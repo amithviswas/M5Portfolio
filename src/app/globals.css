@@ -26,7 +26,7 @@
     --accent: 18 100% 50%; /* Vibrant Orange */
     --accent-foreground: 0 0% 98%; /* White text on accent */
 
-    --destructive: 0 84.2% 60.2%; /* Default destructive red (can be same as primary) */
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 0 0% 18%; /* Darker Border #2E2E2E */
@@ -51,16 +51,29 @@
     --sidebar-border: 0 0% 18%;
     --sidebar-ring: 0 100% 42%;
 
-    --bmw-m-blue: 208 100% 38%; /* Explicit M Performance Blue */
-    --blood-red: 0 100% 42%; /* Explicit Blood Red */
-    --shadow-gray: 0 2% 11%; /* Explicit Shadow Gray */
-    
+    /* M Theme Colors */
+    --bmw-m-blue: 208 100% 38%; 
+    --blood-red: 0 100% 42%; 
+    --shadow-gray: 0 2% 11%; 
     --m-light-blue-hsl: 208 100% 60%; /* Lighter M Blue for accents */
-    --m-red-hsl: 0 100% 42%; /* Blood Red */
+    --m-dark-blue-hsl: 208 100% 30%; /* Darker M Blue */
+    --m-red-hsl: 0 100% 42%; 
+    --m-violet-hsl: 270 80% 60%; /* For M-stripe pulse */
+
+    /* Empire Edition Colors */
+    --royal-blue-hsl: 220 70% 50%;
+    --crimson-hsl: 348 83% 47%;
+    --gold-hsl: 45 100% 50%;
+    --silver-hsl: 0 0% 75%; /* Added for tachometer base */
+    --i-blue-fog-hsl: 210 100% 20%; /* For BMW i-blue radial fog */
 
 
     --ease-m-blip: cubic-bezier(.36,1.08,.33,1);
-    --ease-m-throttle: cubic-bezier(.36,1.08,.33,1); /* Same as blip for now, can be customized */
+    --ease-m-throttle: cubic-bezier(.36,1.08,.33,1);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Font Variables are set by next/font in layout.tsx */
+    /* --font-rajdhani, --font-playfair-display, --font-space-grotesk */
   }
 }
 
@@ -72,35 +85,35 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground font-sans;
-    /* Existing grid pattern */
+    @apply bg-background text-foreground font-sans; /* font-sans uses --font-rajdhani via tailwind.config */
     background-image:
+      /* Carbon Fiber Pattern */
       linear-gradient(45deg, hsla(0, 0%, 5%, 0.4) 25%, transparent 25%, transparent 75%, hsla(0, 0%, 5%, 0.4) 75%, hsla(0, 0%, 5%, 0.4)),
       linear-gradient(-45deg, hsla(0, 0%, 5%, 0.4) 25%, transparent 25%, transparent 75%, hsla(0, 0%, 5%, 0.4) 75%, hsla(0, 0%, 5%, 0.4));
     background-size: 20px 20px;
-    position: relative; /* For ::before pseudo-element */
+    position: relative; 
   }
 
-  body.dark::before {
+  body.dark::before { /* Carbon Fiber Noise Overlay */
     content: '';
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     width: 100%; height: 100%;
-    /* Carbon fiber-like subtle pattern */
     background-image: 
       linear-gradient(135deg, hsla(0,0%,10%,0.02) 25%, transparent 25%),
       linear-gradient(225deg, hsla(0,0%,10%,0.02) 25%, transparent 25%),
       linear-gradient(45deg, hsla(0,0%,10%,0.02) 25%, transparent 25%),
       linear-gradient(315deg, hsla(0,0%,10%,0.02) 25%, transparent 25%);
-    background-position: 0 0, 2px 2px, 2px 2px, 0 0; /* Staggered slightly */
-    background-size: 4px 4px; /* Adjust for finer/coarser pattern */
-    opacity: 0.04; /* As requested */
+    background-position: 0 0, 2px 2px, 2px 2px, 0 0;
+    background-size: 4px 4px;
+    opacity: 0.04; 
     pointer-events: none;
-    z-index: -1; /* Behind content, but above body's own background grid */
+    z-index: -1; 
   }
 
-
+  /* General heading style if needed, but specific components might override */
   .font-heading {
+    font-family: var(--font-space-grotesk);
     @apply font-bold uppercase tracking-wider;
   }
 
@@ -111,16 +124,16 @@
     @apply shadow-[0_0_25px_hsl(var(--primary)/0.8)];
   }
 
-  /* Custom M-Blip Transition Utility */
   .transition-m-blip {
-    @apply transition-[color,background-color,border-color,text-shadow,transform,box-shadow,opacity,filter] duration-150 ease-m-blip;
+    @apply transition-[color,background-color,border-color,text-decoration-color,text-shadow,transform,box-shadow,opacity,filter] duration-150 ease-m-blip;
   }
 }
 
+/* ShadCN Component Overrides & Custom Styles */
 .DialogContent[data-state="open"] {
   display: flex;
   flex-direction: column;
-  overflow: hidden; 
+  overflow: hidden; /* Added for modal scroll fix */
 }
 .DialogContent > div[data-radix-scroll-area-viewport] {
   scrollbar-width: thin;
@@ -139,10 +152,10 @@
   border: 2px solid hsl(var(--card));
 }
 .DialogOverlay[data-state="open"] {
-    z-index: 40;
+    z-index: 40; /* Ensure it's below the navbar (z-50) if needed */
 }
 
-/* BMW M5 Kidney Grille Blade Underline */
+/* Navbar Grille Underline */
 .nav-grille-underline {
   position: relative;
   overflow: visible; 
@@ -156,7 +169,7 @@
   bottom: -2px; 
   transform: translateX(-50%);
   width: 0%;
-  height: 4px;
+  height: 4px; /* As per spec */
   background-image: linear-gradient(
     to right,
     hsl(var(--bmw-m-blue)) 0%, 
@@ -164,8 +177,8 @@
     hsl(var(--primary)) var(--grille-red-start-percentage, 55%),
     hsl(var(--primary)) 100%
   );
-  border-radius: 9999px; 
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.4); 
+  border-radius: 9999px; /* Pill shape */
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.4); /* Initial depth */
   filter: drop-shadow(0 0 3px hsla(var(--bmw-m-blue), 0.5)) drop-shadow(0 0 3px hsla(var(--primary), 0.5));
   opacity: 0;
   transition: width 170ms var(--ease-m-blip), 
@@ -183,12 +196,13 @@
   background-image: linear-gradient(
     to right,
     hsl(var(--bmw-m-blue)) 0%, 
-    hsl(var(--bmw-m-blue)) var(--grille-blue-stop-percentage-hover, 50%), 
-    hsl(var(--primary)) var(--grille-red-start-percentage-hover, 50%),   
+    hsl(var(--bmw-m-blue)) var(--grille-blue-stop-percentage-hover, 50%), /* Drifts on hover via JS */
+    hsl(var(--primary)) var(--grille-red-start-percentage-hover, 50%),   /* Drifts on hover via JS */
     hsl(var(--primary)) 100%
   );
+  /* Glow ramps brightness +25% then settles at +10% - simplified to one brighter state */
   filter: drop-shadow(0 0 5px hsla(var(--bmw-m-blue), 0.8)) drop-shadow(0 0 5px hsla(var(--primary), 0.8)) brightness(1.25); 
-  box-shadow: inset 0 1px 3px rgba(0,0,0,.6);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.6); /* Enhanced depth */
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -200,11 +214,11 @@
   }
    .nav-grille-underline:hover::after,
   .nav-grille-underline.active-link::after {
-    width: 90%;
+    width: 90%; /* Static width */
     opacity: 1;
     filter: none;
     box-shadow: inset 0 1px 2px rgba(0,0,0,.4);
-    background-image: linear-gradient( 
+    background-image: linear-gradient( /* Non-drifting colors */
       to right,
       hsl(var(--bmw-m-blue)) 0%, 
       hsl(var(--bmw-m-blue)) 55%,
@@ -214,9 +228,10 @@
   }
 }
 
+/* Hero Section Dimming */
 .hero-backdrop-dimmed {
-  @apply transition-m-blip;
-  filter: brightness(0.85);
+  @apply transition-m-blip; /* Use custom ease for filter transition */
+  filter: brightness(0.85); /* Dims 15% */
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-backdrop-dimmed {
@@ -224,12 +239,12 @@
   }
 }
 
-/* Contact Form Halo */
+/* Contact Form Halo Effect */
 .form-container-halo { 
   box-shadow: 0 0 8px 2px hsla(var(--primary)/0.2);
   @apply transition-m-blip;
 }
-.form-container-halo-active { 
+.form-container-halo-active { /* Intensified halo when textarea is focused */
   box-shadow: 0 0 20px 6px hsla(var(--primary)/0.7), 0 0 35px 12px hsla(var(--primary)/0.4);
 }
 
@@ -240,93 +255,236 @@
   }
 }
 
-/* Hero Section Specific Styles */
-.hero-carbon-ring {
-  @apply rounded-full p-0.5; /* Padded slightly for the tricolor effect */
-  background-image: 
-    linear-gradient(45deg, hsl(var(--shadow-gray)) 25%, hsl(var(--card)/0.8) 25%, hsl(var(--card)/0.8) 50%, hsl(var(--shadow-gray)) 50%, hsl(var(--shadow-gray)) 75%, hsl(var(--card)/0.8) 75%, hsl(var(--card)/0.8) 100%),
-    linear-gradient(-45deg, hsl(var(--shadow-gray)) 25%, hsl(var(--card)/0.8) 25%, hsl(var(--card)/0.8) 50%, hsl(var(--shadow-gray)) 50%, hsl(var(--shadow-gray)) 75%, hsl(var(--card)/0.8) 75%, hsl(var(--card)/0.8) 100%);
-  background-size: 6px 6px; /* Smaller for finer texture */
-  box-shadow: 0 0 35px 0 hsla(var(--m-light-blue-hsl), .25); /* Icy-blue spotlight */
+/* === EMPIRE EDITION HERO STYLES START === */
+
+/* 1. Imperial Crown Surround (Medallion) */
+.hero-medallion-empire {
+  @apply relative w-[120px] h-[120px] rounded-full p-0.5;
+  /* Icy-blue spotlight */
+  box-shadow: 0 0 35px 0 hsla(var(--m-light-blue-hsl), .25);
+  /* Embossed metallic ridges via multiple shadows or border-image */
+  background: conic-gradient(from 0deg, hsl(var(--shadow-gray)) 0%, hsl(var(--card)) 20%, hsl(var(--shadow-gray)) 40%, hsl(var(--card)) 60%, hsl(var(--shadow-gray)) 80%, hsl(var(--card)) 100%);
 }
 
-.hero-tricolor-stroke-outer { /* Applied to the element inside hero-carbon-ring */
-  @apply rounded-full border-2 border-transparent;
-  background:
-    linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, /* This creates the "border" */
-    conic-gradient(
-      from 90deg, 
-      hsl(var(--m-light-blue-hsl)) 0deg 70deg, 
-      hsl(var(--m-dark-blue-hsl)) 70deg 140deg, 
-      hsl(var(--m-red-hsl)) 140deg 210deg,
-      transparent 210deg 360deg /* Cut off part of the tricolor */
-    ) border-box;
+.hero-medallion-empire-inner { /* For M-stripe and gold glint */
+  @apply relative w-full h-full rounded-full overflow-hidden;
+  border: 2px solid transparent; /* Base for gradient border */
+  background-clip: padding-box;
 }
 
-.hero-spec-highlight {
+.hero-medallion-empire-inner::before { /* M-stripe pulse (animated border) */
+  content: "";
+  @apply absolute inset-[-2px] rounded-full z-0; /* -2px to make it appear as outer stroke */
+  background: conic-gradient(
+    hsl(var(--m-light-blue-hsl)) 0deg 120deg, 
+    hsl(var(--m-violet-hsl)) 120deg 240deg, 
+    hsl(var(--m-red-hsl)) 240deg 360deg
+  );
+  animation: mStripePulse 3s linear infinite paused; /* Paused initially */
+}
+.hero-medallion-empire-inner:hover::before,
+.hero-medallion-empire:focus-within .hero-medallion-empire-inner::before {
+  animation-play-state: running;
+}
+
+.hero-medallion-empire-inner::after { /* Gold glint sweep (simplified shimmer) */
+  content: "";
+  @apply absolute inset-0 rounded-full z-0 opacity-0;
+  background: linear-gradient(90deg, transparent, hsla(var(--gold-hsl), 0.5), transparent);
+  background-size: 200% 100%; /* For sweep effect */
+  animation: goldGlint 1.2s linear infinite paused; /* Paused initially */
+}
+.hero-medallion-empire-inner:hover::after {
+  opacity: 0.7;
+  animation-play-state: running;
+}
+
+.hero-spec-highlight-empire { /* Lacquered finish arc */
   content: "";
   @apply absolute inset-0 rounded-full;
-  background: linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 60%);
+  background: linear-gradient(135deg, hsla(0,0%,100%,.15) 0%, transparent 60%);
   pointer-events: none;
 }
 
-.hero-tagline-gradient {
-  @apply bg-clip-text text-transparent;
-  background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
+
+/* 2. Hero Text Royal Alloy Typography */
+.hero-headline-empire {
+  font-family: var(--font-playfair-display); /* Use CSS variable directly */
+  @apply text-[#E5E5E5] font-bold; /* Apply other utilities */
+  text-shadow: 0 1px 1px hsl(0 0% 0% / 0.6), 0 2px 3px hsl(0 0% 0% / 0.4), 0 0 8px hsl(0 0% 0% / 0.25); /* Engraved chrome bevel */
 }
 
-.hero-tagline-underline {
-  @apply relative inline-block;
+.hero-tagline-empire {
+  font-family: var(--font-space-grotesk); /* Use CSS variable directly */
+  @apply font-light uppercase tracking-wider text-transparent bg-clip-text relative;
+  background-image: linear-gradient(to right, hsl(var(--m-light-blue-hsl)) 50%, hsl(var(--m-red-hsl)) 50%);
 }
-.hero-tagline-underline::after {
+.hero-tagline-empire::after { /* Shimmering metal strip underline */
   content: '';
-  @apply absolute left-0 bottom-[-2px] h-[2px] w-0 rounded-full transition-m-blip;
-  background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
-  transition-property: width;
+  @apply absolute left-0 bottom-[-4px] h-[2px] w-0 rounded-full;
+  background-image: linear-gradient(to right, hsl(var(--m-light-blue-hsl)) 50%, hsl(var(--m-red-hsl)) 50%);
+  box-shadow: 0 0 5px hsl(var(--m-light-blue-hsl)/0.5), 0 0 5px hsl(var(--m-red-hsl)/0.5);
+  transition: width 0.6s var(--ease-out-expo); /* Animates width */
 }
-.hero-tagline-underline:hover::after {
-  @apply w-[110%];
-}
-
-
-.hero-satin-mesh-bg {
-    background: 
-      radial-gradient(circle at 30% 30%, #1d1d1f 0%, #0d0d0e 60%),
-      /* Carbon fiber pattern (copied from body.dark::before, adjust opacity if needed) */
-      linear-gradient(135deg, hsla(0,0%,10%,0.01) 25%, transparent 25%), /* Reduced opacity for overlay */
-      linear-gradient(225deg, hsla(0,0%,10%,0.01) 25%, transparent 25%),
-      linear-gradient(45deg, hsla(0,0%,10%,0.01) 25%, transparent 25%),
-      linear-gradient(315deg, hsla(0,0%,10%,0.01) 25%, transparent 25%);
-    background-blend-mode: overlay, normal, normal, normal, normal; /* Blend radial with carbon layers */
-    background-position: center center, 0 0, 2px 2px, 2px 2px, 0 0;
-    background-size: cover, 4px 4px, 4px 4px, 4px 4px, 4px 4px;
+.hero-tagline-empire.animate-underline::after { /* Class to trigger animation */
+  width: 110%;
 }
 
+.hero-headline-beam::before { /* Dynamic Headline Beam */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%; /* Animates from 0 to 100% */
+  height: 100%;
+  background: linear-gradient(to right, hsla(var(--m-light-blue-hsl),0.5), hsla(var(--m-red-hsl),0.5));
+  mix-blend-mode: screen; 
+  opacity: 0.7;
+  animation: neonSweep 6s linear infinite paused; /* Paused initially */
+  pointer-events: none;
+  z-index: 1; /* Ensure it's above text if text has its own z-index */
+}
+.hero-headline-beam.beam-active::before { /* Class to start animation */
+  animation-play-state: running;
+}
+.hero-headline-beam.beam-frozen::before {
+  animation-play-state: paused;
+  opacity: 0.5; /* Dimmed glow */
+  width: 100%; /* Show full beam when frozen */
+}
 
+/* 3. Deep Empire Glow Background */
+.hero-empire-bg {
+  @apply relative overflow-hidden;
+  background: 
+    /* Dark brushed steel pattern */
+    linear-gradient(0deg, hsla(0,0%,10%,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, hsla(0,0%,10%,0.05) 1px, transparent 1px),
+    /* BMW i-blue radial fog */
+    radial-gradient(circle at 50% 0%, hsla(var(--i-blue-fog-hsl), 0.3) 0%, transparent 70%),
+    /* Base background */
+    hsl(var(--background));
+  background-size: 4px 4px, 4px 4px, 100% 100%, 100% 100%;
+}
+.hero-empire-bg::before, .hero-empire-bg::after, .hero-bloom-extra { /* Halo glows */
+  content: "";
+  @apply absolute rounded-full pointer-events-none -z-10; /* Ensure behind parallax streaks if they exist */
+  background: radial-gradient(circle, hsla(var(--m-light-blue-hsl), 0.1) 0%, transparent 70%);
+}
+.hero-empire-bg::before { /* Bloom 1 */
+  width: 400px; height: 400px; top: 10%; left: 20%;
+  animation: bloomGlide 15s infinite ease-in-out;
+}
+.hero-empire-bg::after { /* Bloom 2 */
+  width: 300px; height: 300px; top: 60%; right: 15%;
+  animation: bloomGlide 18s infinite ease-in-out 3s;
+}
+.hero-bloom-extra { /* Bloom 3 - needs a separate div in JSX */
+  width: 500px; height: 500px; top: 30%; left: 50%; transform: translateX(-50%);
+  animation: bloomGlide 12s infinite ease-in-out 6s;
+  background: radial-gradient(circle, hsla(var(--m-red-hsl), 0.08) 0%, transparent 70%);
+}
+
+/* 5. Empire Tachometer (Scroll RPM Bar) */
+.hero-empire-tachometer {
+  @apply fixed bottom-4 right-4 h-2 w-0 rounded-full transition-all duration-200 ease-linear;
+  /* Inset glow shadow */
+  box-shadow: inset 0 0 5px hsla(0,0%,0%,0.5), 0 0 8px hsla(var(--gold-hsl),0.3);
+  /* Gradient will be applied via inline style from JS */
+  background: linear-gradient(to right, 
+    hsl(var(--silver-hsl)) var(--tach-stop1, 0%), 
+    hsl(var(--royal-blue-hsl)) var(--tach-stop2, 33%), 
+    hsl(var(--crimson-hsl)) var(--tach-stop3, 66%), 
+    hsl(var(--gold-hsl)) var(--tach-stop4, 100%)
+  );
+}
+.hero-empire-tachometer::before { /* Blur trail */
+  content: '';
+  @apply absolute -inset-px rounded-full opacity-50 blur-sm;
+  background: inherit; /* Inherits the gradient */
+  z-index: -1;
+  transition: opacity 0.3s ease-out;
+}
+.hero-empire-tachometer:not([style*="width: 0px"])::before { /* Show trail when bar has width */
+  opacity: 0.3;
+}
+
+
+/* 6. Gantry Light Sweep (Section Divider) */
+.hero-gantry-light {
+  @apply absolute left-0 h-1 w-full;
+  background: linear-gradient(to right, transparent, hsl(var(--m-light-blue-hsl)/0.7) 50%, transparent);
+  box-shadow: 0 0 8px hsl(var(--m-light-blue-hsl)/0.5);
+  opacity: 0; /* Initial state for animation */
+}
+.hero-gantry-light.top { @apply top-0; }
+.hero-gantry-light.bottom { @apply bottom-0; }
+
+
+/* Keyframes for M-stripe pulse and gold glint for Medallion */
+@keyframes mStripePulse {
+  0%, 100% { border-color: hsl(var(--m-light-blue-hsl)); box-shadow: 0 0 5px hsl(var(--m-light-blue-hsl)/0.5); }
+  33% { border-color: hsl(var(--m-violet-hsl)); box-shadow: 0 0 7px hsl(var(--m-violet-hsl)/0.6); }
+  66% { border-color: hsl(var(--m-red-hsl)); box-shadow: 0 0 5px hsl(var(--m-red-hsl)/0.5); }
+}
+@keyframes goldGlint {
+  0% { background-position: -200% 0; } /* Start off-screen to the left */
+  100% { background-position: 200% 0; } /* End off-screen to the right */
+}
+
+/* Keyframe for Dynamic Headline Beam */
+@keyframes neonSweep {
+  0% { width: 0%; left: 0; }
+  50% { width: 100%; left: 0; }
+  50.01% { width: 100%; left: auto; right:0; } /* Jump to right side for sweep out */
+  100% { width: 0%; left: auto; right: 0; }
+}
+
+/* Keyframe for Bloom Glide */
+@keyframes bloomGlide {
+  0%, 100% { opacity: 0.05; transform: scale(0.8) translate(var(--tx-start, -10px), var(--ty-start, -10px)); }
+  50% { opacity: 0.15; transform: scale(1) translate(var(--tx-end, 10px), var(--ty-end, 10px)); }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-medallion-empire-inner::before, .hero-medallion-empire-inner::after,
+  .hero-headline-beam::before {
+    animation: none !important;
+  }
+   .hero-empire-bg::before, .hero-empire-bg::after, .hero-bloom-extra {
+    animation: none !important;
+    opacity: 0.05 !important; /* Static subtle glow */
+  }
+  .hero-gantry-light { animation: none !important; opacity: 0.3 !important; }
+  .hero-tagline-empire.animate-underline::after {
+    transition: none;
+    width: 110%; 
+  }
+}
+
+/* Existing Hero Styles to be adapted or removed if conflicting */
+.hero-text-lift:hover, .hero-text-lift:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+  @apply transition-m-blip;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-text-lift:hover, .hero-text-lift:focus-visible {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+.animate-ambient-pulse {
+  animation: ambientLightPulse 12s infinite ease-in-out;
+}
 @keyframes ambientLightPulse {
   0%, 100% { filter: brightness(1); }
   50% { filter: brightness(1.08); }
 }
-
-@keyframes cameraShutterFlash {
-  0%, 100% { filter: saturate(1) brightness(1); }
-  50% { filter: saturate(1.4) brightness(1.3); }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .animate-ambient-pulse {
-    animation: none;
-  }
-  .animate-camera-flash:hover {
-    animation: none;
-  }
-   .hero-tagline-underline::after {
-    transition: none;
-  }
-  .hero-tagline-underline:hover::after {
-    width: 110%; /* static on hover if reduced motion */
-  }
+  .animate-ambient-pulse { animation: none; }
 }
-.animate-ambient-pulse {
-  animation: ambientLightPulse 12s infinite ease-in-out;
-}
+
+/* === EMPIRE EDITION HERO STYLES END === */

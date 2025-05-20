@@ -5,29 +5,54 @@ import * as React from 'react';
 import { Button, type ButtonProps } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-// M Start/Stop Button Style - Now accepts children for content
 const MStartStopButton = React.forwardRef<
   HTMLButtonElement,
   ButtonProps & { children: React.ReactNode }
 >(({ children, className, asChild, ...props }, ref) => {
-  const buttonBaseClasses = "group relative inline-flex items-center justify-center text-lg font-bold uppercase tracking-wider text-primary-foreground rounded-full shadow-[0_0_15px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_25px_hsl(var(--primary)/0.8)] transition-all duration-300 ease-in-out overflow-hidden focus:outline-none focus:ring-4 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background";
   
-  // Specific Start/Stop styling with metallic chamfer
-  const startStopClasses = cn(
-    buttonBaseClasses, 
-    "w-24 h-24 md:w-28 md:h-28 bg-card border-4 border-primary hover:border-blood-red",
-    // Metallic chamfer
-    "shadow-[0_0_15px_hsl(var(--primary)/0.5),inset_1px_1px_3px_rgba(255,255,255,.25),inset_-2px_-2px_4px_rgba(0,0,0,.6)]",
-    "hover:shadow-[0_0_25px_hsl(var(--primary)/0.8),inset_1px_1px_3px_rgba(255,255,255,.25),inset_-2px_-2px_4px_rgba(0,0,0,.6)]"
+  // Obsidian Crown Mode Styling
+  const obsidianClasses = cn(
+    "group relative inline-flex items-center justify-center text-lg font-bold uppercase tracking-wider",
+    "text-primary-foreground rounded-md shadow-lg", // Inset-rounded rectangle (adjust border-radius if more hexagonal)
+    "w-28 h-16 md:w-32 md:h-20", // Adjusted size for a more rectangular feel
+    "bg-gradient-to-b from-neutral-800 to-black", // Obsidian glass base
+    "border-2 border-neutral-700",
+    "focus:outline-none focus:ring-4 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background",
+    "transition-all duration-300 ease-in-out overflow-hidden",
+    // Metallic chamfer and obsidian depth
+    "shadow-[0_0_15px_hsl(var(--primary)/0.3),inset_1px_1px_2px_hsl(0_0%_100%/0.1),inset_-1px_-1px_2px_hsl(0_0%_0%/0.5)]",
+    "hover:shadow-[0_0_25px_hsl(var(--primary)/0.6),inset_1px_1px_2px_hsl(0_0%_100%/0.1),inset_-1px_-1px_2px_hsl(0_0%_0%/0.5)]",
+    // For triple glow ring container and reflection
+    "before:content-[''] before:absolute before:inset-[-2px] before:rounded-[calc(var(--radius)-2px)] before:opacity-0 before:transition-opacity before:duration-300",
+    "before:bg-transparent", // Placeholder, actual glow by box-shadow
+    "hover:before:opacity-100",
+    // Triple glow rings on hover (applied to ::before for layering)
+    "hover:before:shadow-[0_0_0_2px_hsl(var(--background)),_0_0_0_4px_hsl(var(--m-red-hsl)),_0_0_0_6px_hsl(var(--bmw-m-blue)/0.7),_0_0_15px_hsl(var(--m-red-hsl)/0.5)]",
+    className
   );
 
   const contentWrapper = (content: React.ReactNode) => (
     <>
-      {/* Inner metallic sheen/glow (simplified) */}
-      <span className="absolute inset-0.5 rounded-full bg-gradient-to-br from-gray-600 via-gray-700 to-gray-800 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></span>
-      {/* Red ring that pulses */}
-      <span className="absolute inset-0 rounded-full border-2 border-primary opacity-70 group-hover:animate-pulse group-hover:border-blood-red"></span>
-      <span className="relative z-10 flex flex-col items-center text-center">
+      {/* Glass reflection overlay */}
+      <span className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300"
+            style={{
+              background: 'linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.05) 50%, transparent 70%)',
+              clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' // Top half reflection
+            }}>
+      </span>
+      <span className={cn(
+        "relative z-10 flex flex-col items-center text-center",
+        "group-hover:[&>span]:opacity-70 group-hover:[&>svg]:opacity-70", // Dim original content for reflection
+        "transition-opacity duration-300"
+        )}>
+        {content}
+      </span>
+      {/* Text reflection on hover */}
+      <span className={cn(
+        "absolute z-0 flex flex-col items-center text-center opacity-0 group-hover:opacity-20",
+        "transform scale-y-[-1] translate-y-[calc(100%+4px)] blur-[1px]", // Positioned below, flipped, blurred
+        "transition-opacity duration-300"
+      )}>
         {content}
       </span>
     </>
@@ -42,7 +67,7 @@ const MStartStopButton = React.forwardRef<
     return (
       <Button
         ref={ref}
-        className={cn(startStopClasses, className)}
+        className={obsidianClasses}
         asChild
         {...props}
       >
@@ -54,7 +79,7 @@ const MStartStopButton = React.forwardRef<
   return (
     <Button
       ref={ref}
-      className={cn(startStopClasses, className)}
+      className={obsidianClasses}
       {...props}
     >
       {contentWrapper(children)}
