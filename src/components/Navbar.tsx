@@ -9,7 +9,7 @@ import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Added
+import { useUserInteraction } from '@/contexts/UserInteractionContext'; 
 
 const navLinks = [
   { name: 'Home', href: '/#home', id: 'home' },
@@ -29,30 +29,39 @@ export default function Navbar() {
   const [activeLink, setActiveLink] = useState('');
   const navLinkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const sectionObserverRef = useRef<IntersectionObserver | null>(null);
-  const { incrementSectionVisit } = useUserInteraction(); // Added
+  const { incrementSectionVisit } = useUserInteraction(); 
 
-  const determineActiveLink = useCallback(() => {
-    let newActive = pathname;
-    const currentHash = typeof window !== 'undefined' ? window.location.hash : '';
-
-    if (pathname === '/') {
-      if (currentHash) {
-        newActive = `/${currentHash}`;
+  const determineActiveLinkBasedOnScrollAndPath = useCallback(() => {
+    // Logic for separate pages
+    if (pathname !== '/') {
+      const matchedNavLink = navLinks.find(link => link.href === pathname);
+      if (matchedNavLink) {
+        setActiveLink(matchedNavLink.href);
       } else {
-        newActive = '/#home';
+         setActiveLink(pathname); // Fallback for unlisted paths
       }
+      return;
     }
-    
-    const matchingNavLink = navLinks.find(link => link.href === newActive || (link.href.startsWith('/#') && `/${currentHash}` === link.href));
-    
-    if (matchingNavLink) {
-      setActiveLink(matchingNavLink.href);
-    } else if (pathname === '/') {
-      setActiveLink('/#home'); 
-    } else {
-      setActiveLink(pathname); 
+
+    // Logic for homepage sections via IntersectionObserver (will be set by observer)
+    // For initial load or when no section is actively intersecting at the top:
+    let currentHash = typeof window !== 'undefined' ? window.location.hash : '';
+    if (!currentHash && window.scrollY < window.innerHeight * 0.3) {
+        setActiveLink('/#home');
+        return;
     }
-  }, [pathname]);
+    if (currentHash) {
+        const matchedByHash = navLinks.find(link => link.href === `/${currentHash}`);
+        if (matchedByHash) {
+            setActiveLink(matchedByHash.href);
+            return;
+        }
+    }
+    // If observer hasn't fired and not at top, keep current or default to home
+    if (!activeLink && pathname ==='/') setActiveLink('/#home');
+
+  }, [pathname, activeLink]);
+
 
   useEffect(() => {
     navLinkRefs.current = navLinkRefs.current.slice(0, navLinks.length);
@@ -60,7 +69,7 @@ export default function Navbar() {
 
   const handleNavLinkMouseMove = (event: React.MouseEvent<HTMLAnchorElement>, index: number) => {
     const linkElement = navLinkRefs.current[index];
-    if (!linkElement) return;
+    if (!linkElement || !linkElement.classList.contains('nav-grille-underline')) return; // Check if it's the old style
 
     const rect = linkElement.getBoundingClientRect();
     const cursorXPercent = ((event.clientX - rect.left) / rect.width) * 100;
@@ -79,7 +88,7 @@ export default function Navbar() {
 
   const handleNavLinkMouseLeave = (index: number) => {
     const linkElement = navLinkRefs.current[index];
-    if (!linkElement) return;
+    if (!linkElement || !linkElement.classList.contains('nav-grille-underline')) return;
     linkElement.style.removeProperty('--grille-blue-stop-percentage-hover');
     linkElement.style.removeProperty('--grille-red-start-percentage-hover');
   };
@@ -91,9 +100,11 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); 
-    determineActiveLink(); 
+    
+    // Determine initial active link
+    determineActiveLinkBasedOnScrollAndPath();
+    window.addEventListener('hashchange', determineActiveLinkBasedOnScrollAndPath, { passive: true });
 
-    window.addEventListener('hashchange', determineActiveLink, { passive: true });
 
     if (sectionObserverRef.current) {
       sectionObserverRef.current.disconnect();
@@ -118,15 +129,14 @@ export default function Navbar() {
             if (entry.isIntersecting) {
               const sectionId = `/#${entry.target.id}`;
               setActiveLink(sectionId);
-              incrementSectionVisit(entry.target.id); // Track section visit
+              incrementSectionVisit(entry.target.id); 
               foundActive = true;
             }
           });
            if (!foundActive && window.scrollY < window.innerHeight * 0.3) {
-            if (pathname === '/') {
+             if (pathname === '/') { // Double check we are on homepage
                 setActiveLink('/#home');
-                incrementSectionVisit('home'); // Track home as active
-            }
+             }
           }
         };
         
@@ -136,16 +146,20 @@ export default function Navbar() {
         });
         sectionObserverRef.current = observer;
 
-        // Initial check for home section if at top
-        if (window.scrollY < 50) { // Small threshold for "at the top"
+        if (window.scrollY < 50 && window.location.hash === '') {
             setActiveLink('/#home');
             incrementSectionVisit('home');
+        } else if (window.location.hash) {
+            const initialHashLink = `/${window.location.hash}`;
+            const matchedLink = navLinks.find(link => link.href === initialHashLink);
+            if (matchedLink) {
+                setActiveLink(initialHashLink);
+                incrementSectionVisit(matchedLink.id);
+            }
         }
 
       }
     } else {
-        determineActiveLink();
-        // For non-homepage routes, use pathname as sectionId
         const currentPathId = pathname.startsWith('/') ? pathname.substring(1) : pathname;
         if (currentPathId) {
             incrementSectionVisit(currentPathId);
@@ -154,37 +168,40 @@ export default function Navbar() {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('hashchange', determineActiveLink);
+      window.removeEventListener('hashchange', determineActiveLinkBasedOnScrollAndPath);
       if (sectionObserverRef.current) {
         sectionObserverRef.current.disconnect();
       }
     };
-  }, [pathname, determineActiveLink, incrementSectionVisit]);
+  }, [pathname, determineActiveLinkBasedOnScrollAndPath, incrementSectionVisit]);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   const handleNavLinkClick = (href: string, id: string) => {
     closeMobileMenu();
     setActiveLink(href); 
-    incrementSectionVisit(id); // Track click as a visit
+    incrementSectionVisit(id); 
     
     if (href.startsWith('/#') && pathname === '/') {
       const targetId = href.substring(2); 
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
+        // Update hash without triggering full page reload if possible
         if (window.location.hash !== `#${targetId}`) {
            history.pushState(null, '', `#${targetId}`);
         }
+        // Smooth scroll
         targetElement.scrollIntoView({ behavior: 'smooth' });
       }
     } else if (href.startsWith('/#')) {
-      // Navigate to home then let browser handle hash.
+      // For navigating to a hash on the homepage from another page
+      // Next.js Link component will handle navigation to '/' then browser handles hash
     }
   };
 
   return (
     <motion.nav 
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out font-sans nav-grille-underline-container"
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out font-sans"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 120, damping: 20 }}
@@ -208,21 +225,20 @@ export default function Navbar() {
 
           <div className="hidden md:flex space-x-1">
             {navLinks.map((link, index) => {
-              const isActive = activeLink === link.href || (activeLink === '/' && link.href === '/#home');
+              const isActive = activeLink === link.href;
               return (
                 <Link
                   key={link.name}
                   href={link.href}
                   ref={el => navLinkRefs.current[index] = el}
-                  onMouseMove={(e) => handleNavLinkMouseMove(e, index)}
-                  onMouseLeave={() => handleNavLinkMouseLeave(index)}
+                  // Removed mousemove/mouseleave as new underline is CSS only hover
                   className={cn(
-                    'relative px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider nav-grille-underline group transition-m-blip',
+                    'relative px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider nav-laser-crest group transition-m-blip', // Use nav-laser-crest
                     isActive ? 'text-primary active-link' : 'text-muted-foreground hover:text-primary-foreground'
                   )}
                   onClick={(e) => {
                     if (link.href.startsWith('/#') && pathname === '/') {
-                      e.preventDefault(); 
+                      // e.preventDefault(); // Prevent default if already on page and it's a hash link
                     }
                     handleNavLinkClick(link.href, link.id);
                   }}
@@ -258,18 +274,18 @@ export default function Navbar() {
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navLinks.map((link) => {
-                 const isActive = activeLink === link.href || (activeLink === '/' && link.href === '/#home');
+                 const isActive = activeLink === link.href;
                 return (
                   <Link
                     key={link.name}
                     href={link.href}
                     className={cn(
-                      'block px-3 py-3 rounded-md text-base font-medium uppercase tracking-wider transition-m-blip',
-                      isActive ? 'text-primary bg-card' : 'text-muted-foreground hover:text-primary-foreground hover:bg-card/50'
+                      'block px-3 py-3 rounded-md text-base font-medium uppercase tracking-wider transition-m-blip nav-laser-crest', // Use nav-laser-crest
+                      isActive ? 'text-primary bg-card active-link' : 'text-muted-foreground hover:text-primary-foreground hover:bg-card/50'
                     )}
                     onClick={(e) => {
                       if (link.href.startsWith('/#') && pathname === '/') {
-                         e.preventDefault(); 
+                         // e.preventDefault(); 
                       }
                       handleNavLinkClick(link.href, link.id);
                     }}
@@ -285,3 +301,4 @@ export default function Navbar() {
     </motion.nav>
   );
 }
+

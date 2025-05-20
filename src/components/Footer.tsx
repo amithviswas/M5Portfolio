@@ -1,10 +1,25 @@
 "use client";
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 export default function Footer() {
   return (
-    <footer className="w-full py-12 border-t border-[hsl(var(--border)/0.5)] text-center">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer 
+      className={cn(
+        "w-full py-10 md:py-16 text-center relative overflow-hidden bg-background border-t border-border/30",
+        "carbon-weave-animated" // Apply animated carbon weave
+      )}
+      style={{
+        clipPath: 'polygon(0 0, 100% 0, 100% 70%, 85% 100%, 15% 100%, 0 70%)',
+      }}
+    >
+      {/* Diffuser Fin Dots - Example Placement */}
+      <div className="absolute bottom-2 left-[16%] footer-diffuser-fin-dot"></div>
+      <div className="absolute bottom-2 left-[20%] footer-diffuser-fin-dot animation-delay-500"></div>
+      <div className="absolute bottom-2 right-[16%] footer-diffuser-fin-dot animation-delay-200"></div>
+      <div className="absolute bottom-2 right-[20%] footer-diffuser-fin-dot animation-delay-700"></div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"> {/* Content needs z-index above dots */}
         <p className="text-sm text-muted-foreground">
           &copy; {new Date().getFullYear()} Amith Viswas Reddy. All rights reserved.
         </p>
