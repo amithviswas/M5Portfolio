@@ -15,12 +15,10 @@ import { useEffect } from 'react';
 import soundService from '@/services/soundService';
 
 // Torque-Ramp Page Transition Variants
-// cubic-bezier(0.6, 0.04, 0.98, 0.335) // "acceleration curve in" (slow start, fast mid)
-// cubic-bezier(0.42, 0, 1, 1) // Fast out
 const pageTransitionVariants = {
   initial: {
     opacity: 0,
-    x: '8vw',
+    x: '8vw', // Incoming page slides from right
     filter: 'blur(0px)',
   },
   animate: {
@@ -29,16 +27,16 @@ const pageTransitionVariants = {
     filter: 'blur(0px)',
     transition: {
       duration: 0.4, // Total duration 400ms for entry
-      ease: [0.6, 0.04, 0.98, 0.335],
+      ease: [0.6, 0.04, 0.98, 0.335], // "acceleration curve in"
     }
   },
   exit: {
     opacity: 0,
-    x: '-8vw',
+    x: '-8vw', // Outgoing page slides left
     filter: 'blur(4px)',
     transition: {
       duration: 0.3, // Total duration 300ms for exit
-      ease: [0.42, 0, 1, 1],
+      ease: [0.42, 0, 1, 1], // Fast out
     }
   }
 };
@@ -54,21 +52,20 @@ export default function AppClientLayout({ children }: { children: ReactNode }) {
     if (rareSections.includes(pathname)) {
       document.body.classList.add('rare-section-pulse-active');
       if (interactionData.isSoundEnabled && soundService.isAudioContextStarted()) {
-         soundService.playSound('timelineRumble', { duration: '0.5s', note: 'C2' }); // Example: A brief, deep pulse
+         soundService.playSound('timelineRumble', { duration: '0.5s', note: 'C2' });
       }
       setTimeout(() => {
         document.body.classList.remove('rare-section-pulse-active');
-      }, 300); // Duration of pulse animation
+      }, 300);
     }
   }, [pathname, interactionData.isSoundEnabled]);
 
 
-  // Scroll handler for fast scroll detection
   useEffect(() => {
     let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
     let lastScrollTime = Date.now();
-    const fastScrollThreshold = 300; // Pixels scrolled
-    const timeThreshold = 100; // Milliseconds
+    const fastScrollThreshold = 300;
+    const timeThreshold = 100;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -77,7 +74,7 @@ export default function AppClientLayout({ children }: { children: ReactNode }) {
       const deltaTime = currentTime - lastScrollTime;
 
       if (deltaTime < timeThreshold && deltaY > fastScrollThreshold) {
-        logFastScroll(); // This will update context and trigger console log in SentientConsole
+        logFastScroll();
         document.body.classList.add('hyperactive-scroll-feedback');
         setTimeout(() => document.body.classList.remove('hyperactive-scroll-feedback'), 200);
       }
@@ -98,29 +95,40 @@ export default function AppClientLayout({ children }: { children: ReactNode }) {
 
   return (
     <>
+      {/* Intro Animation - Fullscreen and fixed */}
       <AnimatePresence>
         {!introCompleted && <IntroAnimation />}
       </AnimatePresence>
 
+      {/* Static elements that appear after intro, but don't participate in page-to-page transitions */}
+      {introCompleted && (
+        <>
+          <ScrollMomentumBar />
+          <Navbar />
+        </>
+      )}
+
+      {/* Page content that transitions */}
       <AnimatePresence mode="wait">
         {introCompleted && (
           <motion.div
-            key={pathname}
+            key={pathname} // Ensures re-animation on path change
             initial="initial"
             animate="animate"
             exit="exit"
             variants={pageTransitionVariants}
-            className="flex flex-col min-h-screen"
+            // This div will contain the scrollable content area.
+            // The main content needs padding for the fixed navbar.
+            // className="flex flex-col min-h-screen" // Keep this for overall structure
           >
-            <ScrollMomentumBar />
-            <Navbar />
-            <main className="flex-grow pt-20">
+            <main className="flex-grow pt-20"> {/* Padding for Navbar height */}
               {children}
             </main>
-            <Footer />
+            <Footer /> {/* Footer will animate with the page content */}
           </motion.div>
         )}
       </AnimatePresence>
+
       <Toaster />
     </>
   );
