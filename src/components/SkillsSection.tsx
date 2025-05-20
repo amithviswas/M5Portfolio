@@ -2,30 +2,33 @@
 "use client";
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Brain, Database, BarChart3, Cpu, Code2, Bot, Palette, Terminal, Server, Zap, Wind, Gauge 
+  Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge 
 } from 'lucide-react';
 import Section from '@/components/Section';
-import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Added
+import { useUserInteraction } from '@/contexts/UserInteractionContext'; 
+import soundService from '@/services/soundService';
+import { cn } from '@/lib/utils';
 
 const skills = [
-  { name: 'AI Model Training', icon: <Zap size={32} />, modeName: 'Turbo Boost' },
-  { name: 'Prompt Engineering', icon: <Bot size={32} />, modeName: 'Drive Logic' },
-  { name: 'Data Visualization', icon: <Palette size={32} />, modeName: 'Heads-Up Display' },
-  { name: 'Machine Learning', icon: <Brain size={32} />, modeName: 'Intelligent Traction' },
-  { name: 'Python Programming', icon: <Code2 size={32} />, modeName: 'Core Engine (Python)' },
-  { name: 'Data Analysis', icon: <BarChart3 size={32} />, modeName: 'Performance Analytics' },
-  { name: 'Web Development', icon: <Code2 size={32} />, modeName: 'Chassis & Aero (Web)' },
-  { name: 'SQL & Databases', icon: <Database size={32} />, modeName: 'Fuel System (Data)' },
-  { name: 'Unix/Linux', icon: <Terminal size={32} />, modeName: 'ECU (Unix/Linux)' },
-  { name: 'Statistical Modeling', icon: <Gauge size={32} />, modeName: 'Precision Tuning' },
-  { name: 'AI Chatbot Dev', icon: <Bot size={32} />, modeName: 'Co-Pilot AI' },
-  { name: 'Big Data (Hadoop, Spark)', icon: <Server size={32} />, modeName: 'Powertrain (Big Data)' },
-  { name: 'R Programming', icon: <Code2 size={32} />, modeName: 'Auxiliary Engine (R)' },
+  { name: 'AI Model Training', icon: <Zap size={32} />, modeName: 'Turbo Boost', id: 'skill-ai-training' },
+  { name: 'Prompt Engineering', icon: <Bot size={32} />, modeName: 'Drive Logic', id: 'skill-prompt-eng' },
+  { name: 'Data Visualization', icon: <Palette size={32} />, modeName: 'Heads-Up Display', id: 'skill-data-viz' },
+  { name: 'Machine Learning', icon: <Brain size={32} />, modeName: 'Intelligent Traction', id: 'skill-ml' },
+  { name: 'Python Programming', icon: <Code2 size={32} />, modeName: 'Core Engine (Python)', id: 'skill-python' },
+  { name: 'Data Analysis', icon: <BarChart3 size={32} />, modeName: 'Performance Analytics', id: 'skill-data-analysis' },
+  { name: 'Web Development', icon: <Code2 size={32} />, modeName: 'Chassis & Aero (Web)', id: 'skill-web-dev' },
+  { name: 'SQL & Databases', icon: <Database size={32} />, modeName: 'Fuel System (Data)', id: 'skill-sql' },
+  { name: 'Unix/Linux', icon: <Terminal size={32} />, modeName: 'ECU (Unix/Linux)', id: 'skill-linux' },
+  { name: 'Statistical Modeling', icon: <Gauge size={32} />, modeName: 'Precision Tuning', id: 'skill-stat-model' },
+  { name: 'AI Chatbot Dev', icon: <Bot size={32} />, modeName: 'Co-Pilot AI', id: 'skill-chatbot' },
+  { name: 'Big Data (Hadoop, Spark)', icon: <Server size={32} />, modeName: 'Powertrain (Big Data)', id: 'skill-big-data' },
+  { name: 'R Programming', icon: <Code2 size={32} />, modeName: 'Auxiliary Engine (R)', id: 'skill-r-prog' },
 ];
 
 export default function SkillsSection() {
   const prefersReducedMotion = useReducedMotion();
-  const { incrementSkillHover } = useUserInteraction(); // Added
+  const { interactionData, incrementSkillHover, getSkillHoverDetail, unlockGhostlineFullMode } = useUserInteraction();
+  const { isSoundEnabled, isGhostlineFullModeUnlocked } = interactionData;
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.9 },
@@ -65,6 +68,18 @@ export default function SkillsSection() {
       transition: { duration: 0.2 }
     }
   };
+
+  const handleSkillHover = (skillName: string) => {
+    incrementSkillHover(skillName);
+    unlockGhostlineFullMode(); // Check if Ghostline can be unlocked
+    if (isSoundEnabled) {
+      soundService.playSound('hoverChime', { note: 'G5' });
+      // Stagger crackle slightly for better effect
+      setTimeout(() => {
+        if (isSoundEnabled) soundService.playSound('electricCrackle');
+      }, 70);
+    }
+  };
   
   return (
     <Section id="skills" className="bg-card/30">
@@ -88,40 +103,53 @@ export default function SkillsSection() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
-        {skills.map((skill, index) => (
-          <motion.div
-            key={skill.modeName}
-            className="bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40 transition-m-blip skill-card-trail-container"
-            custom={index}
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            whileHover="hover"
-            viewport={{ once: true, amount: 0.1 }}
-            onHoverStart={() => incrementSkillHover(skill.name)} // Track skill hover
-          >
-            <div className="skill-card-trail"></div> {/* For trail effect */}
-            <motion.div 
-              className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
-              variants={iconVariants}
+        {skills.map((skill, index) => {
+          const hoverDetail = getSkillHoverDetail(skill.name);
+          const isRepeatedHover = hoverDetail && hoverDetail.count >= 3 && (Date.now() - hoverDetail.lastTimestamp < 10000); // 3+ hovers in 10s
+
+          return (
+            <motion.div
+              key={skill.id}
+              className={cn(
+                "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40 transition-m-blip skill-card-trail-container",
+                isGhostlineFullModeUnlocked && "skill-card-ghostline-active",
+                isGhostlineFullModeUnlocked && Math.random() < 0.3 && !prefersReducedMotion && "animate-skill-jitter", // Random jitter
+                isRepeatedHover && "erratic-glow"
+              )}
+              custom={index}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              whileHover="hover"
+              viewport={{ once: true, amount: 0.1 }}
+              onHoverStart={() => handleSkillHover(skill.name)}
             >
-              {skill.icon}
+              <div className={cn(
+                "skill-card-trail",
+                isGhostlineFullModeUnlocked && "skill-card-trail-ghostline"
+              )}></div>
+              <motion.div 
+                className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
+                variants={iconVariants}
+              >
+                {skill.icon}
+              </motion.div>
+              <motion.h3 
+                className="text-sm md:text-base font-semibold text-muted-foreground"
+                variants={textVariants}
+              >
+                {skill.modeName}
+              </motion.h3>
+              <motion.p
+                className="text-xs text-muted-foreground/70 mt-1"
+                variants={{ hover: { opacity: 1} }}
+                initial={{ opacity: 0 }} 
+              >
+                ({skill.name})
+              </motion.p>
             </motion.div>
-            <motion.h3 
-              className="text-sm md:text-base font-semibold text-muted-foreground"
-              variants={textVariants}
-            >
-              {skill.modeName}
-            </motion.h3>
-            <motion.p
-              className="text-xs text-muted-foreground/70 mt-1"
-              variants={{ hover: { opacity: 1} }}
-              initial={{ opacity: 0 }} 
-            >
-              ({skill.name})
-            </motion.p>
-          </motion.div>
-        ))}
+          );
+        })}
       </div>
     </Section>
   );
