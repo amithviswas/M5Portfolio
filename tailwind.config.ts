@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 import { fontFamily } from 'tailwindcss/defaultTheme';
 
@@ -11,7 +12,7 @@ export default {
   theme: {
   	extend: {
       fontFamily: {
-        sans: ['var(--font-rajdhani)', ...fontFamily.sans], // Set Rajdhani as default sans-serif
+        sans: ['var(--font-rajdhani)', ...fontFamily.sans],
       },
   		colors: {
   			background: 'hsl(var(--background))',
@@ -25,7 +26,7 @@ export default {
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			primary: {
-  				DEFAULT: 'hsl(var(--primary))', // Blood Red
+  				DEFAULT: 'hsl(var(--primary))', 
   				foreground: 'hsl(var(--primary-foreground))'
   			},
   			secondary: {
@@ -37,7 +38,7 @@ export default {
   				foreground: 'hsl(var(--muted-foreground))'
   			},
   			accent: {
-  				DEFAULT: 'hsl(var(--accent))', // M Performance Blue
+  				DEFAULT: 'hsl(var(--accent))', 
   				foreground: 'hsl(var(--accent-foreground))'
   			},
   			destructive: {
@@ -64,7 +65,6 @@ export default {
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
   			},
-        // Explicitly defined colors from prompt
         'blood-red': 'hsl(var(--blood-red))',
         'm-performance-blue': 'hsl(var(--bmw-m-blue))',
         'shadow-gray': 'hsl(var(--shadow-gray))',
@@ -95,7 +95,10 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
-  		}
+  		},
+      transitionTimingFunction: {
+        'm-blip': 'var(--ease-m-blip)',
+      }
   	}
   },
   plugins: [require("tailwindcss-animate")],
