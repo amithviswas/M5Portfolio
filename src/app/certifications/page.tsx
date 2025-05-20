@@ -1,3 +1,4 @@
+
 "use client";
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -9,23 +10,23 @@ const certifications = [
   {
     title: 'NPTEL Certification in Software Testing',
     issuer: 'NPTEL (IIT Kharagpur)',
-    image: 'https://placehold.co/300x200/1A1A1A/FF3333.png?text=NPTEL',
+    image: 'https://i.ibb.co/G4SbmYpd/6fec1819-e21f-4618-a38f-9d58ffa341cc.png',
     dataAiHint: 'certificate document',
-    description: 'Completed a comprehensive course and examination on software testing methodologies and practices, covering various testing levels and techniques.',
+    description: 'Completed a comprehensive course and examination on software testing methodologies and practices, covering various testing levels, techniques, black-box and white-box testing, test case design, and automated test tools.',
   },
   {
     title: 'Internship at Academor',
     issuer: 'Academor',
-    image: 'https://placehold.co/300x200/1A1A1A/FF7733.png?text=Academor',
+    image: 'https://i.ibb.co/NgzyW2JK/76090043-7164-48a1-a9ca-121350494613.png',
     dataAiHint: 'internship award',
-    description: 'Successfully completed an internship program focusing on data-driven projects, gaining hands-on experience in data analysis and problem-solving.',
+    description: 'Successfully completed an internship program focusing on data-driven projects and real-world web development, gaining hands-on experience in data analysis, problem-solving, front-end technologies, and teamwork in an agile environment.',
   },
   {
     title: 'Full Stack Development using Python and Django',
     issuer: 'CipherSchools',
-    image: 'https://placehold.co/300x200/1A1A1A/FFFFFF.png?text=CipherSchools',
+    image: 'https://i.ibb.co/fVs8kXZs/Screenshot-2025-04-21-192249.png',
     dataAiHint: 'web development certificate',
-    description: 'Mastered full-stack web development principles using Python and Django framework, including front-end and back-end technologies.',
+    description: 'Mastered full-stack web development principles using Python and Django framework, including front-end and back-end technologies, and integrating databases effectively.',
   },
 ];
 
@@ -75,7 +76,7 @@ export default function CertificationsPage() {
             custom={index}
             variants={cardVariants}
             initial="initial"
-            animate="animate" // Changed from whileInView to animate for page load
+            animate="animate" 
             whileHover="hover"
             viewport={{ once: true, amount: 0.1 }}
           >

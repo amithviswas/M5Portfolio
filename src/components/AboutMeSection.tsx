@@ -1,8 +1,10 @@
+
 "use client";
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Section from '@/components/Section';
 import { Card, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
 
 export default function AboutMeSection() {
   return (
@@ -37,7 +39,7 @@ export default function AboutMeSection() {
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
               <Image
-                src="https://placehold.co/600x800.png?bg=1f1f1f&fc=primary"
+                src="https://i.ibb.co/PGgTrngH/d2d27295-61a5-43fa-bd33-5f44c25e813a.png"
                 alt="Amith Viswas Reddy"
                 layout="fill"
                 objectFit="cover"
@@ -54,14 +56,15 @@ export default function AboutMeSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
             >
+              <h3 className="text-3xl font-bold text-primary-foreground mb-4">D. Amith Viswas Reddy</h3>
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
-                Hello! I'm Amith Viswas Reddy, a passionate and driven Data Scientist with a deep-rooted enthusiasm for Artificial Intelligence and Machine Learning. My journey in tech is fueled by a relentless curiosity and a desire to leverage data for solving complex, real-world problems.
+                A passionate Data Scientist & Robotics Developer with a deep-rooted enthusiasm for Artificial Intelligence and Machine Learning. My journey in tech is fueled by a relentless curiosity and a desire to leverage data for solving complex, real-world problems and innovating automation.
               </p>
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
-                I thrive in dynamic environments where I can apply my analytical skills and innovative thinking to uncover insights and drive impactful solutions. From developing predictive models to crafting intelligent systems, I'm always eager to explore new frontiers in AI/ML and contribute to cutting-edge projects.
+                Currently pursuing B.Tech in Computer Science at Lovely Professional University, I'm honing skills in Python, Java, JavaScript, HTML, CSS, and Unix/Linux. I thrive in dynamic environments where I can apply my analytical skills and innovative thinking to uncover insights and drive impactful solutions. From developing predictive models to crafting intelligent systems and web applications, I'm always eager to explore new frontiers.
               </p>
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                When I'm not immersed in data, you might find me exploring the latest tech trends or conceptualizing new ways to apply AI for a smarter future. I believe in continuous learning and collaboration to make a tangible difference. You can explore my skills and projects further on this site or check out my <Link href="/resume" passHref><a className="text-primary hover:underline relative group">Resume<span className="absolute bottom-[-2px] left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span></a></Link>.
+                I believe in continuous learning and collaboration to make a tangible difference. You can explore my skills and projects further on this site or check out my <Link href="/resume" passHref><span className="text-primary hover:underline relative group cursor-pointer">Resume<span className="absolute bottom-[-2px] left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span></span></Link>.
               </p>
             </motion.div>
           </div>

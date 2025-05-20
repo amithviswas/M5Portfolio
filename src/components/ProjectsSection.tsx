@@ -1,3 +1,4 @@
+
 "use client";
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,32 +10,59 @@ import Link from 'next/link';
 
 const projects = [
   {
-    title: 'LinkedIn Automator Bot',
-    description: 'An Automation Anywhere bot for LinkedIn tasks like login and message automation.',
-    image: 'https://placehold.co/600x400/1A1A1A/FF3333.png?text=Project+Alpha',
-    dataAiHint: 'automation code',
-    liveLink: '#', // Replace with actual link
-    repoLink: '#', // Replace with actual link
-    tags: ['Automation Anywhere', 'RPA', 'Productivity']
+    title: 'Landing Page',
+    description: 'A responsive and modern landing page design.',
+    image: 'https://i.ibb.co/7jTdqCv/Screenshot-2024-07-09-093930.png',
+    dataAiHint: 'website design',
+    liveLink: 'https://amithviswas.github.io/Landing-Page/',
+    repoLink: '#', 
+    tags: ['HTML', 'CSS', 'Responsive Design']
   },
   {
-    title: 'AI Powered Recommendation System',
-    description: 'A machine learning model that provides personalized content recommendations.',
-    image: 'https://placehold.co/600x400/1A1A1A/FF7733.png?text=Project+Beta',
-    dataAiHint: 'data algorithm',
-    liveLink: '#',
+    title: 'Home Theater Experience',
+    description: 'A web application simulating a home theater selection and viewing experience.',
+    image: 'https://i.ibb.co/G52Sq68/Screenshot-of-Home-Theater.png',
+    dataAiHint: 'web application',
+    liveLink: 'https://amithviswas.github.io/Home-Theater-Experience/',
     repoLink: '#',
-    tags: ['Machine Learning', 'Python', 'AI']
+    tags: ['HTML', 'CSS', 'JavaScript', 'UI/UX']
   },
   {
-    title: 'Data Visualization Dashboard',
-    description: 'Interactive dashboard for visualizing complex datasets using modern web technologies.',
-    image: 'https://placehold.co/600x400/1A1A1A/FFFFFF.png?text=Project+Gamma',
-    dataAiHint: 'charts graphs',
-    liveLink: '#',
+    title: 'Reverse-engineered Twitch.tv UI',
+    description: 'A recreation of the Twitch.tv user interface focusing on front-end details.',
+    image: 'https://i.ibb.co/kqk32SP/Screenshot-of-Twitch-tv.png',
+    dataAiHint: 'website interface',
+    liveLink: 'https://amithviswas.github.io/Twitch.tv-UI-Reversed-Engineered-/',
     repoLink: '#',
-    tags: ['Data Viz', 'React', 'D3.js']
+    tags: ['UI/UX', 'HTML', 'CSS', 'Reverse Engineering']
   },
+  {
+    title: 'Music Player with Slider',
+    description: 'A functional music player interface with playback controls and a progress slider.',
+    image: 'https://i.ibb.co/tp12Hq5/Screenshot-2024-07-09-153458.png',
+    dataAiHint: 'web application',
+    liveLink: 'https://amithviswas.github.io/Music-Player-with-Slider/',
+    repoLink: '#',
+    tags: ['JavaScript', 'HTML', 'CSS', 'UI Component']
+  },
+  {
+    title: 'Dark Run Game',
+    description: 'An engaging scroll-based game named Dark Run, built with web technologies.',
+    image: 'https://i.ibb.co/cNNvz48/Screenshot-2024-07-09-154834.png',
+    dataAiHint: 'game interface',
+    liveLink: 'https://amithviswas.github.io/Scroll-Game-Dark-Run/',
+    repoLink: '#',
+    tags: ['JavaScript', 'HTML5 Game', 'Canvas']
+  },
+  {
+    title: 'Old Car Game',
+    description: 'A retro-style car game developed using web technologies.',
+    image: 'https://i.ibb.co/6XYKhGP/Screenshot-2024-07-09-105411.png',
+    dataAiHint: 'game interface',
+    liveLink: 'https://amithviswas.github.io/Old-Car-Game/',
+    repoLink: '#',
+    tags: ['JavaScript', 'HTML5 Game', 'Retro']
+  }
 ];
 
 const cardVariants = {

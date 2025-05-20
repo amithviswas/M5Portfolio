@@ -1,3 +1,4 @@
+
 "use client";
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -21,8 +22,8 @@ const MGrillePattern = () => (
 
 
 export default function HeroSection() {
-  const name = "Amith Viswas Reddy";
-  const tagline = "Data Scientist | AI/ML Enthusiast | Problem Solver";
+  const name = "Amith Viswas Reddy. D";
+  const tagline = "Passionate Data Scientist & Robotics Developer | AI & ML Enthusiast";
 
   const nameVariants = {
     hidden: { opacity: 0 },
