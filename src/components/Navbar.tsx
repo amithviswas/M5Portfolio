@@ -26,9 +26,127 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const [activeLink, setActiveLink] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
   const navLinkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const sectionObserverRef = useRef<IntersectionObserver | null>(null);
   const { incrementSectionVisit } = useUserInteraction();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const setActiveLinkAndTrack = useCallback((href: string, sectionId?: string) => {
+    setActiveLink(prevActiveLink => {
+      if (prevActiveLink !== href) {
+        if (sectionId) {
+          incrementSectionVisit(sectionId);
+        } else {
+          // Fallback to derive sectionId from href if it's a homepage hash link
+          const matchingNavLink = navLinks.find(nl => nl.href === href && nl.href.startsWith('/#'));
+          if (matchingNavLink) {
+            incrementSectionVisit(matchingNavLink.id);
+          }
+        }
+      }
+      return href;
+    });
+  }, [incrementSectionVisit]);
+
+  // Effect for setting active link based on pathname and hash, and for IntersectionObserver
+  useEffect(() => {
+    if (!isMounted) return;
+
+    const currentHash = window.location.hash;
+
+    if (pathname !== '/') {
+      setActiveLinkAndTrack(pathname);
+      if (sectionObserverRef.current) {
+        sectionObserverRef.current.disconnect();
+      }
+      return;
+    }
+
+    // Homepage specific logic
+    let initialActiveHref = '/#home';
+    if (currentHash) {
+      const matchedNavLink = navLinks.find(link => link.href === `/${currentHash}`);
+      if (matchedNavLink) {
+        initialActiveHref = matchedNavLink.href;
+      }
+    }
+    setActiveLinkAndTrack(initialActiveHref, initialActiveHref.substring(2));
+    
+    // Setup IntersectionObserver for homepage sections
+    if (sectionObserverRef.current) {
+      sectionObserverRef.current.disconnect();
+    }
+
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      if (pathname !== '/') return; // Only run on homepage
+
+      let currentHighestVisibleSectionId: string | null = null;
+      let highestVisibleSectionTop = Infinity;
+
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const rect = entry.target.getBoundingClientRect();
+           // Consider sections whose top is within the top 60% of the viewport
+          if (rect.top < window.innerHeight * 0.6 && rect.top < highestVisibleSectionTop) {
+            highestVisibleSectionTop = rect.top;
+            currentHighestVisibleSectionId = entry.target.id;
+          }
+        }
+      });
+      
+      if (currentHighestVisibleSectionId) {
+        const activeNavLinK = navLinks.find(link => link.id === currentHighestVisibleSectionId);
+        if (activeNavLinK) {
+          setActiveLinkAndTrack(activeNavLinK.href, activeNavLinK.id);
+        }
+      } else if (window.scrollY < window.innerHeight * 0.2) { // Very top of the page
+        setActiveLinkAndTrack('/#home', 'home');
+      }
+    };
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -50% 0px", // Section active if top enters this zone
+      threshold: 0.01, // Small threshold
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sectionObserverRef.current = observer;
+
+    navLinks.forEach(link => {
+      if (link.href.startsWith('/#')) {
+        const sectionElement = document.getElementById(link.id);
+        if (sectionElement) {
+          observer.observe(sectionElement);
+        }
+      }
+    });
+
+    const handleHashChange = () => {
+      if (pathname === '/') {
+        const newHash = window.location.hash;
+        const matchedNavLink = navLinks.find(link => link.href === `/${newHash}`);
+        if (matchedNavLink) {
+          setActiveLinkAndTrack(matchedNavLink.href, matchedNavLink.id);
+        } else if (!newHash) {
+           setActiveLinkAndTrack('/#home', 'home');
+        }
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      if (sectionObserverRef.current) {
+        sectionObserverRef.current.disconnect();
+      }
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, [isMounted, pathname, setActiveLinkAndTrack]);
+
 
   const handleNavLinkMouseMove = (event: React.MouseEvent<HTMLAnchorElement>, index: number) => {
     const linkElement = navLinkRefs.current[index];
@@ -37,15 +155,14 @@ export default function Navbar() {
     const rect = linkElement.getBoundingClientRect();
     const cursorXPercent = ((event.clientX - rect.left) / rect.width) * 100;
 
-    let blueStopPercentage = 55; // Default split
-    const driftAmount = 15; // How much the split can drift towards cursor, max 15%
+    let blueStopPercentage = 55; 
+    const driftAmount = 15; 
 
-    if (cursorXPercent < 50) { // Cursor on left half
+    if (cursorXPercent < 50) { 
       blueStopPercentage = 55 + ((50 - cursorXPercent) / 50) * driftAmount;
-    } else { // Cursor on right half
+    } else { 
       blueStopPercentage = 55 - ((cursorXPercent - 50) / 50) * driftAmount;
     }
-    // Clamp values between, for example, 40% and 70% to keep both colors visible
     blueStopPercentage = Math.max(40, Math.min(70, blueStopPercentage));
 
     linkElement.style.setProperty('--grille-blue-stop-percentage-hover', `${blueStopPercentage}%`);
@@ -55,179 +172,54 @@ export default function Navbar() {
   const handleNavLinkMouseLeave = (index: number) => {
     const linkElement = navLinkRefs.current[index];
     if (!linkElement || !linkElement.classList.contains('nav-laser-crest')) return;
-    // Reset to default non-hover split or remove if you want it to snap back sharply
     linkElement.style.removeProperty('--grille-blue-stop-percentage-hover');
     linkElement.style.removeProperty('--grille-red-start-percentage-hover');
   };
 
-  const setActiveLinkAndTrackVisit = useCallback((href: string, id?: string) => {
-    if (activeLink !== href) {
-      setActiveLink(href);
-      if (id) {
-        incrementSectionVisit(id);
-      } else {
-        // Try to find id if not provided (e.g. for path-based links)
-        const foundLink = navLinks.find(nl => nl.href === href);
-        if (foundLink?.id) incrementSectionVisit(foundLink.id);
-      }
-    }
-  }, [activeLink, incrementSectionVisit]);
-
-
-  useEffect(() => {
-    navLinkRefs.current = navLinkRefs.current.slice(0, navLinks.length);
-  }, []);
-
-  useEffect(() => {
-    // Initial active link determination based on path and hash
-    const currentPath = pathname;
-    const currentHash = typeof window !== 'undefined' ? window.location.hash : '';
-    let initialActiveHref = '';
-    let initialActiveId = '';
-
-    if (currentPath !== '/') {
-      const matchedNavLink = navLinks.find(link => link.href === currentPath);
-      if (matchedNavLink) {
-        initialActiveHref = matchedNavLink.href;
-        initialActiveId = matchedNavLink.id;
-      } else {
-        initialActiveHref = currentPath; // Fallback for unlisted paths
-        initialActiveId = currentPath.replace('/', '');
-      }
-    } else { // Homepage
-      if (currentHash) {
-        const matchedByHash = navLinks.find(link => link.href === `/${currentHash}`);
-        if (matchedByHash) {
-          initialActiveHref = matchedByHash.href;
-          initialActiveId = matchedByHash.id;
-        }
-      }
-      if (!initialActiveHref && window.scrollY < window.innerHeight * 0.1) {
-        initialActiveHref = '/#home';
-        initialActiveId = 'home';
-      }
-    }
-    if (initialActiveHref) {
-      setActiveLinkAndTrackVisit(initialActiveHref, initialActiveId);
-    }
-
-    // Intersection Observer setup
-    if (sectionObserverRef.current) {
-      sectionObserverRef.current.disconnect();
-    }
-
-    const sections = navLinks
-      .filter(link => link.href.startsWith('/#'))
-      .map(link => document.getElementById(link.id))
-      .filter(section => section !== null) as HTMLElement[];
-
-    if (sections.length > 0 && pathname === '/') {
-      const observerOptions = {
-        root: null,
-        rootMargin: "-30% 0px -45% 0px", // Section active if top is within 30%-55% of viewport height
-        threshold: 0, // Any part of section in rootMargin triggers
-      };
-
-      const observerCallback: IntersectionObserverCallback = (entries) => {
-        if (pathname !== '/') return;
-
-        let highestVisibleSection: { href: string; id: string; top: number } | null = null;
-
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const matchingNavLink = navLinks.find(link => link.id === entry.target.id);
-            if (matchingNavLink) {
-              const rect = entry.boundingClientRect;
-              if (!highestVisibleSection || rect.top < highestVisibleSection.top) {
-                highestVisibleSection = { href: matchingNavLink.href, id: matchingNavLink.id, top: rect.top };
-              }
-            }
-          }
-        });
-
-        if (highestVisibleSection) {
-           setActiveLinkAndTrackVisit(highestVisibleSection.href, highestVisibleSection.id);
-        } else if (window.scrollY < window.innerHeight * 0.1) { // At the very top of homepage
-           setActiveLinkAndTrackVisit('/#home', 'home');
-        }
-      };
-
-      const observer = new IntersectionObserver(observerCallback, observerOptions);
-      sections.forEach(section => {
-        if (section) observer.observe(section);
-      });
-      sectionObserverRef.current = observer;
-    }
-
-    const handleHashChange = () => {
-      const newHash = window.location.hash;
-      if (pathname === '/' && newHash) {
-        const matchedByHash = navLinks.find(link => link.href === `/${newHash}`);
-        if (matchedByHash) {
-          setActiveLinkAndTrackVisit(matchedByHash.href, matchedByHash.id);
-        }
-      }
-    };
-
-    window.addEventListener('hashchange', handleHashChange, { passive: true });
-
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-      if (sectionObserverRef.current) {
-        sectionObserverRef.current.disconnect();
-      }
-    };
-  }, [pathname, setActiveLinkAndTrackVisit]);
-
-
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
-  const handleNavLinkClick = (href: string, id: string) => {
+  const handleNavLinkClick = (href: string, sectionId: string) => {
     closeMobileMenu();
-    setActiveLinkAndTrackVisit(href, id); // Set active link and track visit immediately
+    setActiveLinkAndTrack(href, sectionId); // Set active link and track visit immediately
 
     if (href.startsWith('/#') && pathname === '/') {
-      const targetId = href.substring(2); // Remove '/#'
+      const targetId = href.substring(2);
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
-        // Update hash without triggering full page reload if possible
-        // History API might not always trigger observer as expected, hence manual setActiveLink
         if (window.location.hash !== `#${targetId}`) {
            history.pushState(null, '', `#${targetId}`);
         }
-        targetElement.scrollIntoView({ behavior: 'smooth' });
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-    } else if (href.startsWith('/#') && pathname !== '/') {
-      // Navigating to a homepage section from another page
-      // Next.js Link component will handle navigation. The hash will be processed by useEffect.
     }
+    // For links to other pages or hash links from other pages, Next.js Link handles navigation.
+    // The useEffect will then pick up the new pathname or hash to set the active link.
   };
 
   return (
     <motion.nav
       className="fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ease-in-out font-sans"
       style={{
-        backgroundColor: 'hsl(var(--background))', // Always use the dark background
-        boxShadow: '0 4px 12px hsla(var(--primary)/0.2)', // Always apply shadow
+        backgroundColor: 'hsl(var(--background))',
+        boxShadow: '0 4px 12px hsla(var(--primary)/0.2)',
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20"> {/* Navbar height */}
+        <div className="flex items-center justify-between h-20">
           <Link href="/#home" className="flex items-center group" onClick={() => handleNavLinkClick('/#home', 'home')}>
             <Image
-              src="https://i.ibb.co/N2v0V2R8/Amith-Viswas-Reddy.png" // Your image logo
+              src="https://i.ibb.co/N2v0V2R8/Amith-Viswas-Reddy.png"
               alt="Amith Viswas Reddy Logo"
-              width={180} // Adjust as needed
-              height={40} // Adjust as needed
+              width={180}
+              height={40}
               className="object-contain group-hover:opacity-80 transition-opacity duration-300"
               priority
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-1">
             {navLinks.map((link, index) => {
-              const isActive = activeLink === link.href || (activeLink === '/' && link.href === '/#home');
+              const isActive = activeLink === link.href || (pathname === '/' && activeLink === '' && link.href === '/#home');
               return (
                 <Link
                   key={link.name}
@@ -240,7 +232,7 @@ export default function Navbar() {
                     isActive ? 'text-primary active-link' : 'text-muted-foreground hover:text-primary-foreground'
                   )}
                   onClick={(e) => {
-                    if (link.href.startsWith('/#') && pathname === '/') e.preventDefault(); // Prevent default for same-page hash links if Link handles scroll
+                    if (link.href.startsWith('/#') && pathname === '/') e.preventDefault();
                     handleNavLinkClick(link.href, link.id);
                   }}
                 >
@@ -250,7 +242,6 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <Button
               variant="ghost"
@@ -265,7 +256,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -273,14 +263,14 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden bg-background border-t border-border/50" // Use background for consistency
+            className="md:hidden bg-background border-t border-border/50"
             style={{
-              boxShadow: '0 4px 12px hsla(var(--primary)/0.2)', // Consistent shadow
+              boxShadow: '0 4px 12px hsla(var(--primary)/0.2)',
             }}
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navLinks.map((link) => {
-                 const isActive = activeLink === link.href || (activeLink === '/' && link.href === '/#home');
+                 const isActive = activeLink === link.href || (pathname === '/' && activeLink === '' && link.href === '/#home');
                 return (
                   <Link
                     key={link.name}
