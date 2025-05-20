@@ -7,12 +7,10 @@ import Section from '@/components/Section';
 import { MStartStopButton } from '@/components/MStartStopButton';
 import { useIntroContext } from '@/contexts/IntroContext';
 import { cn } from '@/lib/utils';
-import Image from 'next/image'; // Added Image import
+import Image from 'next/image';
 
 export default function HeroSection() {
   const { setIntroCompleted } = useIntroContext();
-  // const title = "Data Scientist | AI Engineer | ML Enthusiast"; // Removed title text
-  const name = "Amith Viswas Reddy. D";
   const [isScrolledPastThreshold, setIsScrolledPastThreshold] = useState(false);
 
   useEffect(() => {
@@ -31,7 +29,7 @@ export default function HeroSection() {
   }, []);
 
 
-  const elementVariants = { // Renamed from titleVariants for clarity
+  const elementVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
@@ -96,15 +94,13 @@ export default function HeroSection() {
       />
 
       <div className="relative z-10 flex flex-col items-center justify-center text-center h-full px-4">
-        {/* Removed motion.h1 for title */}
         
-        {/* New Image element */}
         <motion.div
-          className="mb-6 md:mb-8 w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 relative rounded-full overflow-hidden shadow-xl border-2 border-primary/50 card-m-glow"
-          variants={elementVariants} // Using the same variants as the old title
+          className="mb-4 md:mb-6 w-36 h-36 md:w-48 md:h-48 relative rounded-full overflow-hidden shadow-xl border-2 border-primary/50 card-m-glow"
+          variants={elementVariants}
           initial="hidden"
           animate="visible"
-          transition={{ delay: 0.5, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95]}} // Explicit transition for image
+          transition={{ delay: 0.5, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95]}}
         >
           <Image
             src="https://i.ibb.co/cKgh0560/1701fc1e-7948-4d92-b440-ffb24258652b.png"
@@ -112,27 +108,45 @@ export default function HeroSection() {
             fill
             style={{ objectFit: "cover" }}
             priority
-            sizes="(max-width: 768px) 192px, (max-width: 1024px) 256px, 288px"
+            sizes="(max-width: 768px) 144px, 192px"
             data-ai-hint="profile photo"
           />
         </motion.div>
 
-         <motion.p
-          className="text-4xl sm:text-5xl md:text-6xl font-bold uppercase tracking-tighter text-primary-foreground drop-shadow-[0_2px_10px_hsl(var(--primary)/0.5)] transition-m-blip"
+        <motion.h1
+          className="text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight text-primary drop-shadow-[0_2px_10px_hsl(var(--primary)/0.5)] transition-m-blip"
           variants={elementVariants}
           initial="hidden"
           animate="visible"
-          transition={{ delay: 0.8, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95]}} // Staggered delay for name
+          transition={{ delay: 0.8, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95]}}
         >
-          {name}
+          Crafting Digital Excellence.
+        </motion.h1>
+        <motion.p
+          className="text-lg md:text-xl text-accent font-semibold mt-2 md:mt-3"
+          variants={elementVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 1.0, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95]}}
+        >
+          Innovate. Create. Inspire.
+        </motion.p>
+        <motion.p
+          className="mt-3 md:mt-4 max-w-xl mx-auto text-sm text-muted-foreground sm:text-base"
+          variants={elementVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 1.2, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95]}}
+        >
+          Welcome to my digital space. I transform ideas into powerful, elegant, and user-centric web experiences. Explore my work and let's build something amazing together.
         </motion.p>
 
         <motion.div
           variants={elementVariants}
           initial="hidden"
           animate="visible"
-          transition={{ delay: 1.2, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95] }} // Staggered delay for button
-          className="mt-10 md:mt-12" // Adjusted margin for image
+          transition={{ delay: 1.5, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95] }}
+          className="mt-8 md:mt-10"
         >
           <MStartStopButton onClick={handleStartDriveClick} className="transition-m-blip">
             <PlayCircle size={32} className="mb-1 text-primary group-hover:text-blood-red transition-colors" />
