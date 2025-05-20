@@ -22,27 +22,27 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col p-0 bg-card border-border shadow-2xl rounded-lg">
+        <div className="relative w-full aspect-video">
+          <Image
+            src={project.imageUrl}
+            alt={project.title}
+            fill
+            style={{ objectFit: "cover" }}
+            className="rounded-t-lg"
+            data-ai-hint={project.dataAiHint || "project showcase"}
+            sizes="(max-width: 768px) 100vw, 70vw"
+          />
+           <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="absolute top-4 right-4 bg-background/50 hover:bg-background/80 text-foreground rounded-full z-10"
+              aria-label="Close dialog"
+          >
+              <X className="h-5 w-5" />
+          </Button>
+        </div>
         <ScrollArea className="flex-grow">
-          <div className="relative w-full aspect-video">
-            <Image
-              src={project.imageUrl}
-              alt={project.title}
-              fill
-              style={{ objectFit: "cover" }}
-              className="rounded-t-lg"
-              data-ai-hint={project.dataAiHint || "project showcase"}
-              sizes="(max-width: 768px) 100vw, 70vw"
-            />
-             <Button
-                variant="ghost"
-                size="icon"
-                onClick={onClose}
-                className="absolute top-4 right-4 bg-background/50 hover:bg-background/80 text-foreground rounded-full z-10"
-                aria-label="Close dialog"
-            >
-                <X className="h-5 w-5" />
-            </Button>
-          </div>
           <div className="p-6 md:p-8 space-y-6">
             <DialogHeader className="text-left">
               <DialogTitle className="text-2xl md:text-3xl font-bold text-primary font-heading">{project.title}</DialogTitle>
