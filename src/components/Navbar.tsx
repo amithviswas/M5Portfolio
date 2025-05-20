@@ -9,6 +9,7 @@ import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Added
 
 const navLinks = [
   { name: 'Home', href: '/#home', id: 'home' },
@@ -28,6 +29,7 @@ export default function Navbar() {
   const [activeLink, setActiveLink] = useState('');
   const navLinkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const sectionObserverRef = useRef<IntersectionObserver | null>(null);
+  const { incrementSectionVisit } = useUserInteraction(); // Added
 
   const determineActiveLink = useCallback(() => {
     let newActive = pathname;
@@ -37,7 +39,6 @@ export default function Navbar() {
       if (currentHash) {
         newActive = `/${currentHash}`;
       } else {
-         // Default to home if no hash and on root path
         newActive = '/#home';
       }
     }
@@ -47,15 +48,15 @@ export default function Navbar() {
     if (matchingNavLink) {
       setActiveLink(matchingNavLink.href);
     } else if (pathname === '/') {
-      setActiveLink('/#home'); // Fallback for root if no other match
+      setActiveLink('/#home'); 
     } else {
-      setActiveLink(pathname); // For non-hash paths
+      setActiveLink(pathname); 
     }
   }, [pathname]);
 
   useEffect(() => {
     navLinkRefs.current = navLinkRefs.current.slice(0, navLinks.length);
-  }, [navLinks.length]);
+  }, []);
 
   const handleNavLinkMouseMove = (event: React.MouseEvent<HTMLAnchorElement>, index: number) => {
     const linkElement = navLinkRefs.current[index];
@@ -89,13 +90,11 @@ export default function Navbar() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial check
-    determineActiveLink(); // Initial active link check
+    handleScroll(); 
+    determineActiveLink(); 
 
-    // Listen to hash changes
     window.addEventListener('hashchange', determineActiveLink, { passive: true });
 
-    // Disconnect previous observer if it exists
     if (sectionObserverRef.current) {
       sectionObserverRef.current.disconnect();
     }
@@ -109,21 +108,25 @@ export default function Navbar() {
       if (sections.length > 0) {
         const observerOptions = {
           root: null, 
-          rootMargin: "-30% 0px -60% 0px", // When top 30% or bottom 60% of section is in view
-          threshold: 0.01, // As soon as 1% of the target is visible
+          rootMargin: "-30% 0px -60% 0px", 
+          threshold: 0.01, 
         };
 
         const observerCallback: IntersectionObserverCallback = (entries) => {
+          let foundActive = false;
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              // Prioritize sections that are more fully in view if multiple are intersecting
-              // This simple version just takes the first one that's intersecting
-              setActiveLink(`/#${entry.target.id}`);
+              const sectionId = `/#${entry.target.id}`;
+              setActiveLink(sectionId);
+              incrementSectionVisit(entry.target.id); // Track section visit
+              foundActive = true;
             }
           });
-           // If after checking all entries, none are "active" but we are at the top, set to home
-           if (window.scrollY < window.innerHeight * 0.3 && !entries.some(e => e.isIntersecting)) {
-            if (pathname === '/') setActiveLink('/#home');
+           if (!foundActive && window.scrollY < window.innerHeight * 0.3) {
+            if (pathname === '/') {
+                setActiveLink('/#home');
+                incrementSectionVisit('home'); // Track home as active
+            }
           }
         };
         
@@ -132,10 +135,21 @@ export default function Navbar() {
           if (section) observer.observe(section);
         });
         sectionObserverRef.current = observer;
+
+        // Initial check for home section if at top
+        if (window.scrollY < 50) { // Small threshold for "at the top"
+            setActiveLink('/#home');
+            incrementSectionVisit('home');
+        }
+
       }
     } else {
-        // For non-homepage routes, set active link based on pathname directly
         determineActiveLink();
+        // For non-homepage routes, use pathname as sectionId
+        const currentPathId = pathname.startsWith('/') ? pathname.substring(1) : pathname;
+        if (currentPathId) {
+            incrementSectionVisit(currentPathId);
+        }
     }
 
     return () => {
@@ -145,29 +159,27 @@ export default function Navbar() {
         sectionObserverRef.current.disconnect();
       }
     };
-  }, [pathname, determineActiveLink]); // Rerun when pathname changes or determineActiveLink reference changes
+  }, [pathname, determineActiveLink, incrementSectionVisit]);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
-  const handleNavLinkClick = (href: string) => {
+  const handleNavLinkClick = (href: string, id: string) => {
     closeMobileMenu();
-    setActiveLink(href); // Set active link immediately on click for better UX
+    setActiveLink(href); 
+    incrementSectionVisit(id); // Track click as a visit
     
     if (href.startsWith('/#') && pathname === '/') {
       const targetId = href.substring(2); 
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
-        // Update hash without causing a full page reload if already on the page
         if (window.location.hash !== `#${targetId}`) {
            history.pushState(null, '', `#${targetId}`);
         }
         targetElement.scrollIntoView({ behavior: 'smooth' });
       }
     } else if (href.startsWith('/#')) {
-      // If on a different page and clicking a hash link, navigate to home then let browser handle hash.
-      // Next/link will handle this naturally by navigating to `/#hash`.
+      // Navigate to home then let browser handle hash.
     }
-    // For non-hash links, Next/link handles navigation.
   };
 
   return (
@@ -183,7 +195,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <Link href="/#home" className="flex items-center group" onClick={() => handleNavLinkClick('/#home')}>
+          <Link href="/#home" className="flex items-center group" onClick={() => handleNavLinkClick('/#home', 'home')}>
             <Image
               src="https://i.ibb.co/N2v0V2R8/Amith-Viswas-Reddy.png"
               alt="Amith Viswas Reddy Logo"
@@ -196,7 +208,7 @@ export default function Navbar() {
 
           <div className="hidden md:flex space-x-1">
             {navLinks.map((link, index) => {
-              const isActive = activeLink === link.href;
+              const isActive = activeLink === link.href || (activeLink === '/' && link.href === '/#home');
               return (
                 <Link
                   key={link.name}
@@ -210,10 +222,9 @@ export default function Navbar() {
                   )}
                   onClick={(e) => {
                     if (link.href.startsWith('/#') && pathname === '/') {
-                      // Prevent default only if it's a hash link on the same page
                       e.preventDefault(); 
                     }
-                    handleNavLinkClick(link.href);
+                    handleNavLinkClick(link.href, link.id);
                   }}
                 >
                   {link.name}
@@ -247,7 +258,7 @@ export default function Navbar() {
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navLinks.map((link) => {
-                 const isActive = activeLink === link.href;
+                 const isActive = activeLink === link.href || (activeLink === '/' && link.href === '/#home');
                 return (
                   <Link
                     key={link.name}
@@ -260,7 +271,7 @@ export default function Navbar() {
                       if (link.href.startsWith('/#') && pathname === '/') {
                          e.preventDefault(); 
                       }
-                      handleNavLinkClick(link.href);
+                      handleNavLinkClick(link.href, link.id);
                     }}
                   >
                     {link.name}
@@ -274,5 +285,3 @@ export default function Navbar() {
     </motion.nav>
   );
 }
-
-    

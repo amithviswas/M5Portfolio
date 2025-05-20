@@ -5,6 +5,7 @@ import {
   Brain, Database, BarChart3, Cpu, Code2, Bot, Palette, Terminal, Server, Zap, Wind, Gauge 
 } from 'lucide-react';
 import Section from '@/components/Section';
+import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Added
 
 const skills = [
   { name: 'AI Model Training', icon: <Zap size={32} />, modeName: 'Turbo Boost' },
@@ -24,6 +25,7 @@ const skills = [
 
 export default function SkillsSection() {
   const prefersReducedMotion = useReducedMotion();
+  const { incrementSkillHover } = useUserInteraction(); // Added
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.9 },
@@ -32,13 +34,13 @@ export default function SkillsSection() {
       y: 0,
       scale: prefersReducedMotion ? 1 : [1, 1.06, 1],
       boxShadow: prefersReducedMotion 
-        ? "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)" // Default shadow from Tailwind's shadow-lg
+        ? "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)" 
         : ["0 0 0px hsla(var(--primary)/0)", "0 0 12px hsla(var(--primary)/0.4)", "0 0 0px hsla(var(--primary)/0)"],
       transition: {
         delay: i * 0.06,
-        duration: prefersReducedMotion ? 0.4 : 0.2, // Faster for blip, normal for fade-in
+        duration: prefersReducedMotion ? 0.4 : 0.2, 
         ease: prefersReducedMotion ? [0.42, 0, 0.58, 1] : "easeInOut",
-        times: prefersReducedMotion ? undefined : [0, 0.5, 1], // For scale and boxShadow sequence
+        times: prefersReducedMotion ? undefined : [0, 0.5, 1], 
       },
     }),
     hover: prefersReducedMotion ? { scale: 1.02 } : {
@@ -89,14 +91,16 @@ export default function SkillsSection() {
         {skills.map((skill, index) => (
           <motion.div
             key={skill.modeName}
-            className="bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40 transition-m-blip"
+            className="bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40 transition-m-blip skill-card-trail-container"
             custom={index}
             variants={cardVariants}
             initial="hidden"
             whileInView="visible"
             whileHover="hover"
             viewport={{ once: true, amount: 0.1 }}
+            onHoverStart={() => incrementSkillHover(skill.name)} // Track skill hover
           >
+            <div className="skill-card-trail"></div> {/* For trail effect */}
             <motion.div 
               className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
               variants={iconVariants}
