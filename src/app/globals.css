@@ -91,6 +91,7 @@
 .DialogContent[data-state="open"] {
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* Added for scroll area fix */
 }
 .DialogContent > div[data-radix-scroll-area-viewport] {
   scrollbar-width: thin;
@@ -111,3 +112,61 @@
 .DialogOverlay[data-state="open"] {
     z-index: 40;
 }
+
+/* M5 Headlight-style Nav Underline */
+.nav-headlight {
+  position: relative;
+  overflow: visible; /* Allow pseudo-element to extend slightly */
+}
+
+.nav-headlight::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; /* Adjust for positioning below text */
+  left: 50%;
+  width: 0%; /* Starts at 0 width */
+  height: 3px;
+  background-image:
+    /* Left beam (blue) */
+    radial-gradient(ellipse 80% 100% at 10% 100%, hsla(var(--bmw-m-blue), 0.95) 0%, hsla(var(--bmw-m-blue), 0.0) 70%),
+    /* Right beam (red) */
+    radial-gradient(ellipse 80% 100% at 90% 100%, hsla(var(--primary), 0.95) 0%, hsla(var(--primary), 0.0) 70%);
+  background-repeat: no-repeat;
+  background-size: 55% 100%, 55% 100%; /* Each gradient takes up slightly more than half, creates overlap */
+  background-position: left bottom, right bottom;
+  filter: blur(0.8px);
+  opacity: 0;
+  transform: translateX(-50%) skewX(-25deg); /* Center and apply skew */
+  transform-origin: center bottom;
+  transition: width 0.35s cubic-bezier(0.23, 1, 0.32, 1), 
+              opacity 0.3s ease-out,
+              height 0.3s ease-out,
+              filter 0.3s ease-out;
+  will-change: width, opacity, height, filter;
+  pointer-events: none;
+}
+
+.nav-headlight:hover::after,
+.nav-headlight.active-link::after {
+  width: 115%; /* Expands beyond the item width for effect */
+  height: 4px; /* Slightly thicker */
+  opacity: 1;
+  filter: blur(0.5px) 
+          drop-shadow(-2px 0 3px hsla(var(--bmw-m-blue), 0.6)) 
+          drop-shadow(2px 0 3px hsla(var(--primary), 0.6)); /* Dual glow */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-headlight::after {
+    transition: none;
+  }
+  .nav-headlight:hover::after,
+  .nav-headlight.active-link::after {
+    width: 100%;
+    height: 3px;
+    opacity: 1;
+    filter: blur(0px); /* No blur or glow for reduced motion */
+    transform: translateX(-50%) skewX(0deg); /* No skew for reduced motion */
+  }
+}
+
