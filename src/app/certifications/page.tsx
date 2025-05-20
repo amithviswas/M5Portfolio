@@ -81,14 +81,15 @@ export default function CertificationsPage() {
             viewport={{ once: true, amount: 0.1 }}
           >
             <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-lg overflow-hidden h-full flex flex-col md:flex-row group">
-                <div className="w-full md:w-1/3 h-60 md:h-auto relative overflow-hidden">
+                <div className="w-full md:w-1/3 h-60 md:h-full relative overflow-hidden">
                   <Image
                     src={cert.image}
                     alt={cert.title}
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    style={{ objectFit: "cover" }}
                     className="transition-transform duration-500 ease-in-out group-hover:scale-110"
                     data-ai-hint={cert.dataAiHint}
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
                    <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-card/70 via-card/10 to-transparent"></div>
                 </div>

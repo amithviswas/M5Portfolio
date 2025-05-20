@@ -32,7 +32,7 @@ export default function AboutMeSection() {
         <CardContent className="p-0 md:p-0">
           <div className="flex flex-col md:flex-row items-center">
             <motion.div 
-              className="w-full md:w-1/3 h-80 md:h-auto relative group"
+              className="w-full md:w-1/3 h-80 md:h-96 relative group"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -41,11 +41,12 @@ export default function AboutMeSection() {
               <Image
                 src="https://i.ibb.co/PGgTrngH/d2d27295-61a5-43fa-bd33-5f44c25e813a.png"
                 alt="Amith Viswas Reddy"
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: "cover" }}
                 className="transition-transform duration-500 group-hover:scale-105"
                 data-ai-hint="professional portrait"
-                priority // Added priority to hint importance
+                priority 
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-card/80 via-card/20 to-transparent"></div>
             </motion.div>
