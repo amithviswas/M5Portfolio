@@ -155,38 +155,31 @@
   overflow: visible;
   @apply transition-m-blip;
 }
+
 .nav-laser-crest::after {
   content: '';
   position: absolute;
-  left: 50%; 
-  bottom: -4px; 
-  height: 6px; 
-  width: 0%; 
-  background: linear-gradient(135deg, hsl(var(--m-light-blue-hsl)) 0%, hsl(var(--m-violet-hsl)) 100%);
-  border-radius: 2px; 
-  opacity: 0;
-  transform: translateX(-50%) skewX(-20deg); 
-  transition: width 0.12s cubic-bezier(.36,1.08,.33,1), 
-              opacity 0.12s cubic-bezier(.36,1.08,.33,1),
-              background 0.12s cubic-bezier(.36,1.08,.33,1),
-              filter 0.12s cubic-bezier(.36,1.08,.33,1);
-  will-change: width, opacity, background, filter;
+  left: 50%;
+  bottom: -2px; /* Sits closer to the text */
+  height: 2px; /* Thinner bar */
+  width: 0%;
+  background: hsl(var(--primary)); /* Solid primary color */
+  border-radius: 1px; /* Slightly rounded ends for a clean line */
+  opacity: 1; /* Always visible when width > 0 */
+  transform: translateX(-50%);
+  transition: width 0.3s ease-in-out; /* Smooth width transition */
+  will-change: width;
   pointer-events: none;
-  filter: drop-shadow(0 0 3px hsl(var(--m-light-blue-hsl)/0.5)) blur(0.5px);
 }
 
-.nav-laser-crest:hover::after {
-  width: 70%; 
-  opacity: 1;
-  background: linear-gradient(135deg, hsla(var(--m-light-blue-hsl),0.9) 0%, hsla(var(--m-violet-hsl),0.9) 100%);
-  filter: drop-shadow(0 0 8px hsl(var(--m-light-blue-hsl)/0.7)) blur(0px);
-}
-
+.nav-laser-crest:hover::after,
 .nav-laser-crest.active-link::after {
-  width: 70%; 
-  opacity: 0.4; 
-  background: linear-gradient(135deg, hsl(var(--m-light-blue-hsl)) 0%, hsl(var(--m-violet-hsl)) 100%);
-  filter: drop-shadow(0 0 4px hsl(var(--m-light-blue-hsl)/0.4)) blur(0.5px);
+  width: 100%; /* Full width on hover and for active link */
+}
+
+/* Remove complex skew, blur, and gradient animations for simpler underline */
+.nav-laser-crest.active-link::after {
+  opacity: 1; /* Ensure active link underline is fully opaque */
 }
 
 
@@ -786,45 +779,71 @@
 
 .m-rpm-tick-base {
   @apply absolute top-1/2 -translate-y-1/2 h-[140%] w-[1.5px] transition-opacity duration-300;
-  background: linear-gradient(to bottom, hsla(0,0%,100%,0.7), hsla(0,0%,100%,0.3)); /* Glowing white */
-  box-shadow: 0 0 2px hsla(0,0%,100%,0.5);
+  background: linear-gradient(to bottom, hsla(0,0%,100%,0.9), hsla(0,0%,100%,0.6)); /* Brighter white for base ticks */
+  box-shadow: 0 0 2px hsla(0,0%,100%,0.7), 0 0 4px hsla(0,0%,100%,0.5); /* Enhanced white glow */
 }
 .m-rpm-tick-major {
-  @apply w-[2px]; /* Slightly thicker major ticks */
-  background: linear-gradient(to bottom, hsla(0,0%,100%,0.9), hsla(0,0%,100%,0.5));
-  box-shadow: 0 0 3px hsla(0,0%,100%,0.7);
+  @apply w-[2px] h-[160%]; /* Slightly thicker and taller major ticks */
+  background: linear-gradient(to bottom, hsla(0,0%,100%,1), hsla(0,0%,100%,0.7)); /* Full white for major ticks */
+  box-shadow: 0 0 3px hsla(0,0%,100%,0.8), 0 0 6px hsla(0,0%,100%,0.6); /* Stronger major tick glow */
 }
 .m-rpm-tick-redzone-highlight { /* For ticks in the redline zone */
-  background: linear-gradient(to bottom, hsl(var(--primary)), hsla(var(--primary), 0.5)) !important;
-  box-shadow: 0 0 3px hsl(var(--primary)), 0 0 5px hsl(var(--primary)/0.7) !important;
+  background: linear-gradient(to bottom, hsl(var(--primary)), hsla(var(--primary), 0.8)) !important; /* Intense red */
+  box-shadow: 0 0 4px hsl(var(--primary)), 0 0 8px hsl(var(--primary)/0.9) !important; /* Strong red glow */
 }
 
 /* Bar Fill / Digital Needle Styles */
 .m-rpm-gauge-fill-low { /* Ice blue - up to 50% */
-  background: linear-gradient(to right, hsl(var(--bmw-i-blue-hsl)/0.8), hsl(var(--bmw-i-blue-hsl)));
-  box-shadow: inset 0 0 3px hsla(var(--bmw-i-blue-hsl),0.4), 0 0 5px hsla(var(--bmw-i-blue-hsl),0.3);
+  background: linear-gradient(to right, hsl(var(--bmw-i-blue-hsl)/0.7), hsl(var(--bmw-i-blue-hsl)/0.9));
+  box-shadow: inset 0 0 2px hsla(var(--bmw-i-blue-hsl),0.3),
+              0 0 3px hsla(var(--bmw-i-blue-hsl),0.2),
+              0 0 0 1px hsla(var(--bmw-i-blue-hsl), 0.5); /* Neon edge */
 }
 .m-rpm-gauge-fill-mid { /* Hyper Violet - 50% to 80% */
-  background: linear-gradient(to right, hsl(var(--bmw-i-blue-hsl)), hsl(var(--hyper-violet-hsl)));
-  box-shadow: inset 0 0 3px hsla(var(--hyper-violet-hsl),0.4), 0 0 5px hsla(var(--hyper-violet-hsl),0.3);
+  background: linear-gradient(to right, hsl(var(--bmw-i-blue-hsl)/0.9), hsl(var(--hyper-violet-hsl)/0.9));
+  box-shadow: inset 0 0 2px hsla(var(--hyper-violet-hsl),0.3),
+              0 0 3px hsla(var(--hyper-violet-hsl),0.2),
+              0 0 0 1px hsla(var(--hyper-violet-hsl), 0.5); /* Neon edge */
 }
 .m-rpm-gauge-fill-high { /* Voltage Gold - 80% to 90% */
-  background: linear-gradient(to right, hsl(var(--hyper-violet-hsl)), hsl(var(--voltage-gold-hsl)));
-  box-shadow: inset 0 0 3px hsla(var(--voltage-gold-hsl),0.4), 0 0 5px hsla(var(--voltage-gold-hsl),0.3);
+  background: linear-gradient(to right, hsl(var(--hyper-violet-hsl)/0.9), hsl(var(--voltage-gold-hsl)/0.9));
+  box-shadow: inset 0 0 2px hsla(var(--voltage-gold-hsl),0.3),
+              0 0 3px hsla(var(--voltage-gold-hsl),0.2),
+              0 0 0 1px hsla(var(--voltage-gold-hsl), 0.5); /* Neon edge */
 }
 .m-rpm-gauge-fill-redline { /* Blood Red - 90%+ */
-  background: linear-gradient(to right, hsl(var(--voltage-gold-hsl)), hsl(var(--primary)));
-  box-shadow: inset 0 0 4px hsla(var(--primary),0.5), 0 0 8px hsla(var(--primary),0.7);
+  background: linear-gradient(to right, hsl(var(--voltage-gold-hsl)/0.9), hsl(var(--primary)/0.95)); /* More intense red */
+  box-shadow: inset 0 0 3px hsla(var(--primary),0.4), /* Sharper inset shadow */
+              0 0 6px hsla(var(--primary),0.6), /* Vivid outer glow */
+              0 0 0 1.5px hsl(var(--primary), 0.7); /* Stronger neon edge */
 }
 
 .m-rpm-led-pulse { /* Animation for LED shift indicators */
-  animation: m-rpm-redline-led-pulse 0.3s ease-out forwards;
+  animation: m-rpm-redline-led-pulse 0.25s ease-out forwards; /* Quicker pulse */
 }
 
 @keyframes m-rpm-redline-led-pulse {
-  0% { filter: brightness(1.2) saturate(1.2); box-shadow: inset 0 0 4px hsla(var(--primary),0.5), 0 0 8px hsla(var(--primary),0.7), 0 0 15px hsla(var(--primary),0.5); }
-  50% { filter: brightness(2.5) saturate(2.0); box-shadow: inset 0 0 6px hsla(var(--primary),0.8), 0 0 15px hsla(var(--primary),1), 0 0 30px hsla(var(--primary),0.7); }
-  100% { filter: brightness(1.5) saturate(1.5); box-shadow: inset 0 0 4px hsla(var(--primary),0.6), 0 0 10px hsla(var(--primary),0.8), 0 0 20px hsla(var(--primary),0.6); }
+  0% {
+    filter: brightness(1.5) saturate(1.5); /* Start brighter */
+    box-shadow: inset 0 0 4px hsla(var(--primary),0.6),
+                0 0 10px hsla(var(--primary),0.8),
+                0 0 20px hsla(var(--primary),0.6),
+                0 0 0 1.5px hsl(var(--primary), 0.7);
+  }
+  50% {
+    filter: brightness(3.5) saturate(3.0); /* Peak brightness, more saturated */
+    box-shadow: inset 0 0 7px hsla(var(--primary),1), /* Intense inset */
+                0 0 25px hsla(var(--primary),1.5), /* Very strong outer glow */
+                0 0 50px hsla(var(--primary),1.2), /* Wide bloom for flash */
+                0 0 0 2.5px hsla(var(--primary), 1); /* Brightest neon edge */
+  }
+  100% {
+    filter: brightness(2.0) saturate(2.0); /* Settle to a very bright redline */
+    box-shadow: inset 0 0 5px hsla(var(--primary),0.8),
+                0 0 15px hsla(var(--primary),1),
+                0 0 30px hsla(var(--primary),0.8),
+                0 0 0 2px hsl(var(--primary), 0.9);
+  }
 }
 
 
