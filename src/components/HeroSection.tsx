@@ -7,10 +7,11 @@ import Section from '@/components/Section';
 import { MStartStopButton } from '@/components/MStartStopButton';
 import { useIntroContext } from '@/contexts/IntroContext';
 import { cn } from '@/lib/utils';
+import Image from 'next/image'; // Added Image import
 
 export default function HeroSection() {
   const { setIntroCompleted } = useIntroContext();
-  const title = "Data Scientist | AI Engineer | ML Enthusiast";
+  // const title = "Data Scientist | AI Engineer | ML Enthusiast"; // Removed title text
   const name = "Amith Viswas Reddy. D";
   const [isScrolledPastThreshold, setIsScrolledPastThreshold] = useState(false);
 
@@ -24,20 +25,19 @@ export default function HeroSection() {
     };
 
     window.addEventListener('scroll', handleScroll);
-    // Initial check
     handleScroll(); 
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
 
-  const titleVariants = {
+  const elementVariants = { // Renamed from titleVariants for clarity
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        delay: 0.5,
+        delay: 0.5, // Base delay, will be staggered
         duration: 0.8,
         ease: [0.6, 0.01, 0.0, 0.95],
       },
@@ -47,7 +47,7 @@ export default function HeroSection() {
   const headlightVariants = {
     initial: { opacity: 0, scaleX: 0 },
     animate: (custom: number) => ({
-      opacity: isScrolledPastThreshold ? [0, 0.03, 0.01, 0.03, 0] : [0, 0.05, 0.02, 0.05, 0], // Reduced intensity when scrolled
+      opacity: isScrolledPastThreshold ? [0, 0.03, 0.01, 0.03, 0] : [0, 0.05, 0.02, 0.05, 0],
       scaleX: [0, 1, 0.8, 1, 0],
       transition: {
         delay: custom * 0.3 + 1.0,
@@ -75,7 +75,7 @@ export default function HeroSection() {
       id="home" 
       className={cn(
         "relative !pt-0 !pb-0 overflow-hidden",
-        isScrolledPastThreshold && "hero-backdrop-dimmed" // Apply dimming class
+        isScrolledPastThreshold && "hero-backdrop-dimmed"
       )} 
       fullHeight 
       noPadding
@@ -96,28 +96,43 @@ export default function HeroSection() {
       />
 
       <div className="relative z-10 flex flex-col items-center justify-center text-center h-full px-4">
-        <motion.h1
-          className="text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-wider text-primary-foreground drop-shadow-[0_2px_10px_hsl(var(--primary)/0.3)] transition-m-blip"
-          variants={titleVariants}
+        {/* Removed motion.h1 for title */}
+        
+        {/* New Image element */}
+        <motion.div
+          className="mb-6 md:mb-8 w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 relative rounded-full overflow-hidden shadow-xl border-2 border-primary/50 card-m-glow"
+          variants={elementVariants} // Using the same variants as the old title
           initial="hidden"
           animate="visible"
+          transition={{ delay: 0.5, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95]}} // Explicit transition for image
         >
-          {title}
-        </motion.h1>
+          <Image
+            src="https://i.ibb.co/cKgh0560/1701fc1e-7948-4d92-b440-ffb24258652b.png"
+            alt="Amith Viswas Reddy"
+            fill
+            style={{ objectFit: "cover" }}
+            priority
+            sizes="(max-width: 768px) 192px, (max-width: 1024px) 256px, 288px"
+            data-ai-hint="profile photo"
+          />
+        </motion.div>
+
          <motion.p
-          className="mt-4 text-5xl sm:text-6xl md:text-7xl font-bold uppercase tracking-tighter text-primary-foreground drop-shadow-[0_2px_10px_hsl(var(--primary)/0.5)] transition-m-blip"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95]}}
+          className="text-4xl sm:text-5xl md:text-6xl font-bold uppercase tracking-tighter text-primary-foreground drop-shadow-[0_2px_10px_hsl(var(--primary)/0.5)] transition-m-blip"
+          variants={elementVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 0.8, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95]}} // Staggered delay for name
         >
           {name}
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95] }}
-          className="mt-12"
+          variants={elementVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 1.2, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95] }} // Staggered delay for button
+          className="mt-10 md:mt-12" // Adjusted margin for image
         >
           <MStartStopButton onClick={handleStartDriveClick} className="transition-m-blip">
             <PlayCircle size={32} className="mb-1 text-primary group-hover:text-blood-red transition-colors" />
