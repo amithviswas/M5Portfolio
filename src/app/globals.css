@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,7 +14,7 @@
     --popover: 0 0% 10%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 0 100% 60%; /* BMW M Red #FF3333 */
+    --primary: 0 100% 60%; /* BMW M Red #FF3333 -> HSL(0, 100%, 50%) adjusted to 60% lightness for better contrast */
     --primary-foreground: 0 0% 98%; /* White text on primary */
 
     --secondary: 0 0% 15%; /* Dark Gray */
@@ -22,7 +23,7 @@
     --muted: 0 0% 25%; /* Muted Gray */
     --muted-foreground: 0 0% 70%;
 
-    --accent: 18 100% 60%; /* Energetic Orange #FF7733 */
+    --accent: 18 100% 60%; /* Energetic Orange #FF7733 -> HSL(18, 100%, 50%) adjusted to 60% lightness */
     --accent-foreground: 0 0% 10%; /* Dark text on accent */
 
     --destructive: 0 84.2% 60.2%; /* Default destructive red */
@@ -72,4 +73,47 @@
       linear-gradient(-45deg, hsla(0, 0%, 0%, 0.03) 25%, transparent 25%, transparent 75%, hsla(0, 0%, 0%, 0.03) 75%, hsla(0, 0%, 0%, 0.03));
     background-size: 10px 10px;
   }
+
+  /* Basic heading font style */
+  .font-heading {
+    @apply font-bold tracking-tight; /* Using Geist Sans bold as a base */
+  }
+
+  /* Simplified glow effect for buttons, can be expanded */
+  .button-m-glow {
+    @apply shadow-md hover:shadow-lg hover:shadow-primary/50 transition-shadow;
+  }
 }
+
+/* Ensure DialogContent takes up available space but not excessively */
+.DialogContent[data-state="open"] {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Styles for scrollbar in the modal if content overflows */
+.DialogContent > div[data-radix-scroll-area-viewport] {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: hsl(var(--primary)) hsl(var(--card)); /* For Firefox */
+}
+
+.DialogContent > div[data-radix-scroll-area-viewport]::-webkit-scrollbar {
+  width: 8px;
+}
+
+.DialogContent > div[data-radix-scroll-area-viewport]::-webkit-scrollbar-track {
+  background: hsl(var(--card));
+  border-radius: 10px;
+}
+
+.DialogContent > div[data-radix-scroll-area-viewport]::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--primary));
+  border-radius: 10px;
+  border: 2px solid hsl(var(--card));
+}
+
+/* Adjustments for DialogOverlay to ensure it's behind the content */
+.DialogOverlay[data-state="open"] {
+    z-index: 40; /* Ensure it's below DialogContent (z-50 by default) */
+}
+
