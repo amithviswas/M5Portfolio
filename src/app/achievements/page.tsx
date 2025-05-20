@@ -1,5 +1,6 @@
 
 "use client";
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Section from '@/components/Section';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -13,7 +14,9 @@ const achievements = [
     description: "Successfully managed and coordinated multiple large-scale events (Vitharkh, Samvaad, Vachan, Clash of Words), each with 150-200 participants. Responsibilities included planning, execution, and post-event analysis, ensuring smooth operations and high attendee satisfaction.",
     impactLabel: "Participants per Event Series",
     impactValue: "150-200+",
-    impactIcon: <Users size={24} className="text-accent" />
+    impactIcon: <Users size={24} className="text-accent" />,
+    imageUrl: 'https://placehold.co/600x300.png',
+    dataAiHint: 'event management conference'
   },
   {
     title: 'Outstanding Performance Award',
@@ -22,24 +25,26 @@ const achievements = [
     description: "Recognized for exceptional performance and leadership in data-driven projects. Spearheaded initiatives that directly contributed to a significant boost in client satisfaction metrics through innovative data analysis and solution implementation using ML.",
     impactLabel: "Client Satisfaction Boost",
     impactValue: "40%",
-    impactIcon: <BarChart size={24} className="text-accent" />
+    impactIcon: <BarChart size={24} className="text-accent" />,
+    imageUrl: 'https://placehold.co/600x300.png',
+    dataAiHint: 'award presentation success'
   },
 ];
 
 const cardVariants = {
-  initial: { opacity: 0, y: 50, filter: "blur(8px)" }, // Start further down
+  initial: { opacity: 0, y: 50, filter: "blur(8px)" },
   animate: (i: number) => ({
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
     transition: {
       delay: i * 0.2,
-      duration: 0.8, // Slightly longer for a more "weighty" feel
+      duration: 0.8,
       ease: [0.6, 0.01, 0.0, 0.95], 
     },
   }),
    hover: {
-    transform: "translateY(-8px) scale(1.02)", // More subtle lift
+    transform: "translateY(-8px) scale(1.02)",
     boxShadow: "0px 10px 25px -5px hsl(var(--primary)/0.6), 0px 6px 15px -8px hsl(var(--bmw-m-blue)/0.4)",
     transition: { type: "spring", stiffness: 220, damping: 14 }
   }
@@ -50,12 +55,12 @@ export default function AchievementsPage() {
     <Section id="achievements" className="min-h-screen">
       <div className="text-center mb-12 md:mb-16">
         <motion.h1 
-          className="text-4xl md:text-5xl font-heading text-primary-foreground" // Font heading
+          className="text-4xl md:text-5xl font-heading text-primary-foreground"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          Lap <span className="text-primary">Records</span> {/* Updated Title */}
+          Lap <span className="text-primary">Records</span>
         </motion.h1>
         <motion.div 
           className="w-32 h-1 bg-primary mx-auto mt-4 rounded-full"
@@ -76,9 +81,20 @@ export default function AchievementsPage() {
             whileHover="hover"
             viewport={{ once: true, amount: 0.1 }}
           >
-            <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-xl card-m-glow overflow-hidden group">
+            <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-xl card-m-glow overflow-hidden group flex flex-col">
+              <div className="relative w-full aspect-[2/1] overflow-hidden rounded-t-lg">
+                <Image
+                  src={achievement.imageUrl}
+                  alt={achievement.title}
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="transition-transform duration-500 ease-in-out group-hover:scale-105"
+                  data-ai-hint={achievement.dataAiHint}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
               <CardHeader className="flex flex-row items-start gap-4 p-6 md:p-8">
-                <div className="p-3 bg-primary/20 rounded-md shadow-inner"> {/* Inner shadow for depth */}
+                <div className="p-3 bg-primary/20 rounded-md shadow-inner">
                   {achievement.icon}
                 </div>
                 <div>
@@ -86,16 +102,16 @@ export default function AchievementsPage() {
                   <CardDescription className="text-accent font-semibold mt-1 uppercase tracking-wider">{achievement.organization}</CardDescription>
                 </div>
               </CardHeader>
-              <CardContent className="p-6 md:p-8 pt-0">
-                <p className="text-muted-foreground leading-relaxed mb-6 text-lg">{achievement.description}</p>
-                <div className="mt-4 border-t border-border/30 pt-4 bg-card/50 p-4 rounded-md shadow-sm">
+              <CardContent className="p-6 md:p-8 pt-0 flex-grow flex flex-col">
+                <p className="text-muted-foreground leading-relaxed mb-6 text-lg flex-grow">{achievement.description}</p>
+                <div className="mt-auto border-t border-border/30 pt-4 bg-card/50 p-4 rounded-md shadow-sm">
                   <h4 className="font-semibold text-primary-foreground/90 mb-2 text-sm uppercase tracking-wider">{achievement.impactLabel}:</h4>
                   <div className="flex items-center">
                     {achievement.impactIcon}
                     <p className="text-primary text-2xl font-bold ml-2">{achievement.impactValue}</p>
                   </div>
                 </div>
-                <Trophy className="mt-6 h-8 w-8 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:rotate-[15deg] group-hover:scale-125 ml-auto" />
+                <Trophy className="mt-6 h-8 w-8 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:rotate-[15deg] group-hover:scale-125 ml-auto self-end" />
               </CardContent>
             </Card>
           </motion.div>
