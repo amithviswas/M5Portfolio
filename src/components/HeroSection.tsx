@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import { PlayCircle } from 'lucide-react';
 import Section from '@/components/Section';
 import { MStartStopButton } from '@/components/MStartStopButton';
-import { useIntroContext } from '@/contexts/IntroContext'; // Import the context hook
+import { useIntroContext } from '@/contexts/IntroContext';
 
 export default function HeroSection() {
-  const { setIntroCompleted } = useIntroContext(); // Get setIntroCompleted from context
+  const { setIntroCompleted } = useIntroContext();
   const title = "Data Scientist | AI Engineer | ML Enthusiast";
   const name = "Amith Viswas Reddy. D";
 
@@ -40,11 +40,15 @@ export default function HeroSection() {
   };
 
   const handleStartDriveClick = () => {
-    setIntroCompleted(true); // Ensure intro is marked as completed
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    setIntroCompleted(true); // Ensure intro is marked as completed, enabling page interaction
+
+    // Use requestAnimationFrame to ensure DOM updates before scrolling
+    requestAnimationFrame(() => {
+      const aboutSection = document.getElementById('about');
+      if (aboutSection) {
+        aboutSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
   };
 
   return (
@@ -88,7 +92,7 @@ export default function HeroSection() {
           transition={{ delay: 1.2, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95] }}
           className="mt-12"
         >
-          <MStartStopButton onClick={handleStartDriveClick}> {/* Use onClick handler */}
+          <MStartStopButton onClick={handleStartDriveClick}>
             <PlayCircle size={32} className="mb-1 text-primary group-hover:text-blood-red transition-colors" />
             <span className="text-xs uppercase">Start</span>
             <span className="text-xs uppercase">Drive</span>
