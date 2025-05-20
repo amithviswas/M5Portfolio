@@ -22,7 +22,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col p-0 bg-card border-border shadow-2xl rounded-lg">
-        <div className="relative w-full aspect-video">
+        <div className="relative w-full aspect-video flex-shrink-0">
           <Image
             src={project.imageUrl}
             alt={project.title}
@@ -42,7 +42,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
               <X className="h-5 w-5" />
           </Button>
         </div>
-        <ScrollArea className="flex-grow">
+        <ScrollArea className="flex-grow min-h-0"> {/* Added min-h-0 here */}
           <div className="p-6 md:p-8 space-y-6">
             <DialogHeader className="text-left">
               <DialogTitle className="text-2xl md:text-3xl font-bold text-primary font-heading">{project.title}</DialogTitle>
@@ -78,7 +78,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
           </div>
         </ScrollArea>
         
-        <div className="flex flex-col sm:flex-row gap-3 p-6 md:p-8 border-t border-border/50 bg-card/50 rounded-b-lg">
+        <div className="flex flex-col sm:flex-row gap-3 p-6 md:p-8 border-t border-border/50 bg-card/50 rounded-b-lg flex-shrink-0">
           {project.projectUrl && project.projectUrl !== '#' && (
             <Button asChild size="lg" className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-primary/50">
               <Link href={project.projectUrl} target="_blank" rel="noopener noreferrer">
