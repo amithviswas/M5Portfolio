@@ -1,12 +1,13 @@
 
 "use client";
 import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { PlayCircle } from 'lucide-react'; // Changed icon
+import { PlayCircle } from 'lucide-react';
 import Section from '@/components/Section';
-import { MStartStopButton } from '@/components/MStartStopButton'; // Import the new button
+import { MStartStopButton } from '@/components/MStartStopButton';
+import { useIntroContext } from '@/contexts/IntroContext'; // Import the context hook
 
 export default function HeroSection() {
+  const { setIntroCompleted } = useIntroContext(); // Get setIntroCompleted from context
   const title = "Data Scientist | AI Engineer | ML Enthusiast";
   const name = "Amith Viswas Reddy. D";
 
@@ -38,25 +39,33 @@ export default function HeroSection() {
     })
   };
 
+  const handleStartDriveClick = () => {
+    setIntroCompleted(true); // Ensure intro is marked as completed
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <Section id="home" className="relative !pt-0 !pb-0 overflow-hidden" fullHeight noPadding>
-      <motion.div 
+      <motion.div
         className="absolute left-0 top-1/2 w-2/5 h-1/2 bg-gradient-to-r from-[hsl(var(--foreground)/0.03)] to-transparent rounded-r-full blur-3xl transform -translate-y-1/2 pointer-events-none"
         variants={headlightVariants}
         initial="initial"
         animate="animate"
         custom={1}
       />
-      <motion.div 
+      <motion.div
         className="absolute right-0 top-1/2 w-2/5 h-1/2 bg-gradient-to-l from-[hsl(var(--foreground)/0.03)] to-transparent rounded-l-full blur-3xl transform -translate-y-1/2 pointer-events-none"
         variants={headlightVariants}
         initial="initial"
         animate="animate"
         custom={2}
       />
-      
+
       <div className="relative z-10 flex flex-col items-center justify-center text-center h-full px-4">
-        <motion.h1 
+        <motion.h1
           className="text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-wider text-primary-foreground drop-shadow-[0_2px_10px_hsl(var(--primary)/0.3)]"
           variants={titleVariants}
           initial="hidden"
@@ -64,7 +73,7 @@ export default function HeroSection() {
         >
           {title}
         </motion.h1>
-         <motion.p 
+         <motion.p
           className="mt-4 text-5xl sm:text-6xl md:text-7xl font-bold uppercase tracking-tighter text-primary-foreground drop-shadow-[0_2px_10px_hsl(var(--primary)/0.5)]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,12 +88,10 @@ export default function HeroSection() {
           transition={{ delay: 1.2, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95] }}
           className="mt-12"
         >
-          <MStartStopButton asChild>
-            <Link href="/#about">
-              <PlayCircle size={32} className="mb-1 text-primary group-hover:text-blood-red transition-colors" />
-              <span className="text-xs uppercase">Start</span>
-              <span className="text-xs uppercase">Drive</span>
-            </Link>
+          <MStartStopButton onClick={handleStartDriveClick}> {/* Use onClick handler */}
+            <PlayCircle size={32} className="mb-1 text-primary group-hover:text-blood-red transition-colors" />
+            <span className="text-xs uppercase">Start</span>
+            <span className="text-xs uppercase">Drive</span>
           </MStartStopButton>
         </motion.div>
       </div>
