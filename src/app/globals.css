@@ -106,13 +106,13 @@
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     width: 100%; height: 100%;
-    background-image:
+    background-image: /* Carbon Fiber Pattern */
       linear-gradient(135deg, hsla(0,0%,5%,0.02) 25%, transparent 25%),
       linear-gradient(225deg, hsla(0,0%,5%,0.02) 25%, transparent 25%),
       linear-gradient(45deg, hsla(0,0%,5%,0.02) 25%, transparent 25%),
       linear-gradient(315deg, hsla(0,0%,5%,0.02) 25%, transparent 25%);
-    background-position: 0 0, 1px 1px, 1px 1px, 0 0;
-    background-size: 2px 2px;
+    background-position: 0 0, 1px 1px, 1px 1px, 0 0; /* Slightly offset for weave */
+    background-size: 2px 2px; /* Smaller weave */
     opacity: 0.04;
     pointer-events: none;
     z-index: -1;
@@ -765,39 +765,68 @@
   clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%);
 }
 
+/* M-Chrono Scroll Gauge / RPM Gauge Styles */
 .m-chrono-scroll-gauge-container {
-  @apply fixed top-4 left-4 w-40 h-3 bg-neutral-900/80 rounded-sm overflow-hidden z-50 shadow-lg border border-neutral-700/60 backdrop-blur-sm;
-  clip-path: polygon(0 0, 100% 0, 100% 70%, 90% 100%, 10% 100%, 0% 70%);
-  box-shadow: 0 0 15px hsla(var(--bmw-i-blue-hsl), 0.3), inset 0 1px 1px hsla(0,0%,0%,0.5);
+  @apply fixed top-4 left-4 w-48 h-4 bg-neutral-900/80 rounded-sm overflow-hidden z-50 shadow-lg border border-neutral-700/60 backdrop-blur-sm;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 90% 100%, 10% 100%, 0% 70%); /* Angular shape */
+  /* UV Blue Ambient Glow */
+  box-shadow: 0 0 15px hsla(var(--bmw-i-blue-hsl), 0.3), 
+              0 0 25px hsla(var(--hyper-violet-hsl), 0.2), /* Subtle UV touch */
+              inset 0 1px 1px hsla(0,0%,0%,0.5);
+  /* Carbon fiber like background for the container */
+  background-image: 
+    linear-gradient(135deg, hsla(var(--shadow-gray),0.9) 25%, transparent 25%),
+    linear-gradient(225deg, hsla(var(--shadow-gray),0.9) 25%, transparent 25%),
+    linear-gradient(45deg, hsla(var(--shadow-gray),0.9) 25%, transparent 25%),
+    linear-gradient(315deg, hsla(var(--shadow-gray),0.9) 25%, transparent 25%),
+    linear-gradient(to bottom, hsl(var(--shadow-gray)/0.95), hsl(var(--background)/0.9));
+  background-position: 0 0, 2px 2px, 2px 2px, 0 0, 0 0;
+  background-size: 4px 4px, 4px 4px, 4px 4px, 4px 4px, 100% 100%;
 }
 
-.m-chrono-tick-base {
-  @apply absolute top-0 h-full bg-neutral-500/70 transition-opacity duration-300;
+.m-rpm-tick-base {
+  @apply absolute top-1/2 -translate-y-1/2 h-[140%] w-[1.5px] transition-opacity duration-300;
+  background: linear-gradient(to bottom, hsla(0,0%,100%,0.7), hsla(0,0%,100%,0.3)); /* Glowing white */
+  box-shadow: 0 0 2px hsla(0,0%,100%,0.5);
 }
-.m-chrono-tick-minor {
-  @apply w-[1px];
+.m-rpm-tick-major {
+  @apply w-[2px]; /* Slightly thicker major ticks */
+  background: linear-gradient(to bottom, hsla(0,0%,100%,0.9), hsla(0,0%,100%,0.5));
+  box-shadow: 0 0 3px hsla(0,0%,100%,0.7);
 }
-.m-chrono-tick-major {
-  @apply w-[1.5px] bg-neutral-400/90;
-}
-.m-chrono-tick-redzone {
-  @apply bg-red-500/80 shadow-[0_0_2px_#fff,0_0_4px_hsl(var(--primary))];
-}
-.m-chrono-final-tick {
-  @apply absolute top-0 right-0 h-full w-[1.5px] bg-neutral-300/90;
-}
-
-.chrono-gauge-redline {
-  background: hsl(var(--primary)) !important;
-  box-shadow: 0 0 8px hsl(var(--primary)/0.8), 0 0 15px hsl(var(--primary)/0.5), 0 0 25px hsl(var(--primary)/0.3);
-  animation: m-rpm-redline-pulse 0.2s ease-out forwards;
+.m-rpm-tick-redzone-highlight { /* For ticks in the redline zone */
+  background: linear-gradient(to bottom, hsl(var(--primary)), hsla(var(--primary), 0.5)) !important;
+  box-shadow: 0 0 3px hsl(var(--primary)), 0 0 5px hsl(var(--primary)/0.7) !important;
 }
 
-@keyframes m-rpm-redline-pulse {
-  0% { filter: brightness(1.2) saturate(1.2); }
-  50% { filter: brightness(2.0) saturate(1.8) drop-shadow(0 0 8px hsl(var(--primary))); }
-  100% { filter: brightness(1.2) saturate(1.2); }
+/* Bar Fill / Digital Needle Styles */
+.m-rpm-gauge-fill-low { /* Ice blue - up to 50% */
+  background: linear-gradient(to right, hsl(var(--bmw-i-blue-hsl)/0.8), hsl(var(--bmw-i-blue-hsl)));
+  box-shadow: inset 0 0 3px hsla(var(--bmw-i-blue-hsl),0.4), 0 0 5px hsla(var(--bmw-i-blue-hsl),0.3);
 }
+.m-rpm-gauge-fill-mid { /* Hyper Violet - 50% to 80% */
+  background: linear-gradient(to right, hsl(var(--bmw-i-blue-hsl)), hsl(var(--hyper-violet-hsl)));
+  box-shadow: inset 0 0 3px hsla(var(--hyper-violet-hsl),0.4), 0 0 5px hsla(var(--hyper-violet-hsl),0.3);
+}
+.m-rpm-gauge-fill-high { /* Voltage Gold - 80% to 90% */
+  background: linear-gradient(to right, hsl(var(--hyper-violet-hsl)), hsl(var(--voltage-gold-hsl)));
+  box-shadow: inset 0 0 3px hsla(var(--voltage-gold-hsl),0.4), 0 0 5px hsla(var(--voltage-gold-hsl),0.3);
+}
+.m-rpm-gauge-fill-redline { /* Blood Red - 90%+ */
+  background: linear-gradient(to right, hsl(var(--voltage-gold-hsl)), hsl(var(--primary)));
+  box-shadow: inset 0 0 4px hsla(var(--primary),0.5), 0 0 8px hsla(var(--primary),0.7);
+}
+
+.m-rpm-led-pulse { /* Animation for LED shift indicators */
+  animation: m-rpm-redline-led-pulse 0.3s ease-out forwards;
+}
+
+@keyframes m-rpm-redline-led-pulse {
+  0% { filter: brightness(1.2) saturate(1.2); box-shadow: inset 0 0 4px hsla(var(--primary),0.5), 0 0 8px hsla(var(--primary),0.7), 0 0 15px hsla(var(--primary),0.5); }
+  50% { filter: brightness(2.5) saturate(2.0); box-shadow: inset 0 0 6px hsla(var(--primary),0.8), 0 0 15px hsla(var(--primary),1), 0 0 30px hsla(var(--primary),0.7); }
+  100% { filter: brightness(1.5) saturate(1.5); box-shadow: inset 0 0 4px hsla(var(--primary),0.6), 0 0 10px hsla(var(--primary),0.8), 0 0 20px hsla(var(--primary),0.6); }
+}
+
 
 .hero-text-lift:hover, .hero-text-lift:focus-visible {
   transform: translateY(-4px);
@@ -842,15 +871,17 @@
     backdrop-filter: none;
     background: hsl(var(--card));
   }
-   .chrono-gauge-redline {
+  .m-rpm-led-pulse, .chrono-gauge-redline { /* Ensure redline visual is static if animations are off */
      box-shadow: none;
      animation: none;
+     background: hsl(var(--primary)) !important; /* Static redline color */
   }
   .hero-text-lift:hover, .hero-text-lift:focus-visible {
      transform: none; text-shadow: none;
   }
   .animate-camera-flash { animation: none; }
   .hero-headlight-sweep-bg { animation: none; opacity: 0.05; }
+  .m-chrono-tick-base, .m-rpm-tick-base { transition: none; }
 }
 
     

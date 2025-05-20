@@ -1,11 +1,11 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-const TICK_MARK_POSITIONS = [10, 20, 30, 40, 50, 60, 70, 80, 90]; // For M-Chrono Scroll Gauge
+// Adjusted tick mark positions for a more "gauge-like" feel if desired
+const TICK_MARK_POSITIONS = [10, 20, 30, 40, 50, 60, 70, 80, 85, 90, 95]; // More ticks towards end
 
 export default function ScrollMomentumBar() {
   const [scrollPercentage, setScrollPercentage] = useState(0);
@@ -19,18 +19,14 @@ export default function ScrollMomentumBar() {
       const scrolled = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setScrollPercentage(Math.min(100, Math.max(0, scrolled)));
 
-      // Redline flare logic
       if (scrolled >= 90 && !isRedline) {
         setIsRedline(true);
         if (redlineTimeout) clearTimeout(redlineTimeout);
         const timeoutId = setTimeout(() => {
           setIsRedline(false);
-          setRedlineTimeout(null); // Clear timeout ID once it has executed
-        }, 200); // Flare for 200ms
+          setRedlineTimeout(null);
+        }, 300); // Duration of the redline LED pulse
         setRedlineTimeout(timeoutId);
-      } else if (scrolled < 90 && isRedline && !redlineTimeout) { 
-        // This case is tricky. If it becomes false while timeout is running, it should stay true until timeout clears.
-        // The current logic should mostly handle this, as isRedline turns false only after timeout.
       }
     };
 
@@ -41,52 +37,64 @@ export default function ScrollMomentumBar() {
       window.removeEventListener('scroll', handleScroll);
       if (redlineTimeout) clearTimeout(redlineTimeout);
     };
-  }, [isRedline, redlineTimeout]); // isRedline and redlineTimeout are dependencies
+  }, [isRedline, redlineTimeout]);
 
-  const getBarColor = () => {
-    // XENOFRAME Apex Meter / M-Chrono Gauge (from previous iterations)
-    if (isRedline) return 'chrono-gauge-redline'; // Special class for redline flare
-    // Using XENOFRAME Apex Meter gradients
-    if (scrollPercentage > 80) return 'bg-gradient-to-r from-orange-500 to-red-600'; // High RPM / Voltage Gold to M-Red
-    if (scrollPercentage > 40) return 'bg-gradient-to-r from-pink-500 to-purple-600'; // Mid RPM / Hyper Violet spectrum
-    return 'bg-gradient-to-r from-sky-400 to-blue-600'; // Low RPM / BMW iBlue spectrum
+  const getBarColorClass = () => {
+    if (isRedline) return 'm-rpm-gauge-fill-redline'; // Intense red for redline
+    if (scrollPercentage > 80) return 'm-rpm-gauge-fill-high'; // Warning color (e.g., orange/yellow)
+    if (scrollPercentage > 50) return 'm-rpm-gauge-fill-mid'; // Mid-range color
+    return 'm-rpm-gauge-fill-low'; // Normal operating color (e.g., ice blue)
   };
 
   return (
-    // Styled as an "Apex Meter" / "M-Chrono Scroll Gauge"
     <div 
         className={cn(
-            "fixed top-4 left-4 w-40 h-3 bg-neutral-800/70 rounded-sm overflow-visible z-50 shadow-lg border border-neutral-700/50 backdrop-blur-sm",
-            "transform-gpu" // Hint for GPU acceleration
+            "fixed top-4 left-4 w-48 h-4 bg-transparent rounded-sm overflow-visible z-50", // Increased width slightly, height for visual presence
+            "m-chrono-scroll-gauge-container", // Main container style for background, glow
+            "transform-gpu" 
         )}
-        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 70%, 90% 100%, 10% 100%, 0% 70%)' }} // Apex Meter shape
+        // Clip-path for angular design is in globals.css under .m-chrono-scroll-gauge-container
     >
       <div className="relative w-full h-full">
+        {/* Digital Needle / Bar Fill */}
         <motion.div
           className={cn(
-            "h-full rounded-sm transition-colors duration-150", // Base bar
-            getBarColor(), // Dynamic color based on scroll
-            isRedline && "chrono-gauge-redline" // Redline flare class
+            "h-full rounded-sm transition-colors duration-150", 
+            getBarColorClass(),
+            isRedline && "m-rpm-led-pulse" // Animation class for redline
           )}
           style={{ width: `${scrollPercentage}%` }}
           initial={{ width: '0%' }}
           animate={{ width: `${scrollPercentage}%` }}
-          transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+          transition={{ type: 'spring', stiffness: 120, damping: 20 }}
         />
-        {/* Tick Marks for M-Chrono Gauge */}
-        {TICK_MARK_POSITIONS.map((pos) => (
-          <motion.div
-            key={pos}
-            className="absolute top-0 h-full w-[1.5px] bg-neutral-500/70"
-            style={{ left: `${pos}%` }}
-            initial={{ opacity: 0.3 }}
-            animate={{ opacity: scrollPercentage >= pos ? 0.7 : 0.3 }} // Fade in as progress passes
-            transition={{ duration: 0.3 }}
-          />
-        ))}
-         {/* End Cap / Final Tick */}
+        
+        {/* Tick Marks */}
+        {TICK_MARK_POSITIONS.map((pos) => {
+          const isRedZoneTick = pos >= 85; // Example threshold for red tick highlights
+          return (
+            <motion.div
+              key={pos}
+              className={cn(
+                "absolute top-1/2 -translate-y-1/2 h-[140%] w-[1.5px]", // Taller ticks that extend beyond bar
+                "m-rpm-tick-base",
+                pos % 20 === 0 && "m-rpm-tick-major", // Style for major ticks (e.g., 20, 40, 60, 80)
+                isRedZoneTick && "m-rpm-tick-redzone-highlight", // Red highlight for ticks in red zone
+                scrollPercentage >= pos ? "opacity-90" : "opacity-50" // Glow brighter when passed
+              )}
+              style={{ left: `${pos}%` }}
+              initial={{ opacity: 0.5 }}
+              animate={{ opacity: scrollPercentage >= pos ? 0.9 : 0.5 }}
+              transition={{ duration: 0.3 }}
+            />
+          );
+        })}
+         {/* End Cap / Final Tick (if needed, or rely on last tick mark) */}
         <div 
-            className="absolute top-0 right-0 h-full w-[1.5px] bg-neutral-400/80"
+            className={cn(
+              "absolute top-1/2 -translate-y-1/2 right-0 h-[140%] w-[1.5px]",
+              "m-rpm-tick-base m-rpm-tick-major m-rpm-tick-redzone-highlight" // Style as a major red tick
+            )}
         />
       </div>
     </div>
