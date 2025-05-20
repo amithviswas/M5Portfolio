@@ -45,6 +45,7 @@ export default function AboutMeSection() {
                 objectFit="cover"
                 className="transition-transform duration-500 group-hover:scale-105"
                 data-ai-hint="professional portrait"
+                priority // Added priority to hint importance
               />
               <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-card/80 via-card/20 to-transparent"></div>
             </motion.div>

@@ -75,7 +75,7 @@ const cardVariants = {
     transition: {
       delay: i * 0.15,
       duration: 0.6,
-      ease: [0.6, 0.01, 0.0, 0.95], // Corrected
+      ease: [0.6, 0.01, 0.0, 0.95], 
     },
   }),
   exit: { opacity: 0, y: -30, scale: 0.95, transition: { duration: 0.3, ease: "easeIn" } },
@@ -205,8 +205,3 @@ export default function ProjectsSection() {
     </Section>
   );
 }
-
-// Add this to your globals.css or a style tag if needed for perspective
-// .perspective { perspective: 1000px; }
-// .transform-style-3d { transform-style: preserve-3d; }
-// This is better placed in globals.css

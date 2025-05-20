@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -51,7 +52,13 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <Link href="/#home" className="flex items-center group" onClick={closeMobileMenu}>
+          <Link href="/#home" className="flex items-center group" onClick={() => {
+            closeMobileMenu();
+            if (pathname === '/') {
+              document.querySelector('#home')?.scrollIntoView({ behavior: 'smooth' });
+            }
+            // If not on home, Link will navigate to /#home
+          }}>
             <Car className="h-8 w-8 text-primary group-hover:text-accent transition-colors duration-300" />
             <span className="ml-3 text-xl font-bold uppercase tracking-wider text-primary-foreground group-hover:text-accent transition-colors duration-300">
               Amith V. Reddy
@@ -64,18 +71,25 @@ export default function Navbar() {
               <Link key={link.name} href={link.href} legacyBehavior passHref>
                 <a
                   className={`relative px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider
-                    ${pathname === link.href || (link.href.startsWith('/#') && pathname === '/' && window.location.hash === link.href.substring(1)) 
+                    ${pathname === link.href || (link.href.startsWith('/#') && pathname === '/' && typeof window !== 'undefined' && window.location.hash === link.href.substring(1)) 
                       ? 'text-primary' 
                       : 'text-muted-foreground hover:text-primary-foreground'} 
                     transition-colors duration-300 group`}
-                  onClick={link.href.startsWith('/#') ? (e) => {
-                    e.preventDefault();
-                    document.querySelector(link.href.substring(1))?.scrollIntoView({behavior: 'smooth'});
-                  } : undefined}
+                  onClick={(e) => {
+                    if (link.href.startsWith('/#')) {
+                      if (pathname === '/') {
+                        e.preventDefault();
+                        const targetSelector = link.href.substring(1); // #about
+                        document.querySelector(targetSelector)?.scrollIntoView({ behavior: 'smooth' });
+                      }
+                      // If not on home page, Link's default behavior will navigate to /#hash
+                    }
+                    // For non-hash links, Link's default behavior handles it.
+                  }}
                 >
                   {link.name}
                   <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out
-                    ${pathname === link.href || (link.href.startsWith('/#') && pathname === '/' && window.location.hash === link.href.substring(1)) ? 'scale-x-100' : ''}`}>
+                    ${pathname === link.href || (link.href.startsWith('/#') && pathname === '/' && typeof window !== 'undefined' && window.location.hash === link.href.substring(1)) ? 'scale-x-100' : ''}`}>
                   </span>
                 </a>
               </Link>
@@ -112,21 +126,20 @@ export default function Navbar() {
                 <Link key={link.name} href={link.href} legacyBehavior passHref>
                   <a
                     className={`block px-3 py-2 rounded-md text-base font-medium uppercase tracking-wider
-                      ${pathname === link.href ? 'text-primary bg-accent/10' : 'text-muted-foreground hover:text-primary-foreground hover:bg-accent/5'}`}
+                      ${pathname === link.href || (link.href.startsWith('/#') && pathname === '/' && typeof window !== 'undefined' && window.location.hash === link.href.substring(1)) 
+                        ? 'text-primary bg-accent/10' 
+                        : 'text-muted-foreground hover:text-primary-foreground hover:bg-accent/5'}`}
                     onClick={(e) => {
                       closeMobileMenu();
                       if (link.href.startsWith('/#')) {
-                        e.preventDefault();
-                        // Ensure DOM is updated if navigating from another page to hash on home
-                        if (pathname !== '/') {
-                          // This part needs careful handling with Next.js router for navigating then scrolling.
-                          // For simplicity, direct scroll if already on home page.
-                          // For complex cases, context or router events might be needed.
-                          window.location.href = link.href; // Basic navigation then scroll
-                        } else {
-                           document.querySelector(link.href.substring(1))?.scrollIntoView({behavior: 'smooth'});
+                        if (pathname === '/') {
+                          e.preventDefault();
+                          const targetSelector = link.href.substring(1); // #about
+                          document.querySelector(targetSelector)?.scrollIntoView({ behavior: 'smooth' });
                         }
+                        // If not on home page, Link's default behavior will navigate to /#hash
                       }
+                      // For non-hash links, Link's default behavior handles it.
                     }}
                   >
                     {link.name}

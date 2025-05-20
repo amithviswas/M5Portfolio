@@ -1,10 +1,10 @@
 
 "use client";
-import * as React from 'react'; // Import React
+import * as React from 'react'; 
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Button, type ButtonProps } from '@/components/ui/button'; // Import ButtonProps
+import { Button, type ButtonProps } from '@/components/ui/button'; 
 import Section from '@/components/Section';
 import { DownloadCloud, ArrowRight } from 'lucide-react';
 
@@ -15,10 +15,7 @@ const MStartButton = ({ children, asChild, ...props }: ButtonProps & { children:
   const buttonClasses = "group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold uppercase tracking-wider text-primary-foreground bg-primary rounded-lg shadow-[0_0_15px_hsl(var(--primary)/0.5)] hover:bg-primary/90 hover:shadow-[0_0_25px_hsl(var(--primary)/0.8)] transition-all duration-300 ease-in-out overflow-hidden focus:outline-none focus:ring-4 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background";
 
   if (asChild) {
-    // Ensure children is a single valid React element for Slot
     const childElement = React.Children.only(children) as React.ReactElement;
-
-    // Wrap the childElement's own children with the custom spans
     const enhancedChildChildren = (
       <>
         <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-primary/50 via-primary to-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse group-hover:animate-none"></span>
@@ -28,7 +25,6 @@ const MStartButton = ({ children, asChild, ...props }: ButtonProps & { children:
       </>
     );
 
-    // Clone the child (e.g., <Link>) and replace its children with the enhanced structure
     const clonedChild = React.cloneElement(childElement, {
       ...childElement.props,
       children: enhancedChildChildren,
@@ -46,7 +42,6 @@ const MStartButton = ({ children, asChild, ...props }: ButtonProps & { children:
     );
   }
 
-  // Default behavior (asChild is false or undefined)
   return (
     <Button
       size="lg"
@@ -90,7 +85,7 @@ export default function ResumePage() {
           src={resumeImageUrl}
           alt="Amith Viswas Reddy Resume Preview"
           width={1200}
-          height={1697} // Aspect ratio for A4 like preview
+          height={1697} 
           layout="responsive"
           objectFit="contain"
           className="bg-card"
@@ -118,4 +113,3 @@ export default function ResumePage() {
     </Section>
   );
 }
-
