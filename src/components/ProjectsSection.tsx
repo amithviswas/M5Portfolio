@@ -10,13 +10,13 @@ import Link from 'next/link';
 
 const projects = [
   {
-    title: 'Landing Page',
-    description: 'A responsive and modern landing page design.',
-    image: 'https://i.ibb.co/7jTdqCv/Screenshot-2024-07-09-093930.png',
-    dataAiHint: 'website design',
-    liveLink: 'https://amithviswas.github.io/Landing-Page/',
-    repoLink: '#', 
-    tags: ['HTML', 'CSS', 'Responsive Design']
+    title: 'CareerCompass: AI-Powered Career Mentor',
+    description: 'An AI-driven web app for resume analysis, ATS resume building, cover letter generation, and mock interviews.',
+    image: 'https://i.ibb.co/JWt10kzX/6555d160-0091-4b3b-841b-b85e201088c0.png',
+    dataAiHint: 'AI career mentor',
+    liveLink: 'https://carrercompassavr.netlify.app/',
+    repoLink: 'https://github.com/amithviswas/career-compass',
+    tags: ["Next.js", "React", "TypeScript", "Genkit", "ShadCN UI", "Tailwind CSS", "Firebase", "Full-Stack", "AI Integration"]
   },
   {
     title: 'Home Theater Experience',
