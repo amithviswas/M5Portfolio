@@ -15,8 +15,7 @@ const achievements = [
     impactLabel: "Participants per Event Series",
     impactValue: "150-200+",
     impactIcon: <Users size={24} className="text-accent" />,
-    imageUrl: 'https://placehold.co/600x300.png',
-    dataAiHint: 'event management conference'
+    imageUrl: 'https://i.ibb.co/s9K5d6j7/875a3943-9026-4af9-ab9d-514f7c2ed301.png',
   },
   {
     title: 'Outstanding Performance Award',
@@ -26,8 +25,7 @@ const achievements = [
     impactLabel: "Client Satisfaction Boost",
     impactValue: "40%",
     impactIcon: <BarChart size={24} className="text-accent" />,
-    imageUrl: 'https://placehold.co/600x300.png',
-    dataAiHint: 'award presentation success'
+    imageUrl: 'https://i.ibb.co/btytXQf/Screenshot-2025-04-22-102101.png',
   },
 ];
 
@@ -44,6 +42,7 @@ const cardVariants = {
     },
   }),
    hover: {
+    opacity: 1, // Explicitly maintain opacity
     transform: "translateY(-8px) scale(1.02)",
     boxShadow: "0px 10px 25px -5px hsl(var(--primary)/0.6), 0px 6px 15px -8px hsl(var(--bmw-m-blue)/0.4)",
     transition: { type: "spring", stiffness: 220, damping: 14 }
@@ -77,7 +76,7 @@ export default function AchievementsPage() {
             custom={index}
             variants={cardVariants}
             initial="initial"
-            animate="animate"
+            whileInView="animate" // Changed from animate="animate"
             whileHover="hover"
             viewport={{ once: true, amount: 0.1 }}
           >
@@ -89,7 +88,6 @@ export default function AchievementsPage() {
                   fill
                   style={{ objectFit: "cover" }}
                   className="transition-transform duration-500 ease-in-out group-hover:scale-105"
-                  data-ai-hint={achievement.dataAiHint}
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
