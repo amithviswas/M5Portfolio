@@ -1,7 +1,7 @@
 
 "use client";
 
-import *import * as React from 'react';
+import * as React from 'react';
 import { motion } from 'framer-motion';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import Section from '@/components/Section';
