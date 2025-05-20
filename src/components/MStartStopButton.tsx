@@ -12,15 +12,21 @@ const MStartStopButton = React.forwardRef<
 >(({ children, className, asChild, ...props }, ref) => {
   const buttonBaseClasses = "group relative inline-flex items-center justify-center text-lg font-bold uppercase tracking-wider text-primary-foreground rounded-full shadow-[0_0_15px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_25px_hsl(var(--primary)/0.8)] transition-all duration-300 ease-in-out overflow-hidden focus:outline-none focus:ring-4 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background";
   
-  // Specific Start/Stop styling
-  const startStopClasses = `${buttonBaseClasses} w-24 h-24 md:w-28 md:h-28 bg-card border-4 border-primary hover:border-blood-red`;
+  // Specific Start/Stop styling with metallic chamfer
+  const startStopClasses = cn(
+    buttonBaseClasses, 
+    "w-24 h-24 md:w-28 md:h-28 bg-card border-4 border-primary hover:border-blood-red",
+    // Metallic chamfer
+    "shadow-[0_0_15px_hsl(var(--primary)/0.5),inset_1px_1px_3px_rgba(255,255,255,.25),inset_-2px_-2px_4px_rgba(0,0,0,.6)]",
+    "hover:shadow-[0_0_25px_hsl(var(--primary)/0.8),inset_1px_1px_3px_rgba(255,255,255,.25),inset_-2px_-2px_4px_rgba(0,0,0,.6)]"
+  );
 
   const contentWrapper = (content: React.ReactNode) => (
     <>
       {/* Inner metallic sheen/glow (simplified) */}
       <span className="absolute inset-0.5 rounded-full bg-gradient-to-br from-gray-600 via-gray-700 to-gray-800 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></span>
       {/* Red ring that pulses */}
-      <span className="absolute inset-0 rounded-full border-2 border-primary opacity-70 group-hover:animate-pulse"></span>
+      <span className="absolute inset-0 rounded-full border-2 border-primary opacity-70 group-hover:animate-pulse group-hover:border-blood-red"></span>
       <span className="relative z-10 flex flex-col items-center text-center">
         {content}
       </span>

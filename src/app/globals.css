@@ -54,8 +54,13 @@
     --bmw-m-blue: 208 100% 38%; /* Explicit M Performance Blue */
     --blood-red: 0 100% 42%; /* Explicit Blood Red */
     --shadow-gray: 0 2% 11%; /* Explicit Shadow Gray */
+    
+    --m-light-blue-hsl: 208 100% 60%; /* Lighter M Blue for accents */
+    --m-red-hsl: 0 100% 42%; /* Blood Red */
+
 
     --ease-m-blip: cubic-bezier(.36,1.08,.33,1);
+    --ease-m-throttle: cubic-bezier(.36,1.08,.33,1); /* Same as blip for now, can be customized */
   }
 }
 
@@ -108,17 +113,14 @@
 
   /* Custom M-Blip Transition Utility */
   .transition-m-blip {
-    @apply transition-[color,background-color,border-color,transform,box-shadow,opacity] duration-150 ease-m-blip;
+    @apply transition-[color,background-color,border-color,text-shadow,transform,box-shadow,opacity,filter] duration-150 ease-m-blip;
   }
-  /* Apply to common interactive elements or specific components as needed */
-  /* Example: button, a, input, textarea could have this by default or opt-in */
-  /* For ShadCN, many transitions are built-in, but this can be for custom elements */
 }
 
 .DialogContent[data-state="open"] {
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Added for modal scroll fix */
+  overflow: hidden; 
 }
 .DialogContent > div[data-radix-scroll-area-viewport] {
   scrollbar-width: thin;
@@ -143,8 +145,7 @@
 /* BMW M5 Kidney Grille Blade Underline */
 .nav-grille-underline {
   position: relative;
-  overflow: visible; /* Allow pseudo-element to extend */
-  /* Apply the custom transition for properties changed on hover */
+  overflow: visible; 
   @apply transition-m-blip;
 }
 
@@ -152,11 +153,10 @@
   content: '';
   position: absolute;
   left: 50%;
-  bottom: -2px; /* Sits 2px below baseline */
+  bottom: -2px; 
   transform: translateX(-50%);
   width: 0%;
   height: 4px;
-  /* Use CSS variables for dynamic gradient stops */
   background-image: linear-gradient(
     to right,
     hsl(var(--bmw-m-blue)) 0%, 
@@ -164,14 +164,14 @@
     hsl(var(--primary)) var(--grille-red-start-percentage, 55%),
     hsl(var(--primary)) 100%
   );
-  border-radius: 9999px; /* Fully rounded ends (pill shape) */
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.4); /* Inner shadow for depth, slightly softer */
+  border-radius: 9999px; 
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.4); 
   filter: drop-shadow(0 0 3px hsla(var(--bmw-m-blue), 0.5)) drop-shadow(0 0 3px hsla(var(--primary), 0.5));
   opacity: 0;
   transition: width 170ms var(--ease-m-blip), 
               opacity 170ms var(--ease-m-blip),
               filter 170ms var(--ease-m-blip),
-              background-image 170ms var(--ease-m-blip); /* Animate background image for color stop changes */
+              background-image 170ms var(--ease-m-blip); 
   will-change: width, opacity, filter, background-image;
   pointer-events: none;
 }
@@ -180,25 +180,22 @@
 .nav-grille-underline.active-link::after {
   width: 120%;
   opacity: 1;
-  /* CSS variables will be updated by JS on hover for the 50/50 or 60/40 split */
-  /* Default hover state for background-image if JS isn't overriding quickly enough: */
   background-image: linear-gradient(
     to right,
     hsl(var(--bmw-m-blue)) 0%, 
-    hsl(var(--bmw-m-blue)) var(--grille-blue-stop-percentage-hover, 50%), /* Default hover split */
-    hsl(var(--primary)) var(--grille-red-start-percentage-hover, 50%),   /* Default hover split */
+    hsl(var(--bmw-m-blue)) var(--grille-blue-stop-percentage-hover, 50%), 
+    hsl(var(--primary)) var(--grille-red-start-percentage-hover, 50%),   
     hsl(var(--primary)) 100%
   );
-  filter: drop-shadow(0 0 5px hsla(var(--bmw-m-blue), 0.8)) drop-shadow(0 0 5px hsla(var(--primary), 0.8)) brightness(1.25); /* Brighter glow +25% */
+  filter: drop-shadow(0 0 5px hsla(var(--bmw-m-blue), 0.8)) drop-shadow(0 0 5px hsla(var(--primary), 0.8)) brightness(1.25); 
   box-shadow: inset 0 1px 3px rgba(0,0,0,.6);
 }
 
-/* Reduced motion preferences for grille underline */
 @media (prefers-reduced-motion: reduce) {
   .nav-grille-underline::after {
-    transition: opacity 0.15s ease-in-out; /* Only fade */
-    width: 90% !important; /* Static 90% bar for active/hover */
-    filter: none !important; /* No glow */
+    transition: opacity 0.15s ease-in-out; 
+    width: 90% !important; 
+    filter: none !important; 
     box-shadow: inset 0 1px 2px rgba(0,0,0,.4) !important;
   }
    .nav-grille-underline:hover::after,
@@ -207,7 +204,7 @@
     opacity: 1;
     filter: none;
     box-shadow: inset 0 1px 2px rgba(0,0,0,.4);
-    background-image: linear-gradient( /* Static 55/45 split for reduced motion */
+    background-image: linear-gradient( 
       to right,
       hsl(var(--bmw-m-blue)) 0%, 
       hsl(var(--bmw-m-blue)) 55%,
@@ -228,11 +225,11 @@
 }
 
 /* Contact Form Halo */
-.form-container-halo { /* Base subtle halo */
+.form-container-halo { 
   box-shadow: 0 0 8px 2px hsla(var(--primary)/0.2);
   @apply transition-m-blip;
 }
-.form-container-halo-active { /* Intensified halo */
+.form-container-halo-active { 
   box-shadow: 0 0 20px 6px hsla(var(--primary)/0.7), 0 0 35px 12px hsla(var(--primary)/0.4);
 }
 
@@ -241,4 +238,95 @@
   .form-container-halo-active {
     box-shadow: none;
   }
+}
+
+/* Hero Section Specific Styles */
+.hero-carbon-ring {
+  @apply rounded-full p-0.5; /* Padded slightly for the tricolor effect */
+  background-image: 
+    linear-gradient(45deg, hsl(var(--shadow-gray)) 25%, hsl(var(--card)/0.8) 25%, hsl(var(--card)/0.8) 50%, hsl(var(--shadow-gray)) 50%, hsl(var(--shadow-gray)) 75%, hsl(var(--card)/0.8) 75%, hsl(var(--card)/0.8) 100%),
+    linear-gradient(-45deg, hsl(var(--shadow-gray)) 25%, hsl(var(--card)/0.8) 25%, hsl(var(--card)/0.8) 50%, hsl(var(--shadow-gray)) 50%, hsl(var(--shadow-gray)) 75%, hsl(var(--card)/0.8) 75%, hsl(var(--card)/0.8) 100%);
+  background-size: 6px 6px; /* Smaller for finer texture */
+  box-shadow: 0 0 35px 0 hsla(var(--m-light-blue-hsl), .25); /* Icy-blue spotlight */
+}
+
+.hero-tricolor-stroke-outer { /* Applied to the element inside hero-carbon-ring */
+  @apply rounded-full border-2 border-transparent;
+  background:
+    linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box, /* This creates the "border" */
+    conic-gradient(
+      from 90deg, 
+      hsl(var(--m-light-blue-hsl)) 0deg 70deg, 
+      hsl(var(--m-dark-blue-hsl)) 70deg 140deg, 
+      hsl(var(--m-red-hsl)) 140deg 210deg,
+      transparent 210deg 360deg /* Cut off part of the tricolor */
+    ) border-box;
+}
+
+.hero-spec-highlight {
+  content: "";
+  @apply absolute inset-0 rounded-full;
+  background: linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-tagline-gradient {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
+}
+
+.hero-tagline-underline {
+  @apply relative inline-block;
+}
+.hero-tagline-underline::after {
+  content: '';
+  @apply absolute left-0 bottom-[-2px] h-[2px] w-0 rounded-full transition-m-blip;
+  background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
+  transition-property: width;
+}
+.hero-tagline-underline:hover::after {
+  @apply w-[110%];
+}
+
+
+.hero-satin-mesh-bg {
+    background: 
+      radial-gradient(circle at 30% 30%, #1d1d1f 0%, #0d0d0e 60%),
+      /* Carbon fiber pattern (copied from body.dark::before, adjust opacity if needed) */
+      linear-gradient(135deg, hsla(0,0%,10%,0.01) 25%, transparent 25%), /* Reduced opacity for overlay */
+      linear-gradient(225deg, hsla(0,0%,10%,0.01) 25%, transparent 25%),
+      linear-gradient(45deg, hsla(0,0%,10%,0.01) 25%, transparent 25%),
+      linear-gradient(315deg, hsla(0,0%,10%,0.01) 25%, transparent 25%);
+    background-blend-mode: overlay, normal, normal, normal, normal; /* Blend radial with carbon layers */
+    background-position: center center, 0 0, 2px 2px, 2px 2px, 0 0;
+    background-size: cover, 4px 4px, 4px 4px, 4px 4px, 4px 4px;
+}
+
+
+@keyframes ambientLightPulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.08); }
+}
+
+@keyframes cameraShutterFlash {
+  0%, 100% { filter: saturate(1) brightness(1); }
+  50% { filter: saturate(1.4) brightness(1.3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ambient-pulse {
+    animation: none;
+  }
+  .animate-camera-flash:hover {
+    animation: none;
+  }
+   .hero-tagline-underline::after {
+    transition: none;
+  }
+  .hero-tagline-underline:hover::after {
+    width: 110%; /* static on hover if reduced motion */
+  }
+}
+.animate-ambient-pulse {
+  animation: ambientLightPulse 12s infinite ease-in-out;
 }

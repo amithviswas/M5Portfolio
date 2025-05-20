@@ -2,7 +2,7 @@
 "use client";
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
+import { motion, type AnimationControls, type TargetAndTransition, type VariantLabels } from 'framer-motion';
 
 interface SectionProps {
   id?: string;
@@ -10,9 +10,10 @@ interface SectionProps {
   children: ReactNode;
   fullHeight?: boolean;
   noPadding?: boolean;
+  animate?: AnimationControls | TargetAndTransition | VariantLabels; // Added animate prop
 }
 
-export default function Section({ id, className, children, fullHeight = false, noPadding = false }: SectionProps) {
+export default function Section({ id, className, children, fullHeight = false, noPadding = false, animate }: SectionProps) {
   return (
     <motion.section
       id={id}
@@ -25,7 +26,8 @@ export default function Section({ id, className, children, fullHeight = false, n
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.6, ease: [0.6, 0.01, 0.0, 0.95] }} // Custom ease for "engineered" feel - Corrected
+      transition={{ duration: 0.6, ease: [0.6, 0.01, 0.0, 0.95] }}
+      animate={animate} // Pass animate prop here
     >
       {children}
     </motion.section>
