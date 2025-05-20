@@ -23,7 +23,7 @@
     --muted: 0 0% 25%; /* Muted Gray */
     --muted-foreground: 0 0% 70%;
 
-    --accent: 208 100% 38%; /* M Performance Blue #0071C5 */
+    --accent: 18 100% 50%; /* Vibrant Orange */
     --accent-foreground: 0 0% 98%; /* White text on accent */
 
     --destructive: 0 84.2% 60.2%; /* Default destructive red (can be same as primary) */
@@ -33,7 +33,7 @@
     --input: 0 0% 18%;
     --ring: 0 100% 42%; /* Primary Red for focus rings */
 
-    --chart-1: 12 76% 61%; /* Retaining chart colors, can be themed later */
+    --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
@@ -41,7 +41,7 @@
     
     --radius: 0.5rem;
 
-    /* Sidebar variables - less emphasis in this design but kept for completeness */
+    /* Sidebar variables */
     --sidebar-background: 0 0% 7%;
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 0 100% 42%;
@@ -51,9 +51,9 @@
     --sidebar-border: 0 0% 18%;
     --sidebar-ring: 0 100% 42%;
 
-    --bmw-m-blue: 208 100% 38%; /* Explicit M Performance Blue as per prompt */
-    --blood-red: 0 100% 42%; /* Explicit Blood Red as per prompt */
-    --shadow-gray: 0 2% 11%; /* Explicit Shadow Gray as per prompt */
+    --bmw-m-blue: 208 100% 38%; /* Explicit M Performance Blue */
+    --blood-red: 0 100% 42%; /* Explicit Blood Red */
+    --shadow-gray: 0 2% 11%; /* Explicit Shadow Gray */
   }
 }
 
@@ -65,20 +65,17 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground font-sans; /* font-sans will be Rajdhani */
-    /* Carbon Fiber Patterned Background */
+    @apply bg-background text-foreground font-sans;
     background-image:
       linear-gradient(45deg, hsla(0, 0%, 5%, 0.4) 25%, transparent 25%, transparent 75%, hsla(0, 0%, 5%, 0.4) 75%, hsla(0, 0%, 5%, 0.4)),
       linear-gradient(-45deg, hsla(0, 0%, 5%, 0.4) 25%, transparent 25%, transparent 75%, hsla(0, 0%, 5%, 0.4) 75%, hsla(0, 0%, 5%, 0.4));
     background-size: 20px 20px;
   }
 
-  /* Section heading style */
   .font-heading {
-    @apply font-bold uppercase tracking-wider; /* Base for Rajdhani, Orbitron, or Montserrat Extra Bold */
+    @apply font-bold uppercase tracking-wider;
   }
 
-  /* M-glow for buttons and cards */
   .button-m-glow, .card-m-glow {
     @apply shadow-[0_0_15px_hsl(var(--primary)/0.5)] transition-shadow duration-300 ease-in-out;
   }
@@ -87,11 +84,10 @@
   }
 }
 
-/* DialogContent scrollbar (from previous) - can be themed further */
 .DialogContent[data-state="open"] {
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Added for scroll area fix */
+  overflow: hidden;
 }
 .DialogContent > div[data-radix-scroll-area-viewport] {
   scrollbar-width: thin;
@@ -113,64 +109,71 @@
     z-index: 40;
 }
 
-/* M5 Grille-inspired Nav Underline - REFINED */
-.nav-headlight {
+/* BMW M5 Kidney Grille Blade Underline */
+.nav-grille-underline {
   position: relative;
-  overflow: visible; /* Allow pseudo-element to extend slightly */
+  overflow: visible;
 }
 
-.nav-headlight::after {
+.nav-grille-underline::after {
   content: '';
   position: absolute;
-  bottom: -3px; /* Positioned slightly below the text */
   left: 50%;
-  transform: translateX(-50%); /* Center the underline */
-  width: 0%; /* Starts at 0 width, animates to full width */
-  height: 4px; /* A bit more substantial, like a grille bar */
-  
-  /* Dual color like M stripes, but for the underline */
+  bottom: -2px; /* Sits 2px below baseline */
+  transform: translateX(-50%);
+  width: 0%;
+  height: 4px;
   background-image: linear-gradient(
     to right,
     hsl(var(--bmw-m-blue)) 0%, 
-    hsl(var(--bmw-m-blue)) 49%, /* Sharp transition for split color */
-    hsl(var(--primary)) 51%,
+    hsl(var(--bmw-m-blue)) 55%,
+    hsl(var(--primary)) 55%,
     hsl(var(--primary)) 100%
   );
-  
-  border-radius: 2px; /* Rounded ends for a "curved" feel */
-  
-  opacity: 0; /* Hidden by default, fades in */
-  filter: blur(0.3px); /* Subtle blur for a soft glow */
-  
-  transition: width 0.35s cubic-bezier(0.23, 1, 0.32, 1), 
-              opacity 0.3s ease-out,
-              height 0.3s ease-out,
-              filter 0.3s ease-out;
-  will-change: width, opacity, height, filter;
-  pointer-events: none; /* Ensure it doesn't interfere with clicks */
+  border-radius: 9999px; /* Fully rounded ends (pill shape) */
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.4); /* Inner shadow for depth, slightly softer */
+  filter: drop-shadow(0 0 3px hsla(var(--bmw-m-blue), 0.5)) drop-shadow(0 0 3px hsla(var(--primary), 0.5));
+  opacity: 0;
+  transition: width 170ms cubic-bezier(.36,1.08,.33,1), 
+              opacity 170ms cubic-bezier(.36,1.08,.33,1),
+              filter 170ms cubic-bezier(.36,1.08,.33,1),
+              background-image 170ms cubic-bezier(.36,1.08,.33,1);
+  will-change: width, opacity, filter, background-image;
+  pointer-events: none;
 }
 
-.nav-headlight:hover::after,
-.nav-headlight.active-link::after {
-  width: 100%; /* Full width of the nav item text */
-  height: 5px; /* Slightly thicker on hover/active */
+.nav-grille-underline:hover::after,
+.nav-grille-underline.active-link::after {
+  width: 120%;
   opacity: 1;
-  filter: blur(0.2px) /* Sharper on active/hover */
-          drop-shadow(0px 0px 4px hsla(var(--bmw-m-blue), 0.6)) /* Blue glow */
-          drop-shadow(0px 0px 4px hsla(var(--primary), 0.6));   /* Red glow */
+  background-image: linear-gradient(
+    to right,
+    hsl(var(--bmw-m-blue)) 0%, 
+    hsl(var(--bmw-m-blue)) 50%,
+    hsl(var(--primary)) 50%,
+    hsl(var(--primary)) 100%
+  ); /* Shift cutoff to 50/50 */
+  filter: drop-shadow(0 0 5px hsla(var(--bmw-m-blue), 0.8)) drop-shadow(0 0 5px hsla(var(--primary), 0.8)); /* Brighter glow */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.6);
 }
 
-/* Reduced motion preferences */
+/* Reduced motion preferences for grille underline */
 @media (prefers-reduced-motion: reduce) {
-  .nav-headlight::after {
+  .nav-grille-underline::after {
     transition: none;
   }
-  .nav-headlight:hover::after,
-  .nav-headlight.active-link::after {
-    width: 100%; /* Standard width */
-    height: 4px; /* Standard thickness */
+  .nav-grille-underline:hover::after,
+  .nav-grille-underline.active-link::after {
+    width: 90%; /* Static 90% bar */
     opacity: 1;
-    filter: none; /* No blur or glow */
-    transform: translateX(-50%); /* Centered */
+    filter: none; /* No glow */
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.4);
+    background-image: linear-gradient(
+      to right,
+      hsl(var(--bmw-m-blue)) 0%, 
+      hsl(var(--bmw-m-blue)) 55%,
+      hsl(var(--primary)) 55%,
+      hsl(var(--primary)) 100%
+    ); /* Static 55/45 split */
   }
 }

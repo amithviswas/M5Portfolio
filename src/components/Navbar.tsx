@@ -2,13 +2,13 @@
 "use client";
 
 import Link from 'next/link';
-import Image from 'next/image'; // Import Next.js Image component
+import Image from 'next/image';
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils'; // Import cn utility
+import { cn } from '@/lib/utils';
 
 const navLinks = [
   { name: 'Home', href: '/#home', id: 'home' },
@@ -32,67 +32,76 @@ export default function Navbar() {
 
     if (pathname === '/') {
       if (currentHash) newActive = `/${currentHash}`;
-      else newActive = '/#home';
+      else newActive = '/#home'; // Default to home if on root and no hash
     }
     
-    const matchingNavLink = navLinks.find(link => link.href === newActive || (link.href === pathname && pathname !== '/'));
+    // Find the navLink whose href matches the newActive path or just the pathname for non-hash links
+    const matchingNavLink = navLinks.find(link => link.href === newActive || (link.href === pathname && !link.href.includes('#')));
 
-    if (matchingNavLink) setActiveLink(matchingNavLink.href);
-    else if (pathname === '/' && !currentHash) setActiveLink('/#home');
-    else setActiveLink(pathname);
-
+    if (matchingNavLink) {
+      setActiveLink(matchingNavLink.href);
+    } else if (pathname === '/' && !currentHash) {
+      setActiveLink('/#home'); // Fallback for homepage initial load without hash
+    } else {
+       // For paths like /certifications, /resume, etc.
+       const directPageMatch = navLinks.find(link => link.href === pathname);
+       if (directPageMatch) {
+        setActiveLink(directPageMatch.href);
+       } else {
+        // If still no match, try to find the closest section if on homepage
+        // This part is complex with IntersectionObserver, simplified for now
+        // Fallback to pathname or a default
+        setActiveLink(pathname === '/' ? '/#home' : pathname);
+       }
+    }
   }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    handleScroll(); // Call on mount
     
     determineActiveLink(); 
 
     window.addEventListener('hashchange', determineActiveLink, { passive: true });
 
-    const sections = navLinks
-      .filter(link => link.href.startsWith('/#'))
-      .map(link => document.getElementById(link.id));
-    
-    const observerOptions = {
-      root: null, 
-      rootMargin: "-30% 0px -60% 0px", 
-      threshold: 0.01, 
-    };
-
-    const observerCallback: IntersectionObserverCallback = (entries) => {
-      if (pathname !== '/') return; 
-
-      let newActiveSectionId = '';
-      let isAnySectionIntersecting = false;
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          newActiveSectionId = entry.target.id;
-          isAnySectionIntersecting = true;
-        }
-      });
+    // IntersectionObserver for homepage sections
+    let observer: IntersectionObserver | null = null;
+    if (pathname === '/') {
+      const sections = navLinks
+        .filter(link => link.href.startsWith('/#'))
+        .map(link => document.getElementById(link.id));
       
-      if (isAnySectionIntersecting && newActiveSectionId) {
-        setActiveLink(`/#${newActiveSectionId}`);
-      } else if (!isAnySectionIntersecting && window.scrollY < window.innerHeight * 0.3 && pathname === '/') {
-        setActiveLink('/#home');
-      }
-    };
+      const observerOptions = {
+        root: null, 
+        rootMargin: "-30% 0px -60% 0px", // Adjust to trigger when section is more centered
+        threshold: 0.01, 
+      };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    sections.forEach(section => {
-      if (section) observer.observe(section);
-    });
+      const observerCallback: IntersectionObserverCallback = (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setActiveLink(`/#${entry.target.id}`);
+          }
+        });
+        // If no section is intersecting (e.g., scrolled to top or bottom of page)
+        // determineActiveLink will handle based on hash or default to home
+        if (!entries.some(entry => entry.isIntersecting) && window.scrollY < window.innerHeight * 0.3) {
+           if (pathname === '/') setActiveLink('/#home');
+        }
+      };
+      observer = new IntersectionObserver(observerCallback, observerOptions);
+      sections.forEach(section => {
+        if (section) observer!.observe(section);
+      });
+    }
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('hashchange', determineActiveLink);
-      sections.forEach(section => {
-        if (section) observer.unobserve(section);
-      });
-      observer.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
     };
   }, [pathname, determineActiveLink]);
 
@@ -101,10 +110,25 @@ export default function Navbar() {
 
   const handleNavLinkClick = (href: string) => {
     closeMobileMenu();
-    setActiveLink(href); 
+    // setActiveLink(href); // Set active link immediately for responsiveness
+
     if (href.startsWith('/#') && pathname === '/') {
       const targetId = href.substring(2); 
       document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+      // Update hash manually if not already set to trigger determineActiveLink via hashchange
+      if (window.location.hash !== `#${targetId}`) {
+        // window.location.hash = `#${targetId}`; // This will trigger hashchange and update activeLink
+      } else {
+        // if hash is already set, force update activeLink
+        setActiveLink(href);
+      }
+    } else if (href.startsWith('/#')) {
+      // Navigating to a hash link on the homepage from another page
+      // Next.js Link component will handle navigation, then browser handles scroll
+      // setActiveLink is handled by determineActiveLink on route change
+    } else {
+      // Navigating to a different page
+      // setActiveLink is handled by determineActiveLink on route change
     }
   };
 
@@ -139,7 +163,7 @@ export default function Navbar() {
                 <Link key={link.name} href={link.href} legacyBehavior passHref>
                   <a
                     className={cn(
-                      'relative px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider nav-headlight group',
+                      'relative px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider nav-grille-underline group', // Changed class name
                       isActive ? 'text-primary active-link' : 'text-muted-foreground hover:text-primary-foreground'
                     )}
                     onClick={(e) => {
@@ -147,10 +171,12 @@ export default function Navbar() {
                         e.preventDefault(); 
                       }
                       handleNavLinkClick(link.href);
+                      // Manually set active link on click for immediate feedback
+                      // especially for same-page hash links not caught by observer quickly enough
+                      setActiveLink(link.href);
                     }}
                   >
                     {link.name}
-                    {/* Removed old span underline, new ::after effect will be applied by .nav-headlight */}
                   </a>
                 </Link>
               );
@@ -193,6 +219,7 @@ export default function Navbar() {
                            e.preventDefault(); 
                         }
                         handleNavLinkClick(link.href);
+                        setActiveLink(link.href); // Also set active link on click for mobile
                       }}
                     >
                       {link.name}
