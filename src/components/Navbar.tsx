@@ -35,22 +35,30 @@ export default function Navbar() {
     setIsMounted(true);
   }, []);
 
-  const setActiveLinkAndTrack = useCallback((href: string, sectionId?: string) => {
-    setActiveLink(prevActiveLink => {
-      if (prevActiveLink !== href) {
-        if (sectionId) {
-          incrementSectionVisit(sectionId);
-        } else {
-          // Fallback to derive sectionId from href if it's a homepage hash link
-          const matchingNavLink = navLinks.find(nl => nl.href === href && nl.href.startsWith('/#'));
-          if (matchingNavLink) {
-            incrementSectionVisit(matchingNavLink.id);
-          }
-        }
+  // Effect to track section visits when activeLink changes
+  useEffect(() => {
+    if (!isMounted || !activeLink) return;
+
+    let sectionIdToTrack: string | undefined;
+
+    if (activeLink.startsWith('/#')) {
+      sectionIdToTrack = activeLink.substring(2);
+    } else if (activeLink.startsWith('/')) {
+      // For page links like /resume, /contact, etc.
+      const navLinkEntry = navLinks.find(nl => nl.href === activeLink);
+      if (navLinkEntry) {
+        sectionIdToTrack = navLinkEntry.id;
+      } else {
+        // Fallback: extract potential ID from pathname, e.g., '/resume' -> 'resume'
+        sectionIdToTrack = activeLink.substring(1);
       }
-      return href;
-    });
-  }, [incrementSectionVisit]);
+    }
+    
+    if (sectionIdToTrack) {
+      incrementSectionVisit(sectionIdToTrack);
+    }
+  }, [activeLink, isMounted, incrementSectionVisit, pathname]);
+
 
   // Effect for setting active link based on pathname and hash, and for IntersectionObserver
   useEffect(() => {
@@ -59,7 +67,7 @@ export default function Navbar() {
     const currentHash = window.location.hash;
 
     if (pathname !== '/') {
-      setActiveLinkAndTrack(pathname);
+      setActiveLink(pathname);
       if (sectionObserverRef.current) {
         sectionObserverRef.current.disconnect();
       }
@@ -74,7 +82,7 @@ export default function Navbar() {
         initialActiveHref = matchedNavLink.href;
       }
     }
-    setActiveLinkAndTrack(initialActiveHref, initialActiveHref.substring(2));
+    setActiveLink(initialActiveHref);
     
     // Setup IntersectionObserver for homepage sections
     if (sectionObserverRef.current) {
@@ -82,7 +90,7 @@ export default function Navbar() {
     }
 
     const observerCallback: IntersectionObserverCallback = (entries) => {
-      if (pathname !== '/') return; // Only run on homepage
+      if (pathname !== '/') return;
 
       let currentHighestVisibleSectionId: string | null = null;
       let highestVisibleSectionTop = Infinity;
@@ -90,7 +98,6 @@ export default function Navbar() {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const rect = entry.target.getBoundingClientRect();
-           // Consider sections whose top is within the top 60% of the viewport
           if (rect.top < window.innerHeight * 0.6 && rect.top < highestVisibleSectionTop) {
             highestVisibleSectionTop = rect.top;
             currentHighestVisibleSectionId = entry.target.id;
@@ -101,17 +108,17 @@ export default function Navbar() {
       if (currentHighestVisibleSectionId) {
         const activeNavLinK = navLinks.find(link => link.id === currentHighestVisibleSectionId);
         if (activeNavLinK) {
-          setActiveLinkAndTrack(activeNavLinK.href, activeNavLinK.id);
+          setActiveLink(activeNavLinK.href);
         }
-      } else if (window.scrollY < window.innerHeight * 0.2) { // Very top of the page
-        setActiveLinkAndTrack('/#home', 'home');
+      } else if (window.scrollY < window.innerHeight * 0.2) {
+        setActiveLink('/#home');
       }
     };
 
     const observerOptions = {
       root: null,
-      rootMargin: "-20% 0px -50% 0px", // Section active if top enters this zone
-      threshold: 0.01, // Small threshold
+      rootMargin: "-30% 0px -45% 0px", 
+      threshold: 0.01,
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
@@ -131,9 +138,9 @@ export default function Navbar() {
         const newHash = window.location.hash;
         const matchedNavLink = navLinks.find(link => link.href === `/${newHash}`);
         if (matchedNavLink) {
-          setActiveLinkAndTrack(matchedNavLink.href, matchedNavLink.id);
+          setActiveLink(matchedNavLink.href);
         } else if (!newHash) {
-           setActiveLinkAndTrack('/#home', 'home');
+           setActiveLink('/#home');
         }
       }
     };
@@ -145,7 +152,7 @@ export default function Navbar() {
       }
       window.removeEventListener('hashchange', handleHashChange);
     };
-  }, [isMounted, pathname, setActiveLinkAndTrack]);
+  }, [isMounted, pathname]);
 
 
   const handleNavLinkMouseMove = (event: React.MouseEvent<HTMLAnchorElement>, index: number) => {
@@ -154,33 +161,35 @@ export default function Navbar() {
 
     const rect = linkElement.getBoundingClientRect();
     const cursorXPercent = ((event.clientX - rect.left) / rect.width) * 100;
+    
+    const baseSplit = 55; // 55% blue, 45% red
+    const driftAmount = 15; // Max drift towards cursor
 
-    let blueStopPercentage = 55; 
-    const driftAmount = 15; 
-
-    if (cursorXPercent < 50) { 
-      blueStopPercentage = 55 + ((50 - cursorXPercent) / 50) * driftAmount;
-    } else { 
-      blueStopPercentage = 55 - ((cursorXPercent - 50) / 50) * driftAmount;
+    let blueStopPercentage = baseSplit;
+    if (cursorXPercent < 50) { // Cursor on left half
+      blueStopPercentage = baseSplit + ((50 - cursorXPercent) / 50) * driftAmount;
+    } else { // Cursor on right half
+      blueStopPercentage = baseSplit - ((cursorXPercent - 50) / 50) * driftAmount;
     }
-    blueStopPercentage = Math.max(40, Math.min(70, blueStopPercentage));
+    blueStopPercentage = Math.max(40, Math.min(70, blueStopPercentage)); // Clamp between 40% and 70%
 
-    linkElement.style.setProperty('--grille-blue-stop-percentage-hover', `${blueStopPercentage}%`);
-    linkElement.style.setProperty('--grille-red-start-percentage-hover', `${blueStopPercentage}%`);
+    linkElement.style.setProperty('--grille-blue-stop-percentage', `${blueStopPercentage}%`);
+    linkElement.style.setProperty('--grille-red-start-percentage', `${blueStopPercentage}%`);
   };
 
   const handleNavLinkMouseLeave = (index: number) => {
     const linkElement = navLinkRefs.current[index];
     if (!linkElement || !linkElement.classList.contains('nav-laser-crest')) return;
-    linkElement.style.removeProperty('--grille-blue-stop-percentage-hover');
-    linkElement.style.removeProperty('--grille-red-start-percentage-hover');
+    // Reset to default split (55/45)
+    linkElement.style.setProperty('--grille-blue-stop-percentage', `55%`);
+    linkElement.style.setProperty('--grille-red-start-percentage', `55%`);
   };
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   const handleNavLinkClick = (href: string, sectionId: string) => {
     closeMobileMenu();
-    setActiveLinkAndTrack(href, sectionId); // Set active link and track visit immediately
+    setActiveLink(href); // Visual update immediate, tracking handled by useEffect on activeLink change
 
     if (href.startsWith('/#') && pathname === '/') {
       const targetId = href.substring(2);
@@ -192,8 +201,6 @@ export default function Navbar() {
         targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
-    // For links to other pages or hash links from other pages, Next.js Link handles navigation.
-    // The useEffect will then pick up the new pathname or hash to set the active link.
   };
 
   return (
@@ -295,5 +302,4 @@ export default function Navbar() {
     </motion.nav>
   );
 }
-
     
