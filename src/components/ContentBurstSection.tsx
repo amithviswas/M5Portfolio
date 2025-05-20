@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card'; // Corrected import
 import { ArrowRight } from 'lucide-react';
 import Section from './Section';
 
