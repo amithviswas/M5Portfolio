@@ -5,7 +5,7 @@ import HeroSection from '@/components/HeroSection';
 import AboutMeSection from '@/components/AboutMeSection';
 import SkillsSection from '@/components/SkillsSection';
 import ProjectsSection from '@/components/ProjectsSection';
-import ContactSection from '@/components/ContactSection'; // Added import
+// Removed ContactSection import
 
 export default function HomePage() {
   return (
@@ -14,7 +14,7 @@ export default function HomePage() {
       <AboutMeSection />
       <SkillsSection />
       <ProjectsSection />
-      <ContactSection /> {/* Added ContactSection */}
+      {/* Removed ContactSection component */}
       <style jsx global>{`
         .perspective { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; }
