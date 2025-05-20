@@ -3,11 +3,15 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, useAnimation, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { PlayCircle } from 'lucide-react';
-import Section from '@/components/Section'; // Ensure Section is imported correctly
+import Section from '@/components/Section'; 
 import { MStartStopButton } from '@/components/MStartStopButton';
 import { useIntroContext } from '@/contexts/IntroContext';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+
+// For "Empire Edition" specific styling
+const cinematicEase = [0.36,1.08,.33,1]; // Snappy M-throttle curve
+const easeOutExpo = [0.16, 1, 0.3, 1]; // Smooth cinematic exit
 
 export default function HeroSection() {
   const { setIntroCompleted } = useIntroContext();
@@ -16,51 +20,53 @@ export default function HeroSection() {
   const [scrollPercentForTachometer, setScrollPercentForTachometer] = useState(0);
   const [taglineUnderlineVisible, setTaglineUnderlineVisible] = useState(false);
   const [gantryLightsVisible, setGantryLightsVisible] = useState(false);
+  const [showCameraFlash, setShowCameraFlash] = useState(false);
 
 
   const prefersReducedMotion = useReducedMotion();
-  const heroControls = useAnimation();
+  const heroControls = useAnimation(); // For hero section dimming
 
   const heroRef = useRef<HTMLElement>(null);
-  const { scrollY, scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"]
-  });
 
-  // Parallax for light streaks
-  const parallaxYLight1 = useTransform(scrollYProgress, [0, 1], ["-30px", "30px"]);
-  const parallaxYLight2 = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
+  // Parallax for Nightfall/Atelier light streaks (can be repurposed for Empire)
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"] // Track scroll through entire hero section
+  });
+  const parallaxYLight1 = useTransform(heroScrollProgress, [0, 1], ["-30px", "30px"]);
+  const parallaxYLight2 = useTransform(heroScrollProgress, [0, 1], ["-50px", "50px"]);
+
 
   useEffect(() => {
     const handleScroll = () => {
-      const heroHeight = heroRef.current?.offsetHeight || window.innerHeight;
       const currentScrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const heroHeight = heroRef.current?.offsetHeight || viewportHeight;
 
-      // Dim hero backdrop & freeze headline beam
-      const dimThreshold = heroHeight * 0.2;
+      // Hero backdrop dimming (Empire & Nightfall)
+      const dimThreshold = viewportHeight * 0.2; // 20vh
       setIsScrolledPastHeroThreshold(currentScrollY > dimThreshold);
-
-      const freezeBeamThreshold = heroHeight * 0.15;
+      
+      // Headline beam freeze (Nightfall)
+      const freezeBeamThreshold = viewportHeight * 0.15; // 15vh
       setHeadlineBeamFrozen(currentScrollY >= freezeBeamThreshold);
 
-      // HUD Tachometer for Hero Section height
-      // Calculate percentage of hero section scrolled out of view
-      let heroScrollPercent = 0;
+      // HUD Tachometer (Empire & Nightfall)
+      // Calculates percentage of HERO SECTION scrolled out of view, capped at 100%
+      let heroSectionScrollPercent = 0;
       if (heroRef.current) {
           const rect = heroRef.current.getBoundingClientRect();
-          // When top is negative, it means we've scrolled past the top of the hero
           if (rect.top < 0) {
-              heroScrollPercent = (Math.abs(rect.top) / heroHeight) * 100;
+              heroSectionScrollPercent = Math.min(100, (Math.abs(rect.top) / heroHeight) * 100);
           }
-          heroScrollPercent = Math.min(100, Math.max(0, heroScrollPercent));
       }
-      setScrollPercentForTachometer(heroScrollPercent);
+      setScrollPercentForTachometer(heroSectionScrollPercent);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    handleScroll(); // Initial call
 
-    const underlineTimer = setTimeout(() => setTaglineUnderlineVisible(true), 1200); // Sync with tagline animation
+    const underlineTimer = setTimeout(() => setTaglineUnderlineVisible(true), 1200); 
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -77,7 +83,6 @@ export default function HeroSection() {
     }
   }, [isScrolledPastHeroThreshold, heroControls, prefersReducedMotion]);
 
-
   const handleStartDriveClick = () => {
     setIntroCompleted(true);
     requestAnimationFrame(() => {
@@ -87,45 +92,57 @@ export default function HeroSection() {
       }
     });
   };
+  
+  const playCameraFlash = () => {
+    if (prefersReducedMotion) return;
+    setShowCameraFlash(true);
+    setTimeout(() => setShowCameraFlash(false), 250); // Duration of flash
+  };
 
-  const cinematicEase = [0.36,1.08,0.33,1];
-  const easeOutExpo = [0.16, 1, 0.3, 1];
-
+  // Staggered animation variants for Empire Edition "Studio Glide"
   const medallionVariants = {
-    hidden: { opacity: 0, scale: 0.5 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: cinematicEase, delay: 0.2 } },
+    hidden: { opacity: 0, x: prefersReducedMotion ? 0 : -50, scale: 0.8 },
+    visible: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.6, ease: easeOutExpo, delay: 0.2 } },
   };
-  const headlineVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: cinematicEase, delay: 0.4 } },
+  const headlineMainVariants = {
+    hidden: { opacity: 0, x: prefersReducedMotion ? 0 : 50, y:10 },
+    visible: { opacity: 1, x: 0, y: 0, transition: { duration: 0.7, ease: cinematicEase, delay: 0.4 } },
   };
-  const taglineVariants = {
-    hidden: { opacity: 0, y: 25 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: cinematicEase, delay: 0.55 } },
+  const headlineSubVariants = { // Tagline
+    hidden: { opacity: 0, x: prefersReducedMotion ? 0 : -50, y:10 },
+    visible: { opacity: 1, x: 0, y:0, transition: { duration: 0.7, ease: cinematicEase, delay: 0.55 } },
   };
   const paragraphVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOutExpo, delay: 0.8 } },
   };
   const buttonVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.9 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1], delay: 1.0 } }, // easeOutBack for rebound
+    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 20, scale: 0.9 },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1], delay: 1.0 } }, // easeOutBack
   };
 
-
-  const getTachometerGradient = () => {
-    // Gradient for the "Empire Tachometer"
-    if (scrollPercentForTachometer <= 40) {
-      const t = scrollPercentForTachometer / 40;
-      return `linear-gradient(to right, hsl(var(--silver-hsl)) ${100 - t*100}%, hsl(var(--royal-blue-hsl)) 100%)`;
-    } else if (scrollPercentForTachometer <= 80) {
-      const t = (scrollPercentForTachometer - 40) / 40;
-      return `linear-gradient(to right, hsl(var(--royal-blue-hsl)) ${100 - t*100}%, hsl(var(--crimson-hsl)) 100%)`;
-    } else {
-      const t = (scrollPercentForTachometer - 80) / 20;
-      return `linear-gradient(to right, hsl(var(--crimson-hsl)) ${100 - t*100}%, hsl(var(--gold-hsl)) 100%)`;
+  const getTachometerGradientEmpire = () => {
+    if (scrollPercentForTachometer <= 40) { // Silver to Royal Blue
+      return `linear-gradient(to right, hsl(var(--silver-hsl)) ${100 - (scrollPercentForTachometer/40)*100}%, hsl(var(--royal-blue-hsl)) 100%)`;
+    } else if (scrollPercentForTachometer <= 80) { // Royal Blue to Crimson
+      return `linear-gradient(to right, hsl(var(--royal-blue-hsl)) ${100 - ((scrollPercentForTachometer-40)/40)*100}%, hsl(var(--crimson-hsl)) 100%)`;
+    } else { // Crimson to Gold
+      return `linear-gradient(to right, hsl(var(--crimson-hsl)) ${100 - ((scrollPercentForTachometer-80)/20)*100}%, hsl(var(--gold-hsl)) 100%)`;
     }
   };
+  
+  const getTachometerGradientNightfall = () => { // For Quantum Edition
+    const stop1 = Math.max(0, 100 - (scrollPercentForTachometer / 0.33));
+    const stop2 = Math.max(0, 100 - ((scrollPercentForTachometer - 33) / 0.33));
+    const stop3 = Math.max(0, 100 - ((scrollPercentForTachometer - 66) / 0.34));
+    return `linear-gradient(to right, 
+      hsl(var(--bmw-i-blue-hsl)) ${stop1}%, 
+      hsl(var(--hyper-violet-hsl)) ${stop2}%, 
+      hsl(var(--voltage-gold-hsl)) ${stop3}%,
+      hsl(var(--voltage-gold-hsl)) 100%
+    )`;
+  };
+
 
   return (
     <Section
@@ -133,30 +150,30 @@ export default function HeroSection() {
       animate={heroControls}
       id="home"
       className={cn(
-        "relative !pt-0 !pb-0 hero-empire-bg",
-        !prefersReducedMotion && "animate-ambient-pulse"
+        "relative !pt-0 !pb-0 hero-empire-bg", // Using Empire BG as base
+        !prefersReducedMotion && "animate-ambient-pulse" // Ambient pulse from Empire
       )}
       fullHeight
       noPadding
     >
-      {/* Dynamic Headlight Sweep Background */}
+      {/* Dynamic Headlight Sweep Background (Apex Finish) */}
       {!prefersReducedMotion && (
         <div className="hero-headlight-sweep-bg"></div>
       )}
 
-      {/* Gantry Lights */}
+      {/* Gantry Lights (Empire & Apex Finish) */}
       {!prefersReducedMotion && (
         <>
          <motion.div
             className="hero-gantry-light top"
             initial={{ opacity: 0, width: 0 }}
-            animate={gantryLightsVisible ? { opacity: 1, width: '100%', transition: { duration: 0.7, ease: 'easeOut', delay: 0.1 } } : {}}
-            onViewportEnter={() => setGantryLightsVisible(true)} // Trigger when section itself is visible
+            animate={gantryLightsVisible ? { opacity: [0,0.7,0.3], width: '100%', transition: { duration: 0.7, ease: 'easeOut', delay: 0.1, times: [0, 0.7, 1] } } : {}}
+            onViewportEnter={() => setGantryLightsVisible(true)} 
           />
         </>
       )}
-
-      {/* Parallax Streaks */}
+      
+      {/* Parallax Light Streaks (Nightfall / Could be repurposed for Empire) */}
       {!prefersReducedMotion && (
         <>
           <motion.div
@@ -169,7 +186,7 @@ export default function HeroSection() {
           />
         </>
       )}
-       <div className="hero-bloom-extra -z-10"></div>
+      <div className="hero-bloom-extra -z-10"></div> {/* From Empire */}
 
 
       <motion.div
@@ -177,23 +194,19 @@ export default function HeroSection() {
         animate="visible"
         className="relative z-10 flex flex-col items-center justify-center text-center h-full px-4 py-12 md:py-20"
       >
+        {/* Profile Medallion - Using Empire Edition Style */}
         <motion.div
-          className="relative mb-6 md:mb-8 hero-medallion-empire"
+          className={cn(
+            "relative mb-6 md:mb-8 hero-medallion-empire hero-medallion-m-stripe",
+            showCameraFlash && !prefersReducedMotion && "animate-camera-flash"
+          )}
           variants={medallionVariants}
-          whileHover={!prefersReducedMotion ? {
-            scale: 1.05,
-            filter: "saturate(1.4) brightness(1.3)",
-            transition: { duration: 0.25, ease: "easeInOut" }
-          } : {}}
-          whileFocusWithin={!prefersReducedMotion ? {
-             scale: 1.05,
-             filter: "saturate(1.4) brightness(1.3)",
-             transition: { duration: 0.25, ease: "easeInOut" }
-          } : {}}
+          onHoverStart={playCameraFlash}
+          onFocus={playCameraFlash}
         >
           <div className="hero-medallion-empire-inner">
              <Image
-                src="https://i.ibb.co/cKgh0560/1701fc1e-7948-4d92-b440-ffb24258652b.png"
+                src="https://i.ibb.co/cKgh0560/1701fc1e-7948-4d92-b440-ffb24258652b.png" 
                 alt="Amith Viswas Reddy"
                 fill
                 style={{ objectFit: "cover" }}
@@ -206,26 +219,27 @@ export default function HeroSection() {
           </div>
         </motion.div>
 
+        {/* Headline Stack - Using Empire Edition Style & Nightfall Beam */}
         <motion.h1
           className={cn(
-            "text-3xl sm:text-4xl md:text-5xl lg:text-6xl hero-headline-empire hero-text-lift",
-            !prefersReducedMotion && headlineBeamFrozen && "beam-frozen"
+            "text-3xl sm:text-4xl md:text-5xl lg:text-6xl hero-headline-empire hero-text-lift font-playfair-display", // Ensure font class is applied
+            "hero-headline-beam", // For Nightfall neon sweep
+            headlineBeamFrozen && "beam-frozen", // For Nightfall beam freeze
+            showCameraFlash && !prefersReducedMotion && "animate-camera-flash"
           )}
-           variants={headlineVariants}
-           whileHover={!prefersReducedMotion ? {
-             filter: "saturate(1.4) brightness(1.3)",
-             transition: { duration: 0.25, ease: "easeInOut" }
-           } : {}}
+           variants={headlineMainVariants}
+           onHoverStart={playCameraFlash}
+           onFocus={playCameraFlash}
         >
           Crafting Digital Excellence.
         </motion.h1>
 
         <motion.p
           className={cn(
-            "text-lg md:text-xl mt-1 md:mt-2 hero-tagline-empire hero-text-lift",
+            "text-lg md:text-xl mt-1 md:mt-2 hero-tagline-empire hero-text-lift font-space-grotesk", // Ensure font class
              taglineUnderlineVisible && "animate-underline"
           )}
-          variants={taglineVariants}
+          variants={headlineSubVariants}
         >
           Innovate. Create. Inspire.
         </motion.p>
@@ -237,36 +251,42 @@ export default function HeroSection() {
           Welcome to my digital space. I transform ideas into powerful, elegant, and user-centric web experiences. Explore my work and let&apos;s build something amazing together.
         </motion.p>
 
+        {/* Start/Stop Button - Obsidian Crown from Empire, Turbo conic from Nightfall */}
         <motion.div
           variants={buttonVariants}
           className="mt-8 md:mt-10"
         >
-          <MStartStopButton onClick={handleStartDriveClick} className="transition-m-blip">
+          <MStartStopButton onClick={handleStartDriveClick} className="transition-m-blip button-turbo-hover"> {/* Added button-turbo-hover */}
             <PlayCircle size={32} className="mb-1 text-primary group-hover:text-blood-red transition-colors" />
             <span className="text-xs uppercase">Start</span>
             <span className="text-xs uppercase">Drive</span>
           </MStartStopButton>
         </motion.div>
 
+        {/* HUD Tachometer - Using Empire Style for gradients */}
          {!prefersReducedMotion && (
           <div
-            className="hero-empire-tachometer"
+            className="hero-empire-tachometer" // Using Empire for main style
             style={{
               width: `${scrollPercentForTachometer}%`,
-              background: getTachometerGradient(),
+              background: getTachometerGradientEmpire(),
             }}
           />
         )}
       </motion.div>
+      
+      {/* Bottom Gantry Light */}
       {!prefersReducedMotion && (
         <>
           <motion.div
             className="hero-gantry-light bottom"
             initial={{ opacity: 0, width: 0 }}
-            animate={gantryLightsVisible ? { opacity: 1, width: '100%', transition: { duration: 0.7, ease: 'easeOut', delay: 0.3 } } : {}}
+            animate={gantryLightsVisible ? { opacity: [0,0.7,0.3], width: '100%', transition: { duration: 0.7, ease: 'easeOut', delay: 0.3, times: [0, 0.7, 1] } } : {}}
           />
         </>
       )}
     </Section>
   );
 }
+
+```

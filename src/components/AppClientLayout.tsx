@@ -2,38 +2,43 @@
 "use client";
 
 import type { ReactNode } from 'react';
-import { usePathname } from 'next/navigation'; // Import usePathname
+import { usePathname } from 'next/navigation';
 import { useIntroContext } from '@/contexts/IntroContext';
 import IntroAnimation from '@/components/IntroAnimation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import ScrollMomentumBar from '@/components/ScrollMomentumBar'; 
+import ScrollMomentumBar from '@/components/ScrollMomentumBar';
 import { Toaster } from "@/components/ui/toaster";
 import { AnimatePresence, motion } from 'framer-motion';
+import { useUserInteraction } from '@/contexts/UserInteractionContext';
+import { useEffect } from 'react';
+import soundService from '@/services/soundService';
 
+// Torque-Ramp Page Transition Variants
+// cubic-bezier(0.6, 0.04, 0.98, 0.335) // "acceleration curve in" (slow start, fast mid)
+// cubic-bezier(0.42, 0, 1, 1) // Fast out
 const pageTransitionVariants = {
   initial: {
     opacity: 0,
-    x: '8vw', // Slide in from right 8vw
-    filter: 'blur(0px)', // Start sharp
+    x: '8vw',
+    filter: 'blur(0px)',
   },
   animate: {
     opacity: 1,
     x: '0vw',
     filter: 'blur(0px)',
     transition: {
-      duration: 0.4, // Total duration
-      ease: [0.6, 0.04, 0.2, 1] // Custom acceleration curve (approx)
-      // For more precise two-part timing, would need GSAP or chained animations
+      duration: 0.4, // Total duration 400ms for entry
+      ease: [0.6, 0.04, 0.98, 0.335],
     }
   },
   exit: {
     opacity: 0,
-    x: '-8vw', // Slide out to left 8vw
+    x: '-8vw',
     filter: 'blur(4px)',
-    transition: { 
-      duration: 0.3, // Slightly faster exit
-      ease: [0.42, 0, 1, 1] 
+    transition: {
+      duration: 0.3, // Total duration 300ms for exit
+      ease: [0.42, 0, 1, 1],
     }
   }
 };
@@ -41,28 +46,75 @@ const pageTransitionVariants = {
 
 export default function AppClientLayout({ children }: { children: ReactNode }) {
   const { introCompleted } = useIntroContext();
-  const pathname = usePathname(); // Get current pathname for AnimatePresence key
+  const pathname = usePathname();
+  const { interactionData, logFastScroll } = useUserInteraction();
+
+  useEffect(() => {
+    const rareSections = ['/achievements', '/certifications', '/resume'];
+    if (rareSections.includes(pathname)) {
+      document.body.classList.add('rare-section-pulse-active');
+      if (interactionData.isSoundEnabled && soundService.isAudioContextStarted()) {
+         soundService.playSound('timelineRumble', { duration: '0.5s', note: 'C2' }); // Example: A brief, deep pulse
+      }
+      setTimeout(() => {
+        document.body.classList.remove('rare-section-pulse-active');
+      }, 300); // Duration of pulse animation
+    }
+  }, [pathname, interactionData.isSoundEnabled]);
+
+
+  // Scroll handler for fast scroll detection
+  useEffect(() => {
+    let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+    let lastScrollTime = Date.now();
+    const fastScrollThreshold = 300; // Pixels scrolled
+    const timeThreshold = 100; // Milliseconds
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const currentTime = Date.now();
+      const deltaY = Math.abs(currentScrollY - lastScrollY);
+      const deltaTime = currentTime - lastScrollTime;
+
+      if (deltaTime < timeThreshold && deltaY > fastScrollThreshold) {
+        logFastScroll(); // This will update context and trigger console log in SentientConsole
+        document.body.classList.add('hyperactive-scroll-feedback');
+        setTimeout(() => document.body.classList.remove('hyperactive-scroll-feedback'), 200);
+      }
+      lastScrollY = currentScrollY;
+      lastScrollTime = currentTime;
+    };
+
+    if (typeof window !== 'undefined') {
+        window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+    return () => {
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('scroll', handleScroll);
+        }
+    };
+  }, [logFastScroll]);
+
 
   return (
     <>
       <AnimatePresence>
         {!introCompleted && <IntroAnimation />}
       </AnimatePresence>
-      
-      {/* Main content with AnimatePresence for page transitions */}
-      <AnimatePresence mode="wait"> 
+
+      <AnimatePresence mode="wait">
         {introCompleted && (
           <motion.div
-            key={pathname} // Key by pathname to trigger transitions on route change
+            key={pathname}
             initial="initial"
             animate="animate"
             exit="exit"
             variants={pageTransitionVariants}
-            className="flex flex-col min-h-screen" // Ensures content takes full height
+            className="flex flex-col min-h-screen"
           >
-            <ScrollMomentumBar /> 
+            <ScrollMomentumBar />
             <Navbar />
-            <main className="flex-grow pt-20"> 
+            <main className="flex-grow pt-20">
               {children}
             </main>
             <Footer />
@@ -73,4 +125,3 @@ export default function AppClientLayout({ children }: { children: ReactNode }) {
     </>
   );
 }
-
