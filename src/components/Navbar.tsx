@@ -2,9 +2,10 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image'; // Import Next.js Image component
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react'; // Car icon removed for now, focusing on 'A'
+import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
@@ -42,47 +43,72 @@ export default function Navbar() {
   }, [pathname]);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20); // Reduced scroll threshold
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    determineActiveLink();
+    
+    determineActiveLink(); // Determine active link on initial load and path change
+
+    // Listener for hash changes (e.g., clicking a link that only changes the hash)
     window.addEventListener('hashchange', determineActiveLink, { passive: true });
 
-    const sections = navLinks.filter(link => link.href.startsWith('/#')).map(link => document.getElementById(link.id));
-    const observerOptions = { root: null, rootMargin: "-30% 0px -60% 0px", threshold: 0.01 };
+    // Intersection Observer for homepage sections
+    const sections = navLinks
+      .filter(link => link.href.startsWith('/#'))
+      .map(link => document.getElementById(link.id));
+    
+    const observerOptions = {
+      root: null, // relative to document viewport
+      rootMargin: "-30% 0px -60% 0px", // Triggers when section top is 30% from viewport top, or bottom is 60% from viewport bottom
+      threshold: 0.01, // As soon as 1% of the target is visible
+    };
 
     const observerCallback: IntersectionObserverCallback = (entries) => {
-      if (pathname !== '/') return;
+      if (pathname !== '/') return; // Only observe scrolling on the homepage
+
       let newActiveSectionId = '';
-      entries.forEach(entry => { if (entry.isIntersecting) newActiveSectionId = entry.target.id; });
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          newActiveSectionId = entry.target.id;
+        }
+      });
       
-      if (newActiveSectionId) setActiveLink(`/#${newActiveSectionId}`);
-      else if (window.scrollY < window.innerHeight * 0.3 && pathname === '/') setActiveLink('/#home');
+      if (newActiveSectionId) {
+        setActiveLink(`/#${newActiveSectionId}`);
+      } else if (window.scrollY < window.innerHeight * 0.3 && pathname === '/') {
+        // If scrolled near the top of the page and no other section is active, set to #home
+        setActiveLink('/#home');
+      }
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
-    sections.forEach(section => { if (section) observer.observe(section); });
+    sections.forEach(section => {
+      if (section) observer.observe(section);
+    });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('hashchange', determineActiveLink);
-      sections.forEach(section => { if (section) observer.unobserve(section); });
+      sections.forEach(section => {
+        if (section) observer.unobserve(section);
+      });
       observer.disconnect();
     };
   }, [pathname, determineActiveLink]);
+
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   const handleNavLinkClick = (href: string) => {
     closeMobileMenu();
-    setActiveLink(href);
-    if (href.startsWith('/#')) {
-      const targetId = href.substring(2);
-      if (pathname === '/') {
-        document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-      }
-      // Navigation for cross-page hash links handled by Next.js Link
+    setActiveLink(href); // Immediately set active link for responsiveness
+    if (href.startsWith('/#') && pathname === '/') {
+      // If on the same page and it's a hash link, scroll smoothly
+      const targetId = href.substring(2); // Remove '/#'
+      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
     }
+    // For cross-page hash links or direct page links, Next.js Link component handles navigation.
+    // The hash will be appended, and the browser should scroll after navigation.
   };
 
   return (
@@ -92,21 +118,22 @@ export default function Navbar() {
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 120, damping: 20 }}
       style={{
-        backgroundColor: isScrolled || mobileMenuOpen ? 'hsl(var(--background))' : 'transparent', // Matte black on scroll
-        boxShadow: isScrolled || mobileMenuOpen ? '0 4px 12px hsla(var(--primary)/0.2)' : 'none', // Subtle red glow shadow
+        backgroundColor: isScrolled || mobileMenuOpen ? 'hsl(var(--background))' : 'transparent',
+        boxShadow: isScrolled || mobileMenuOpen ? '0 4px 12px hsla(var(--primary)/0.2)' : 'none',
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Stylized 'A' Logo */}
+          {/* Image Logo */}
           <Link href="/#home" className="flex items-center group" onClick={() => handleNavLinkClick('/#home')}>
-            <div className="flex items-center justify-center w-8 h-8">
-              <span className="font-bold text-2xl text-primary group-hover:text-accent transition-colors duration-300">A</span>
-              {/* Could add M color stripes here later with ::before/::after or SVGs */}
-            </div>
-            <span className="ml-3 text-xl font-bold uppercase tracking-wider text-primary-foreground group-hover:text-accent transition-colors duration-300">
-              Amith V. Reddy
-            </span>
+            <Image
+              src="https://i.ibb.co/N2v0V2R8/Amith-Viswas-Reddy.png"
+              alt="Amith Viswas Reddy Logo"
+              width={180} // Adjust width as needed, maintaining aspect ratio with height
+              height={40} // Desired height for the logo in the navbar
+              className="object-contain group-hover:opacity-80 transition-opacity duration-300" // object-contain ensures the image scales down to fit
+              priority // Good for LCP elements like logos
+            />
           </Link>
 
           <div className="hidden md:flex space-x-1">
@@ -119,13 +146,15 @@ export default function Navbar() {
                       ${isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary-foreground'} 
                       transition-colors duration-300 group`}
                     onClick={(e) => {
-                      if (link.href.startsWith('/#') && pathname === '/') e.preventDefault();
+                      if (link.href.startsWith('/#') && pathname === '/') {
+                        e.preventDefault(); // Prevent default if on same page for smooth scroll
+                      }
                       handleNavLinkClick(link.href);
                     }}
                   >
                     {link.name}
                     <span className={`absolute bottom-1 left-0 w-full h-[2px] bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out
-                      ${isActive ? 'scale-x-100' : ''}`}> {/* Red hover underline */}
+                      ${isActive ? 'scale-x-100' : ''}`}>
                     </span>
                   </a>
                 </Link>
@@ -154,7 +183,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden bg-background border-t border-border/50" // Matte black background
+            className="md:hidden bg-background border-t border-border/50"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navLinks.map((link) => {
@@ -165,7 +194,9 @@ export default function Navbar() {
                       className={`block px-3 py-3 rounded-md text-base font-medium uppercase tracking-wider
                         ${isActive ? 'text-primary bg-card' : 'text-muted-foreground hover:text-primary-foreground hover:bg-card/50'}`}
                       onClick={(e) => {
-                        if (link.href.startsWith('/#') && pathname === '/') e.preventDefault();
+                        if (link.href.startsWith('/#') && pathname === '/') {
+                           e.preventDefault(); // Prevent default if on same page for smooth scroll
+                        }
                         handleNavLinkClick(link.href);
                       }}
                     >
