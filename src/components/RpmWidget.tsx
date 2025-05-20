@@ -10,16 +10,13 @@ export default function RpmWidget() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      // Simple modulo for continuous rotation.
-      // You might want a more sophisticated mapping if the page height is dynamic
-      // or if you want it to map to full page scroll height.
-      // For now, this gives a continuous spin effect.
-      const newRotation = (scrollY * 0.5) % 360; // Adjust multiplier for speed
+      // Adjust multiplier for rotation speed if needed
+      const newRotation = (scrollY * 0.5) % 360; 
       setRotation(newRotation);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); 
+    handleScroll(); // Initial call to set rotation based on current scroll
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -55,8 +52,9 @@ export default function RpmWidget() {
           borderRadius: '2px 2px 0 0',
           boxShadow: '0 0 5px hsl(var(--primary))'
         }}
-        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+        transition={{ type: 'spring', stiffness: 100, damping: 20 }} // Smooth transition for rotation changes
       />
     </div>
   );
 }
+
