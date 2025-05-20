@@ -34,7 +34,7 @@
     --input: 0 0% 15%;
     --ring: 0 100% 42%; /* Primary Red for focus rings */
 
-    --radius: 0.375rem; /* Slightly sharper radius for M5 feel (6px) */
+    --radius: 0.3rem; /* Sharpened radius for M5 feel (was 0.375rem) */
 
     /* M Theme Colors */
     --bmw-m-blue: 208 100% 39%; /* M Performance Blue #0071C5 */
@@ -128,11 +128,11 @@
     @apply font-bold uppercase tracking-wider; /* M-badging style */
   }
   
-  .font-serif-display { /* For Empire Edition Hero Headline */
-      font-family: var(--font-playfair-display);
+  .font-serif-display {
+    font-family: var(--font-playfair-display);
   }
-  .font-sans-condensed { /* For Empire Edition Hero Tagline */
-      font-family: var(--font-space-grotesk);
+  .font-sans-condensed {
+    font-family: var(--font-space-grotesk);
   }
 
 
@@ -152,32 +152,44 @@
 .DialogContent[data-state="open"] {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: hidden; /* Added for modal content */
 }
 
-/* Navbar "Laser Crest" / Kidney-Grille Blade Underline */
+/* Laser Crest Navbar Hover (V-crest shape, blue-violet flash) */
 .nav-laser-crest {
   position: relative;
-  overflow: visible;
+  overflow: visible; /* Allow pseudo-element to extend */
 }
 .nav-laser-crest::after {
   content: '';
   position: absolute;
-  left: 0;
-  bottom: -2px; /* Sits 2px below baseline */
-  height: 2px; /* Default height, can be adjusted */
-  width: 0; /* Start with no width */
-  background-color: hsl(var(--primary)); /* Default to primary, can be overridden by specific styles */
-  border-radius: 9999px; /* Pill shape */
-  transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  will-change: width, background-color, opacity;
+  left: 50%;
+  bottom: -4px; /* Adjust to sit below text, accounting for height */
+  transform: translateX(-50%);
+  height: 0; /* Start with no height */
+  width: 0;  /* Start with no width */
+  background: linear-gradient(to right, hsl(var(--m-light-blue-hsl)) 50%, hsl(var(--m-violet-hsl)) 50%);
+  background-size: 200% 100%; /* For color flash effect */
+  background-position: 0% 0%;
+  border-radius: 2px; /* Slightly rounded for a softer laser */
+  opacity: 0;
+  transition: all 120ms ease-in-out; /* Flash duration */
+  will-change: width, height, opacity, background-position;
   pointer-events: none;
+  clip-path: polygon(0% 100%, 20% 0%, 80% 0%, 100% 100%, 80% 100%, 20% 100%); /* V-crest / angled bar */
 }
 
 .nav-laser-crest:hover::after,
 .nav-laser-crest.active-link::after {
-  width: 100%;
+  height: 6px; /* Full height on hover/active */
+  width: 100%; /* Full width on hover/active */
   opacity: 1;
+  background-position: -100% 0%; /* Flash blue to violet */
+}
+
+.nav-laser-crest.active-link::after {
+  opacity: 0.4; /* Settled state for active link */
+  background-position: 0% 0%; /* Reset to initial color mix */
 }
 
 
@@ -210,7 +222,7 @@
   background: linear-gradient(145deg, hsl(var(--liquid-obsidian-start)), hsl(var(--liquid-obsidian-end)));
   border: 1px solid hsl(var(--border) / 0.3);
 }
-.hero-medallion-nightfall-inner::before {
+.hero-medallion-nightfall-inner::before { /* Conic gradient for M-stripe pulse */
   content: "";
   @apply absolute inset-[-2px] rounded-full z-0;
   background: conic-gradient(
@@ -220,7 +232,7 @@
     hsla(var(--bmw-i-blue-hsl),0.7) 360deg
   );
   background-size: 100%;
-  animation: mStripeConicPulse 3s linear infinite paused;
+  animation: mStripeConicPulse 3s linear infinite paused; /* Paused by default */
   filter: blur(1px);
   opacity: 0.8;
 }
@@ -230,22 +242,26 @@
 }
 .hero-medallion-nightfall:hover {
   box-shadow: 0 0 35px 5px hsla(var(--m-light-blue-hsl), 0.3),
-              0 0 15px 2px hsla(var(--foreground), 0.1) inset;
+              0 0 15px 2px hsla(var(--foreground), 0.1) inset; /* Molten glass ripple */
 }
-.hero-medallion-m-stripe .hero-medallion-nightfall-inner::before { /* For M-stripe pulse */
-  animation: mStripeConicPulseAlternate 3s linear infinite; /* Different or modified animation */
+/* For click/focus expansion - can be tied to Framer Motion or simple CSS transition */
+.hero-medallion-nightfall.medallion-active .hero-medallion-nightfall-inner::before {
+  transform: scale(1.1);
+  opacity: 0.5;
+  filter: blur(3px);
+  transition: transform 300ms ease-out, opacity 300ms ease-out, filter 300ms ease-out;
 }
+
 
 /* 2. Headline Alloy Typography */
 .hero-headline-nightfall {
   font-family: var(--font-fraunces);
   @apply text-foreground font-bold relative;
   font-optical-sizing: auto;
-  /* Fraunces variable settings - ensure font file supports these */
   font-variation-settings: "opsz" 36, "wght" 700, "SOFT" 50, "WONK" 0.2;
   text-shadow: 0 1px 1px hsla(0,0%,0%,0.5), 0 2px 3px hsla(0,0%,0%,0.3);
 }
-.hero-headline-beam::before { /* For neon sweep */
+.hero-headline-beam::before { /* Neon sweep */
   content: '';
   position: absolute;
   top: 50%;
@@ -273,8 +289,9 @@
   text-shadow: 0 0 8px hsl(var(--foreground)/0.5);
 }
 .hero-tagline-nightfall {
-  font-family: var(--font-inter);
+  font-family: var(--font-inter); /* Use Inter for Satoshi/General Sans alternative */
   @apply font-normal uppercase tracking-wider text-transparent bg-clip-text relative;
+  /* Liquid titanium mirror effect with animated gradient */
   background-image: linear-gradient(110deg,
     hsl(var(--silver-hsl)/0.8) 15%,
     hsl(var(--bmw-i-blue-hsl)/0.7) 35%,
@@ -284,13 +301,15 @@
   );
   background-size: 300% 100%;
   animation: liquidTitaniumSheen 5s linear infinite;
-  -webkit-text-stroke: 0.5px hsl(var(--foreground)/0.2);
+  -webkit-text-stroke: 0.5px hsl(var(--foreground)/0.2); /* Subtle stroke for depth */
+  /* backdrop-filter: blur(1px) contrast(1.2); - requires text to be on its own layer or careful composition */
 }
 
 /* 3. Dynamic Atelier Background */
 .hero-atelier-bg {
   @apply relative overflow-hidden;
-  background: radial-gradient(ellipse at 50% 30%, hsl(var(--background)) 0%, hsl(240,10%,2%) 70%);
+  /* Deep navy-to-black vignette gradient */
+  background: radial-gradient(ellipse at 50% 30%, hsl(240, 30%, 15%) 0%, hsl(var(--background)) 70%);
 }
 .hero-atelier-bg::before { /* Nano particle shimmer */
   content: "";
@@ -313,6 +332,7 @@
 /* 5. RPM Tachometer Strip — Quantum Edition */
 .hero-rpm-quantum {
   @apply fixed bottom-4 right-4 h-1.5 w-0 rounded-full transition-all duration-100 ease-linear;
+  /* Flame gradient: BMW iBlue → Hyper Violet → Voltage Gold */
   background: linear-gradient(to right,
     hsl(var(--bmw-i-blue-hsl)) var(--tach-q-stop1, 0%),
     hsl(var(--hyper-violet-hsl)) var(--tach-q-stop2, 33%),
@@ -320,7 +340,7 @@
     hsl(var(--voltage-gold-hsl)) var(--tach-q-stop4, 100%)
   );
   box-shadow: inset 0 0 3px hsla(0,0%,0%,0.4), 0 0 6px hsla(var(--voltage-gold-hsl),0.4);
-  animation: tachometerSineWave 2s infinite ease-in-out;
+  animation: tachometerSineWave 2s infinite ease-in-out; /* Sine wave undulation */
 }
 .hero-rpm-quantum::before { /* Light ghost trail */
   content: '';
@@ -334,12 +354,6 @@
 @keyframes mStripeConicPulse {
   0%, 100% { opacity: 0.7; filter: blur(1px) brightness(1); }
   50% { opacity: 1; filter: blur(0.5px) brightness(1.3); }
-}
-@keyframes mStripeConicPulseAlternate { /* For M-stripe border evolution */
-  0%, 100% { --pulse-color: hsl(var(--m-light-blue-hsl)); opacity: 0.6; }
-  33% { --pulse-color: hsl(var(--m-violet-hsl)); opacity: 0.9; }
-  66% { --pulse-color: hsl(var(--m-red-hsl)); opacity: 0.6; }
-  /* Used with conic-gradient using var(--pulse-color) */
 }
 @keyframes liquidTitaniumSheen {
   0% { background-position: 0% 50%; }
@@ -359,7 +373,7 @@
 }
 @keyframes neonSweep { /* For headline beam */
   0% { width: 0%; left: 0%; opacity: 0.5; }
-  40% { width: 100%; left: 0%; opacity: 1; }
+  40% { width: 100%; left: 0%; opacity: 1; } /* Changed from 50% to 40% for 1s duration */
   60% { width: 100%; left: 0%; opacity: 1; } /* Hold */
   100% { width: 0%; left: 100%; opacity: 0.5; }
 }
@@ -372,7 +386,6 @@
   .hero-rpm-quantum { animation: none !important; }
   .hero-lens-flare { animation: none !important; opacity: 0.05; }
   .hero-headline-beam::before { animation: none !important; width: 100%; opacity: 0.5; }
-  .hero-medallion-m-stripe .hero-medallion-nightfall-inner::before { animation: none !important; }
 }
 /* === NIGHTFALL ATELIER HERO STYLES END === */
 
@@ -503,6 +516,11 @@
   }
 }
 
+@keyframes mStripePulse {
+  0%, 100% { border-color: hsl(var(--m-light-blue-hsl)); box-shadow: 0 0 5px hsl(var(--m-light-blue-hsl)/0.5); }
+  33% { border-color: hsl(var(--m-violet-hsl)); box-shadow: 0 0 7px hsl(var(--m-violet-hsl)/0.6); }
+  66% { border-color: hsl(var(--m-red-hsl)); box-shadow: 0 0 5px hsl(var(--m-red-hsl)/0.5); }
+}
 @keyframes mStripePulseFocus {
   0%, 100% { transform: scale(1); box-shadow: 0 0 35px 0px hsla(var(--m-light-blue-hsl), 0.25); }
   50% { transform: scale(1.03); box-shadow: 0 0 45px 5px hsla(var(--m-light-blue-hsl), 0.4); }
