@@ -12,7 +12,7 @@ const rajdhani = Rajdhani({ // Changed from Geist
 });
 
 export const metadata: Metadata = {
-  title: "Amith's M5-Inspired Portfolio", // Updated title
+  title: "Amith's M-Powered Portfolio", // Updated title
   description: 'High-performance portfolio of Amith Viswas Reddy, AI/ML Engineer & Data Scientist.', // Updated description
 };
 
@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark"> {/* Assuming dark theme is default as per new design */}
+    <html lang="en" className="dark">{/* Assuming dark theme is default as per new design */}
       <body className={`${rajdhani.variable} font-sans antialiased bg-background text-foreground`}>
         <IntroProvider>
           <AppClientLayout>{children}</AppClientLayout>
