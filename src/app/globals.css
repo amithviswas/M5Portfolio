@@ -1,3 +1,4 @@
+
 /*
   NOTE: A CssSyntaxError "Unknown word" was reported at line 346, column 1 of this file.
   The context provided to the AI agent ends before this line.
@@ -19,7 +20,7 @@
     --popover: 240 4% 8%; 
     --popover-foreground: 0 0% 98%;
 
-    --primary: 0 100% 50%; /* Blood Red #FF3333 */
+    --primary: 0 100% 50%; /* Blood Red #D60000 (was #FF3333) */
     --primary-foreground: 0 0% 98%; 
 
     --secondary: 240 4% 12%; /* Slightly lighter navy-gray */
@@ -28,7 +29,7 @@
     --muted: 240 4% 20%; 
     --muted-foreground: 0 0% 70%;
 
-    --accent: 18 100% 50%; /* Vibrant Orange - Keep or change to an M violet/blue? */
+    --accent: 18 100% 50%; /* Vibrant Orange */
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 72% 51%; /* Slightly darker red for destructive */
@@ -57,9 +58,11 @@
     --sidebar-ring: 0 100% 50%;
 
     /* M Theme Colors (existing, some might be overridden by Nightfall) */
-    --bmw-m-blue: 208 100% 47%; /* Standard M Blue */
-    --blood-red: 0 100% 50%; 
-    --shadow-gray: 0 2% 11%; 
+    --bmw-m-blue: 208 100% 47%; /* Standard M Blue #0071C5 */
+    --m-performance-blue: 208 100% 47%; /* Alias */
+    --blood-red: 0 100% 50%; /* #D60000 is hsl(0, 100%, 42%) or simply use --primary which is now D60000 */
+    --shadow-gray: 240 2% 11%; /* #1C1C1E */
+    
     --m-light-blue-hsl: 208 100% 60%; 
     --m-dark-blue-hsl: 208 100% 38%; 
     --m-red-hsl: 0 100% 50%; 
@@ -88,6 +91,19 @@
     /* Font Variables are set by next/font in layout.tsx */
     /* --font-rajdhani, --font-playfair-display, --font-space-grotesk, --font-fraunces, --font-inter */
   }
+
+  :root {
+    --primary: 0 100% 42%; /* Blood Red #D60000 */
+    --m-performance-blue: 208 100% 39%; /* M Performance Blue #0071C5 */
+    --shadow-gray: 240 2% 11%; /* Shadow Gray #1C1C1E */
+    --background: 0 0% 7%; /* Matte Black base approx #121212 */
+    --card: 0 0% 10%; /* slightly lighter than matte black for cards */
+    
+    /* M Stripe colors for borders etc. */
+    --m-stripe-light-blue: 205 100% 50%; /* Typical M light blue */
+    --m-stripe-dark-blue: 215 80% 40%;  /* Typical M dark blue/violet */
+    --m-stripe-red: 0 100% 50%; /* --primary can be used */
+  }
 }
 
 @layer base {
@@ -99,39 +115,41 @@
   }
   body {
     /* Base Nightfall background - subtle pattern */
-    background-color: hsl(var(--background));
+    background-color: hsl(var(--background)); /* Matte Black */
+    /* Carbon Fiber Patterned Background */
     background-image: 
-      linear-gradient(45deg, hsla(var(--card), 0.1) 25%, transparent 25%, transparent 75%, hsla(var(--card), 0.1) 75%, hsla(var(--card), 0.1)),
-      linear-gradient(-45deg, hsla(var(--card), 0.1) 25%, transparent 25%, transparent 75%, hsla(var(--card), 0.1) 75%, hsla(var(--card), 0.1));
-    background-size: 16px 16px; /* Slightly larger pattern */
+      linear-gradient(45deg, hsla(var(--shadow-gray), 0.05) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.05) 75%, hsla(var(--shadow-gray), 0.05)),
+      linear-gradient(-45deg, hsla(var(--shadow-gray), 0.05) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.05) 75%, hsla(var(--shadow-gray), 0.05)),
+      radial-gradient(circle at center, hsla(var(--card),0.1) 0%, transparent 50%); /* Softer base pattern */
+    background-size: 20px 20px, 20px 20px, 100% 100%;
     @apply text-foreground font-sans; 
     position: relative; 
   }
 
-  body.dark::before { /* Carbon Fiber Noise Overlay -> Updated for Atelier Subtle Texture */
+  body.dark::before { /* Carbon Fiber Noise Overlay */
     content: '';
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     width: 100%; height: 100%;
     background-image: 
-      linear-gradient(135deg, hsla(0,0%,5%,0.01) 25%, transparent 25%),
-      linear-gradient(225deg, hsla(0,0%,5%,0.01) 25%, transparent 25%),
-      linear-gradient(45deg, hsla(0,0%,5%,0.01) 25%, transparent 25%),
-      linear-gradient(315deg, hsla(0,0%,5%,0.01) 25%, transparent 25%);
+      linear-gradient(135deg, hsla(0,0%,5%,0.02) 25%, transparent 25%), /* finer, less opaque */
+      linear-gradient(225deg, hsla(0,0%,5%,0.02) 25%, transparent 25%),
+      linear-gradient(45deg, hsla(0,0%,5%,0.02) 25%, transparent 25%),
+      linear-gradient(315deg, hsla(0,0%,5%,0.02) 25%, transparent 25%);
     background-position: 0 0, 1px 1px, 1px 1px, 0 0;
-    background-size: 2px 2px; /* Finer noise */
-    opacity: 0.06; /* Slightly more visible for texture */
+    background-size: 3px 3px; /* Finer noise pattern */
+    opacity: 0.04; /* As requested */
     pointer-events: none;
     z-index: -1; 
   }
 
   /* General heading style if needed, using new primary font */
-  .font-heading { /* This is a generic helper, components might specify fonts directly */
-    font-family: var(--font-fraunces); /* Default heading to Fraunces */
-    @apply font-bold uppercase tracking-wider;
+  .font-heading { 
+    font-family: var(--font-rajdhani); /* Changed from Fraunces to Rajdhani for M5 theme */
+    @apply font-bold uppercase tracking-wider; /* Keep M-badging style */
   }
 
-  .button-m-glow, .card-m-glow { /* Kept for other sections, Hero uses more specific glows */
+  .button-m-glow, .card-m-glow { 
     @apply shadow-[0_0_15px_hsl(var(--primary)/0.5)] transition-shadow duration-300 ease-in-out;
   }
   .button-m-glow:hover, .card-m-glow:hover {
@@ -149,9 +167,8 @@
   flex-direction: column;
   overflow: hidden; 
 }
-/* ... other existing Dialog styles ... */
 
-/* Navbar Grille Underline (Existing, ensure compatibility or update if Nightfall has specific nav style) */
+/* Navbar Grille Underline  */
 .nav-grille-underline {
   position: relative;
   overflow: visible; 
@@ -161,63 +178,105 @@
   content: '';
   position: absolute;
   left: 50%;
-  bottom: -2px; 
+  bottom: -2px; /* Sits 2px below baseline */
   transform: translateX(-50%);
-  width: 0%;
-  height: 4px; 
+  width: 0%; /* Initial width */
+  height: 4px; /* As specified */
   background-image: linear-gradient(
     to right,
-    hsl(var(--bmw-m-blue)) 0%, 
-    hsl(var(--bmw-m-blue)) var(--grille-blue-stop-percentage, 55%),
-    hsl(var(--primary)) var(--grille-red-start-percentage, 55%),
-    hsl(var(--primary)) 100%
+    hsl(var(--m-performance-blue)) 0%, /* M-blue */
+    hsl(var(--m-performance-blue)) var(--grille-blue-stop-percentage, 55%), /* Blue stop, default 55% */
+    hsl(var(--primary)) var(--grille-red-start-percentage, 55%), /* Red start, default 55% */
+    hsl(var(--primary)) 100% /* M-red */
   );
-  border-radius: 9999px; 
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.4); 
-  filter: drop-shadow(0 0 3px hsla(var(--bmw-m-blue), 0.5)) drop-shadow(0 0 3px hsla(var(--primary), 0.5));
+  border-radius: 9999px; /* Fully rounded ends */
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.4), /* Inner shadow for metal recess */
+              0 0 4px hsla(var(--accent), 0.8); /* Subtle outer glow with accent color */
   opacity: 0;
-  transition: width 170ms var(--ease-m-blip), 
-              opacity 170ms var(--ease-m-blip),
-              filter 170ms var(--ease-m-blip),
-              background-image 170ms var(--ease-m-blip); 
-  will-change: width, opacity, filter, background-image;
+  transition: width 170ms cubic-bezier(.36,1.08,.33,1), 
+              opacity 170ms cubic-bezier(.36,1.08,.33,1),
+              filter 170ms cubic-bezier(.36,1.08,.33,1),
+              box-shadow 170ms cubic-bezier(.36,1.08,.33,1),
+              background-image 170ms cubic-bezier(.36,1.08,.33,1); 
+  will-change: width, opacity, filter, box-shadow, background-image;
   pointer-events: none;
 }
-/* ... other existing nav-grille styles ... */
+.nav-grille-underline:hover::after,
+.nav-grille-underline.active-link::after {
+  width: 120%; /* Grows to 120% on hover/active */
+  opacity: 1;
+  /* Glow ramps brightness +25% (1*1.25 = 1.25), then settles at +10% (1*1.1 = 1.1) - approximated with one brighter state */
+  filter: brightness(1.25); 
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.6), /* Metal recess feel (updated alpha) */
+              0 0 6px hsla(var(--accent), 1); /* Brighter outer glow */
+}
+.nav-grille-underline.active-link::after {
+   /* Keep split at 55/45 for active link, hover overrides this if also hovered */
+  --grille-blue-stop-percentage-hover: 55%; 
+  --grille-red-start-percentage-hover: 55%;
+}
+.nav-grille-underline:hover::after {
+  background-image: linear-gradient(
+    to right,
+    hsl(var(--m-performance-blue)) 0%,
+    hsl(var(--m-performance-blue)) var(--grille-blue-stop-percentage-hover, 50%), /* Shift to 50/50 on hover */
+    hsl(var(--primary)) var(--grille-red-start-percentage-hover, 50%),
+    hsl(var(--primary)) 100%
+  );
+}
 
-/* Hero Section Dimming (Existing, keep or integrate with Atelier background) */
+@media (prefers-reduced-motion: reduce) {
+  .nav-grille-underline::after {
+    transition: none;
+    opacity: 0; /* Keep hidden if no animation */
+  }
+  .nav-grille-underline:hover::after,
+  .nav-grille-underline.active-link::after {
+    width: 90%; /* Static 90% bar */
+    opacity: 1;
+    filter: none; /* No glow */
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.4); /* Only inner shadow */
+    background-image: linear-gradient( /* Static 55/45 split */
+      to right,
+      hsl(var(--m-performance-blue)) 0%,
+      hsl(var(--m-performance-blue)) 55%,
+      hsl(var(--primary)) 55%,
+      hsl(var(--primary)) 100%
+    );
+  }
+}
+
+
+/* Hero Section Dimming */
 .hero-backdrop-dimmed {
   @apply transition-m-blip;
-  filter: brightness(0.85);
+  filter: brightness(0.85); /* Dims 15% */
 }
-/* ... */
 
-/* Contact Form Halo Effect (Existing, check if Nightfall page needs this) */
+/* Contact Form Halo Effect */
 .form-container-halo { 
   box-shadow: 0 0 8px 2px hsla(var(--primary)/0.2);
   @apply transition-m-blip;
 }
-/* ... */
+.form-container-halo-active { /* Intensified halo */
+  box-shadow: 0 0 20px 5px hsla(var(--primary)/0.7), 0 0 30px 10px hsla(var(--primary)/0.4);
+  transition: box-shadow 0.3s var(--ease-m-blip);
+}
 
 
 /* === NIGHTFALL ATELIER HERO STYLES START === */
-
 /* 1. Nocturne Crown Halo (Medallion) */
 .hero-medallion-nightfall {
   @apply relative w-[120px] h-[120px] rounded-full p-0.5;
-  /* Initial faint glow */
   box-shadow: 0 0 20px 0px hsla(var(--m-light-blue-hsl), 0.15);
   transition: box-shadow 0.9s ease-in-out;
 }
-
 .hero-medallion-nightfall-inner {
   @apply relative w-full h-full rounded-full overflow-hidden flex items-center justify-center;
-  /* Obsidian liquid base */
   background: linear-gradient(145deg, hsl(var(--liquid-obsidian-start)), hsl(var(--liquid-obsidian-end)));
-  border: 1px solid hsl(var(--border) / 0.3); /* Subtle edge */
+  border: 1px solid hsl(var(--border) / 0.3); 
 }
-
-.hero-medallion-nightfall-inner::before { /* M-Tricolor Pulse Ring */
+.hero-medallion-nightfall-inner::before { 
   content: "";
   @apply absolute inset-[-2px] rounded-full z-0;
   background: conic-gradient(
@@ -236,31 +295,28 @@
   animation-play-state: running;
 }
 .hero-medallion-nightfall:hover {
-  box-shadow: 0 0 35px 5px hsla(var(--m-light-blue-hsl), 0.3), /* Thicker glow */
-              0 0 15px 2px hsla(var(--foreground), 0.1) inset; /* Molten glass inner highlight */
+  box-shadow: 0 0 35px 5px hsla(var(--m-light-blue-hsl), 0.3), 
+              0 0 15px 2px hsla(var(--foreground), 0.1) inset; 
 }
-/* Click/Focus effect can be handled by Framer Motion if more complex */
 
 /* 2. Headline Alloy Typography */
 .hero-headline-nightfall {
   font-family: var(--font-fraunces);
-  @apply text-foreground font-bold relative; /* Base color, might be overridden by sheen */
+  @apply text-foreground font-bold relative; 
   font-optical-sizing: auto;
   font-variation-settings: "opsz" 36, "wght" 700, "SOFT" 50, "WONK" 0.2;
-  text-shadow: 0 1px 1px hsla(0,0%,0%,0.5), 0 2px 3px hsla(0,0%,0%,0.3); /* Subtle depth */
+  text-shadow: 0 1px 1px hsla(0,0%,0%,0.5), 0 2px 3px hsla(0,0%,0%,0.3); 
 }
-.hero-headline-nightfall .word-pulse { /* For individual word hover pulse */
+.hero-headline-nightfall .word-pulse { 
   @apply inline-block transition-transform duration-150 ease-m-blip;
 }
 .hero-headline-nightfall .word-pulse:hover {
   transform: scale(1.03) translateY(-1px);
   text-shadow: 0 0 8px hsl(var(--foreground)/0.5);
 }
-
 .hero-tagline-nightfall {
-  font-family: var(--font-inter); /* Alternative for Satoshi/General Sans */
+  font-family: var(--font-inter); 
   @apply font-normal uppercase tracking-wider text-transparent bg-clip-text relative;
-  /* Liquid Titanium Mirror Effect - Animated Gradient */
   background-image: linear-gradient(110deg, 
     hsl(var(--silver-hsl)/0.8) 15%, 
     hsl(var(--bmw-i-blue-hsl)/0.7) 35%, 
@@ -270,15 +326,15 @@
   );
   background-size: 300% 100%;
   animation: liquidTitaniumSheen 5s linear infinite;
-  -webkit-text-stroke: 0.5px hsl(var(--foreground)/0.2); /* Subtle edge */
+  -webkit-text-stroke: 0.5px hsl(var(--foreground)/0.2); 
 }
 
 /* 3. Dynamic Atelier Background */
 .hero-atelier-bg {
   @apply relative overflow-hidden;
-  background: radial-gradient(ellipse at 50% 30%, hsl(var(--background)) 0%, hsl(240,10%,2%) 70%); /* Deep navy-to-black vignette */
+  background: radial-gradient(ellipse at 50% 30%, hsl(var(--background)) 0%, hsl(240,10%,2%) 70%); 
 }
-.hero-atelier-bg::before { /* Nano particle shimmer */
+.hero-atelier-bg::before { 
   content: "";
   @apply absolute inset-0 -z-10;
   background-image: radial-gradient(hsl(var(--m-light-blue-hsl)/0.03) 0.5px, transparent 0.5px),
@@ -305,29 +361,26 @@
     hsl(var(--voltage-gold-hsl)) var(--tach-q-stop4, 100%) 
   );
   box-shadow: inset 0 0 3px hsla(0,0%,0%,0.4), 0 0 6px hsla(var(--voltage-gold-hsl),0.4);
-  animation: tachometerSineWave 2s infinite ease-in-out; /* Gentle undulation */
+  animation: tachometerSineWave 2s infinite ease-in-out; 
 }
-.hero-rpm-quantum::before { /* Ghost trail */
+.hero-rpm-quantum::before { 
   content: '';
   @apply absolute -inset-0.5 rounded-full opacity-30 blur-sm;
   background: inherit;
   z-index: -1;
-  transition: opacity 0.3s ease-out; /* Trail fades slightly slower */
-  /* JS will need to control width of this trail if it's delayed */
+  transition: opacity 0.3s ease-out; 
 }
 
 /* Keyframes for Nightfall Atelier */
-@keyframes mStripeConicPulse { /* For Medallion */
+@keyframes mStripeConicPulse { 
   0%, 100% { opacity: 0.7; filter: blur(1px) brightness(1); }
   50% { opacity: 1; filter: blur(0.5px) brightness(1.3); }
 }
-
-@keyframes liquidTitaniumSheen { /* For tagline */
+@keyframes liquidTitaniumSheen { 
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-
 @media (prefers-reduced-motion: reduce) {
   .hero-medallion-nightfall-inner::before { animation: none !important; }
   .hero-tagline-nightfall { animation: none !important; background-size: 100% 100%; }
@@ -335,15 +388,210 @@
   .hero-rpm-quantum { animation: none !important; }
   .hero-lens-flare { animation: none !important; }
 }
-
-/* Existing Hero Styles to be adapted or removed if conflicting */
-/* ... (ensure these don't clash with new Nightfall styles) ... */
-.hero-medallion-empire, .hero-medallion-empire-inner, .hero-headline-empire, .hero-tagline-empire, .hero-empire-bg, .hero-empire-tachometer, .hero-gantry-light {
-  /* These are from Empire Edition, may need removal or careful overriding if still present */
-  /* For now, assume Nightfall styles will take precedence due to specificity or direct application */
-}
 /* === NIGHTFALL ATELIER HERO STYLES END === */
 
 /* === EMPIRE EDITION HERO STYLES START === */
-/* ... (Keep existing Empire styles for reference or if they are still used elsewhere, but Nightfall styles should override for hero) ... */
+.hero-medallion-empire {
+  @apply relative w-[120px] h-[120px] rounded-full p-0.5;
+  box-shadow: 0 0 35px 0px hsla(var(--m-light-blue-hsl), 0.25); /* Spotlight */
+  background: radial-gradient(circle, hsla(0,0%,100%,0.05) 0%, transparent 70%), /* Inner bevel hint */
+              linear-gradient(135deg, hsl(var(--shadow-gray)/0.8), hsl(var(--shadow-gray)/0.5)); /* Base carbon-like */
+  border: 2px solid;
+  border-image-slice: 1;
+  border-image-source: conic-gradient(
+    from 0deg, 
+    hsl(var(--m-stripe-light-blue)) 0% 33%, 
+    hsl(var(--m-stripe-dark-blue)) 33% 66%, 
+    hsl(var(--m-stripe-red)) 66% 100%
+  );
+  animation: mStripePulse 3s linear infinite;
+}
+.hero-medallion-empire-inner {
+  @apply relative w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-card;
+}
+.hero-spec-highlight-empire { /* Specular highlight arc */
+  @apply absolute top-[5%] left-[5%] w-[90%] h-[90%] rounded-full;
+  background: linear-gradient(135deg, hsla(0,0%,100%,.20) 0%, transparent 60%);
+}
+.hero-medallion-empire:hover { animation: goldGlint 1.2s linear infinite, mStripePulse 3s linear infinite; }
+.hero-medallion-empire:focus-within { animation: goldGlint 1.2s linear infinite, mStripePulse 3s linear infinite, mStripePulseFocus 1s ease-in-out alternate infinite; }
+
+
+.hero-headline-empire {
+  font-family: var(--font-playfair-display); /* Or your chosen serif: Cinzel, etc. */
+  @apply text-[#E5E5E5] font-bold; /* #E5E5E5 for headline */
+  text-shadow: 0 1px 1px #000, 0 0 5px rgba(0,0,0,.2), 0 0 10px rgba(0,0,0,.15); /* Engraved chrome bevel */
+}
+
+.hero-tagline-empire {
+  font-family: var(--font-space-grotesk); /* Or your chosen thin sans */
+  @apply font-semibold uppercase tracking-[1px] text-transparent bg-clip-text relative;
+  /* Stroked with split M-blue/red gradient */
+  background-image: linear-gradient(to right, hsl(var(--m-performance-blue)) 50%, hsl(var(--primary)) 50%);
+  background-size: 200% 100%; /* For potential animation */
+  -webkit-text-stroke: 0.5px hsl(var(--foreground)/0.3); /* Subtle edge */
+}
+
+.hero-tagline-empire::after { /* Shimmering metal strip underline */
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  height: 2px;
+  background: linear-gradient(to right, hsl(var(--m-performance-blue)) 50%, hsl(var(--primary)) 50%);
+  border-radius: 9999px;
+  width: 0; /* Animates on scroll-in */
+  transform: translateX(-50%);
+  transition: width 0.6s var(--ease-out-expo); /* Matches hero content slide-in */
+  box-shadow: 0 0 5px hsl(var(--m-performance-blue)/0.5), 0 0 5px hsl(var(--primary)/0.5);
+}
+.hero-tagline-empire.animate-underline::after { /* Class added by JS */
+  width: 110%;
+}
+
+.hero-empire-bg {
+  background: radial-gradient(circle at 30% 30%, hsl(var(--i-blue-fog-hsl)) 0%, hsl(var(--background)) 60%),
+              linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%); /* Base dark */
+  /* Overlay with carbon pattern from body or add specific here */
+  background-image: 
+    radial-gradient(circle at 30% 30%, hsla(var(--i-blue-fog-hsl), 0.5) 0%, transparent 60%), /* i-blue radial fog */
+    linear-gradient(45deg, hsla(var(--shadow-gray), 0.04) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.04) 75%, hsla(var(--shadow-gray), 0.04)), /* Carbon pattern */
+    linear-gradient(-45deg, hsla(var(--shadow-gray), 0.04) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.04) 75%, hsla(var(--shadow-gray), 0.04)),
+    hsl(var(--background)); /* Matte black base */
+  background-blend-mode: overlay, normal, normal, normal;
+  background-size: 100% 100%, 16px 16px, 16px 16px, auto;
+  position: relative;
+  overflow: hidden; /* For bloom effects */
+}
+.hero-empire-bg .bloom-effect { /* For halo glows */
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(50px);
+  animation: bloomGlide 15s infinite ease-in-out alternate;
+  will-change: transform, opacity;
+}
+
+.hero-empire-tachometer {
+  @apply fixed bottom-4 right-4 h-2 rounded-full transition-all duration-100 ease-linear;
+  /* Gradient logic handled by JS for dynamic stops */
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5), 0 0 8px hsla(var(--gold-hsl),0.6); /* Inset glow shadow */
+}
+.hero-empire-tachometer::before { /* Ghost trail */
+  content: '';
+  @apply absolute -inset-1 rounded-full opacity-20 blur-md;
+  background: inherit; /* Inherits the dynamic gradient */
+  z-index: -1;
+  transition: opacity 0.3s ease-out;
+  /* JS will need to control width of this trail if it's delayed */
+}
+
+.hero-gantry-light {
+  @apply absolute left-0 w-full h-1;
+  background: linear-gradient(to right, transparent, hsl(var(--silver-hsl)/0.5) 20%, hsl(var(--silver-hsl)/0.8) 50%, hsl(var(--silver-hsl)/0.5) 80%, transparent);
+  box-shadow: 0 0 10px hsl(var(--m-performance-blue)/0.5); /* Neon blue edge glow */
+  opacity: 0;
+  /* Animation handled by Framer Motion on viewport entry */
+}
+.hero-gantry-light.top { @apply top-0; }
+.hero-gantry-light.bottom { @apply bottom-0; }
+
+@keyframes mStripePulseFocus { /* For medallion focus */
+  0%, 100% { transform: scale(1); box-shadow: 0 0 35px 0px hsla(var(--m-light-blue-hsl), 0.25); }
+  50% { transform: scale(1.03); box-shadow: 0 0 45px 5px hsla(var(--m-light-blue-hsl), 0.4); }
+}
+@keyframes goldGlint {
+  0% { border-image-source: conic-gradient(from 0deg, hsl(var(--m-stripe-light-blue)) 0% 33%, hsl(var(--m-stripe-dark-blue)) 33% 66%, hsl(var(--m-stripe-red)) 66% 100%); }
+  50% { border-image-source: conic-gradient(from 180deg, hsl(var(--gold-hsl)) 0% 33%, hsl(var(--silver-hsl)) 33% 66%, hsl(var(--gold-hsl)) 66% 100%); }
+  100% { border-image-source: conic-gradient(from 360deg, hsl(var(--m-stripe-light-blue)) 0% 33%, hsl(var(--m-stripe-dark-blue)) 33% 66%, hsl(var(--m-stripe-red)) 66% 100%); }
+}
+@keyframes bloomGlide { /* For background halos */
+  0% { transform: scale(0.8) translate(var(--tx-start, -20%), var(--ty-start, -20%)); opacity: 0.05; }
+  100% { transform: scale(1.2) translate(var(--tx-end, 20%), var(--ty-end, 20%)); opacity: 0.15; }
+}
+/* Reduced motion for Empire edition */
+@media (prefers-reduced-motion: reduce) {
+  .hero-medallion-empire, .hero-medallion-empire:hover, .hero-medallion-empire:focus-within { animation: none; }
+  .hero-tagline-empire.animate-underline::after { width: 90%; } /* Static underline */
+  .hero-empire-bg .bloom-effect { animation: none; opacity: 0.05; }
+  .hero-gantry-light { opacity: 0.5 !important; /* Static gantry light */ }
+  .hero-empire-tachometer { /* Static appearance */ }
+}
 /* === EMPIRE EDITION HERO STYLES END === */
+
+/* Content Burst Section Styles */
+.carbon-card-burst {
+  @apply block rounded-lg shadow-xl overflow-hidden transition-all duration-300 ease-m-blip;
+  background-color: hsl(var(--card)); /* Dark card base */
+  /* Simulated Carbon Fiber Background */
+  background-image: 
+    linear-gradient(45deg, hsla(0,0%,0%,0.2) 25%, transparent 25%, transparent 75%, hsla(0,0%,0%,0.2) 75%, hsla(0,0%,0%,0.2)),
+    linear-gradient(-45deg, hsla(0,0%,0%,0.2) 25%, transparent 25%, transparent 75%, hsla(0,0%,0%,0.2) 75%, hsla(0,0%,0%,0.2));
+  background-size: 10px 10px;
+  border: 2px solid transparent; /* Base for gradient border */
+  position: relative;
+  transform: perspective(1000px) rotateX(5deg) rotateY(-5deg); /* Initial tilt */
+}
+
+.carbon-card-burst::before { /* M-stripe border effect */
+  content: "";
+  position: absolute;
+  inset: -2px; /* Control border thickness */
+  border-radius: calc(var(--radius) + 2px);
+  background: conic-gradient(
+    from 90deg,
+    hsl(var(--m-stripe-light-blue)) 0deg 120deg,
+    hsl(var(--m-stripe-dark-blue)) 120deg 240deg,
+    hsl(var(--m-stripe-red)) 240deg 360deg
+  );
+  z-index: -1;
+  animation: mStripePulse 3s linear infinite paused; /* Paused initially */
+}
+.carbon-card-burst:hover::before {
+  animation-play-state: running;
+}
+
+.carbon-card-burst:hover {
+  transform: translateY(-8px) rotateX(0deg) rotateY(0deg); /* Lift and un-tilt */
+  box-shadow: 0 15px 30px hsla(var(--shadow-gray), 0.5);
+}
+
+.light-sweep-overlay {
+  @apply absolute inset-0 pointer-events-none;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    hsla(var(--m-performance-blue), 0.3) 45%,
+    hsla(var(--primary), 0.3) 55%,
+    transparent 70%
+  );
+  mix-blend-mode: overlay; /* Or screen, color-dodge */
+  opacity: 0.8;
+  transform: translateX(-100%); /* Initial position for animation */
+}
+
+/* RPM Widget Styles */
+.rpm-widget-dial {
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+}
+.rpm-widget-needle {
+  /* Styles applied inline via motion.div */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carbon-card-burst {
+    transform: none; /* No tilt */
+  }
+  .carbon-card-burst:hover {
+    transform: translateY(-6px); /* Simple lift */
+  }
+  .carbon-card-burst::before {
+    animation: none; /* No M-stripe pulse */
+  }
+  .light-sweep-overlay {
+    display: none; /* No light sweep */
+  }
+  .rpm-widget-needle {
+    transition: none !important; /* No needle animation */
+  }
+}
