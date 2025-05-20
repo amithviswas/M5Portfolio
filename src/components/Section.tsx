@@ -53,5 +53,3 @@ export default function Section({ id, className, children, fullHeight = false, n
     </motion.section>
   );
 }
-
-```
