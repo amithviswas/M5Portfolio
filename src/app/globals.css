@@ -124,9 +124,17 @@
 
   /* General heading style */
   .font-heading {
-    font-family: var(--font-rajdhani);
+    font-family: var(--font-rajdhani); /* Use Rajdhani as the primary heading font */
     @apply font-bold uppercase tracking-wider; /* M-badging style */
   }
+  
+  .font-serif-display { /* For Empire Edition Hero Headline */
+      font-family: var(--font-playfair-display);
+  }
+  .font-sans-condensed { /* For Empire Edition Hero Tagline */
+      font-family: var(--font-space-grotesk);
+  }
+
 
   .button-m-glow, .card-m-glow {
     @apply shadow-[0_0_15px_hsl(var(--primary)/0.5)] transition-shadow duration-300 ease-in-out;
@@ -147,50 +155,29 @@
   overflow: hidden;
 }
 
-/* Navbar "Laser Crest" Underline (M5 Hood Line Inspired) */
+/* Navbar "Laser Crest" / Kidney-Grille Blade Underline */
 .nav-laser-crest {
   position: relative;
   overflow: visible;
-  @apply transition-m-blip;
 }
 .nav-laser-crest::after {
   content: '';
   position: absolute;
-  left: 50%;
-  bottom: -4px; /* Adjusted for 6px height + proximity */
-  transform: translateX(-50%);
-  width: 0%;
-  height: 6px;
-  background: linear-gradient(135deg, hsl(var(--m-light-blue-hsl)) 0%, hsl(var(--m-violet-hsl)) 100%);
-  opacity: 0;
-  /* V-Crest shape: Two points at top, one at bottom center, then back up */
-  clip-path: polygon(0% 100%, 10% 0%, 50% 70%, 90% 0%, 100% 100%, 90% 100%, 50% 80%, 10% 100%); /* More aggressive V-crest */
-  transition: width 120ms var(--ease-m-blip), opacity 120ms var(--ease-m-blip), background 120ms var(--ease-m-blip);
-  will-change: width, opacity, background;
+  left: 0;
+  bottom: -2px; /* Sits 2px below baseline */
+  height: 2px; /* Default height, can be adjusted */
+  width: 0; /* Start with no width */
+  background-color: hsl(var(--primary)); /* Default to primary, can be overridden by specific styles */
+  border-radius: 9999px; /* Pill shape */
+  transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  will-change: width, background-color, opacity;
   pointer-events: none;
 }
+
 .nav-laser-crest:hover::after,
 .nav-laser-crest.active-link::after {
-  width: 24px; /* Adjusted width for V-crest shape */
+  width: 100%;
   opacity: 1;
-  /* Flash effect: icy-blue to violet */
-  background: linear-gradient(135deg, hsl(var(--m-light-blue-hsl)/0.8) 0%, hsl(var(--m-violet-hsl)/0.8) 100%);
-}
-.nav-laser-crest.active-link::after {
-  opacity: 0.4; /* Settle at 40% opacity for active link */
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nav-laser-crest::after {
-    transition: none;
-    opacity: 0;
-  }
-  .nav-laser-crest:hover::after,
-  .nav-laser-crest.active-link::after {
-    width: 20px; /* Static width for V-crest */
-    opacity: 0.4;
-    background: hsl(var(--m-light-blue-hsl)); /* Simpler background for reduced motion */
-  }
 }
 
 
@@ -417,12 +404,12 @@
 
 
 .hero-headline-empire {
-  font-family: var(--font-playfair-display); /* Use specific Tailwind class now */
+  font-family: var(--font-playfair-display); 
   @apply text-[#E5E5E5] font-bold;
   text-shadow: 0 1px 1px #000, 0 0 5px rgba(0,0,0,.2), 0 0 10px rgba(0,0,0,.15);
 }
 .hero-tagline-empire {
-  font-family: var(--font-space-grotesk); /* Use specific Tailwind class now */
+  font-family: var(--font-space-grotesk); 
   @apply font-semibold uppercase tracking-[1px] text-transparent bg-clip-text relative;
   background-image: linear-gradient(to right, hsl(var(--m-performance-blue)) 50%, hsl(var(--primary)) 50%);
   background-size: 200% 100%;
@@ -819,17 +806,27 @@
 @media (prefers-reduced-motion: reduce) {
   .carbon-weave-animated { animation: none; }
   .footer-diffuser-fin-dot { animation: none; opacity: 0.5; }
-  /* nav-laser-crest::after is handled in its specific section */
+  .nav-laser-crest::after {
+    transition: none;
+    /* For reduced motion, the :after should be static on hover/active */
+    /* so ensure active state is visible */
+  }
+  .nav-laser-crest:hover::after,
+  .nav-laser-crest.active-link::after {
+    width: 100%;
+    opacity: 1; /* Static, visible underline for active/hover state */
+    background-color: hsl(var(--primary)); /* Ensure color */
+    height: 2px; /* Consistent height with non-reduced motion */
+    bottom: -2px; /* Consistent positioning */
+  }
   .section-grille-blade {
-    /* Static display, no entry animation if preferred */
-    transform: scaleY(1) !important; /* Ensure visible statically */
+    transform: scaleY(1) !important;
     opacity: 1 !important;
   }
   .crystal-hud-tooltip-content {
     backdrop-filter: none;
     background: hsl(var(--card));
   }
-  /* hero-headlight-sweep-bg is already handled */
    .chrono-gauge-redline {
      box-shadow: none;
   }
