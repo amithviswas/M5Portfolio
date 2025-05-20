@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Section from '@/components/Section';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Trophy, Users, Zap, BarChart } from 'lucide-react'; // Added BarChart for impact
+import { Trophy, Users, Zap, BarChart } from 'lucide-react';
 
 const achievements = [
   {
@@ -38,11 +38,11 @@ const cardVariants = {
     transition: {
       delay: i * 0.2,
       duration: 0.8,
-      ease: [0.6, 0.01, 0.0, 0.95], 
+      ease: [0.6, 0.01, 0, 0.95], 
     },
   }),
    hover: {
-    opacity: 1, // Explicitly maintain opacity
+    opacity: 1, 
     transform: "translateY(-8px) scale(1.02)",
     boxShadow: "0px 10px 25px -5px hsl(var(--primary)/0.6), 0px 6px 15px -8px hsl(var(--bmw-m-blue)/0.4)",
     transition: { type: "spring", stiffness: 220, damping: 14 }
@@ -69,26 +69,27 @@ export default function AchievementsPage() {
         />
       </div>
 
-      <div className="space-y-8 md:space-y-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
         {achievements.map((achievement, index) => (
           <motion.div
             key={achievement.title}
             custom={index}
             variants={cardVariants}
             initial="initial"
-            whileInView="animate" // Changed from animate="animate"
+            whileInView="animate"
             whileHover="hover"
             viewport={{ once: true, amount: 0.1 }}
+            className="flex" // Added to ensure cards in grid take full height available if content differs
           >
-            <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-xl card-m-glow overflow-hidden group flex flex-col">
-              <div className="relative w-full aspect-[2/1] overflow-hidden rounded-t-lg">
+            <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-xl card-m-glow overflow-hidden group flex flex-col w-full">
+              <div className="relative w-full aspect-video overflow-hidden rounded-t-lg"> {/* Changed aspect ratio */}
                 <Image
                   src={achievement.imageUrl}
                   alt={achievement.title}
                   fill
                   style={{ objectFit: "cover" }}
                   className="transition-transform duration-500 ease-in-out group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" // Adjusted sizes
                 />
               </div>
               <CardHeader className="flex flex-row items-start gap-4 p-6 md:p-8">
