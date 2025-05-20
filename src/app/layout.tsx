@@ -1,24 +1,19 @@
-// REMOVE "use client"; directive from here
 
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Rajdhani } from 'next/font/google'; // Changed from Geist
 import './globals.css';
-import { IntroProvider } from '@/contexts/IntroContext'; // Only need IntroProvider
-import AppClientLayout from '@/components/AppClientLayout'; // Import the new client layout component
+import { IntroProvider } from '@/contexts/IntroContext';
+import AppClientLayout from '@/components/AppClientLayout';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const rajdhani = Rajdhani({ // Changed from Geist
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'], // Rajdhani weights
+  variable: '--font-rajdhani', // CSS variable for Rajdhani
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
-export const metadata: Metadata = { // This is NOW VALID
-  title: "Amith's M-Powered Portfolio",
-  description: 'Personal portfolio of Amith Viswas Reddy, Data Scientist and AI/ML Enthusiast.',
+export const metadata: Metadata = {
+  title: "Amith's M5-Inspired Portfolio", // Updated title
+  description: 'High-performance portfolio of Amith Viswas Reddy, AI/ML Engineer & Data Scientist.', // Updated description
 };
 
 export default function RootLayout({
@@ -27,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}>
+    <html lang="en" className="dark"> {/* Assuming dark theme is default as per new design */}
+      <body className={`${rajdhani.variable} font-sans antialiased bg-background text-foreground`}>
         <IntroProvider>
           <AppClientLayout>{children}</AppClientLayout>
         </IntroProvider>

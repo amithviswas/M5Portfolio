@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
 export default {
     darkMode: ["class"],
@@ -9,6 +10,9 @@ export default {
   ],
   theme: {
   	extend: {
+      fontFamily: {
+        sans: ['var(--font-rajdhani)', ...fontFamily.sans], // Set Rajdhani as default sans-serif
+      },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -21,7 +25,7 @@ export default {
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
+  				DEFAULT: 'hsl(var(--primary))', // Blood Red
   				foreground: 'hsl(var(--primary-foreground))'
   			},
   			secondary: {
@@ -33,7 +37,7 @@ export default {
   				foreground: 'hsl(var(--muted-foreground))'
   			},
   			accent: {
-  				DEFAULT: 'hsl(var(--accent))',
+  				DEFAULT: 'hsl(var(--accent))', // M Performance Blue
   				foreground: 'hsl(var(--accent-foreground))'
   			},
   			destructive: {
@@ -59,7 +63,11 @@ export default {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
-  			}
+  			},
+        // Explicitly defined colors from prompt
+        'blood-red': 'hsl(var(--blood-red))',
+        'm-performance-blue': 'hsl(var(--bmw-m-blue))',
+        'shadow-gray': 'hsl(var(--shadow-gray))',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

@@ -31,21 +31,21 @@ const certifications = [
 ];
 
 const cardVariants = {
-  initial: { opacity: 0, y: 50, filter: "blur(5px)" },
+  initial: { opacity: 0, x: -50, filter: "blur(5px)" }, // Slide in from left
   animate: (i: number) => ({
     opacity: 1,
-    y: 0,
+    x: 0,
     filter: "blur(0px)",
     transition: {
       delay: i * 0.15,
-      duration: 0.6,
+      duration: 0.7, // Snappy like DCT gear transition
       ease: [0.6, 0.01, 0.0, 0.95], 
     },
   }),
   hover: {
-    scale: 1.03,
-    boxShadow: "0px 8px 25px -5px hsl(var(--primary)/0.5), 0px 5px 15px -8px hsl(var(--bmw-m-blue)/0.3)",
-    transition: { type: "spring", stiffness: 250, damping: 15 }
+    scale: 1.02, // Subtle scale
+    boxShadow: "0px 8px 25px -5px hsl(var(--primary)/0.5), 0px 5px 15px -8px hsl(var(--bmw-m-blue)/0.3)", // M-glow
+    transition: { type: "spring", stiffness: 200, damping: 12 }
   }
 };
 
@@ -54,22 +54,22 @@ export default function CertificationsPage() {
     <Section id="certifications" className="min-h-screen">
       <div className="text-center mb-12 md:mb-16">
         <motion.h1 
-          className="text-4xl md:text-5xl font-bold uppercase tracking-wider text-primary-foreground"
+          className="text-4xl md:text-5xl font-heading text-primary-foreground" // Font heading
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          My <span className="text-primary">Certifications</span>
+          Racing <span className="text-primary">Credentials</span> {/* Updated Title */}
         </motion.h1>
         <motion.div 
-          className="w-36 h-1 bg-primary mx-auto mt-4 rounded-full"
+          className="w-48 h-1 bg-primary mx-auto mt-4 rounded-full" // Wider underline
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-10">
+      <div className="space-y-8 md:space-y-10"> {/* Increased spacing for trail effect */}
         {certifications.map((cert, index) => (
           <motion.div
             key={cert.title}
@@ -80,24 +80,24 @@ export default function CertificationsPage() {
             whileHover="hover"
             viewport={{ once: true, amount: 0.1 }}
           >
-            <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-lg overflow-hidden h-full flex flex-col md:flex-row group">
-                <div className="w-full md:w-1/3 h-60 md:h-full relative overflow-hidden">
+            {/* Card styled like M instrument cluster - focus on border and bg */}
+            <Card className="bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary shadow-xl card-m-glow overflow-hidden h-full flex flex-col md:flex-row group">
+                <div className="w-full md:w-2/5 h-60 md:h-auto relative overflow-hidden p-2 bg-black/30"> {/* Inner "frame" */}
                   <Image
                     src={cert.image}
                     alt={cert.title}
                     fill
-                    style={{ objectFit: "cover" }}
-                    className="transition-transform duration-500 ease-in-out group-hover:scale-110"
+                    style={{ objectFit: "contain" }} // Contain to see full cert
+                    className="transition-transform duration-500 ease-in-out group-hover:scale-105 rounded-sm"
                     data-ai-hint={cert.dataAiHint}
-                    sizes="(max-width: 768px) 100vw, 33vw"
+                    sizes="(max-width: 768px) 100vw, 40vw"
                   />
-                   <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-card/70 via-card/10 to-transparent"></div>
                 </div>
-                <CardContent className="p-6 md:p-8 w-full md:w-2/3 flex flex-col justify-center">
-                  <h3 className="text-2xl font-bold text-primary-foreground mb-2 group-hover:text-primary transition-colors duration-300">{cert.title}</h3>
+                <CardContent className="p-6 md:p-8 w-full md:w-3/5 flex flex-col justify-center">
+                  <h3 className="text-2xl font-bold text-primary-foreground mb-2 group-hover:text-primary transition-colors duration-300 font-heading">{cert.title}</h3>
                   <p className="text-sm text-accent font-medium mb-3 uppercase tracking-wider">{cert.issuer}</p>
-                  <p className="text-muted-foreground leading-relaxed">{cert.description}</p>
-                  <CheckCircle className="mt-4 h-6 w-6 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 self-start md:self-end" />
+                  <p className="text-muted-foreground leading-relaxed text-base">{cert.description}</p>
+                  <Award className="mt-4 h-6 w-6 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 self-start md:self-end" />
                 </CardContent>
             </Card>
           </motion.div>
