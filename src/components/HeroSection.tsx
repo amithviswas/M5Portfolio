@@ -1,19 +1,14 @@
 
 "use client";
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { PlayCircle } from 'lucide-react'; // Changed icon
 import Section from '@/components/Section';
-
-// Removed MGrillePattern for now to simplify, can be re-added if a subtle carbon/metal pattern is desired
-// const MGrillePattern = () => ( ... );
+import { MStartStopButton } from '@/components/MStartStopButton'; // Import the new button
 
 export default function HeroSection() {
-  // Updated content as per "Launch Control"
   const title = "Data Scientist | AI Engineer | ML Enthusiast";
-  const name = "Amith Viswas Reddy. D"; // Kept for intro animation reference if needed, but title is primary
-  const buttonText = "Start the Drive →";
+  const name = "Amith Viswas Reddy. D";
 
   const titleVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -21,22 +16,21 @@ export default function HeroSection() {
       opacity: 1,
       y: 0,
       transition: {
-        delay: 0.5, // Adjusted delay
+        delay: 0.5,
         duration: 0.8,
         ease: [0.6, 0.01, 0.0, 0.95],
       },
     },
   };
 
-  // Headlight beam effects (subtle for now, complex parallax deferred)
   const headlightVariants = {
     initial: { opacity: 0, scaleX: 0 },
     animate: (custom: number) => ({
-      opacity: [0, 0.05, 0.02, 0.05, 0], // More subtle opacity
+      opacity: [0, 0.05, 0.02, 0.05, 0],
       scaleX: [0, 1, 0.8, 1, 0],
       transition: {
         delay: custom * 0.3 + 1.0,
-        duration: 2.5, // Slower, more ambient
+        duration: 2.5,
         repeat: Infinity,
         repeatDelay: 7,
         ease: "easeInOut"
@@ -46,9 +40,6 @@ export default function HeroSection() {
 
   return (
     <Section id="home" className="relative !pt-0 !pb-0 overflow-hidden" fullHeight noPadding>
-      {/* <MGrillePattern /> */}
-      
-      {/* Subtle Headlight Beams */}
       <motion.div 
         className="absolute left-0 top-1/2 w-2/5 h-1/2 bg-gradient-to-r from-[hsl(var(--foreground)/0.03)] to-transparent rounded-r-full blur-3xl transform -translate-y-1/2 pointer-events-none"
         variants={headlightVariants}
@@ -73,7 +64,6 @@ export default function HeroSection() {
         >
           {title}
         </motion.h1>
-        {/* Name can be displayed here if desired, or kept in IntroAnimation */}
          <motion.p 
           className="mt-4 text-5xl sm:text-6xl md:text-7xl font-bold uppercase tracking-tighter text-primary-foreground drop-shadow-[0_2px_10px_hsl(var(--primary)/0.5)]"
           initial={{ opacity: 0, y: 20 }}
@@ -89,11 +79,13 @@ export default function HeroSection() {
           transition={{ delay: 1.2, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95] }}
           className="mt-12"
         >
-          <Button asChild size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground rounded-md button-m-glow px-8 py-3">
+          <MStartStopButton asChild>
             <Link href="/#about">
-              {buttonText} <PlayCircle className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              <PlayCircle size={32} className="mb-1 text-primary group-hover:text-blood-red transition-colors" />
+              <span className="text-xs uppercase">Start</span>
+              <span className="text-xs uppercase">Drive</span>
             </Link>
-          </Button>
+          </MStartStopButton>
         </motion.div>
       </div>
     </Section>
