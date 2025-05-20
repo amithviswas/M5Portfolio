@@ -113,7 +113,7 @@
     z-index: 40;
 }
 
-/* M5 Headlight-style Nav Underline - REFINED */
+/* M5 Grille-inspired Nav Underline - REFINED */
 .nav-headlight {
   position: relative;
   overflow: visible; /* Allow pseudo-element to extend slightly */
@@ -122,22 +122,26 @@
 .nav-headlight::after {
   content: '';
   position: absolute;
-  bottom: -1px; /* Closer to the text */
+  bottom: -3px; /* Positioned slightly below the text */
   left: 50%;
-  width: 0%; /* Starts at 0 width */
-  height: 2.5px; /* Slightly thinner for initial state */
-  background-image:
-    /* Left beam (blue) */
-    radial-gradient(ellipse 70% 100% at 10% 100%, hsla(var(--bmw-m-blue), 0.9) 0%, hsla(var(--bmw-m-blue), 0.0) 70%),
-    /* Right beam (red) */
-    radial-gradient(ellipse 70% 100% at 90% 100%, hsla(var(--primary), 0.9) 0%, hsla(var(--primary), 0.0) 70%);
-  background-repeat: no-repeat;
-  background-size: 55% 100%, 55% 100%; /* Each gradient takes up slightly more than half, creates overlap */
-  background-position: left bottom, right bottom;
-  filter: blur(0.4px); /* Sharper initial blur */
-  opacity: 0;
-  transform: translateX(-50%) skewX(-30deg); /* Use requested -30deg skew */
-  transform-origin: center bottom;
+  transform: translateX(-50%); /* Center the underline */
+  width: 0%; /* Starts at 0 width, animates to full width */
+  height: 4px; /* A bit more substantial, like a grille bar */
+  
+  /* Dual color like M stripes, but for the underline */
+  background-image: linear-gradient(
+    to right,
+    hsl(var(--bmw-m-blue)) 0%, 
+    hsl(var(--bmw-m-blue)) 49%, /* Sharp transition for split color */
+    hsl(var(--primary)) 51%,
+    hsl(var(--primary)) 100%
+  );
+  
+  border-radius: 2px; /* Rounded ends for a "curved" feel */
+  
+  opacity: 0; /* Hidden by default, fades in */
+  filter: blur(0.3px); /* Subtle blur for a soft glow */
+  
   transition: width 0.35s cubic-bezier(0.23, 1, 0.32, 1), 
               opacity 0.3s ease-out,
               height 0.3s ease-out,
@@ -148,12 +152,12 @@
 
 .nav-headlight:hover::after,
 .nav-headlight.active-link::after {
-  width: 110%; /* Slightly reduced expansion if 115% was too much */
-  height: 3.5px; /* Slightly more pronounced on hover/active */
+  width: 100%; /* Full width of the nav item text */
+  height: 5px; /* Slightly thicker on hover/active */
   opacity: 1;
-  filter: blur(0.3px) /* Sharper blur for active/hover state */
-          drop-shadow(-1.5px 0 2.5px hsla(var(--bmw-m-blue), 0.65)) 
-          drop-shadow(1.5px 0 2.5px hsla(var(--primary), 0.65)); /* Refined dual glow */
+  filter: blur(0.2px) /* Sharper on active/hover */
+          drop-shadow(0px 0px 4px hsla(var(--bmw-m-blue), 0.6)) /* Blue glow */
+          drop-shadow(0px 0px 4px hsla(var(--primary), 0.6));   /* Red glow */
 }
 
 /* Reduced motion preferences */
@@ -164,9 +168,9 @@
   .nav-headlight:hover::after,
   .nav-headlight.active-link::after {
     width: 100%; /* Standard width */
-    height: 2.5px; /* Standard thickness */
+    height: 4px; /* Standard thickness */
     opacity: 1;
-    filter: blur(0px); /* No blur or glow */
-    transform: translateX(-50%) skewX(0deg); /* No skew */
+    filter: none; /* No blur or glow */
+    transform: translateX(-50%); /* Centered */
   }
 }
