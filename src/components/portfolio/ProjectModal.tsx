@@ -21,7 +21,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col p-0 bg-card border-border shadow-2xl rounded-lg">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col p-0 bg-card border-border shadow-2xl rounded-lg overflow-hidden">
         <div className="relative w-full aspect-video flex-shrink-0">
           <Image
             src={project.imageUrl}
@@ -42,7 +42,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
               <X className="h-5 w-5" />
           </Button>
         </div>
-        <ScrollArea className="flex-grow min-h-0"> {/* Added min-h-0 here */}
+        <ScrollArea className="flex-grow min-h-0"> {/* Ensures ScrollArea can shrink and grow */}
           <div className="p-6 md:p-8 space-y-6">
             <DialogHeader className="text-left">
               <DialogTitle className="text-2xl md:text-3xl font-bold text-primary font-heading">{project.title}</DialogTitle>

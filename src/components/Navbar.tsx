@@ -2,9 +2,9 @@
 "use client";
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Car, ArrowRight } from 'lucide-react'; // ArrowRight might be used elsewhere
+import { Menu, X, Car } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Geist } from 'next/font/google';
@@ -15,13 +15,13 @@ const geistSans = Geist({
 });
 
 const navLinks = [
-  { name: 'Home', href: '/#home' },
-  { name: 'About', href: '/#about' },
-  { name: 'Skills', href: '/#skills' },
-  { name: 'Projects', href: '/#projects' },
-  { name: 'Certifications', href: '/certifications' },
-  { name: 'Achievements', href: '/achievements' },
-  { name: 'Resume', href: '/resume' },
+  { name: 'Home', href: '/#home', id: 'home' },
+  { name: 'About', href: '/#about', id: 'about' },
+  { name: 'Skills', href: '/#skills', id: 'skills' },
+  { name: 'Projects', href: '/#projects', id: 'projects' },
+  { name: 'Certifications', href: '/certifications', id: 'certifications' },
+  { name: 'Achievements', href: '/achievements', id: 'achievements' },
+  { name: 'Resume', href: '/resume', id: 'resume' },
 ];
 
 export default function Navbar() {
@@ -30,69 +30,107 @@ export default function Navbar() {
   const pathname = usePathname();
   const [activeLink, setActiveLink] = useState('');
 
+  const determineActiveLink = useCallback(() => {
+    const currentHash = typeof window !== 'undefined' ? window.location.hash : '';
+    let newActive = pathname;
+
+    if (pathname === '/') { // On the homepage
+      if (currentHash) {
+        newActive = `/${currentHash}`; // e.g. /#about
+      } else {
+        newActive = '/#home'; // Default to home if no hash
+      }
+    }
+    // For other pages like /certifications, newActive is already pathname
+    
+    // Ensure it matches a navLink href for styling
+    const matchingNavLink = navLinks.find(link => 
+        link.href === newActive || // For /#hash links
+        (link.href === pathname && pathname !== '/') // For direct page links not on root
+    );
+
+    if (matchingNavLink) {
+      setActiveLink(matchingNavLink.href);
+    } else if (pathname === '/' && !currentHash) {
+      setActiveLink('/#home'); // Fallback for root path without hash
+    } else {
+      setActiveLink(pathname); // Fallback for other pages not exactly matching
+    }
+
+  }, [pathname]);
+
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check on mount
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
 
-    const determineActiveLink = () => {
-      const currentHash = typeof window !== 'undefined' ? window.location.hash : ''; // e.g., #about
-      let newActive = pathname;
+    determineActiveLink(); // Initial determination
+    window.addEventListener('hashchange', determineActiveLink, { passive: true });
 
-      if (pathname === '/' && currentHash) {
-        newActive = `/${currentHash}`; // Match format like /#about
-      }
-      
-      // Prioritize direct page matches
-      const directMatch = navLinks.find(link => link.href === pathname);
-      if (directMatch) {
-        newActive = directMatch.href;
-      } else if (pathname === '/' ) {
-         // If on homepage, check hash
-        const hashMatch = navLinks.find(link => link.href === `/${currentHash}`);
-        if (hashMatch) {
-          newActive = hashMatch.href;
-        } else if (!currentHash) { // Default to home if no hash on root
-            newActive = '/#home';
+    // Intersection Observer for homepage sections
+    const sections = navLinks
+      .filter(link => link.href.startsWith('/#'))
+      .map(link => document.getElementById(link.id));
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -70% 0px", // Section active when its top is in the upper ~30% of viewport
+      threshold: 0.01, // Small threshold
+    };
+
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      if (pathname !== '/') return; // Only run on homepage
+
+      let newActiveSectionId = '';
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          newActiveSectionId = entry.target.id;
         }
+      });
+      
+      if (newActiveSectionId) {
+        setActiveLink(`/#${newActiveSectionId}`);
+      } else if (window.scrollY < window.innerHeight * 0.2 && pathname === '/') { 
+        // If scrolled near top and no specific section found, set to home
+        setActiveLink('/#home');
       }
-      setActiveLink(newActive);
     };
 
-    determineActiveLink(); // Set on mount and pathname change
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sections.forEach(section => {
+      if (section) observer.observe(section);
+    });
 
-    const handleHashChange = () => {
-      determineActiveLink();
-    };
-
-    window.addEventListener('hashchange', handleHashChange);
-    
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('hashchange', determineActiveLink);
+      sections.forEach(section => {
+        if (section) observer.unobserve(section);
+      });
+      observer.disconnect();
     };
-  }, [pathname]);
+  }, [pathname, determineActiveLink]);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
   const handleNavLinkClick = (href: string) => {
     closeMobileMenu();
+    setActiveLink(href); // Set active link immediately on click
+
     if (href.startsWith('/#')) {
-      if (pathname === '/') {
-        const targetId = href.substring(2); // Remove '/#'
+      const targetId = href.substring(2);
+      if (pathname === '/') { // If on homepage, smooth scroll
         document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
-         // Manually update activeLink state for immediate feedback on same-page hash links
-        setActiveLink(href);
       } else {
-        // For navigating to homepage section from another page, Link handles it
-        // Active link will be updated by useEffect via pathname change
+        // If on another page, Next.js Link will navigate to '/'
+        // and the hash will be handled by the browser & useEffect/hashchange listener.
+        // No explicit scrollIntoView needed here as Link handles the navigation.
       }
     }
-    // For direct page links, Link handles it, activeLink updates via useEffect
   };
-
 
   return (
     <motion.nav 
@@ -126,7 +164,7 @@ export default function Navbar() {
                       transition-colors duration-300 group`}
                     onClick={(e) => {
                       if (link.href.startsWith('/#') && pathname === '/') {
-                        e.preventDefault(); // Prevent default for same-page hash links
+                         e.preventDefault(); // Prevent default only for same-page hash links to allow our scroll
                       }
                       handleNavLinkClick(link.href);
                     }}
