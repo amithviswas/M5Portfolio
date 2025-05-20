@@ -1,3 +1,4 @@
+
 "use client";
 import { motion } from 'framer-motion';
 import Section from '@/components/Section';
@@ -32,7 +33,7 @@ const cardVariants = {
     transition: {
       delay: i * 0.2,
       duration: 0.7,
-      ease: [0.6, 0.01, -0.05, 0.95], // "engineered" feel
+      ease: [0.6, 0.01, 0.0, 0.95], // "engineered" feel - corrected
     },
   }),
    hover: {

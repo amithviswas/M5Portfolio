@@ -1,3 +1,4 @@
+
 "use client";
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
@@ -24,7 +25,7 @@ export default function Section({ id, className, children, fullHeight = false, n
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.6, ease: [0.6, 0.01, -0.05, 0.95] }} // Custom ease for "engineered" feel
+      transition={{ duration: 0.6, ease: [0.6, 0.01, 0.0, 0.95] }} // Custom ease for "engineered" feel - Corrected
     >
       {children}
     </motion.section>

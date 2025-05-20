@@ -47,7 +47,7 @@ export default function HeroSection() {
       transition: {
         delay: 1.2,
         duration: 0.8,
-        ease: [0.6, 0.01, -0.05, 0.95],
+        ease: [0.6, 0.01, 0.0, 0.95], // Corrected
       },
     },
   };
@@ -114,7 +114,7 @@ export default function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.8, duration: 0.8, ease: [0.6, 0.01, -0.05, 0.95] }}
+          transition={{ delay: 1.8, duration: 0.8, ease: [0.6, 0.01, 0.0, 0.95] }} // Corrected
           className="mt-12"
         >
           <Button asChild size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground rounded-md shadow-lg hover:shadow-[0_0_20px_hsl(var(--primary)/0.7)] transition-all duration-300 transform hover:scale-105">

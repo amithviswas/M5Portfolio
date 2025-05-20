@@ -39,7 +39,7 @@ const cardVariants = {
     transition: {
       delay: i * 0.15,
       duration: 0.6,
-      ease: [0.6, 0.01, -0.05, 0.95],
+      ease: [0.6, 0.01, 0.0, 0.95], // Corrected
     },
   }),
   hover: {
