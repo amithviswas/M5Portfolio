@@ -2,7 +2,7 @@
 "use client";
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge 
+  Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge, Activity // Added Activity
 } from 'lucide-react';
 import Section from '@/components/Section';
 import { useUserInteraction } from '@/contexts/UserInteractionContext'; 
@@ -16,7 +16,7 @@ const skills = [
   { name: 'Machine Learning', icon: <Brain size={32} />, modeName: 'Intelligent Traction', id: 'skill-ml' },
   { name: 'Python Programming', icon: <Code2 size={32} />, modeName: 'Core Engine (Python)', id: 'skill-python' },
   { name: 'Data Analysis', icon: <BarChart3 size={32} />, modeName: 'Performance Analytics', id: 'skill-data-analysis' },
-  { name: 'Web Development', icon: <Code2 size={32} />, modeName: 'Chassis & Aero (Web)', id: 'skill-web-dev' },
+  { name: 'Web Development', icon: <Activity size={32} />, modeName: 'Chassis & Aero (Web)', id: 'skill-web-dev' }, // Changed icon
   { name: 'SQL & Databases', icon: <Database size={32} />, modeName: 'Fuel System (Data)', id: 'skill-sql' },
   { name: 'Unix/Linux', icon: <Terminal size={32} />, modeName: 'ECU (Unix/Linux)', id: 'skill-linux' },
   { name: 'Statistical Modeling', icon: <Gauge size={32} />, modeName: 'Precision Tuning', id: 'skill-stat-model' },
@@ -50,14 +50,14 @@ export default function SkillsSection() {
       scale: 1.05, 
       boxShadow: "0px 0px 20px 0px hsl(var(--primary)/0.6)", 
       borderColor: "hsl(var(--primary))", 
-      transition: { type: 'spring', stiffness: 250, damping: 10 }
+      // transition: { type: 'spring', stiffness: 250, damping: 10 } // Using transition-m-throttle globally
     }
   };
 
   const textVariants = {
     hover: {
       color: "hsl(var(--primary-foreground))",
-      transition: { type: 'spring', stiffness: 300, damping: 10, duration: 0.1 }
+      // transition: { type: 'spring', stiffness: 300, damping: 10, duration: 0.1 } // Using transition-m-throttle globally
     }
   };
 
@@ -65,16 +65,15 @@ export default function SkillsSection() {
     hover: {
       scale: 1.15,
       color: "hsl(var(--primary))", 
-      transition: { duration: 0.2 }
+      // transition: { duration: 0.2 } // Using transition-m-throttle globally
     }
   };
 
   const handleSkillHover = (skillName: string) => {
     incrementSkillHover(skillName);
-    unlockGhostlineFullMode(); // Check if Ghostline can be unlocked
+    unlockGhostlineFullMode(); 
     if (isSoundEnabled) {
       soundService.playSound('hoverChime', { note: 'G5' });
-      // Stagger crackle slightly for better effect
       setTimeout(() => {
         if (isSoundEnabled) soundService.playSound('electricCrackle');
       }, 70);
@@ -85,7 +84,7 @@ export default function SkillsSection() {
     <Section id="skills" className="bg-card/30">
       <div className="text-center mb-12 md:mb-16">
         <motion.h2 
-          className="text-4xl md:text-5xl font-heading text-primary-foreground"
+          className="text-4xl md:text-5xl font-heading text-primary-foreground" // Uses .font-heading for M-badging style
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -105,15 +104,16 @@ export default function SkillsSection() {
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
         {skills.map((skill, index) => {
           const hoverDetail = getSkillHoverDetail(skill.name);
-          const isRepeatedHover = hoverDetail && hoverDetail.count >= 3 && (Date.now() - hoverDetail.lastTimestamp < 10000); // 3+ hovers in 10s
+          const isRepeatedHover = hoverDetail && hoverDetail.count >= 3 && (Date.now() - hoverDetail.lastTimestamp < 10000); 
 
           return (
             <motion.div
               key={skill.id}
               className={cn(
-                "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40 transition-m-blip skill-card-trail-container",
+                "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40 skill-card-trail-container",
+                "transition-m-throttle", // Added M-throttle transition
                 isGhostlineFullModeUnlocked && "skill-card-ghostline-active",
-                isGhostlineFullModeUnlocked && Math.random() < 0.3 && !prefersReducedMotion && "animate-skill-jitter", // Random jitter
+                isGhostlineFullModeUnlocked && Math.random() < 0.3 && !prefersReducedMotion && "animate-skill-jitter", 
                 isRepeatedHover && "erratic-glow"
               )}
               custom={index}
@@ -129,19 +129,19 @@ export default function SkillsSection() {
                 isGhostlineFullModeUnlocked && "skill-card-trail-ghostline"
               )}></div>
               <motion.div 
-                className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
+                className="mb-3 md:mb-4 text-primary-foreground/80 inline-block transition-m-throttle" // Added transition
                 variants={iconVariants}
               >
                 {skill.icon}
               </motion.div>
               <motion.h3 
-                className="text-sm md:text-base font-semibold text-muted-foreground"
+                className="text-sm md:text-base font-semibold text-muted-foreground transition-m-throttle" // Added transition
                 variants={textVariants}
               >
                 {skill.modeName}
               </motion.h3>
               <motion.p
-                className="text-xs text-muted-foreground/70 mt-1"
+                className="text-xs text-muted-foreground/70 mt-1 transition-m-throttle" // Added transition
                 variants={{ hover: { opacity: 1} }}
                 initial={{ opacity: 0 }} 
               >
@@ -154,3 +154,4 @@ export default function SkillsSection() {
     </Section>
   );
 }
+

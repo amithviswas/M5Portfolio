@@ -48,11 +48,11 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
       style={{ rotateY: prefersReducedMotion ? 0 : rotateY, perspective: 1000 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={cn(isClicked && !prefersReducedMotion && "filter blur-[1px] brightness-90", "transition-m-blip")}
+      className={cn(isClicked && !prefersReducedMotion && "filter blur-[1px] brightness-90", "transition-m-throttle")} // Changed to transition-m-throttle
     >
       <Card className={cn(
         "flex flex-col h-full overflow-hidden shadow-xl hover:shadow-primary/40 card-m-glow",
-        "transition-m-blip transform hover:scale-[1.03]",
+        "transition-m-throttle transform hover:scale-[1.03]", // Changed to transition-m-throttle
         "border border-border/50 hover:border-primary group bg-card rounded-lg"
       )}>
         <CardHeader className="p-0">
@@ -83,12 +83,12 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
           <Button 
             onClick={() => { onViewDetails(project); handleClickEffect(); }} 
             variant="outline"
-            className="w-full sm:w-auto hover:bg-accent hover:text-accent-foreground hover:border-accent button-m-glow transition-m-blip"
+            className="w-full sm:w-auto hover:bg-accent hover:text-accent-foreground hover:border-accent button-m-glow transition-m-throttle" // Changed to transition-m-throttle
           >
             <Eye className="mr-2 h-4 w-4" /> View Specs
           </Button>
           {project.projectUrl && project.projectUrl !== '#' && (
-            <Button asChild className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-primary-foreground button-m-glow transition-m-blip" onClick={handleClickEffect}>
+            <Button asChild className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-primary-foreground button-m-glow transition-m-throttle" onClick={handleClickEffect}> {/* Changed to transition-m-throttle */}
               <Link href={project.projectUrl} target="_blank" rel="noopener noreferrer">
                 <Zap className="mr-2 h-4 w-4 group-hover:animate-ping" /> LAUNCH
               </Link>
@@ -99,3 +99,4 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
     </motion.div>
   );
 }
+

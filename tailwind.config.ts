@@ -81,7 +81,7 @@ export default {
         'i-blue-fog': 'hsl(var(--i-blue-fog-hsl))',
         'hyper-violet': 'hsl(var(--hyper-violet-hsl))',
         'voltage-gold': 'hsl(var(--voltage-gold-hsl))',
-        'uv-blue': 'hsl(var(--uv-blue))',
+        'uv-blue': 'hsl(var(--uv-blue))', // Added UV Blue
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -117,7 +117,10 @@ export default {
           '0%, 100%': { opacity: '0.05', transform: 'scale(0.8) translate(var(--tx-start, -10px), var(--ty-start, -10px));' },
           '50%': { opacity: '0.15', transform: 'scale(1) translate(var(--tx-end, 10px), var(--ty-end, 10px));' },
         },
-        'spin': { // Standard spin keyframe
+        'spin': { 
+          'to': { transform: 'rotate(360deg)' },
+        },
+        'spin-slow': { // Defined spin-slow
           'to': { transform: 'rotate(360deg)' },
         },
         'gantryPulse': {
@@ -206,7 +209,7 @@ export default {
           '0%, 100%': { filter: 'saturate(1) brightness(1)' },
           '50%': { filter: 'saturate(1.4) brightness(1.3)' },
         },
-        'm-rpm-redline-led-pulse': {
+        'm-rpm-redline-led-pulse': { // Renamed from m-rpm-redline-pulse for clarity
           '0%': {
             filter: 'brightness(1.5) saturate(1.5)',
             boxShadow: 'inset 0 0 4px hsla(var(--primary),0.6), 0 0 10px hsla(var(--primary),0.8), 0 0 20px hsla(var(--primary),0.6), 0 0 0 1.5px hsl(var(--primary), 0.7)',
@@ -249,7 +252,7 @@ export default {
         'carbon-weave-shift': 'carbonWeaveShift 8s linear infinite',
         'pulse-led': 'pulseLed 10s infinite ease-in-out',
         'animate-camera-flash': 'cameraShutterFlash 0.25s ease-in-out',
-        'm-rpm-led-pulse': 'm-rpm-redline-led-pulse 0.25s ease-out forwards',
+        'm-rpm-led-pulse': 'm-rpm-redline-led-pulse 0.25s ease-out forwards', // Renamed
   		},
       transitionTimingFunction: {
         'm-throttle': 'var(--ease-m-throttle)', // Renamed from m-blip for clarity
