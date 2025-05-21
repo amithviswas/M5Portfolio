@@ -1,15 +1,16 @@
 
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react'; // Added useRef
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIntroContext } from '@/contexts/IntroContext';
 import { cn } from '@/lib/utils';
 
 // GlitchText sub-component
 const GlitchText = ({ text, resolved, className }: { text: string, resolved: boolean, className?: string }) => {
-  const [displayText, setDisplayText] = useState(resolved ? text : text.replace(/./g, '\u00A0'));
-  const [isMounted, setIsMounted] = useState(false); // Added to ensure client-side only rendering of dynamic text
+  const [displayText, setDisplayText] = useState(text.replace(/./g, '\u00A0')); // Start with placeholders
+  const [isMounted, setIsMounted] = useState(false);
+  const animationFrameIdRef = useRef<number | undefined>(); // Use useRef for animationFrameId
   const chars = "!<>-_\\/[]{}—=+*^?#_M5";
 
   useEffect(() => {
@@ -17,17 +18,21 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
   }, []);
 
   useEffect(() => {
-    if (!isMounted || resolved) {
-      // If not mounted or already resolved, set to final text or placeholder
+    if (!isMounted) {
+      // If not mounted, display placeholders or resolved text
       setDisplayText(resolved ? text : text.replace(/./g, '\u00A0'));
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = undefined;
+      return;
+    }
+
+    if (resolved) {
+      setDisplayText(text);
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current);
+        animationFrameIdRef.current = undefined;
       }
       return;
     }
 
-    let animationFrameId: number | undefined;
     const updateText = () => {
       setDisplayText(
         text
@@ -35,27 +40,22 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
           .map(() => chars[Math.floor(Math.random() * chars.length)])
           .join('')
       );
-      animationFrameId = requestAnimationFrame(updateText);
+      animationFrameIdRef.current = requestAnimationFrame(updateText);
     };
 
-    if (isMounted && !resolved) {
+    // Start animation only if not resolved and mounted
+    if (!resolved && isMounted) {
       updateText();
     }
 
+    // Cleanup function
     return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current);
+        animationFrameIdRef.current = undefined;
       }
     };
-  }, [resolved, text, isMounted, chars]); // Added isMounted and chars to dependency array
-
-  if (!isMounted && !resolved) {
-    return <span className={cn("font-heading tracking-wider", className)}>{text.replace(/./g, '\u00A0')}</span>;
-  }
-   if (!isMounted && resolved) {
-    return <span className={cn("font-heading tracking-wider", className)}>{text}</span>;
-  }
-
+  }, [resolved, text, isMounted, chars]); // Rerun effect if these change
 
   return (
     <span className={cn("font-heading tracking-wider", className)}>
@@ -71,7 +71,11 @@ export default function IntroAnimation() {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setHasMounted(true); // Set hasMounted to true on component mount
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasMounted) return; // Don't run timers if not mounted
 
     const timers: NodeJS.Timeout[] = [];
 
@@ -81,37 +85,21 @@ export default function IntroAnimation() {
     timers.push(setTimeout(() => setStep(3), 4300));
     timers.push(setTimeout(() => setStep(4), 5500));
     timers.push(setTimeout(() => {
-      if (hasMounted) { // Ensure introCompleted is only set client-side after mount
-        setIntroCompleted(true);
-      }
+      setIntroCompleted(true);
     }, 6000));
 
     return () => timers.forEach(clearTimeout);
-  }, [setIntroCompleted, hasMounted]); // Added hasMounted to dependencies
+  }, [setIntroCompleted, hasMounted]);
 
-  // Only render the animation if the component has mounted and the intro is not yet on its fade-out step
-  if (!hasMounted || step >= 4 && !useIntroContext().introCompleted) {
-    // Keep rendering a transparent div during fade-out if intro isn't fully complete yet
-    // This avoids a premature unmount that might cause issues with AnimatePresence
-    if (step === 4 && !useIntroContext().introCompleted) {
-      return (
-        <motion.div
-          key="intro-screen-fading"
-          className="fixed inset-0 z-[100] bg-black"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 0 }} // This animate will be controlled by the parent AnimatePresence exit
-          transition={{ duration: 0.4, ease: [0.42, 0, 0.58, 1] }}
-        />
-      );
-    }
-    return null; // Return null if not mounted or if beyond step 4 and intro IS completed
+  // Only render the animation if the component has mounted
+  if (!hasMounted) {
+    return null;
   }
 
   const nameResolved = step >= 2;
 
   return (
-    <>
-      {/* Conditional rendering based on step ensures this motion.div is present during active intro steps */}
+    <AnimatePresence>
       {step < 4 && (
         <motion.div
           key="intro-screen"
@@ -121,10 +109,10 @@ export default function IntroAnimation() {
         >
           {/* Background Image */}
           <motion.img
-            src="https://i.ibb.co/DHPKdq3n/generated-image-1.png" // Reverted to this URL
+            src="https://i.ibb.co/DHPKdq3n/generated-image-1.png"
             alt="Aggressive BMW M5 backdrop"
-            data-ai-hint="BMW M5 night" // Kept the hint
-            className="absolute inset-0 w-full h-full object-cover z-[-2]"
+            data-ai-hint="BMW M5 night"
+            className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
             initial={{ scale: 1.05 }}
             animate={{ scale: 1, transition: { duration: 6.0, ease: "easeInOut" } }}
           />
@@ -170,8 +158,7 @@ export default function IntroAnimation() {
               </motion.div>
 
               {/* Screen flash / pulse - Render only on client after mount */}
-              <AnimatePresence>
-                {step === 3 && hasMounted && ( // also ensure hasMounted for this
+              {step === 3 && ( 
                   <motion.div
                     key="final-pulse"
                     className="absolute inset-0"
@@ -187,12 +174,11 @@ export default function IntroAnimation() {
                     }}
                     exit={{opacity: 0}}
                   />
-                )}
-              </AnimatePresence>
+              )}
             </motion.div>
           )}
         </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 }
