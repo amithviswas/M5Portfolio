@@ -23,14 +23,14 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col p-0 bg-card border-border shadow-2xl rounded-lg overflow-hidden">
-        {/* Image container with fixed height to make image smaller */}
+        {/* Image container with fixed height */}
         <div className="relative w-full h-48 md:h-56 flex-shrink-0 overflow-hidden">
           <Image
             src={project.imageUrl}
             alt={project.title}
             fill
             style={{ objectFit: "cover" }}
-            className="rounded-t-lg"
+            className="rounded-t-lg" // Image itself might not need rounded-t-lg if container clips
             data-ai-hint={project.dataAiHint || "project showcase"}
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 33vw"
           />
@@ -46,7 +46,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
         </div>
 
         {/* Scrollable area for project details */}
-        <ScrollArea className="flex-grow min-h-0">
+        <ScrollArea className="flex-grow min-h-0"> {/* Crucial for flex child to scroll */}
           <div className="p-6 md:p-8 space-y-6">
             <DialogHeader className="text-left">
               <DialogTitle className="text-2xl md:text-3xl font-bold text-primary font-heading">{project.title}</DialogTitle>
