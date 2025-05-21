@@ -9,7 +9,9 @@ import { useIntroContext } from '@/contexts/IntroContext';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-const easeOutExpo = [0.16, 1, 0.3, 1];
+// Easing curve for "throttle blip" or snappy M-Series transitions
+const easeOutExpo = [0.16, 1, 0.3, 1]; // Standard easeOutExpo
+const easeMThrottle = [0.36,1.08,0.33,1]; // Custom "throttle blip"
 
 const heroTextAnimation = (delay = 0, duration = 0.7) => ({
   initial: { opacity: 0, y: 20, filter: 'blur(3px)' },
@@ -17,7 +19,7 @@ const heroTextAnimation = (delay = 0, duration = 0.7) => ({
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    transition: { duration, ease: [0.36,1.08,0.33,1] as any, delay } // Using 'm-throttle' as array
+    transition: { duration, ease: easeMThrottle as any, delay }
   }
 });
 
@@ -36,7 +38,6 @@ export default function HeroSection() {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const { scrollY } = useScroll();
 
-  // Hero content scroll animations - using Framer Motion's scroll-linked animations
   const headlineOpacity = useTransform(scrollY, [0, 100], [1, 0.5]);
   const taglineOpacity = useTransform(scrollY, [50, 150], [1, 0.3]);
 
@@ -53,7 +54,7 @@ export default function HeroSection() {
 
   useEffect(() => {
     if (introCompleted) {
-      const timer = setTimeout(() => setIsTaglineUnderlineVisible(true), 800); // Delay for tagline underline
+      const timer = setTimeout(() => setIsTaglineUnderlineVisible(true), 800); 
       return () => clearTimeout(timer);
     }
   }, [introCompleted]);
@@ -65,7 +66,7 @@ export default function HeroSection() {
       const heroSectionElement = document.getElementById('home'); 
       const heroSectionHeight = heroSectionElement?.offsetHeight || viewportHeight;
 
-      const scrollThreshold = viewportHeight * 0.15;
+      const scrollThreshold = viewportHeight * 0.15; 
       const newIsScrolledPast = currentScrollY > scrollThreshold;
       if (newIsScrolledPast !== isScrolledPastHeroThreshold) {
         setIsScrolledPastHeroThreshold(newIsScrolledPast);
@@ -100,25 +101,39 @@ export default function HeroSection() {
 
 
   const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
+    initial: { opacity: 0 },
+    animate: {
       opacity: 1,
       transition: { staggerChildren: 0.15, delayChildren: introCompleted ? 0.2 : 0.2 }
     },
   };
 
-  // Staggered animation timings for "Empire Edition"
   const itemVariants = {
-    medallion: heroTextAnimation(introCompleted ? 0.2 : 0.2, 0.7), // delay, duration
-    headline: heroTextAnimation(introCompleted ? 0.4 : 0.4, 0.7),
-    tagline: heroTextAnimation(introCompleted ? 0.55 : 0.55, 0.7),
-    paragraph: heroTextAnimation(introCompleted ? 0.8 : 0.8, 0.6),
-    button: heroTextAnimation(introCompleted ? 1.0 : 1.0, 0.5),
+    medallion: {
+      initial: { opacity: 0, scale: 0.5, y: 20 },
+      animate: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5, ease: easeMThrottle, delay: introCompleted ? 0.2 : 0.2 } }
+    },
+    headline: {
+      initial: { opacity: 0, y: 20, filter: 'blur(4px)' },
+      animate: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: easeMThrottle, delay: introCompleted ? 0.4 : 0.4 } }
+    },
+    tagline: {
+      initial: { opacity: 0, y: 15, filter: 'blur(3px)' },
+      animate: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: easeMThrottle, delay: introCompleted ? 0.55 : 0.55 } }
+    },
+    paragraph: {
+      initial: { opacity: 0, y: 10 },
+      animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOutExpo, delay: introCompleted ? 0.8 : 0.8 } }
+    },
+    button: {
+      initial: { opacity: 0, y: 10, scale: 0.8 },
+      animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: easeMThrottle, delay: introCompleted ? 1.0 : 1.0 } }
+    },
   };
   
   const getTachometerBarGradient = (percentage: number) => {
-    if (percentage <= 33) return 'linear-gradient(to right, hsl(var(--empire-i-blue-fog-start-hsl)), hsl(var(--empire-royal-blue-hsl)))';
-    if (percentage <= 66) return 'linear-gradient(to right, hsl(var(--empire-royal-blue-hsl)), hsl(var(--empire-crimson-hsl)))';
+    if (percentage <= 40) return 'linear-gradient(to right, hsl(var(--empire-i-blue-fog-start-hsl)), hsl(var(--empire-royal-blue-hsl)))';
+    if (percentage <= 80) return 'linear-gradient(to right, hsl(var(--empire-royal-blue-hsl)), hsl(var(--empire-crimson-hsl)))';
     return 'linear-gradient(to right, hsl(var(--empire-crimson-hsl)), hsl(var(--empire-gold-hsl)))';
   };
 
@@ -128,17 +143,16 @@ export default function HeroSection() {
       animate={heroControls}
       id="home"
       className={cn(
-        "relative hero-empire-bg", // Empire Edition background
-        "min-h-[calc(100vh)] !py-0 overflow-hidden" // Ensure full viewport height
+        "relative hero-empire-bg", 
+        "min-h-[calc(100vh)] !py-0 overflow-hidden" 
       )}
       fullHeight={false} 
       noPadding 
     >
-      <div className="hero-headlight-sweep-bg" /> {/* M5 Apex Finish Headlight Sweep */}
+      <div className="hero-headlight-sweep-bg" /> 
       
       {!prefersReducedMotion && (
         <>
-           {/* Parallax Streaks from Empire */}
           <motion.div
             className="absolute -top-1/4 -left-1/4 w-[150vw] h-[150vh] opacity-[0.04] bg-gradient-radial from-bmw-m-blue/30 via-transparent to-transparent blur-3xl transform rotate-[20deg] pointer-events-none -z-10"
             style={{ y: parallaxStreaks.streak1Y, willChange: 'transform' }}
@@ -149,16 +163,14 @@ export default function HeroSection() {
             style={{ y: parallaxStreaks.streak2Y, willChange: 'transform' }}
             animate={{ x: ['5%', '-5%', '5%'], transition: { duration: 22, repeat: Infinity, repeatType: "mirror", ease: "linear" } }}
           />
-          {/* Halo Glows from Empire */}
           <div className="halo-glow" style={{ width: '400px', height: '400px', top: '10%', left: '20%', background: 'radial-gradient(circle, hsla(var(--empire-i-blue-fog-start-hsl),0.15) 0%, transparent 70%)', animationDelay: '0s' }} />
           <div className="halo-glow" style={{ width: '500px', height: '500px', top: '50%', left: '60%', background: 'radial-gradient(circle, hsla(var(--primary),0.08) 0%, transparent 70%)', animationDelay: '3s' }} />
-          <div className="hero-bloom-extra" /> {/* Extra bloom from Empire */}
+          <div className="hero-bloom-extra" />
 
-          {/* Nano Particles & Lens Flare from Nightfall */}
           <div className="nano-particle-shimmer" aria-hidden="true">
             {Array.from({ length: 15 }).map((_, i) => (
               <motion.div
-                key={i}
+                key={`nano-${i}`}
                 className="nano-particle"
                 style={{
                   left: `${Math.random() * 100}%`,
@@ -176,7 +188,6 @@ export default function HeroSection() {
           <div className="vertical-lens-flare" style={{ left: '10%', animationDelay: '0s', '--flare-y-offset': -10 } as React.CSSProperties} />
           <div className="vertical-lens-flare" style={{ left: '85%', animationDelay: '5s', '--flare-y-offset': 10 } as React.CSSProperties} />
 
-           {/* Gantry Lights from Empire Edition */}
            <motion.div
             className="hero-gantry-light top-0"
             initial={{ scaleX:0, opacity:0}}
@@ -195,21 +206,21 @@ export default function HeroSection() {
 
       <motion.div
         variants={containerVariants}
-        initial="initial"
+        initial="initial" // Changed from "hidden" to match variants definition
         animate={introCompleted ? "animate" : "initial"}
         className="relative z-10 flex flex-col items-center justify-center text-center h-full px-4 py-16 md:py-20 lg:py-24"
       >
         <motion.div
           variants={itemVariants.medallion}
           className={cn(
-            "mb-6 group hero-medallion-empire", // Empire styling for medallion
-            isHeadlineHovered && !prefersReducedMotion && "animate-camera-shutter-flash" // Animate from globals
+            "mb-6 group hero-medallion-empire", 
+            isHeadlineHovered && !prefersReducedMotion && "animate-cameraShutterFlash" 
           )}
           onMouseEnter={() => setIsHeadlineHovered(true)}
           onMouseLeave={() => setIsHeadlineHovered(false)}
         >
-          <div className="hero-medallion-nightfall-inner"> {/* Nightfall inner glow */}
-            <div className="spec-highlight-arc" /> {/* Empire spec highlight */}
+          <div className="hero-medallion-nightfall-inner"> 
+            <div className="spec-highlight-arc" /> 
             <Image
               src="https://i.ibb.co/cKgh0560/1701fc1e-7948-4d92-b440-ffb24258652b.png"
               alt="Amith Viswas Reddy"
@@ -226,9 +237,9 @@ export default function HeroSection() {
           ref={headlineRef}
           variants={itemVariants.headline}
           className={cn(
-            "text-5xl sm:text-6xl md:text-7xl text-primary-foreground hero-headline-empire hero-text-lift relative font-fraunces", // Fraunces for main headline
-            headlineBeamFrozen && !prefersReducedMotion && "beam-frozen", // For future beam effect
-            isHeadlineHovered && !prefersReducedMotion && "animate-camera-shutter-flash"
+            "text-5xl sm:text-6xl md:text-7xl text-primary-foreground hero-headline-empire relative font-fraunces", 
+            headlineBeamFrozen && !prefersReducedMotion && "beam-frozen", 
+            isHeadlineHovered && !prefersReducedMotion && "animate-cameraShutterFlash"
           )}
           style={{ opacity: headlineOpacity }}
           onMouseEnter={() => setIsHeadlineHovered(true)}
@@ -240,17 +251,17 @@ export default function HeroSection() {
         <motion.h2
           variants={itemVariants.tagline}
           className={cn(
-            "hero-tagline-empire text-xl md:text-2xl mt-2 md:mt-3 font-semibold uppercase tracking-wider md:tracking-widest hero-text-lift font-inter", // Inter for tagline
+            "hero-tagline-empire text-xl md:text-2xl mt-2 md:mt-3 font-semibold uppercase tracking-wider md:tracking-widest font-inter", 
             isTaglineUnderlineVisible && "underline-visible"
           )}
           style={{ opacity: taglineOpacity }}
         >
-          Designed for the Fast Lane.
+          DESIGNED FOR THE FAST LANE.
         </motion.h2>
 
         <motion.p
           variants={itemVariants.paragraph}
-          className="mt-6 md:mt-8 max-w-xl mx-auto text-base text-foreground/80 sm:text-lg hero-text-lift"
+          className="mt-6 md:mt-8 max-w-xl mx-auto text-base text-foreground/80 sm:text-lg font-inter"
         >
           Welcome to my digital space. I transform ideas into powerful, elegant, and user-centric web experiences. Explore my work and let&apos;s build something amazing together.
         </motion.p>
@@ -271,7 +282,6 @@ export default function HeroSection() {
         </motion.div>
       </motion.div>
 
-      {/* HUD Tachometer from Empire Edition */}
       {!prefersReducedMotion && introCompleted && (
         <motion.div
           className="hero-empire-tachometer"
@@ -294,5 +304,3 @@ export default function HeroSection() {
     </Section>
   );
 }
-
-    
