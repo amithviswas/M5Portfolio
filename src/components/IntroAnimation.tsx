@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIntroContext } from '@/contexts/IntroContext';
+import { cn } from '@/lib/utils';
 
 // GlitchText sub-component
 const GlitchText = ({ text, resolved, className }: { text: string, resolved: boolean, className?: string }) => {
@@ -12,11 +13,11 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
   const chars = "!<>-_\\/[]{}—=+*^?#_M5";
 
   useEffect(() => {
-    setIsMounted(true); // Component has mounted on client
+    setIsMounted(true);
   }, []);
 
   useEffect(() => {
-    if (!isMounted) { // If not mounted, keep it static
+    if (!isMounted) {
       setDisplayText(resolved ? text : text.replace(/./g, '\u00A0'));
       return;
     }
@@ -39,7 +40,10 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
       }
       setDisplayText(text);
     } else {
-      updateText(); // Start the animation only if not resolved
+      // Start the animation only if not resolved and mounted
+      if (isMounted) {
+        updateText();
+      }
     }
     
     return () => {
@@ -47,11 +51,15 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [resolved, text, isMounted, chars]); // Rerun effect if these change
+  }, [resolved, text, isMounted, chars]);
 
-  if (!isMounted) {
-    return <span className={`font-heading tracking-wider ${className}`}>{resolved ? text : text.replace(/./g, '\u00A0')}</span>;
+  if (!isMounted && !resolved) {
+    return <span className={`font-heading tracking-wider ${className}`}>{text.replace(/./g, '\u00A0')}</span>;
   }
+   if (!isMounted && resolved) {
+    return <span className={`font-heading tracking-wider ${className}`}>{text}</span>;
+  }
+
 
   return (
     <span className={`font-heading tracking-wider ${className}`}>
@@ -67,39 +75,42 @@ export default function IntroAnimation() {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setHasMounted(true); // Set mounted state on client
+    setHasMounted(true);
 
     const timers: NodeJS.Timeout[] = [];
 
+    // Timings for a 6-second intro
     timers.push(setTimeout(() => setStep(1), 100));      // Start glitch
     timers.push(setTimeout(() => setStep(2), 3800));     // Resolve name
     timers.push(setTimeout(() => setStep(3), 4300));     // Final visual pulse
     timers.push(setTimeout(() => setStep(4), 5500));     // Fade out intro screen
-    timers.push(setTimeout(() => setIntroCompleted(true), 6000)); // Intro complete (6 seconds total)
+    timers.push(setTimeout(() => setIntroCompleted(true), 6000)); // Intro complete
 
     return () => timers.forEach(clearTimeout);
   }, [setIntroCompleted]);
 
   const nameResolved = step >= 2;
 
+  // Render nothing on the server or initial client render if not mounted
   if (!hasMounted) {
-    return null; // Render nothing on the server or initial client render
+    return null;
   }
 
   return (
-    <AnimatePresence>
+    <>
       {step < 4 && (
         <motion.div
           key="intro-screen"
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black overflow-hidden"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.4 } }}
+          exit={{ opacity: 0, transition: { duration: 0.4, ease: [0.42, 0, 0.58, 1] } }} // Match page transition ease
         >
           {/* Background Image */}
           <motion.img
-            src="https://i.ibb.co/DHPKdq3n/generated-image-1.png"
+            src="https://placehold.co/1920x1080.png" // New placeholder
             alt="Aggressive BMW M5 backdrop"
-            className="absolute inset-0 w-full h-full object-cover z-[-2]"
+            data-ai-hint="BMW M5 night" // New AI Hint
+            className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
             initial={{ scale: 1.05 }}
             animate={{ scale: 1, transition: { duration: 6.0, ease: "easeInOut" } }}
           />
@@ -108,7 +119,6 @@ export default function IntroAnimation() {
           <div className="absolute inset-0 w-full h-full bg-black opacity-40 z-[-1]"></div>
 
           {/* Subtle headlight beam hint - Render only on client after mount */}
-          {/* This inner hasMounted check is technically redundant now but harmless */}
           {hasMounted && ( 
             <>
               <motion.div
@@ -126,14 +136,14 @@ export default function IntroAnimation() {
             </>
           )}
 
-          {/* This inner hasMounted check is technically redundant now but harmless */}
+          {/* Text content block, also client-side mounted to avoid hydration issues */}
           {hasMounted && (
             <motion.div
               className="relative flex flex-col items-center justify-center"
               animate={ step === 2 ? { scale: [1, 1.02, 1], transition: { duration: 0.3 } } : {} } 
             >
               <div className="mb-8">
-                 {/* Placeholder for tachometer */}
+                 {/* Placeholder for tachometer or M logo, can be added later */}
               </div>
 
               <motion.div
@@ -169,6 +179,6 @@ export default function IntroAnimation() {
           )}
         </motion.div>
       )}
-    </AnimatePresence>
+    </>
   );
 }
