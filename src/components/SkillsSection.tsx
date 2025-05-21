@@ -7,8 +7,8 @@ import {
 } from 'lucide-react';
 import Section from '@/components/Section'; 
 import { cn } from '@/lib/utils';
-import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Re-added
-import soundService from '@/services/soundService'; // Re-added
+import { useUserInteraction } from '@/contexts/UserInteractionContext';
+import soundService from '@/services/soundService';
 
 const skills = [
   { name: 'AI Model Training', icon: <Zap size={32} />, modeName: 'Turbo Boost', id: 'skill-ai-training' },
@@ -37,7 +37,7 @@ export default function SkillsSection() {
     incrementSkillHover(skillName);
     if (interactionData.isSoundEnabled) {
       soundService.playSound('hoverChime');
-      setTimeout(() => soundService.playSound('electricCrackle'), 100); // Delayed crackle
+      // setTimeout(() => soundService.playSound('electricCrackle'), 100); // Optional delayed sound
     }
   };
   
@@ -104,7 +104,7 @@ export default function SkillsSection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
         {skills.map((skill, index) => {
-          const isRepeatedHover = interactionData.skillHovers[skill.name]?.count >= 3;
+          const isRepeatedHover = interactionData.skillHoverCounts[skill.name]?.count >= 3;
           const isGhostlineSkill = interactionData.isGhostlineFullModeUnlocked;
           return (
             <motion.div
@@ -112,9 +112,9 @@ export default function SkillsSection() {
               className={cn(
                 "skill-card-trail-container", 
                 "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40",
-                "transition-m-throttle card-m-glow",
-                isGhostlineSkill && "animate-skill-jitter", // Jitter if Ghostline active
-                isRepeatedHover && isGhostlineSkill && "erratic-glow" // Erratic glow if Ghostline and repeated hover
+                "transition-m-throttle card-m-glow", // ensures smooth transition on hover
+                isGhostlineSkill && "animate-skill-jitter",
+                isRepeatedHover && isGhostlineSkill && "erratic-glow"
               )}
               custom={index}
               variants={cardVariants}
@@ -126,7 +126,7 @@ export default function SkillsSection() {
             >
               <div className={cn(
                 "skill-card-trail",
-                 isGhostlineSkill && "electric-trail" // More intense trail if Ghostline active
+                 isGhostlineSkill && "electric-trail"
               )}/>
               <motion.div 
                 className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
@@ -157,4 +157,3 @@ export default function SkillsSection() {
   );
 }
 
-    
