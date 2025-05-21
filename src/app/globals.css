@@ -137,7 +137,7 @@
 
   /* @keyframes pulseDot defined in tailwind.config.ts */
 
-  /* "Laser Crest" Navbar Underline (Apex Finish) */
+  /* "Laser Crest" Navbar Underline (Empire Edition - Shimmering Metal Strip) */
   .nav-laser-crest {
     @apply relative text-muted-foreground hover:text-primary-foreground transition-m-throttle;
   }
@@ -148,27 +148,27 @@
     left: 50%;
     bottom: -4px; /* Sits a bit lower */
     width: 0%;
-    height: 3px; /* Thinner, sharper */
-    background: hsl(var(--primary)); /* Default to primary red */
-    border-radius: 1.5px;
+    height: 2px; /* Thin metallic strip */
+    background: linear-gradient(90deg, 
+      hsl(var(--border)), 
+      hsl(var(--foreground)), 
+      hsl(var(--border))
+    ); /* Metallic gradient */
+    background-size: 200% 100%; /* For potential shimmer animation */
+    border-radius: 1px;
     transform: translateX(-50%);
     opacity: 0;
-    transition: width 170ms var(--ease-m-throttle), opacity 170ms var(--ease-m-throttle), background 120ms ease-in-out;
+    transition: width 250ms var(--ease-m-throttle), opacity 250ms var(--ease-m-throttle);
   }
 
-  .nav-laser-crest:hover::after {
-    width: 70%;
-    opacity: 0.6;
-    animation: navCrestFlash 300ms ease-in-out forwards;
+  .nav-laser-crest:hover::after,
+  .nav-laser-crest.active-link::after {
+    width: 100%; /* Full width on hover/active */
+    opacity: 1;
+    /* Consider adding a shimmer animation on background-position if desired */
   }
   
-  .nav-laser-crest.active-link::after {
-    width: 70%; /* Active state width */
-    opacity: 0.4; /* Settled opacity for active link */
-    background: hsl(var(--primary)); /* Ensure active color */
-  }
-
-  /* @keyframes navCrestFlash defined in tailwind.config.ts */
+  /* @keyframes navCrestFlash defined in tailwind.config.ts - no longer needed for this style */
 
   .section-grille-blade {
     @apply absolute w-[3px] bg-gradient-to-b from-neutral-700 to-neutral-500 shadow-md;
@@ -212,7 +212,7 @@
     @apply bg-red-400/90;
   }
 
-  .chrono-gauge-redline .m-chrono-gauge-fill {
+  .chrono-gauge-redline .m-rpm-gauge-fill {
     animation: m-rpm-redline-led-pulse 0.2s ease-in-out forwards;
   }
   
@@ -231,9 +231,9 @@
   
   .hero-medallion-empire::before { /* M-stripe pulse - simplified for CSS */
     content: '';
-    @apply absolute inset-[-2px] rounded-full -z-10;
+    @apply absolute inset-[-3px] rounded-full -z-10; /* Adjusted inset for thicker ring */
     background: transparent; /* Base for animation */
-    animation: empireMedallionPulse 3s infinite linear;
+    animation: empireMedallionPulse 2.5s infinite linear; /* Faster pulse */
   }
 
   /* @keyframes empireMedallionPulse defined in tailwind.config.ts */
@@ -324,8 +324,8 @@
     inset: -3px; 
     border-radius: 9999px;
     z-index: -1;
-    background: conic-gradient( /* This was the complex gradient causing issues */
-/* from 0deg,
+    background: conic-gradient(
+      from 0deg,
       hsla(210, 100%, 50%, 0.7) 0%,
       hsla(270, 100%, 65%, 0.7) 33.33%,
       hsla(0, 100%, 50%, 0.7) 66.67%,
@@ -443,6 +443,9 @@
   /* === SKILL SECTION TRAIL EFFECT END === */
 
   /* === NEURAL DRIFT TIMELINE STYLES START === */
+  .neural-drift-timeline-container {
+    @apply relative w-full py-4;
+  }
   .neural-drift-timeline {
     @apply flex overflow-x-auto py-4 px-2 space-x-8 relative;
     scrollbar-width: thin;
@@ -454,7 +457,7 @@
   }
 
   .timeline-milestone {
-    @apply relative flex-shrink-0 w-64 bg-card/80 p-4 rounded-lg shadow-lg border border-border/50 text-center;
+    @apply relative flex-shrink-0 w-64 bg-card/80 p-4 rounded-lg shadow-lg border border-border/50 text-center transition-transform duration-300 hover:scale-105;
   }
   .timeline-milestone-node { /* Example node style */
     @apply absolute -top-1 left-1/2 w-3 h-3 bg-primary rounded-full -translate-x-1/2 transform border-2 border-background;
@@ -655,7 +658,11 @@
   .hud-console-panel { animation: none !important; }
   .carbon-weave-animated::before { animation: none !important; }
   .footer-diffuser-fin-dot { animation: none !important; opacity: 0.7; }
-  .nav-laser-crest:hover::after { animation: none !important; }
+  .nav-laser-crest:hover::after, .nav-laser-crest.active-link::after { /* Updated to include .active-link */
+    animation: none !important; 
+    width: 100%; 
+    opacity: 1;
+  }
   .hero-headlight-sweep-bg { animation: none !important; transform: translateX(0) rotate(-15deg) !important; }
   .chrono-gauge-redline .m-chrono-gauge-fill { animation: none !important; background: hsl(var(--primary)) !important; }
   .m-rpm-tick-active { transform: scaleY(1); }
@@ -668,7 +675,7 @@
   .nano-particle { animation: none; }
   .skill-card-trail-container:hover .skill-card-trail { animation: none; opacity: 0.5; }
   .rare-section-pulse-active { animation: none; }
-  .hyperactive-scroll-feedback { animation: none; }
+  .hyper-scroll-visual-feedback { animation: none; }
   .skill-card-ghostline-active { animation: none; }
   .animate-skill-jitter { animation: none; }
   .erratic-glow { animation: none; }
@@ -683,3 +690,5 @@
   flex-direction: column;
   overflow: hidden;
 }
+
+    
