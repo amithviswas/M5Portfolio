@@ -90,6 +90,19 @@ export default function IntroAnimation() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.5 } }}
         >
+          {/* Background Image */}
+ <motion.img
+ src="https://i.ibb.co/DHPKdq3n/generated-image-1.png"
+ alt="Aggressive BMW M5 backdrop"
+ className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
+ initial={{ scale: 1.05 }}
+ animate={{ scale: 1, transition: { duration: 2, ease: "easeInOut" } }}
+ />
+
+ {/* Dark Overlay */}
+ <div className="absolute inset-0 w-full h-full bg-black opacity-40 z-[-1]"></div> {/* Ensure overlay is behind text */}
+
+
           {/* Subtle headlight beam hint */}
            <motion.div
             className="absolute top-1/2 left-0 w-1/2 h-64 bg-gradient-to-r from-white/5 to-transparent opacity-50 blur-3xl transform -translate-y-1/2"
