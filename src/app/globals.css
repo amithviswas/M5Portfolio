@@ -66,12 +66,19 @@
     --ease-acceleration-curve-in: cubic-bezier(0.6, 0.04, 0.98, 0.335); /* For page transitions */
     --ease-acceleration-curve-out: cubic-bezier(0.19, 1, 0.22, 1);  /* For page transitions */
 
-    --medallion-nightfall-gradient: conic-gradient(
+     /* --medallion-nightfall-gradient: conic-gradient(
       from 0deg,
       hsla(210, 100%, 50%, 0.7) 0deg,
       hsla(270, 100%, 65%, 0.7) 120deg,
       hsla(0, 100%, 50%, 0.7) 240deg,
       hsla(210, 100%, 50%, 0.7) 360deg
+    ); */
+    --medallion-nightfall-gradient: conic-gradient(
+      from 0deg,
+      hsla(210, 100%, 50%, 0.7) 0%, /* 0deg */
+      hsla(270, 100%, 65%, 0.7) 33.33%, /* 120deg */
+      hsla(0, 100%, 50%, 0.7) 66.67%, /* 240deg */
+      hsla(210, 100%, 50%, 0.7) 100% /* 360deg */
     );
   }
 
@@ -155,11 +162,10 @@
   overflow: hidden;
 }
 
-/* === M5 Kidney-Grille Blade Style Navbar Underline === */
-/* Renamed from .nav-grille-underline to .nav-laser-crest for "Apex Finish" theme */
+
 .nav-laser-crest {
   position: relative;
-  padding-bottom: 8px; /* Increased space for the V-crest */
+  padding-bottom: 8px; /* Increased padding for the V-crest */
   @apply text-muted-foreground hover:text-primary-foreground transition-m-throttle;
 }
 
@@ -167,44 +173,39 @@
   content: '';
   position: absolute;
   left: 50%;
-  bottom: 0px; /* Sits below text baseline */
-  height: 0px; /* Starts at 0 height, grows to 6px */
-  width: 0%; /* Starts at 0 width, grows */
-  background: linear-gradient(to right, hsl(var(--m-light-blue-hsl)), hsl(var(--m-violet-hsl)));
-  clip-path: polygon(0% 100%, 50% 0%, 100% 100%, 90% 100%, 50% 20%, 10% 100%); /* V-crest shape */
-  box-shadow: 0 0 8px 0px hsla(var(--uv-blue)/0.6); /* Icy blue initial glow */
+  bottom: 0px; /* Adjusted bottom position */
+  height: 2px; /* Thinner, more precise line */
+  width: 0%;
+  background: hsl(var(--primary));
+  border-radius: 1px; /* Slightly rounded ends */
+  box-shadow: 0 0 6px 0px hsla(var(--primary)/0.5);
   transform: translateX(-50%);
   transform-origin: center;
-  transition: width 120ms var(--ease-m-throttle),
-              height 120ms var(--ease-m-throttle),
-              opacity 120ms var(--ease-m-throttle),
-              filter 120ms var(--ease-m-throttle),
-              background 120ms var(--ease-m-throttle);
-  will-change: width, height, opacity, filter, background;
+  transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Changed ease */
+  will-change: width, opacity;
   opacity: 0;
 }
 
 .nav-laser-crest:hover::after,
 .nav-laser-crest.active-link::after {
-  width: 100%; /* Full width of link */
-  height: 6px; /* Full height of crest */
+  width: 100%; /* Covers most of the link text */
   opacity: 1;
 }
 
 .nav-laser-crest.active-link::after {
-   opacity: 0.4; /* Settled opacity for active link */
-   background: linear-gradient(to right, hsl(var(--m-light-blue-hsl)/0.6), hsl(var(--m-violet-hsl)/0.6));
-   filter: drop-shadow(0 0 6px hsla(var(--uv-blue)/0.4));
+   opacity: 1; /* More prominent for active link */
+   background: hsl(var(--primary)); /* Primary color */
+   filter: drop-shadow(0 0 8px hsla(var(--primary)/0.6));
 }
 
 .nav-laser-crest:hover::after {
-   background: linear-gradient(to right, hsl(var(--m-light-blue-hsl)), hsl(var(--m-violet-hsl))); /* Full flash colors */
-   filter: brightness(1.3) drop-shadow(0 0 10px hsla(var(--uv-blue)/0.8)); /* Brighter glow on hover */
+   background: hsl(var(--primary)); /* Primary color */
+   filter: brightness(1.3) drop-shadow(0 0 10px hsla(var(--primary)/0.8));
 }
 
 .nav-laser-crest.active-link {
-  @apply text-primary; /* Or text-uv-blue if preferred for active link */
-  text-shadow: 0 0 5px hsl(var(--primary)/0.5); /* Or --uv-blue for active glow */
+  @apply text-primary; /* Primary color for active link text */
+  text-shadow: 0 0 5px hsl(var(--primary)/0.5);
 }
 
 
@@ -236,14 +237,21 @@
   border: 1px solid hsl(var(--border) / 0.3);
 }
 
-/* Conic gradient for M-stripe halo - using CSS variable */
 .hero-medallion-nightfall-inner::before {
   content: "";
   position: absolute;
   inset: -2px;
   border-radius: 9999px;
   z-index: 0;
-  background: var(--medallion-nightfall-gradient); /* Using the CSS variable */
+  /* Problematic conic-gradient temporarily commented out to pass build */
+  /* background: var(--medallion-nightfall-gradient); */
+  background: conic-gradient(
+    from 0deg,
+    hsla(210, 100%, 50%, 0.7) 0%, /* M-Light Blue direct, 0deg */
+    hsla(270, 100%, 65%, 0.7) 33.33%, /* M-Violet direct, 120deg as % */
+    hsla(0, 100%, 50%, 0.7) 66.67%, /* M-Red direct, 240deg as % */
+    hsla(210, 100%, 50%, 0.7) 100% /* M-Light Blue direct, 360deg as % */
+  );
   background-size: 100%;
   animation: mStripeConicPulse 3s linear infinite paused;
   filter: blur(1px);
@@ -258,7 +266,7 @@
   box-shadow: 0 0 35px 5px hsla(var(--uv-blue), 0.4),
               0 0 15px 2px hsla(var(--foreground), 0.1) inset; /* Molten glass feel */
 }
-/* Click/Focus effect for ring expansion - needs JS to add class or direct style preferred */
+
 .hero-medallion-nightfall.medallion-active .hero-medallion-nightfall-inner::before {
   transform: scale(1.1);
   opacity: 0.5;
@@ -1102,4 +1110,4 @@
   }
 }
 
-```
+    
