@@ -9,7 +9,6 @@ import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-// import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Temporarily removed for rollback
 
 const navLinks = [
   { name: 'Home', href: '/#home', id: 'home' },
@@ -27,32 +26,31 @@ export default function Navbar() {
   const pathname = usePathname();
   const [activeLink, setActiveLink] = useState('');
   const [isMounted, setIsMounted] = useState(false);
-  // const { incrementSectionVisit } = useUserInteraction(); // Temporarily removed
-  const navLinkRefs = useRef<(HTMLAnchorElement | null)[]>([]); // For underline drift
-
-  // Placeholder for incrementSectionVisit if UserInteractionContext is removed
-  const incrementSectionVisit = useCallback((sectionId: string) => {
-    console.log("Section visited (placeholder):", sectionId);
-  }, []);
-
+  const navLinkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const sectionRefs = useRef<Map<string, HTMLElement | null>>(new Map());
 
   useEffect(() => {
     setIsMounted(true);
+    navLinks.forEach(link => {
+      if (link.id) {
+        sectionRefs.current.set(link.id, document.getElementById(link.id));
+      }
+    });
   }, []);
 
   const setActiveLinkAndTrack = useCallback((href: string, sectionId?: string) => {
     if (activeLink !== href) {
       setActiveLink(href);
-      if (sectionId && pathname === '/') { // Only track visits for homepage sections
-        incrementSectionVisit(sectionId);
-      }
+      // Placeholder for incrementSectionVisit if context were re-added
+      // if (sectionId && pathname === '/') {
+      //   console.log("Section visited (placeholder):", sectionId);
+      // }
     }
-  }, [activeLink, incrementSectionVisit, pathname]);
+  }, [activeLink, pathname]);
 
   useEffect(() => {
     if (!isMounted) return;
-
-    let observer: IntersectionObserver | undefined;
 
     if (pathname === '/') {
       const currentHash = window.location.hash;
@@ -67,19 +65,25 @@ export default function Navbar() {
 
       const observerCallback: IntersectionObserverCallback = (entries) => {
         if (window.scrollY < 100 && !window.location.hash) {
-          setActiveLinkAndTrack('/#home', 'home');
-          return;
+            setActiveLinkAndTrack('/#home', 'home');
+            return;
         }
-        
+
         let highestVisibleSection: IntersectionObserverEntry | null = null;
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            if (!highestVisibleSection || entry.boundingClientRect.top < highestVisibleSection.boundingClientRect.top) {
-              highestVisibleSection = entry;
+            const entryTop = entry.boundingClientRect.top;
+            // Prioritize sections whose top is closer to the top of the viewport (within the -30% margin)
+            if (!highestVisibleSection || entryTop < highestVisibleSection.boundingClientRect.top) {
+                 // Check if it's within the "active" part of the rootMargin
+                const viewportHeight = window.innerHeight;
+                if (entryTop < viewportHeight * 0.7) { // Roughly top 70% consider, adjust as needed
+                    highestVisibleSection = entry;
+                }
             }
           }
         });
-
+        
         if (highestVisibleSection) {
           const activeNav = navLinks.find(link => link.id === highestVisibleSection!.target.id);
           if (activeNav) {
@@ -88,20 +92,25 @@ export default function Navbar() {
         }
       };
       
-      const observerOptions = { root: null, rootMargin: "-30% 0px -45% 0px", threshold: 0.01 };
-      observer = new IntersectionObserver(observerCallback, observerOptions);
+      observerRef.current = new IntersectionObserver(observerCallback, { 
+        rootMargin: "-30% 0px -45% 0px", // Active when section is in the upper-middle of viewport
+        threshold: 0.01 
+      });
 
       navLinks.forEach(link => {
         if (link.href.startsWith('/#')) {
-          const sectionElement = document.getElementById(link.id);
+          const sectionElement = sectionRefs.current.get(link.id);
           if (sectionElement) {
-            observer?.observe(sectionElement);
+            observerRef.current?.observe(sectionElement);
           }
         }
       });
 
-    } else { // For non-homepage routes
+    } else { 
       setActiveLinkAndTrack(pathname);
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
     }
 
     const handleHashChange = () => {
@@ -118,7 +127,7 @@ export default function Navbar() {
     window.addEventListener('hashchange', handleHashChange);
 
     return () => {
-      observer?.disconnect();
+      observerRef.current?.disconnect();
       window.removeEventListener('hashchange', handleHashChange);
     };
   }, [isMounted, pathname, setActiveLinkAndTrack]);
@@ -141,25 +150,19 @@ export default function Navbar() {
         targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
-    // For links to other pages, Next.js Link component handles navigation naturally
   };
   
-  // Handler for navbar underline drift effect
   const handleNavLinkMouseMove = (event: React.MouseEvent<HTMLAnchorElement>, index: number) => {
     const linkElement = navLinkRefs.current[index];
-    if (!linkElement) return;
+    if (!linkElement || !linkElement.classList.contains('nav-rpm-underline')) return;
 
     const rect = linkElement.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
     const percent = mouseX / rect.width;
 
-    // Shift the gradient split point: 0% on far left, 100% on far right
-    // This aims for 60/40 split towards cursor side.
-    // Default is 55/45. So if cursor is on left (percent < 0.5), blue part is wider.
-    // If cursor on right (percent > 0.5), red part is wider (blue part shrinks).
-    let blueStop = 55; // default blue stop
-    if (percent < 0.3) blueStop = 60; // Cursor far left, blue wider
-    else if (percent > 0.7) blueStop = 50; // Cursor far right, blue narrower (red wider)
+    let blueStop = 55; 
+    if (percent < 0.3) blueStop = 60; 
+    else if (percent > 0.7) blueStop = 50; 
     
     linkElement.style.setProperty('--grille-blue-stop-percentage', `${blueStop}%`);
     linkElement.style.setProperty('--grille-red-start-percentage', `${blueStop}%`);
@@ -167,8 +170,8 @@ export default function Navbar() {
 
   const handleNavLinkMouseLeave = (index: number) => {
     const linkElement = navLinkRefs.current[index];
-    if (linkElement) {
-      linkElement.style.setProperty('--grille-blue-stop-percentage', `55%`); // Reset to default
+    if (linkElement && linkElement.classList.contains('nav-rpm-underline')) {
+      linkElement.style.setProperty('--grille-blue-stop-percentage', `55%`); 
       linkElement.style.setProperty('--grille-red-start-percentage', `55%`);
     }
   };
@@ -182,7 +185,7 @@ export default function Navbar() {
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20"> {/* Increased height */}
+        <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center group" onClick={(e) => handleNavLinkClick(e, '/#home', 'home')}>
              <Image
               src="https://i.ibb.co/N2v0V2R8/Amith-Viswas-Reddy.png"
@@ -205,7 +208,7 @@ export default function Navbar() {
                   onMouseMove={(e) => handleNavLinkMouseMove(e, index)}
                   onMouseLeave={() => handleNavLinkMouseLeave(index)}
                   className={cn(
-                    'px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider nav-rpm-underline', // Changed from nav-laser-crest for RPM theme
+                    'px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider nav-rpm-underline', 
                     isActive ? 'active-link nav-rpm-active-glow' : 'text-muted-foreground hover:text-primary-foreground'
                   )}
                   onClick={(e) => handleNavLinkClick(e, link.href, link.id)}
@@ -250,7 +253,7 @@ export default function Navbar() {
                     key={link.name}
                     href={link.href}
                     className={cn(
-                      'block px-3 py-3 rounded-md text-base font-medium uppercase tracking-wider nav-rpm-underline', // Changed from nav-laser-crest
+                      'block px-3 py-3 rounded-md text-base font-medium uppercase tracking-wider nav-rpm-underline',
                       isActive ? 'active-link nav-rpm-active-glow' : 'text-muted-foreground hover:text-primary-foreground hover:bg-card/50'
                     )}
                     onClick={(e) => handleNavLinkClick(e, link.href, link.id)}
@@ -266,3 +269,5 @@ export default function Navbar() {
     </motion.nav>
   );
 }
+
+    

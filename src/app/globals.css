@@ -6,7 +6,7 @@
 @layer base {
   :root {
     /* Aggressive Elegance Palette & M5 Apex Finish Adjustments */
-    --background: 0 0% 6%; /* Deep Matte Black for a more aggressive base */
+    --background: 0 0% 4%; /* Deep Matte Black for a more aggressive base */
     --foreground: 0 0% 98%; /* Sharp White LED-like text */
 
     --card: 0 0% 8%; /* Darker Gunmetal for cards */
@@ -40,7 +40,7 @@
     --bmw-m-blue: 210 100% 55%; 
     --blood-red: 0 100% 55%; 
     --m-violet-hsl: 270 100% 65%;
-    --uv-blue: 220 100% 60%; /* UV Blue for glows, slightly adjusted */
+    --uv-blue: 220 100% 60%; /* UV Blue for glows */
     --m-light-blue-hsl: 210 100% 65%; /* Brighter, icier blue for accents */
     --m-red-hsl: 0 100% 50%; /* Primary Red as M-Red */
     
@@ -59,10 +59,10 @@
     
     --medallion-nightfall-gradient: conic-gradient(
       from 0deg,
-      hsla(210, 100%, 50%, 0.7) 0%,
-      hsla(270, 100%, 65%, 0.7) 33.33%,
-      hsla(0, 100%, 50%, 0.7) 66.67%,
-      hsla(210, 100%, 50%, 0.7) 100%
+      hsla(210, 100%, 50%, 0.7) 0deg,
+      hsla(270, 100%, 65%, 0.7) 120deg,
+      hsla(0, 100%, 50%, 0.7) 240deg,
+      hsla(210, 100%, 50%, 0.7) 360deg
     );
 
 
@@ -79,7 +79,7 @@
 
   :root.dark {
     /* Ensure dark theme variables match the base for consistency */
-    --background: 0 0% 6%;
+    --background: 0 0% 4%;
     --foreground: 0 0% 98%;
     --card: 0 0% 8%;
     --card-foreground: 0 0% 95%;
@@ -99,12 +99,13 @@
     background-image:
       linear-gradient(45deg, hsla(var(--card), 0.02) 25%, transparent 25%, transparent 75%, hsla(var(--card), 0.02) 75%, hsla(var(--card), 0.02)),
       linear-gradient(-45deg, hsla(var(--card), 0.02) 25%, transparent 25%, transparent 75%, hsla(var(--card), 0.02) 75%, hsla(var(--card), 0.02));
-    background-size: 4px 4px; /* Finer carbon pattern */
+    background-size: 3px 3px; /* Finer carbon pattern */
   }
 
   .font-heading {
     font-family: var(--font-rajdhani);
-    @apply font-bold uppercase tracking-wider; /* M-Badging Style */
+    letter-spacing: 0.05em; /* M-Badging Style with aggressive letter spacing */
+    @apply font-bold uppercase tracking-wider;
   }
   .font-serif-display { font-family: var(--font-playfair-display); }
   .font-sans-condensed { font-family: var(--font-space-grotesk); }
@@ -118,41 +119,24 @@
   .card-m-glow {
     @apply shadow-lg transition-m-throttle; 
   }
-  .card-m-glow:hover {
-    @apply shadow-[0_18px_35px_-10px_hsl(var(--primary)/0.85),_0_12px_28px_-14px_hsl(var(--bmw-m-blue)/0.7),_0_0_22px_5px_hsl(var(--primary)/0.45)_inset];
+  .card-m-glow:hover { /* More intense glow for aggressive elegance */
+    @apply shadow-[0_20px_40px_-12px_hsl(var(--primary)/0.9),_0_15px_30px_-15px_hsl(var(--bmw-m-blue)/0.8),_0_0_25px_8px_hsl(var(--primary)/0.5)_inset];
   }
 
   /* === MStartStopButton Specific Hover Ring Enhancement === */
-  /* Defined in MStartStopButton.tsx: .group:hover:before:opacity-100 */
-  /* Target the :before pseudo-element when the .group (button) is hovered */
-  .group:hover .MStartStopButton-before-pseudo { /* Assuming a marker class or direct targeting */
-    box-shadow: 0 0 0 2px hsl(var(--background)),
-                0 0 0 6px hsl(var(--primary)), /* Thicker primary ring */
-                0 0 0 10px hsl(var(--bmw-m-blue)), /* Thicker, more vibrant blue ring */
-                0 0 35px 10px hsl(var(--primary)/0.85); /* Larger, more intense outer glow */
-  }
-  /* If MStartStopButton.tsx applies a class like 'hover:before:custom-shadow' */
-  .MStartStopButton-hover-ring {
-    box-shadow: 0 0 0 2px hsl(var(--background)),
-                0 0 0 6px hsl(var(--primary)), 
-                0 0 0 10px hsl(var(--bmw-m-blue)), 
-                0 0 35px 10px hsl(var(--primary)/0.85);
-  }
-   /* Ensure the ::before is set up for this in MStartStopButton.tsx if not already */
-  .MStartStopButton-base-style::before { /* Example class for the button itself */
+  .MStartStopButton-base-style::before { 
     content: '';
     position: absolute;
-    inset: -2px; /* Or as defined */
-    border-radius: calc(var(--radius) - 2px); /* Or as defined */
+    inset: -2px; 
+    border-radius: calc(var(--radius) - 2px); 
     opacity: 0;
-    transition: opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Ensure smooth transition */
-    background: transparent; /* Should be transparent */
-    pointer-events: none; /* To not interfere with button clicks */
-    z-index: -1; /* If needed to be behind content */
+    transition: opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
+    background: transparent; 
+    pointer-events: none; 
+    z-index: -1; 
   }
   .group:hover .MStartStopButton-base-style::before {
       opacity: 1;
-      /* The shadow is applied here directly or via a specific class like .MStartStopButton-hover-ring */
       box-shadow: 0 0 0 2px hsl(var(--background)),
                   0 0 0 7px hsl(var(--primary)), 
                   0 0 0 12px hsl(var(--bmw-m-blue)), 
@@ -168,7 +152,7 @@
     background-image: 
       linear-gradient(45deg, hsla(var(--card), 0.07) 25%, transparent 25%, transparent 75%, hsla(var(--card), 0.07) 75%, hsla(var(--card), 0.07)),
       linear-gradient(-45deg, hsla(var(--card), 0.07) 25%, transparent 25%, transparent 75%, hsla(var(--card), 0.07) 75%, hsla(var(--card), 0.07));
-    background-size: 10px 10px; /* Slightly larger for weave effect */
+    background-size: 10px 10px; 
     opacity: 0.5;
     z-index: 0; 
     animation: carbonWeaveShift 8s linear infinite;
@@ -179,41 +163,42 @@
     animation: pulseDot 10s infinite ease-in-out;
   }
 
-  /* Laser Crest Navbar Underline */
-  .nav-laser-crest {
+  /* RPM-Inspired Navigation System (Replaces Laser Crest) */
+  .nav-rpm-underline {
     @apply relative text-muted-foreground hover:text-primary-foreground transition-m-throttle;
   }
-  .nav-laser-crest::after {
+  .nav-rpm-underline::after {
     content: '';
-    @apply absolute left-0 h-[2px] bg-primary opacity-0 transition-m-throttle;
-    bottom: -2px; /* Sits 2px below the text */
+    @apply absolute left-0 h-[3px] bg-primary opacity-0 transition-m-throttle;
+    bottom: -4px; /* Sits further below text to look like gauge bar */
     width: 0%;
-    border-radius: 9999px; /* Fully rounded ends for a pill shape */
-    background: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.3), 
-                0 0 8px 2px hsl(var(--bmw-m-blue)/0.7),
-                0 0 8px 2px hsl(var(--primary)/0.7);
+    border-radius: 2px; /* Sharper than pill for gauge feel */
+    box-shadow: 0 0 6px 1px hsl(var(--primary)/0.5); /* Primary color glow */
     transform-origin: center;
     transition: width 170ms var(--ease-m-throttle), 
                 opacity 170ms var(--ease-m-throttle),
-                background 170ms var(--ease-m-throttle),
+                background-color 170ms var(--ease-m-throttle),
                 box-shadow 170ms var(--ease-m-throttle);
   }
-  .nav-laser-crest:hover::after,
-  .nav-laser-crest.active-link::after {
-    width: 100%; 
+  .nav-rpm-underline:hover::after {
+    width: 70%; /* Doesn't go full width, like a segment of RPM */
     opacity: 1;
-    background: linear-gradient(to right, hsl(var(--bmw-m-blue)) var(--grille-blue-stop-percentage, 55%), hsl(var(--primary)) var(--grille-red-start-percentage, 55%));
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.3), 
-                0 0 10px 2px hsl(var(--bmw-m-blue)/0.8),
-                0 0 10px 2px hsl(var(--primary)/0.8);
-    filter: brightness(1.1);
+    background-color: hsl(var(--accent)); /* Changes to M-Blue on hover (shift indicator) */
+    box-shadow: 0 0 10px 2px hsl(var(--accent)/0.7); /* M-Blue glow */
+    animation: navRPMItemPulse 0.4s infinite alternate;
   }
-  .nav-laser-crest.active-link {
-    @apply text-primary; 
-    filter: brightness(1.1);
+  .nav-rpm-underline.active-link::after {
+    width: 70%; 
+    opacity: 1;
+    background-color: hsl(var(--primary)); /* Stays primary red for active */
+    box-shadow: 0 0 12px 3px hsl(var(--primary)/0.8); /* Intense redline glow */
+    animation: navRPMItemPulseActive 0.6s infinite alternate;
   }
-  .nav-laser-crest:hover {
+  .nav-rpm-active-glow { /* Applied to active link text */
+    @apply text-primary;
+    text-shadow: 0 0 8px hsl(var(--primary)/0.7);
+  }
+  .nav-rpm-underline:hover {
     filter: brightness(1.05);
   }
 
@@ -243,7 +228,7 @@
     top: -30%; left: -50%; width: 200vw; height: 200vh;
     background: radial-gradient(ellipse at center, hsla(var(--accent), 0.5) 0%, transparent 50%);
     transform-origin: center center;
-    animation: headlightSweep 18s infinite alternate ease-in-out; /* Added animation */
+    animation: headlightSweep 18s infinite alternate ease-in-out; 
   }
   /* === M5 APEX FINISH STYLES END === */
 
@@ -419,8 +404,8 @@
     display: flex;
     flex-direction: column;
     gap: 3px; 
-    box-shadow: 0 0 25px hsl(var(--uv-blue)/0.2), 0 0 10px hsl(var(--uv-blue)/0.1) inset;
-    transition: box-shadow 0.3s ease-m-throttle;
+    box-shadow: 0 0 25px hsl(var(--uv-blue)/0.4), 0 0 10px hsl(var(--uv-blue)/0.2) inset; /* Adjusted glow */
+    transition: box-shadow 0.3s var(--ease-m-throttle);
   }
   .hud-console-panel.uv-glow { 
     box-shadow: 0 0 40px 8px hsl(var(--uv-blue)/0.75), 0 0 20px 5px hsl(var(--uv-blue)/0.4) inset, 0 0 10px 3px hsl(var(--primary)/0.4);
@@ -461,9 +446,10 @@
   .hud-meter-track {
     @apply h-1.5 w-full bg-neutral-700 rounded-full overflow-hidden my-1;
   }
-  .hud-meter-fill {
+  .hud-meter-fill { /* Used for Engine Temp / System Load */
     @apply h-full rounded-full transition-all duration-300 ease-linear;
     box-shadow: inset 0 0 3px hsl(var(--background)/0.5);
+    /* Gradient will be applied inline or via dynamic class */
   }
   .hud-console-button-container {
     @apply grid grid-cols-2 gap-1.5 pt-1 mt-1 border-t border-neutral-700;
@@ -578,7 +564,7 @@
   }
   .m-rpm-tick-active { opacity: 1; transform: scaleY(1.15); } 
   .chrono-gauge-redline .m-rpm-gauge-fill { 
-    animation: m-rpm-redline-led-pulse 0.15s infinite alternate ease-in-out; 
+    animation: m-rpm-redline-pulse 0.15s infinite alternate ease-in-out; 
   }
   /* === SCROLL MOMENTUM BAR / APEX METER / RPM GAUGE STYLES END === */
 
@@ -626,7 +612,7 @@
     100% { box-shadow: 0 0 5px 0px hsla(210, 100%, 70%, 0.5); }
   }
 
-  @keyframes m-rpm-redline-led-pulse { 
+  @keyframes m-rpm-redline-pulse { 
     0% {
       box-shadow: inset 0 0 5px hsl(var(--background)/0.3), 0 0 20px 7px hsl(var(--primary)/1), 0 0 40px 12px hsl(var(--primary)/0.75);
       filter: brightness(2.0) saturate(2.0);
@@ -646,19 +632,16 @@
     5% { opacity: 1; transform: scale(1.1); }
     10% { opacity: 0.7; transform: scale(1); }
   }
-  @keyframes navCrestFlash {
-    0% { background: hsl(var(--accent)) }
-    50% { background: hsl(var(--m-violet-hsl)) }
-    100% { background: hsl(var(--primary)) }
-  }
+
   @keyframes navRPMItemPulse { 
-    from { transform: translateX(-50%) scaleX(0.7); box-shadow: 0 0 8px hsl(var(--accent)/0.5); }
-    to   { transform: translateX(-50%) scaleX(0.75); box-shadow: 0 0 12px hsl(var(--accent)/0.7); }
+    from { transform: scale(1); opacity: 0.7; }
+    to   { transform: scale(1.05); opacity: 1; }
   }
   @keyframes navRPMItemPulseActive { 
-    from { transform: translateX(-50%) scaleX(0.7); box-shadow: 0 0 10px hsl(var(--primary)/0.6); }
-    to   { transform: translateX(-50%) scaleX(0.8); box-shadow: 0 0 15px hsl(var(--primary)/0.8); }
+    from { transform: scale(1.05); opacity: 1; }
+    to   { transform: scale(1.1); opacity: 1; }
   }
+
   @keyframes empireMedallionPulse {
     0%, 100% { box-shadow: 0 0 15px 3px hsla(var(--bmw-m-blue), 0.75), 0 0 8px 1px hsla(var(--bmw-m-blue), 0.55) inset, 0 0 20px 2px hsla(var(--uv-blue),.3); }
     33% { box-shadow: 0 0 18px 4px hsla(var(--m-violet-hsl), 0.85), 0 0 10px 2px hsla(var(--m-violet-hsl), 0.65) inset, 0 0 25px 3px hsla(var(--uv-blue),.4); }
@@ -686,7 +669,7 @@
     from { transform: translateX(-20px) translateY(calc(var(--flare-y-offset) * 1px)); }
     to { transform: translateX(20px) translateY(calc(var(--flare-y-offset) * 1px)); }
   }
-  @keyframes headlightSweep { /* Added for hero headlight sweep background */
+  @keyframes headlightSweep { 
     from { transform: translateX(-6vw) rotate(-15deg); }
     to { transform: translateX(6vw) rotate(-15deg); }
   }
@@ -725,7 +708,7 @@
     75% { box-shadow: 0 0 12px hsl(var(--primary)/0.4), 0 0 5px hsl(var(--accent)/0.2), 0 0 15px hsl(var(--uv-blue)/0.25); transform: scale(0.99); }
     100% { box-shadow: 0 0 5px hsl(var(--primary)/0.2), 0 0 3px hsl(var(--accent)/0.1), 0 0 8px hsl(var(--uv-blue)/0.1); }
   }
-  @keyframes cameraShutterFlash { /* For hero image hover */
+  @keyframes cameraShutterFlash { 
     0% { filter: saturate(1) brightness(1); }
     50% { filter: saturate(1.4) brightness(1.3); }
     100% { filter: saturate(1) brightness(1); }
@@ -744,11 +727,29 @@
   .transition-m-throttle {
     transition: none !important;
   }
-  .nav-rpm-underline:hover::after,
-  .nav-rpm-underline.active-link::after {
+  .nav-laser-crest::after {
     animation: none !important;
-    transform: translateX(-50%) scaleX(0.7); 
+    transform: none !important; /* Remove skew and scale transforms */
+    /* Static appearance for reduced motion */
+    width: 0%;
+    opacity: 0;
+    background: hsl(var(--primary)) !important;
+    box-shadow: none !important;
+    filter: none !important;
   }
+  .nav-laser-crest:hover::after,
+  .nav-laser-crest.active-link::after {
+    width: 70% !important; /* Match active state for consistency */
+    opacity: 1 !important;
+  }
+  .nav-laser-crest.active-link::after {
+    background: hsl(var(--primary)) !important; /* Active color */
+  }
+  .nav-laser-crest:hover::after {
+    background: hsl(var(--accent)) !important; /* Hover color */
+  }
+
+
   .hud-console-panel { animation: none !important; } 
   .hud-console-settings-icon { animation: none; } 
   
@@ -780,15 +781,19 @@
   .neurolink-terminal-overlay { animation: none; } 
   .neurolink-terminal { animation: none; }
 
-  .m5-headlight-glow { animation: none !important; opacity: 0.7 !important; } 
-  .m5-grille-line { animation: none !important; transform: scaleY(1) !important; } 
+  .MStartStopButton-base-style::before { animation: none !important; }
+  .group:hover .MStartStopButton-base-style::before { animation: none !important; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--primary)), 0 0 0 7px hsl(var(--bmw-m-blue)), 0 0 20px 7px hsl(var(--primary)/0.7); }
+
 
   .navRPMItemPulse, .navRPMItemPulseActive { animation: none !important; }
-  .nav-laser-crest::after, .nav-laser-crest:hover::after, .nav-laser-crest.active-link::after { animation: none !important; }
   .animate-cameraShutterFlash { animation: none !important; }
+  
 }
 
     
 
     
 
+
+
+    

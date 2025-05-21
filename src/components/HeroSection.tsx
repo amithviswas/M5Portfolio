@@ -17,7 +17,7 @@ const heroTextAnimation = (delay = 0, duration = 0.7) => ({
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    transition: { duration, ease: [0.36,1.08,0.33,1] as any, delay }
+    transition: { duration, ease: [0.36,1.08,0.33,1] as any, delay } // Using 'm-throttle' as array
   }
 });
 
@@ -36,6 +36,7 @@ export default function HeroSection() {
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const { scrollY } = useScroll();
 
+  // Hero content scroll animations - using Framer Motion's scroll-linked animations
   const headlineOpacity = useTransform(scrollY, [0, 100], [1, 0.5]);
   const taglineOpacity = useTransform(scrollY, [50, 150], [1, 0.3]);
 
@@ -61,26 +62,24 @@ export default function HeroSection() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
-      const heroSectionElement = document.getElementById('home'); // Ensure 'home' is the ID of your HeroSection
+      const heroSectionElement = document.getElementById('home'); 
       const heroSectionHeight = heroSectionElement?.offsetHeight || viewportHeight;
 
       const scrollThreshold = viewportHeight * 0.15;
       const newIsScrolledPast = currentScrollY > scrollThreshold;
       if (newIsScrolledPast !== isScrolledPastHeroThreshold) {
         setIsScrolledPastHeroThreshold(newIsScrolledPast);
-        setHeadlineBeamFrozen(newIsScrolledPast); // Freeze beam when scrolled past
+        setHeadlineBeamFrozen(newIsScrolledPast); 
         heroControls.start({ 
           filter: newIsScrolledPast ? 'brightness(0.85)' : 'brightness(1)', 
           transition: { duration: 0.5 } 
         });
       }
 
-      // Parallax for background streaks
       const streak1Val = Math.max(-50, Math.min(50, currentScrollY * -0.05));
       const streak2Val = Math.max(-50, Math.min(50, currentScrollY * 0.04));
       setParallaxStreaks({ streak1Y: streak1Val, streak2Y: streak2Val });
       
-      // Tachometer scroll percentage
       let scrollPercent = 0;
       if (heroSectionHeight > viewportHeight) {
          scrollPercent = Math.min(100, (currentScrollY / (heroSectionHeight - viewportHeight)) * 100);
@@ -92,7 +91,7 @@ export default function HeroSection() {
 
     if (introCompleted) {
       window.addEventListener('scroll', handleScroll, { passive: true });
-      handleScroll(); // Initial call
+      handleScroll(); 
     }
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -104,16 +103,17 @@ export default function HeroSection() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: introCompleted ? 0.2 : 0.2 } // Consistent delay
+      transition: { staggerChildren: 0.15, delayChildren: introCompleted ? 0.2 : 0.2 }
     },
   };
 
+  // Staggered animation timings for "Empire Edition"
   const itemVariants = {
     medallion: heroTextAnimation(introCompleted ? 0.2 : 0.2, 0.7), // delay, duration
     headline: heroTextAnimation(introCompleted ? 0.4 : 0.4, 0.7),
     tagline: heroTextAnimation(introCompleted ? 0.55 : 0.55, 0.7),
-    paragraph: heroTextAnimation(introCompleted ? 0.7 : 0.7, 0.6),
-    button: heroTextAnimation(introCompleted ? 0.85 : 0.85, 0.5),
+    paragraph: heroTextAnimation(introCompleted ? 0.8 : 0.8, 0.6),
+    button: heroTextAnimation(introCompleted ? 1.0 : 1.0, 0.5),
   };
   
   const getTachometerBarGradient = (percentage: number) => {
@@ -128,31 +128,14 @@ export default function HeroSection() {
       animate={heroControls}
       id="home"
       className={cn(
-        "relative hero-empire-bg", // Keep empire bg for now
-        "min-h-[calc(100vh-0rem)] !py-0 overflow-hidden" // Added overflow-hidden
+        "relative hero-empire-bg", // Empire Edition background
+        "min-h-[calc(100vh)] !py-0 overflow-hidden" // Ensure full viewport height
       )}
-      fullHeight={false} // Already false by default from Section.tsx
-      noPadding // Already true by default from Section.tsx
+      fullHeight={false} 
+      noPadding 
     >
-      {/* Gantry Lights */}
-      {!prefersReducedMotion && (
-        <>
-          <motion.div
-            className="hero-gantry-light top-0"
-            initial={{ scaleX:0, opacity:0}}
-            animate={introCompleted ? { scaleX:1, opacity:1, transition: {duration: 0.5, delay:0.1, ease: "easeOut"}} : {}}
-            exit={{scaleX:0, opacity:0}}
-          />
-          <motion.div
-            className="hero-gantry-light bottom-0"
-            initial={{ scaleX:0, opacity:0}}
-            animate={introCompleted ? { scaleX:1, opacity:1, transition: {duration: 0.5, delay:0.3, ease: "easeOut"}} : {}}
-            exit={{scaleX:0, opacity:0}}
-          />
-        </>
-      )}
+      <div className="hero-headlight-sweep-bg" /> {/* M5 Apex Finish Headlight Sweep */}
       
-      {/* Dynamic Backgrounds from Empire/Nightfall (Simplified) */}
       {!prefersReducedMotion && (
         <>
            {/* Parallax Streaks from Empire */}
@@ -192,77 +175,88 @@ export default function HeroSection() {
           </div>
           <div className="vertical-lens-flare" style={{ left: '10%', animationDelay: '0s', '--flare-y-offset': -10 } as React.CSSProperties} />
           <div className="vertical-lens-flare" style={{ left: '85%', animationDelay: '5s', '--flare-y-offset': 10 } as React.CSSProperties} />
+
+           {/* Gantry Lights from Empire Edition */}
+           <motion.div
+            className="hero-gantry-light top-0"
+            initial={{ scaleX:0, opacity:0}}
+            animate={introCompleted ? { scaleX:1, opacity:1, transition: {duration: 0.5, delay:0.1, ease: "easeOut"}} : {}}
+            exit={{scaleX:0, opacity:0}}
+          />
+          <motion.div
+            className="hero-gantry-light bottom-0"
+            initial={{ scaleX:0, opacity:0}}
+            animate={introCompleted ? { scaleX:1, opacity:1, transition: {duration: 0.5, delay:0.3, ease: "easeOut"}} : {}}
+            exit={{scaleX:0, opacity:0}}
+          />
         </>
       )}
 
 
       <motion.div
-        initial="initial"
-        animate={introCompleted ? "animate" : "initial"} // Control via introCompleted
         variants={containerVariants}
+        initial="initial"
+        animate={introCompleted ? "animate" : "initial"}
         className="relative z-10 flex flex-col items-center justify-center text-center h-full px-4 py-16 md:py-20 lg:py-24"
       >
         <motion.div
-          variants={itemVariants.medallion.initial} // Use initial part of variant object
-          animate={introCompleted ? itemVariants.medallion.animate : itemVariants.medallion.initial}
+          variants={itemVariants.medallion}
           className={cn(
-            "mb-6 group hero-medallion-empire", // Use Empire styling
-            isHeadlineHovered && !prefersReducedMotion && "animate-cameraShutterFlash" // Existing shutter flash
+            "mb-6 group hero-medallion-empire", // Empire styling for medallion
+            isHeadlineHovered && !prefersReducedMotion && "animate-camera-shutter-flash" // Animate from globals
           )}
           onMouseEnter={() => setIsHeadlineHovered(true)}
           onMouseLeave={() => setIsHeadlineHovered(false)}
         >
-          <div className="spec-highlight-arc" />
-          <Image
-            src="https://i.ibb.co/cKgh0560/1701fc1e-7948-4d92-b440-ffb24258652b.png"
-            alt="Amith Viswas Reddy"
-            width={128}
-            height={128}
-            className="rounded-full object-cover"
-            priority
-            data-ai-hint="profile photo"
-          />
+          <div className="hero-medallion-nightfall-inner"> {/* Nightfall inner glow */}
+            <div className="spec-highlight-arc" /> {/* Empire spec highlight */}
+            <Image
+              src="https://i.ibb.co/cKgh0560/1701fc1e-7948-4d92-b440-ffb24258652b.png"
+              alt="Amith Viswas Reddy"
+              width={128}
+              height={128}
+              className="rounded-full object-cover"
+              priority
+              data-ai-hint="profile photo"
+            />
+          </div>
         </motion.div>
 
         <motion.h1
           ref={headlineRef}
-          variants={itemVariants.headline.initial}
-          animate={introCompleted ? itemVariants.headline.animate : itemVariants.headline.initial}
+          variants={itemVariants.headline}
           className={cn(
-            "text-5xl sm:text-6xl md:text-7xl text-primary-foreground hero-headline-empire hero-text-lift relative font-serif-display", // Font from Empire
-            headlineBeamFrozen && !prefersReducedMotion && "beam-frozen",
-            isHeadlineHovered && !prefersReducedMotion && "animate-cameraShutterFlash"
+            "text-5xl sm:text-6xl md:text-7xl text-primary-foreground hero-headline-empire hero-text-lift relative font-fraunces", // Fraunces for main headline
+            headlineBeamFrozen && !prefersReducedMotion && "beam-frozen", // For future beam effect
+            isHeadlineHovered && !prefersReducedMotion && "animate-camera-shutter-flash"
           )}
           style={{ opacity: headlineOpacity }}
           onMouseEnter={() => setIsHeadlineHovered(true)}
           onMouseLeave={() => setIsHeadlineHovered(false)}
         >
-          Crafting Digital Excellence.
+          Coded Precision.
         </motion.h1>
 
         <motion.h2
-          variants={itemVariants.tagline.initial}
-          animate={introCompleted ? itemVariants.tagline.animate : itemVariants.tagline.initial}
+          variants={itemVariants.tagline}
           className={cn(
-            "hero-tagline-empire text-xl md:text-2xl mt-2 md:mt-3 font-semibold uppercase tracking-wider md:tracking-widest hero-text-lift font-sans-condensed", // Font from Empire
+            "hero-tagline-empire text-xl md:text-2xl mt-2 md:mt-3 font-semibold uppercase tracking-wider md:tracking-widest hero-text-lift font-inter", // Inter for tagline
             isTaglineUnderlineVisible && "underline-visible"
           )}
           style={{ opacity: taglineOpacity }}
         >
-          Innovate. Create. Inspire.
+          Designed for the Fast Lane.
         </motion.h2>
 
         <motion.p
-          variants={itemVariants.paragraph.initial}
-          animate={introCompleted ? itemVariants.paragraph.animate : itemVariants.paragraph.initial}
+          variants={itemVariants.paragraph}
           className="mt-6 md:mt-8 max-w-xl mx-auto text-base text-foreground/80 sm:text-lg hero-text-lift"
         >
           Welcome to my digital space. I transform ideas into powerful, elegant, and user-centric web experiences. Explore my work and let&apos;s build something amazing together.
         </motion.p>
 
         <motion.div
-          variants={itemVariants.button.initial}
-          animate={introCompleted ? itemVariants.button.animate : itemVariants.button.initial}
+          variants={itemVariants.button}
           className="mt-10 md:mt-12"
         >
           <MStartStopButton
@@ -300,3 +294,5 @@ export default function HeroSection() {
     </Section>
   );
 }
+
+    

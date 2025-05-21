@@ -93,25 +93,20 @@ export default {
           '5%': { opacity: '1', transform: 'scale(1.1)' },
           '10%': { opacity: '0.7', transform: 'scale(1)' },
         },
-        'navCrestFlash': {
-          '0%': { background: 'hsl(var(--accent))' },
-          '50%': { background: 'hsl(var(--m-violet-hsl))' },
-          '100%': { background: 'hsl(var(--primary))' },
-        },
-        'm-rpm-redline-pulse': { /* Updated for RPM Gauge */
-          '0%': { 
+        'm-rpm-redline-pulse': { 
+          '0%': {
             boxShadow: 'inset 0 0 6px hsl(var(--background)/0.4), 0 0 12px 3px hsl(var(--primary)/0.8), 0 0 25px 6px hsl(var(--primary)/0.5)',
-            filter: 'brightness(1.3)'
+            filter: 'brightness(1.3) saturate(1.5)'
           },
           '100%': { 
             boxShadow: 'inset 0 0 10px hsl(var(--background)/0.5), 0 0 20px 5px hsl(var(--primary)/1), 0 0 40px 10px hsl(var(--primary)/0.7)',
-            filter: 'brightness(1.7)'
+            filter: 'brightness(1.8) saturate(2.0)'
           }
         },
         'empireMedallionPulse': {
-          '0%, 100%': { 'box-shadow': '0 0 8px 2px hsla(var(--bmw-m-blue), 0.7)' },
-          '33%': { 'box-shadow': '0 0 10px 3px hsla(var(--m-violet-hsl), 0.7)' },
-          '66%': { 'box-shadow': '0 0 8px 2px hsla(var(--primary), 0.7)' },
+          '0%, 100%': { 'box-shadow': '0 0 15px 3px hsla(var(--bmw-m-blue), 0.75), 0 0 8px 1px hsla(var(--bmw-m-blue), 0.55) inset, 0 0 20px 2px hsla(var(--uv-blue),.3)' },
+          '33%': { 'box-shadow': '0 0 18px 4px hsla(var(--m-violet-hsl), 0.85), 0 0 10px 2px hsla(var(--m-violet-hsl), 0.65) inset, 0 0 25px 3px hsla(var(--uv-blue),.4)' },
+          '66%': { 'box-shadow': '0 0 15px 3px hsla(var(--primary), 0.75), 0 0 8px 1px hsla(var(--primary), 0.55) inset, 0 0 20px 2px hsla(var(--uv-blue),.3)' },
         },
         'goldGlintSweep': {
           '0%': { opacity: '0', 'background-position': '-100% 0' },
@@ -126,13 +121,18 @@ export default {
           '100%': { transform: 'translate(-10vw, 5vh) scale(0.8)', opacity: '0' },
         },
         'nanoDrift': {
-          '0%, 100%': { transform: 'translate(0,0)', opacity: '0' },
-          '50%': { opacity: '0.6' },
-          '75%': { transform: 'translate(50px, -30px) scale(0.5)', opacity: '0.2' },
+          '0%, 100%': { transform: 'translate(0,0) scale(1)', opacity: '0' },
+          '20%': { opacity: '0.7' },
+          '50%': { transform: 'translate(calc(var(--drift-x) * 1px), calc(var(--drift-y) * 1px)) scale(0.5)', opacity: '0.3' },
+          '80%': { opacity: '0.7' },
         },
         'flareShift': {
-          from: { transform: 'translateX(-20px)' },
-          to: { transform: 'translateX(20px)' },
+          from: { transform: 'translateX(-20px) translateY(calc(var(--flare-y-offset) * 1px))' },
+          to: { transform: 'translateX(20px) translateY(calc(var(--flare-y-offset) * 1px))' },
+        },
+        'headlightSweep': { 
+          from: { transform: 'translateX(-6vw) rotate(-15deg)' },
+          to: { transform: 'translateX(6vw) rotate(-15deg)' },
         },
         'gantrySweepAnimation': {
           '0%': { opacity: '0', transform: 'scaleX(0.2) translateX(-50%)' },
@@ -140,19 +140,19 @@ export default {
           '100%': { opacity: '0', transform: 'scaleX(0.2) translateX(50%)' },
         },
         'skillTrailFadeOut': { to: { opacity: '0'} },
-        'rareSectionVisualPulse': {
-          '0%': { 'box-shadow': '0 0 0 0px hsl(var(--accent)/0)' },
-          '50%': { 'box-shadow': '0 0 0 10px hsl(var(--accent)/0.3)' },
-          '100%': { 'box-shadow': '0 0 0 0px hsl(var(--accent)/0)' },
+        'rareSectionVisualPulse': { 
+          '0%': { 'box-shadow': '0 0 0 0px hsla(var(--uv-blue)/0)' },
+          '50%': { 'box-shadow': '0 0 0 15px hsla(var(--uv-blue)/0.3), 0 0 0 5px hsla(var(--primary)/0.2) inset' },
+          '100%': { 'box-shadow': '0 0 0 0px hsla(var(--uv-blue)/0)' },
         },
-        'hyperScrollVisualFeedback': {
+        'hyperScrollVisualFeedback': { 
           '0%': { filter: 'saturate(1) brightness(1)' },
-          '50%': { filter: 'saturate(1.5) brightness(1.1) hue-rotate(15deg)' },
+          '50%': { filter: 'saturate(1.8) brightness(1.2) hue-rotate(25deg) contrast(1.2)' }, 
           '100%': { filter: 'saturate(1) brightness(1)' },
         },
-        'ghostlineSkillPulse': {
-          '0%, 100%': { 'box-shadow': '0 0 5px hsl(var(--uv-blue)/0.3)' },
-          '50%': { 'box-shadow': '0 0 15px hsl(var(--uv-blue)/0.6)' },
+        'ghostlineSkillPulse': { 
+          '0%, 100%': { 'box-shadow': '0 0 8px hsl(var(--uv-blue)/0.4), 0 0 4px hsl(var(--primary)/0.2)' },
+          '50%': { 'box-shadow': '0 0 20px hsl(var(--uv-blue)/0.7), 0 0 10px hsl(var(--primary)/0.4)' },
         },
         'skillJitter': {
           '0%': { transform: 'translate(0, 0) rotate(0)' },
@@ -162,19 +162,32 @@ export default {
           '100%': { transform: 'translate(0, 0) rotate(0)' },
         },
         'erraticGlowAnimation': {
-          '0%': { 'box-shadow': '0 0 5px hsl(var(--primary)/0.2), 0 0 3px hsl(var(--accent)/0.1)' },
-          '25%': { 'box-shadow': '0 0 15px hsl(var(--primary)/0.5), 0 0 8px hsl(var(--accent)/0.3)', transform: 'scale(1.01)' },
-          '50%': { 'box-shadow': '0 0 3px hsl(var(--primary)/0.1), 0 0 10px hsl(var(--accent)/0.4)' },
-          '75%': { 'box-shadow': '0 0 12px hsl(var(--primary)/0.4), 0 0 5px hsl(var(--accent)/0.2)', transform: 'scale(0.99)' },
-          '100%': { 'box-shadow': '0 0 5px hsl(var(--primary)/0.2), 0 0 3px hsl(var(--accent)/0.1)' },
+          '0%': { 'box-shadow': '0 0 5px hsl(var(--primary)/0.2), 0 0 3px hsl(var(--accent)/0.1), 0 0 8px hsl(var(--uv-blue)/0.1)' },
+          '25%': { 'box-shadow': '0 0 15px hsl(var(--primary)/0.5), 0 0 8px hsl(var(--accent)/0.3), 0 0 18px hsl(var(--uv-blue)/0.3)', transform: 'scale(1.01)' },
+          '50%': { 'box-shadow': '0 0 3px hsl(var(--primary)/0.1), 0 0 10px hsl(var(--accent)/0.4), 0 0 12px hsl(var(--uv-blue)/0.2)' },
+          '75%': { 'box-shadow': '0 0 12px hsl(var(--primary)/0.4), 0 0 5px hsl(var(--accent)/0.2), 0 0 15px hsl(var(--uv-blue)/0.25)', transform: 'scale(0.99)' },
+          '100%': { 'box-shadow': '0 0 5px hsl(var(--primary)/0.2), 0 0 3px hsl(var(--accent)/0.1), 0 0 8px hsl(var(--uv-blue)/0.1)' },
+        },
+        'cameraShutterFlash': { 
+          '0%': { filter: 'saturate(1) brightness(1)' },
+          '50%': { filter: 'saturate(1.4) brightness(1.3)' },
+          '100%': { filter: 'saturate(1) brightness(1)' },
+        },
+        'fadeIn': { from: { opacity: '0' }, to: { opacity: '1' } },
+        'slideInFromBottom': { from: { opacity: '0', transform: 'translateY(20px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+        'spin': { to: { transform: 'rotate(360deg)' } },
+        'nightfallPulse': {
+          '0%': { 'box-shadow': '0 0 5px 0px hsla(210, 100%, 70%, 0.5)' },
+          '50%': { 'box-shadow': '0 0 15px 5px hsla(270, 100%, 75%, 0.7), 0 0 8px 2px hsla(0, 100%, 65%, 0.5)' },
+          '100%': { 'box-shadow': '0 0 5px 0px hsla(210, 100%, 70%, 0.5)' },
         },
         'navRPMItemPulse': {
-          from: { transform: 'translateX(-50%) scaleX(0.7)', 'box-shadow': '0 0 8px hsl(var(--accent)/0.5)' },
-          to:   { transform: 'translateX(-50%) scaleX(0.75)', 'box-shadow': '0 0 12px hsl(var(--accent)/0.7)' }
+          from: { transform: 'scale(1)', opacity: '0.7' },
+          to:   { transform: 'scale(1.05)', opacity: '1' }
         },
         'navRPMItemPulseActive': {
-          from: { transform: 'translateX(-50%) scaleX(0.7)', 'box-shadow': '0 0 10px hsl(var(--primary)/0.6)' },
-          to:   { transform: 'translateX(-50%) scaleX(0.8)', 'box-shadow': '0 0 15px hsl(var(--primary)/0.8)' }
+          from: { transform: 'scale(1.05)', opacity: '1' },
+          to:   { transform: 'scale(1.1)', opacity: '1' }
         }
   		},
   		animation: {
@@ -183,13 +196,13 @@ export default {
         'spin-slow': 'spin 3s linear infinite',
         'carbon-weave-shift': 'carbonWeaveShift 8s linear infinite',
         'pulse-dot': 'pulseDot 10s infinite ease-in-out',
-        'nav-crest-flash': 'navCrestFlash 300ms ease-in-out forwards',
-        'm-rpm-redline-pulse': 'm-rpm-redline-pulse 0.4s infinite alternate ease-in-out',
-        'empire-medallion-pulse': 'empireMedallionPulse 3s infinite linear',
+        'm-rpm-redline-pulse': 'm-rpm-redline-pulse 0.15s infinite alternate ease-in-out', // Updated duration for aggression
+        'empire-medallion-pulse': 'empireMedallionPulse 2.5s infinite linear',
         'gold-glint-sweep': 'goldGlintSweep 1.2s linear forwards',
         'bloom-glide': 'bloomGlide 15s infinite alternate ease-in-out',
         'nano-drift': 'nanoDrift 8s infinite ease-in-out',
         'flare-shift': 'flareShift 10s infinite alternate ease-in-out',
+        'headlight-sweep': 'headlightSweep 18s infinite alternate ease-in-out',
         'gantry-sweep-animation': 'gantrySweepAnimation 0.7s ease-out forwards',
         'skill-trail-fade-out': 'skillTrailFadeOut 0.5s 0.2s forwards',
         'rare-section-visual-pulse': 'rareSectionVisualPulse 0.5s ease-out forwards',
@@ -197,8 +210,13 @@ export default {
         'ghostline-skill-pulse': 'ghostlineSkillPulse 2s infinite ease-in-out',
         'skill-jitter': 'skillJitter 0.3s infinite alternate ease-in-out',
         'erratic-glow': 'erraticGlowAnimation 0.8s infinite ease-in-out',
-        'nav-rpm-item-pulse': 'navRPMItemPulse 0.6s infinite alternate',
-        'nav-rpm-item-pulse-active': 'navRPMItemPulseActive 0.8s infinite alternate'
+        'camera-shutter-flash': 'cameraShutterFlash 0.25s ease-in-out',
+        'fade-in': 'fadeIn 0.3s ease-out',
+        'slide-in-from-bottom': 'slideInFromBottom 0.4s ease-out',
+        'spin': 'spin 4s linear infinite',
+        'nightfall-pulse': 'spin 4s linear infinite, nightfallPulse 2s infinite ease-in-out alternate',
+        'nav-rpm-item-pulse': 'navRPMItemPulse 0.4s infinite alternate', 
+        'nav-rpm-item-pulse-active': 'navRPMItemPulseActive 0.6s infinite alternate'
   		},
       transitionTimingFunction: {
         'm-throttle': 'var(--ease-m-throttle)', 
@@ -207,3 +225,5 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
+    

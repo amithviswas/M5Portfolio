@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import Section from '@/components/Section'; 
 import { cn } from '@/lib/utils';
+import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Re-added
+import soundService from '@/services/soundService'; // Re-added
 
 const skills = [
   { name: 'AI Model Training', icon: <Zap size={32} />, modeName: 'Turbo Boost', id: 'skill-ai-training' },
@@ -29,6 +31,15 @@ const skills = [
 
 export default function SkillsSection() {
   const prefersReducedMotion = useReducedMotion();
+  const { interactionData, incrementSkillHover } = useUserInteraction();
+
+  const handleSkillHover = (skillName: string) => {
+    incrementSkillHover(skillName);
+    if (interactionData.isSoundEnabled) {
+      soundService.playSound('hoverChime');
+      setTimeout(() => soundService.playSound('electricCrackle'), 100); // Delayed crackle
+    }
+  };
   
   const cardVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.9 },
@@ -46,9 +57,9 @@ export default function SkillsSection() {
         times: prefersReducedMotion ? undefined : [0, 0.5, 1], 
       },
     }),
-    hover: prefersReducedMotion ? { scale: 1.02, y: -2 } : {
-      scale: 1.07, // Increased scale
-      y: -5, // Increased lift
+    hover: {
+      scale: 1.07, 
+      y: -5, 
       boxShadow: "0px 0px 28px 2px hsl(var(--primary)/0.65), 0 0 18px hsl(var(--bmw-m-blue)/0.45)", 
       borderColor: "hsl(var(--primary))",
       transition: { type: 'spring', stiffness: 250, damping: 10, duration: 0.15 }
@@ -93,23 +104,29 @@ export default function SkillsSection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
         {skills.map((skill, index) => {
+          const isRepeatedHover = interactionData.skillHovers[skill.name]?.count >= 3;
+          const isGhostlineSkill = interactionData.isGhostlineFullModeUnlocked;
           return (
             <motion.div
               key={skill.id}
               className={cn(
                 "skill-card-trail-container", 
                 "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40",
-                "transition-m-throttle card-m-glow"
+                "transition-m-throttle card-m-glow",
+                isGhostlineSkill && "animate-skill-jitter", // Jitter if Ghostline active
+                isRepeatedHover && isGhostlineSkill && "erratic-glow" // Erratic glow if Ghostline and repeated hover
               )}
               custom={index}
               variants={cardVariants}
               initial="hidden"
               whileInView="visible"
               whileHover="hover"
+              onHoverStart={() => handleSkillHover(skill.name)}
               viewport={{ once: true, amount: 0.1 }}
             >
               <div className={cn(
-                "skill-card-trail"
+                "skill-card-trail",
+                 isGhostlineSkill && "electric-trail" // More intense trail if Ghostline active
               )}/>
               <motion.div 
                 className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
@@ -140,3 +157,4 @@ export default function SkillsSection() {
   );
 }
 
+    

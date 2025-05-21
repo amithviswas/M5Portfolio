@@ -1,9 +1,11 @@
 
+"use client"; // Keep this if AppClientLayout uses client hooks directly or its children do
+
 import type { Metadata } from 'next';
 import { Rajdhani, Playfair_Display, Space_Grotesk, Fraunces, Inter } from 'next/font/google';
 import './globals.css';
 import { IntroProvider } from '@/contexts/IntroContext';
-// UserInteractionProvider is removed for rollback
+import { UserInteractionProvider } from '@/contexts/UserInteractionContext'; // Import the provider
 import AppClientLayout from '@/components/AppClientLayout';
 
 const rajdhani = Rajdhani({
@@ -35,10 +37,12 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-export const metadata: Metadata = {
-  title: "Amith's M-Powered Portfolio",
-  description: 'Personal portfolio of Amith Viswas Reddy, Data Scientist and AI/ML Enthusiast.',
-};
+// Metadata should ideally be in a server component layout if this file remains "use client"
+// For now, keeping it here as it was.
+// export const metadata: Metadata = { 
+//   title: "Amith's M-Powered Portfolio",
+//   description: 'Personal portfolio of Amith Viswas Reddy, Data Scientist and AI/ML Enthusiast.',
+// };
 
 export default function RootLayout({
   children,
@@ -48,10 +52,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${rajdhani.variable} ${playfairDisplay.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${inter.variable} font-sans antialiased bg-background text-foreground`}>
-        {/* UserInteractionProvider removed */}
-        <IntroProvider>
-          <AppClientLayout>{children}</AppClientLayout>
-        </IntroProvider>
+        <UserInteractionProvider> {/* Wrap with UserInteractionProvider */}
+          <IntroProvider>
+            <AppClientLayout>{children}</AppClientLayout>
+          </IntroProvider>
+        </UserInteractionProvider>
       </body>
     </html>
   );

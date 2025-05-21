@@ -28,7 +28,7 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
     const rect = cardElement.getBoundingClientRect();
     const cursorX = event.clientX - rect.left;
     const normalizedX = cursorX / rect.width; 
-    const newRotateY = (normalizedX - 0.5) * 12; 
+    const newRotateY = (normalizedX - 0.5) * 6; // Reduced tilt for subtlety
     rotateY.set(newRotateY);
   };
 
@@ -50,12 +50,12 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
       onMouseLeave={handleMouseLeave}
       className={cn(
         isClicked && !prefersReducedMotion && "filter blur-[1px] brightness-90", 
-        "transition-m-throttle"
+        "transition-m-throttle h-full" // Ensure motion div takes full height
       )} 
       whileHover={{ y: -8, scale: 1.03 }} 
     >
       <Card className={cn(
-        "flex flex-col h-full overflow-hidden shadow-xl card-m-glow", 
+        "flex flex-col h-full overflow-hidden card-m-glow", // Removed shadow-xl as card-m-glow covers it
         "border border-border/50 hover:border-primary group bg-card rounded-lg transition-m-throttle"
       )}>
         <CardHeader className="p-0">
@@ -86,14 +86,14 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
           <Button 
             onClick={() => { onViewDetails(project); handleClickEffect(); }} 
             variant="outline"
-            className="w-full sm:w-auto hover:bg-accent hover:text-accent-foreground hover:border-accent button-m-glow transition-m-throttle"
+            className="w-full sm:w-auto hover:bg-accent hover:text-accent-foreground hover:border-accent transition-m-throttle" // Removed button-m-glow to avoid double glow
           >
             <Eye className="mr-2 h-4 w-4" /> View Specs
           </Button>
           {project.projectUrl && project.projectUrl !== '#' && (
             <Button 
               asChild 
-              className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-primary-foreground button-m-glow transition-m-throttle"
+              className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-primary-foreground transition-m-throttle" // Removed button-m-glow
               onClick={handleClickEffect} 
             >
               <Link href={project.projectUrl} target="_blank" rel="noopener noreferrer">
@@ -107,3 +107,4 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
   );
 }
 
+    
