@@ -16,7 +16,7 @@ export default {
         'playfair-display': ['var(--font-playfair-display)', ...fontFamily.serif],
         'space-grotesk': ['var(--font-space-grotesk)', ...fontFamily.sans],
         fraunces: ['var(--font-fraunces)', ...fontFamily.serif],
-        inter: ['var(--font-inter)', ...fontFamily.sans], // Inter as alternative for Satoshi/General Sans
+        inter: ['var(--font-inter)', ...fontFamily.sans],
       },
   		colors: {
   			background: 'hsl(var(--background))',
@@ -74,12 +74,14 @@ export default {
         'shadow-gray': 'hsl(var(--shadow-gray))',
         'm-light-blue': 'hsl(var(--m-light-blue-hsl))',
         'm-red': 'hsl(var(--m-red-hsl))',
+        'm-violet': 'hsl(var(--m-violet-hsl))',
         'royal-blue': 'hsl(var(--royal-blue-hsl))', 
         'crimson': 'hsl(var(--crimson-hsl))',       
         'gold': 'hsl(var(--gold-hsl))',
         'i-blue-fog': 'hsl(var(--i-blue-fog-hsl))',
         'hyper-violet': 'hsl(var(--hyper-violet-hsl))',
         'voltage-gold': 'hsl(var(--voltage-gold-hsl))',
+        'uv-blue': 'hsl(var(--uv-blue))',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -115,7 +117,7 @@ export default {
           '0%, 100%': { opacity: '0.05', transform: 'scale(0.8) translate(var(--tx-start, -10px), var(--ty-start, -10px));' },
           '50%': { opacity: '0.15', transform: 'scale(1) translate(var(--tx-end, 10px), var(--ty-end, 10px));' },
         },
-        'spin': {
+        'spin': { // Standard spin keyframe
           'to': { transform: 'rotate(360deg)' },
         },
         'gantryPulse': {
@@ -126,39 +128,98 @@ export default {
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
         },
-        'mStripePulse': { // For medallion
-          '0%, 100%': { borderColor: 'hsl(var(--m-light-blue-hsl))', boxShadow: '0 0 5px hsl(var(--m-light-blue-hsl)/0.5)' },
-          '33%': { borderColor: 'hsl(var(--m-violet-hsl))', boxShadow: '0 0 7px hsl(var(--m-violet-hsl)/0.6)' },
-          '66%': { borderColor: 'hsl(var(--m-red-hsl))', boxShadow: '0 0 5px hsl(var(--m-red-hsl)/0.5)' },
+        'mStripePulse': { 
+          '0%, 100%': { borderColor: 'hsl(var(--bmw-m-blue))', boxShadow: '0 0 5px hsl(var(--bmw-m-blue)/0.5)' },
+          '33%': { borderColor: 'hsl(var(--uv-blue))', boxShadow: '0 0 7px hsl(var(--uv-blue)/0.6)' },
+          '66%': { borderColor: 'hsl(var(--primary))', boxShadow: '0 0 5px hsl(var(--primary)/0.5)' },
         },
-        'neonSweep': { // For headline beam
-          '0%': { width: '0%', left: '0' },
-          '50%': { width: '100%', left: '0' },
-          '50.01%': { width: '100%', left: 'auto', right:'0' },
-          '100%': { width: '0%', left: 'auto', right: '0' },
+        'mStripeConicPulse': {
+          '0%, 100%': { opacity: '0.7', filter: 'blur(1px) brightness(1)' },
+          '50%': { opacity: '1', filter: 'blur(0.5px) brightness(1.3)' },
         },
-        'nanoParticleDrift': { // For Atelier background shimmer
-          '0%': { transform: 'translate(0, 0)', opacity: 0 },
-          '20%': { opacity: 0.05 },
-          '80%': { opacity: 0.05 },
-          '100%': { transform: 'translate(20px, -20px)', opacity: 0 },
+        'neonSweep': { 
+          '0%': { width: '0%', left: '0%', opacity: '0.5' },
+          '40%': { width: '100%', left: '0%', opacity: '1' },
+          '60%': { width: '100%', left: '0%', opacity: '1' },
+          '100%': { width: '0%', left: '100%', opacity: '0.5' },
         },
-        'buttonCrystalBorderSpin': { // For Start/Stop button border
+        'liquidTitaniumSheen': {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
+        'nanoParticleDrift': {
+          '0%': { transform: 'translate(0, 0) scale(1)', opacity: '0.02' },
+          '50%': { transform: 'translate(5px, -5px) scale(1.1)', opacity: '0.05' },
+          '100%': { transform: 'translate(0, 0) scale(1)', opacity: '0.02' },
+        },
+        'buttonCrystalBorderSpin': { 
             '0%': { transform: 'rotate(0deg)' },
             '100%': { transform: 'rotate(360deg)' },
         },
-        'buttonNeonFlicker': { // For Start/Stop button hover
-            '0%, 100%': { textShadow: '0 0 2px #fff, 0 0 5px hsl(var(--primary)), 0 0 8px hsl(var(--primary))', opacity: 1},
-            '50%': { textShadow: '0 0 3px #fff, 0 0 7px hsl(var(--accent)), 0 0 12px hsl(var(--accent))', opacity: 0.8 },
+        'buttonNeonFlicker': {
+            '0%, 100%': { textShadow: '0 0 2px #fff, 0 0 5px hsl(var(--primary)), 0 0 8px hsl(var(--primary))', opacity: '1'},
+            '50%': { textShadow: '0 0 3px #fff, 0 0 7px hsl(var(--accent)), 0 0 12px hsl(var(--accent))', opacity: '0.8' },
         },
-        'buttonClickRipple': { // For Start/Stop button click
-            '0%': { transform: 'scale(0)', opacity: 0.7 },
-            '100%': { transform: 'scale(2)', opacity: 0 },
+        'buttonClickRipple': { 
+            '0%': { transform: 'scale(0)', opacity: '0.7' },
+            '100%': { transform: 'scale(2)', opacity: '0' },
         },
-        'tachometerSineWave': { // For RPM Tachometer
-            '0%, 100%': { transform: 'translateY(0)' },
-            '50%': { transform: 'translateY(-2px)' },
-        }
+        'tachometerSineWave': {
+            '0%, 100%': { transform: 'translateY(0) scaleX(1)' },
+            '25%': { transform: 'translateY(-1px) scaleX(1.01)' },
+            '50%': { transform: 'translateY(0) scaleX(1)' },
+            '75%': { transform: 'translateY(1px) scaleX(0.99)' },
+        },
+        'headlightSweep': {
+          '0%': { transform: 'translateX(-6vw) rotate(-15deg)' },
+          '100%': { transform: 'translateX(6vw) rotate(-15deg)' },
+        },
+        'skillJitter': {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '25%': { transform: 'translate(0.5px, -0.5px)' },
+          '50%': { transform: 'translate(-0.5px, 0.5px)' },
+          '75%': { transform: 'translate(0.5px, 0.5px)' },
+        },
+        'erraticGlowPulse': {
+          '0%': { boxShadow: '0 0 10px hsl(var(--destructive)/0.4), 0 0 5px hsla(var(--uv-blue)/0.2)' },
+          '100%': { boxShadow: '0 0 25px hsl(var(--destructive)/0.8), 0 0 10px hsla(var(--uv-blue)/0.4)' },
+        },
+        'rareSectionPulse': {
+          '0%, 100%': { boxShadow: 'inset 0 0 0 0px hsl(var(--uv-blue)/0)' },
+          '50%': { boxShadow: 'inset 0 0 0 15px hsl(var(--uv-blue)/0.25)' },
+        },
+        'hyperactiveFeedbackFlash': {
+          '0%, 100%': { backgroundColor: 'hsl(var(--background))', border: '2px solid transparent' },
+          '50%': { backgroundColor: 'hsl(var(--background))', border: '2px solid hsl(var(--primary)/0.6)' },
+        },
+        'carbonWeaveShift': {
+          '0%': { backgroundPosition: '0 0' },
+          '100%': { backgroundPosition: '16px 16px' },
+        },
+        'pulseLed': {
+          '0%, 100%': { opacity: '0.3', transform: 'scale(0.8)' },
+          '5%': { opacity: '1', transform: 'scale(1)' },
+          '10%': { opacity: '0.3', transform: 'scale(0.8)' },
+        },
+        'cameraShutterFlash': {
+          '0%, 100%': { filter: 'saturate(1) brightness(1)' },
+          '50%': { filter: 'saturate(1.4) brightness(1.3)' },
+        },
+        'm-rpm-redline-led-pulse': {
+          '0%': {
+            filter: 'brightness(1.5) saturate(1.5)',
+            boxShadow: 'inset 0 0 4px hsla(var(--primary),0.6), 0 0 10px hsla(var(--primary),0.8), 0 0 20px hsla(var(--primary),0.6), 0 0 0 1.5px hsl(var(--primary), 0.7)',
+          },
+          '50%': {
+            filter: 'brightness(3.5) saturate(3.0)',
+            boxShadow: 'inset 0 0 7px hsla(var(--primary),1), 0 0 25px hsla(var(--primary),1.5), 0 0 50px hsla(var(--primary),1.2), 0 0 0 2.5px hsl(var(--primary), 1)',
+          },
+          '100%': {
+            filter: 'brightness(2.0) saturate(2.0)',
+            boxShadow: 'inset 0 0 5px hsla(var(--primary),0.8), 0 0 15px hsla(var(--primary),1), 0 0 30px hsla(var(--primary),0.8), 0 0 0 2px hsl(var(--primary), 0.9)',
+          },
+        },
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
@@ -169,20 +230,38 @@ export default {
         'bloom-glide-2': 'bloomGlide 18s infinite ease-in-out 3s',
         'bloom-glide-3': 'bloomGlide 12s infinite ease-in-out 6s',
         'm-stripe-pulse': 'mStripePulse 3s linear infinite',
+        'm-stripe-conic-pulse': 'mStripeConicPulse 3s linear infinite paused',
         'neon-sweep': 'neonSweep 6s linear infinite',
         'gold-glint': 'goldGlint 1.2s linear infinite',
-        'nano-particle-drift': 'nanoParticleDrift 8s linear infinite',
+        'liquid-titanium-sheen': 'liquidTitaniumSheen 5s linear infinite',
+        'nano-particle-drift': 'nanoParticleDrift 10s linear infinite alternate',
         'button-crystal-border-spin': 'buttonCrystalBorderSpin 5s linear infinite',
         'button-neon-flicker': 'buttonNeonFlicker 0.3s infinite alternate',
         'button-click-ripple': 'buttonClickRipple 0.3s ease-out forwards',
-        'tachometer-sine-wave': 'tachometerSineWave 1.5s infinite ease-in-out',
+        'tachometer-sine-wave': 'tachometerSineWave 2s infinite ease-in-out',
+        'headlight-sweep': 'headlightSweep 18s linear infinite alternate',
+        'spin': 'spin 1s linear infinite',
+        'spin-slow': 'spin 3s linear infinite', // Added spin-slow animation
+        'skill-jitter': 'skillJitter 0.15s infinite linear',
+        'erratic-glow-pulse': 'erraticGlowPulse 0.5s infinite alternate',
+        'rare-section-pulse': 'rareSectionPulse 0.3s ease-out',
+        'hyperactive-feedback-flash': 'hyperactiveFeedbackFlash 0.2s ease-out',
+        'carbon-weave-shift': 'carbonWeaveShift 8s linear infinite',
+        'pulse-led': 'pulseLed 10s infinite ease-in-out',
+        'animate-camera-flash': 'cameraShutterFlash 0.25s ease-in-out',
+        'm-rpm-led-pulse': 'm-rpm-redline-led-pulse 0.25s ease-out forwards',
   		},
       transitionTimingFunction: {
-        'm-blip': 'var(--ease-m-blip)',
-        'ease-out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
-        'ease-out-back': 'cubic-bezier(0.34, 1.56, 0.64, 1)', // For Studio Glide
+        'm-throttle': 'var(--ease-m-throttle)', // Renamed from m-blip for clarity
+        'ease-out-expo': 'var(--ease-out-expo)',
+        'ease-out-back': 'var(--ease-out-back)', // For Studio Glide
+        'ease-torque-kick': 'var(--ease-torque-kick)',
+        'ease-acceleration-curve-in': 'var(--ease-acceleration-curve-in)',
+        'ease-acceleration-curve-out': 'var(--ease-acceleration-curve-out)',
       }
   	}
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
+    
