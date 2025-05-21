@@ -38,7 +38,7 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
       animationFrameId = requestAnimationFrame(updateText);
     };
 
-    if (hasMounted) {
+    if (hasMounted) { // Only run glitch effect on client after mount
       updateText();
     }
 
@@ -47,10 +47,13 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [resolved, text, hasMounted, chars]);
+  }, [resolved, text, hasMounted, chars]); // Added hasMounted dependency
 
-  if (!hasMounted) {
-    return <span className={`font-heading tracking-wider ${className}`}>{resolved ? text : text.replace(/./g, '\u00A0')}</span>;
+  if (!hasMounted && !resolved) { // During SSR or initial client render before mount, render spaces if not resolved
+    return <span className={`font-heading tracking-wider ${className}`}>{text.replace(/./g, '\u00A0')}</span>;
+  }
+  if (!hasMounted && resolved) { // During SSR or initial client render before mount, render actual text if resolved
+    return <span className={`font-heading tracking-wider ${className}`}>{text}</span>;
   }
 
 
@@ -69,12 +72,12 @@ export default function IntroAnimation() {
   useEffect(() => {
     const timers: NodeJS.Timeout[] = [];
 
-    // Adjusted timings for ~5 second animation
+    // Adjusted timings for ~6 second animation
     timers.push(setTimeout(() => setStep(1), 100));      // Start glitch
-    timers.push(setTimeout(() => setStep(2), 3000));     // Resolve name
-    timers.push(setTimeout(() => setStep(3), 3500));     // Final visual pulse
-    timers.push(setTimeout(() => setStep(4), 4500));     // Fade out intro screen
-    timers.push(setTimeout(() => setIntroCompleted(true), 5000)); // Intro complete
+    timers.push(setTimeout(() => setStep(2), 3800));     // Resolve name
+    timers.push(setTimeout(() => setStep(3), 4300));     // Final visual pulse
+    timers.push(setTimeout(() => setStep(4), 5500));     // Fade out intro screen
+    timers.push(setTimeout(() => setIntroCompleted(true), 6000)); // Intro complete
 
     return () => timers.forEach(clearTimeout);
   }, [setIntroCompleted]);
@@ -96,7 +99,7 @@ export default function IntroAnimation() {
             alt="Aggressive BMW M5 backdrop"
             className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
             initial={{ scale: 1.05 }}
-            animate={{ scale: 1, transition: { duration: 5.0, ease: "easeInOut" } }} // Match new duration
+            animate={{ scale: 1, transition: { duration: 6.0, ease: "easeInOut" } }} // Match new duration
           />
 
           {/* Dark Overlay */}
@@ -106,13 +109,13 @@ export default function IntroAnimation() {
            <motion.div
             className="absolute top-1/2 left-0 w-1/2 h-64 bg-gradient-to-r from-white/5 to-transparent opacity-50 blur-3xl transform -translate-y-1/2"
             initial={{ x: "-100%" }}
-            animate={{ x: "50%", transition: {delay: 2.2, duration: 0.6, ease: "circOut"} }} 
+            animate={{ x: "50%", transition: {delay: 2.8, duration: 0.7, ease: "circOut"} }} 
             exit={{ x: "-100%"}}
           ></motion.div>
           <motion.div
             className="absolute top-1/2 right-0 w-1/2 h-64 bg-gradient-to-l from-white/5 to-transparent opacity-50 blur-3xl transform -translate-y-1/2"
             initial={{ x: "100%" }}
-            animate={{ x: "-50%", transition: {delay: 2.2, duration: 0.6, ease: "circOut"} }} 
+            animate={{ x: "-50%", transition: {delay: 2.8, duration: 0.7, ease: "circOut"} }} 
             exit={{ x: "100%"}}
           ></motion.div>
 
