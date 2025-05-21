@@ -91,7 +91,7 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
             <Button 
               asChild 
               className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-primary-foreground button-m-glow transition-m-throttle"
-              onClick={handleClickEffect} // Slot will forward this to the Link/anchor
+              onClick={handleClickEffect} 
             >
               <Link href={project.projectUrl} target="_blank" rel="noopener noreferrer">
                 <Zap className="mr-2 h-4 w-4 group-hover:animate-ping" /> LAUNCH
@@ -103,3 +103,4 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
     </motion.div>
   );
 }
+

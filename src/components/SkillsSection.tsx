@@ -5,8 +5,8 @@ import {
   Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge, Activity
 } from 'lucide-react';
 import Section from '@/components/Section';
-// Removed: import { useUserInteraction } from '@/contexts/UserInteractionContext'; 
-// Removed: import soundService from '@/services/soundService';
+// import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Rolled back
+// import soundService from '@/services/soundService'; // Rolled back
 import { cn } from '@/lib/utils';
 
 const skills = [
@@ -27,22 +27,22 @@ const skills = [
 
 export default function SkillsSection() {
   const prefersReducedMotion = useReducedMotion();
-  // Removed: const { interactionData, incrementSkillHover, getSkillHoverDetail, unlockGhostlineFullMode } = useUserInteraction();
-  // Removed: const { isSoundEnabled, isGhostlineFullModeUnlocked } = interactionData;
+  // const { interactionData, incrementSkillHover, getSkillHoverDetail, unlockGhostlineFullMode } = useUserInteraction(); // Rolled back
+  // const { isSoundEnabled, isGhostlineFullModeUnlocked } = interactionData || {}; // Rolled back, with fallback
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.9 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
-      scale: prefersReducedMotion ? 1 : [1, 1.06, 1], // Simplified scale animation
+      scale: prefersReducedMotion ? 1 : [1, 1.06, 1], 
       boxShadow: prefersReducedMotion 
         ? "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)" 
         : ["0 0 0px hsla(var(--primary)/0)", "0 0 12px hsla(var(--primary)/0.4)", "0 0 0px hsla(var(--primary)/0)"],
       transition: {
         delay: i * 0.06,
-        duration: prefersReducedMotion ? 0.4 : 0.3, // Adjusted duration
-        ease: prefersReducedMotion ? [0.42, 0, 0.58, 1] : "circOut", // Using circOut for a bit of bounce
+        duration: prefersReducedMotion ? 0.4 : 0.3, 
+        ease: prefersReducedMotion ? [0.42, 0, 0.58, 1] : "circOut", 
         times: prefersReducedMotion ? undefined : [0, 0.5, 1], 
       },
     }),
@@ -68,8 +68,6 @@ export default function SkillsSection() {
       transition: { duration: 0.1 }
     }
   };
-
-  // Removed: handleSkillHover function
   
   return (
     <Section id="skills" className="bg-card/30">
@@ -94,18 +92,20 @@ export default function SkillsSection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
         {skills.map((skill, index) => {
-          // Removed: const hoverDetail = getSkillHoverDetail(skill.name);
-          // Removed: const isRepeatedHover = hoverDetail && hoverDetail.count >= 3 && (Date.now() - hoverDetail.lastTimestamp < 10000); 
+          // const hoverDetail = getSkillHoverDetail ? getSkillHoverDetail(skill.name) : null; // Rolled back
+          // const isRepeatedHover = hoverDetail && hoverDetail.count >= 3 && (Date.now() - hoverDetail.lastTimestamp < 10000);  // Rolled back
+          // const isGhostlineActive = isGhostlineFullModeUnlocked; // Rolled back
 
           return (
             <motion.div
               key={skill.id}
               className={cn(
+                "skill-card-trail-container", // For hover trail effect
                 "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40",
-                "transition-m-throttle" // Kept base transition for consistency
-                // Removed: isGhostlineFullModeUnlocked && "skill-card-ghostline-active",
-                // Removed: isGhostlineFullModeUnlocked && Math.random() < 0.3 && !prefersReducedMotion && "animate-skill-jitter", 
-                // Removed: isRepeatedHover && "erratic-glow"
+                "transition-m-throttle"
+                // isGhostlineActive && "skill-card-ghostline-active", // Rolled back
+                // isGhostlineActive && Math.random() < 0.3 && !prefersReducedMotion && "animate-skill-jitter",  // Rolled back
+                // isRepeatedHover && "erratic-glow" // Rolled back
               )}
               custom={index}
               variants={cardVariants}
@@ -113,9 +113,15 @@ export default function SkillsSection() {
               whileInView="visible"
               whileHover="hover"
               viewport={{ once: true, amount: 0.1 }}
-              // Removed: onHoverStart={() => handleSkillHover(skill.name)}
+              // onHoverStart={() => { // Rolled back hover sound and tracking
+              //   if (incrementSkillHover) incrementSkillHover(skill.name);
+              //   if (isSoundEnabled && soundService.playSound) {
+              //     soundService.playSound('hoverChime');
+              //     setTimeout(() => soundService.playSound('electricCrackle'), 80);
+              //   }
+              // }}
             >
-              {/* Removed: skill-card-trail div */}
+              <div className="skill-card-trail"/>
               <motion.div 
                 className="mb-3 md:mb-4 text-primary-foreground/80 inline-block transition-m-throttle"
                 variants={iconVariants}
@@ -130,10 +136,10 @@ export default function SkillsSection() {
               </motion.h3>
               <motion.p
                 className="text-xs text-muted-foreground/70 mt-1 transition-m-throttle"
-                variants={{ hover: { opacity: 1} }} // Show skill name on hover
-                initial={{ opacity: 0 }} // Initially hidden
-                animate={{ opacity: 1, transition: {delay: index * 0.06 + 0.4} }} // Fade in slightly after card
-                whileHover={{opacity: 1}} // Keep visible on hover
+                variants={{ hover: { opacity: 1} }} 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1, transition: {delay: index * 0.06 + 0.4} }} 
+                whileHover={{opacity: 1}} 
               >
                 ({skill.name})
               </motion.p>
@@ -144,3 +150,4 @@ export default function SkillsSection() {
     </Section>
   );
 }
+
