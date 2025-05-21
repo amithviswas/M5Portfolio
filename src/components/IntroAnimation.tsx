@@ -12,11 +12,11 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
   const chars = "!<>-_\\/[]{}—=+*^?#_M5";
 
   useEffect(() => {
-    setIsMounted(true);
+    setIsMounted(true); // Component has mounted on client
   }, []);
 
   useEffect(() => {
-    if (!isMounted) {
+    if (!isMounted) { // If not mounted, keep it static
       setDisplayText(resolved ? text : text.replace(/./g, '\u00A0'));
       return;
     }
@@ -26,6 +26,7 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
       return;
     }
 
+    // Only run glitch effect if mounted and not resolved
     let animationFrameId: number;
     const updateText = () => {
       setDisplayText(
@@ -37,24 +38,17 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
       animationFrameId = requestAnimationFrame(updateText);
     };
 
-    if (isMounted) {
-      updateText();
-    }
+    updateText(); // Start the animation
 
     return () => {
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [resolved, text, isMounted, chars]);
+  }, [resolved, text, isMounted, chars]); // Rerun effect if these change
 
-  if (!isMounted && !resolved) {
-    return <span className={`font-heading tracking-wider ${className}`}>{text.replace(/./g, '\u00A0')}</span>;
-  }
-  if (!isMounted && resolved) {
-    return <span className={`font-heading tracking-wider ${className}`}>{text}</span>;
-  }
-  if (!isMounted) { // Fallback for server render or pre-mount client render
+  // Render static text or placeholder before mount to avoid hydration mismatch
+  if (!isMounted) {
     return <span className={`font-heading tracking-wider ${className}`}>{resolved ? text : text.replace(/./g, '\u00A0')}</span>;
   }
 
@@ -69,10 +63,10 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
 export default function IntroAnimation() {
   const { setIntroCompleted } = useIntroContext();
   const [step, setStep] = useState(0);
-  const [hasMounted, setHasMounted] = useState(false); // New state for client-side rendering
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setHasMounted(true); // Component has mounted on client
+    setHasMounted(true);
 
     const timers: NodeJS.Timeout[] = [];
 
@@ -100,7 +94,7 @@ export default function IntroAnimation() {
           <motion.img
             src="https://i.ibb.co/DHPKdq3n/generated-image-1.png"
             alt="Aggressive BMW M5 backdrop"
-            className="absolute inset-0 w-full h-full object-cover z-[-2]"
+            className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
             initial={{ scale: 1.05 }}
             animate={{ scale: 1, transition: { duration: 6.0, ease: "easeInOut" } }}
           />
@@ -126,44 +120,46 @@ export default function IntroAnimation() {
             </>
           )}
 
-          <motion.div
-            className="relative flex flex-col items-center justify-center"
-            animate={ step === 2 ? { scale: [1, 1.02, 1], transition: { duration: 0.3 } } : {} } 
-          >
-            <div className="mb-8">
-               {/* Placeholder for tachometer */}
-            </div>
-
+          {hasMounted && (
             <motion.div
-              className="text-center text-primary-foreground"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, transition: { delay: 0.2 } }}
+              className="relative flex flex-col items-center justify-center"
+              animate={ step === 2 ? { scale: [1, 1.02, 1], transition: { duration: 0.3 } } : {} } 
             >
-              <GlitchText text="AMITH VISWAS REDDY" resolved={nameResolved} className="text-4xl md:text-5xl lg:text-6xl block" />
-              <GlitchText text="AI/MACHINE LEARNING ENGINEER" resolved={nameResolved} className="text-xl md:text-2xl lg:text-3xl text-primary mt-2 block" />
-            </motion.div>
+              <div className="mb-8">
+                 {/* Placeholder for tachometer */}
+              </div>
 
-            {/* Screen flash / pulse */}
-            <AnimatePresence>
-              {step === 3 && (
-                <motion.div
-                  key="final-pulse"
-                  className="absolute inset-0"
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: 1,
-                    boxShadow: [
-                      "0 0 0px 0px hsl(var(--primary)/0)",
-                      "0 0 100px 50px hsl(var(--primary)/0.4), 0 0 40px 20px hsl(var(--primary-foreground)/0.2)", 
-                      "0 0 0px 0px hsl(var(--primary)/0)"
-                    ],
-                    transition: { duration: 0.4, times: [0, 0.5, 1] } 
-                  }}
-                  exit={{opacity: 0}}
-                />
-              )}
-            </AnimatePresence>
-          </motion.div>
+              <motion.div
+                className="text-center text-primary-foreground"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { delay: 0.2 } }}
+              >
+                <GlitchText text="AMITH VISWAS REDDY" resolved={nameResolved} className="text-4xl md:text-5xl lg:text-6xl block" />
+                <GlitchText text="AI/MACHINE LEARNING ENGINEER" resolved={nameResolved} className="text-xl md:text-2xl lg:text-3xl text-primary mt-2 block" />
+              </motion.div>
+
+              {/* Screen flash / pulse */}
+              <AnimatePresence>
+                {step === 3 && (
+                  <motion.div
+                    key="final-pulse"
+                    className="absolute inset-0"
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: 1,
+                      boxShadow: [
+                        "0 0 0px 0px hsl(var(--primary)/0)",
+                        "0 0 100px 50px hsl(var(--primary)/0.4), 0 0 40px 20px hsl(var(--primary-foreground)/0.2)", 
+                        "0 0 0px 0px hsl(var(--primary)/0)"
+                      ],
+                      transition: { duration: 0.4, times: [0, 0.5, 1] } 
+                    }}
+                    exit={{opacity: 0}}
+                  />
+                )}
+              </AnimatePresence>
+            </motion.div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
