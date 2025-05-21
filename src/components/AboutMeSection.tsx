@@ -33,7 +33,7 @@ export default function AboutMeSection() {
           Performance <span className="text-primary">Specs</span>
         </motion.h2>
         <motion.div 
-          className="w-40 h-1 bg-primary mx-auto mt-4 rounded-full"
+          className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -50,7 +50,7 @@ export default function AboutMeSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <div className="relative w-56 h-56 md:w-64 md:h-64 rounded-full overflow-hidden p-1 bg-gradient-to-br from-primary via-accent to-m-performance-blue shadow-xl card-m-glow">
+          <div className="relative w-56 h-56 md:w-64 md:h-64 rounded-full overflow-hidden p-1 bg-gradient-to-br from-primary via-accent to-bmw-m-blue shadow-xl card-m-glow">
             <div className="absolute inset-0 rounded-full border-4 border-card opacity-50"></div>
             <Image
               src="https://i.ibb.co/PGgTrngH/d2d27295-61a5-43fa-bd33-5f44c25e813a.png"

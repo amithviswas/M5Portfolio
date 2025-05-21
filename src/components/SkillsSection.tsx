@@ -5,8 +5,6 @@ import {
   Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge, Activity
 } from 'lucide-react';
 import Section from '@/components/Section';
-// import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Temporarily removed for rollback
-// import soundService from '@/services/soundService'; // Temporarily removed for rollback
 import { cn } from '@/lib/utils';
 
 const skills = [
@@ -27,9 +25,7 @@ const skills = [
 
 export default function SkillsSection() {
   const prefersReducedMotion = useReducedMotion();
-  // const { incrementSkillHover, interactionData } = useUserInteraction(); // Temporarily removed
-
-  // Placeholder for interactionData if context is removed
+  
   const interactionData = { 
     skillHovers: {}, 
     isGhostlineFullModeUnlocked: false 
@@ -78,14 +74,6 @@ export default function SkillsSection() {
       transition: { duration: 0.1 }
     }
   };
-
-  // const handleSkillHover = (skillName: string) => {
-  //   incrementSkillHover(skillName);
-  //   if (interactionData?.isSoundEnabled) { // Check if sound is enabled
-  //     soundService.playSound('hoverChime');
-  //     setTimeout(() => soundService.playSound('electricCrackle'), 50); // Slightly delay crackle
-  //   }
-  // };
   
   return (
     <Section id="skills" className="bg-card/30">
@@ -100,7 +88,7 @@ export default function SkillsSection() {
           Engine <span className="text-primary">Modes</span>
         </motion.h2>
         <motion.div 
-          className="w-36 h-1 bg-primary mx-auto mt-4 rounded-full"
+          className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -110,11 +98,8 @@ export default function SkillsSection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
         {skills.map((skill, index) => {
-          // const isRepeatedHover = (interactionData?.skillHovers?.[skill.name]?.count || 0) >= 3 && 
-          //                         Date.now() - (interactionData?.skillHovers?.[skill.name]?.lastTimestamp || 0) < 10000;
-          // const isGhostlineActive = interactionData?.isGhostlineFullModeUnlocked;
-          const isRepeatedHover = false; // Placeholder
-          const isGhostlineActive = false; // Placeholder
+          const isRepeatedHover = false; 
+          const isGhostlineActive = false; 
 
           return (
             <motion.div
@@ -123,8 +108,8 @@ export default function SkillsSection() {
                 "skill-card-trail-container", 
                 "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40",
                 "transition-m-throttle card-m-glow",
-                isRepeatedHover && !prefersReducedMotion && "erratic-glow", // XENOFRAME repeated hover
-                isGhostlineActive && !prefersReducedMotion && (index % 3 === 0) && "animate-skill-jitter" // XENOFRAME jitter
+                isRepeatedHover && !prefersReducedMotion && "erratic-glow", 
+                isGhostlineActive && !prefersReducedMotion && (index % 3 === 0) && "animate-skill-jitter" 
               )}
               custom={index}
               variants={cardVariants}
@@ -132,11 +117,10 @@ export default function SkillsSection() {
               whileInView="visible"
               whileHover="hover"
               viewport={{ once: true, amount: 0.1 }}
-              // onHoverStart={() => handleSkillHover(skill.name)} // Simplified, no sound for now
             >
               <div className={cn(
                 "skill-card-trail",
-                isGhostlineActive && "skill-card-electric-trail" // XENOFRAME trail
+                isGhostlineActive && "skill-card-electric-trail" 
               )}/>
               <motion.div 
                 className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
