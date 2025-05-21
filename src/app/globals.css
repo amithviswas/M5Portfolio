@@ -5,10 +5,10 @@
 @layer base {
   :root {
     /* Aggressive Elegance Palette & M5 Apex Finish Adjustments */
-    --background: 220 10% 5%; /* Deeper Matte Black */
+    --background: 0 0% 6%; /* Deep Matte Black for a more aggressive base */
     --foreground: 0 0% 98%; /* Sharp White LED-like text */
 
-    --card: 220 10% 8%; /* Darker Gunmetal */
+    --card: 0 0% 8%; /* Darker Gunmetal for cards */
     --card-foreground: 0 0% 95%;
 
     --popover: 220 10% 7%;
@@ -39,7 +39,7 @@
     --bmw-m-blue: 210 100% 55%; 
     --blood-red: 0 100% 55%; 
     --m-violet-hsl: 270 100% 65%;
-    --uv-blue: 220 100% 65%; /* UV Blue for glows */
+    --uv-blue: 220 100% 60%; /* UV Blue for glows, slightly adjusted */
     --m-light-blue-hsl: 210 100% 65%; /* Brighter, icier blue for accents */
     --m-red-hsl: 0 100% 50%; /* Primary Red as M-Red */
     
@@ -55,6 +55,8 @@
     --nightfall-obsidian-hsl: 220 15% 5%;
     --nightfall-titanium-sheen-start-hsl: 210 15% 70%;
     --nightfall-titanium-sheen-end-hsl: 210 100% 85%;
+    
+    /* Commented out as it was problematic and replaced with direct conic-gradient usage */
     /* --medallion-nightfall-gradient: conic-gradient(
       from 0deg,
       hsla(210, 100%, 50%, 0.7) 0%, 
@@ -76,9 +78,10 @@
   }
 
   :root.dark {
-    --background: 220 10% 5%;
+    /* Ensure dark theme variables match the base for consistency */
+    --background: 0 0% 6%;
     --foreground: 0 0% 98%;
-    --card: 220 10% 8%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 95%;
   }
 }
@@ -94,9 +97,9 @@
     @apply bg-background text-foreground font-sans antialiased;
     /* Subtle carbon fiber pattern */
     background-image:
-      linear-gradient(45deg, hsla(var(--card), 0.03) 25%, transparent 25%, transparent 75%, hsla(var(--card), 0.03) 75%, hsla(var(--card), 0.03)),
-      linear-gradient(-45deg, hsla(var(--card), 0.03) 25%, transparent 25%, transparent 75%, hsla(var(--card), 0.03) 75%, hsla(var(--card), 0.03));
-    background-size: 6px 6px; /* Slightly finer carbon pattern */
+      linear-gradient(45deg, hsla(var(--card), 0.02) 25%, transparent 25%, transparent 75%, hsla(var(--card), 0.02) 75%, hsla(var(--card), 0.02)),
+      linear-gradient(-45deg, hsla(var(--card), 0.02) 25%, transparent 25%, transparent 75%, hsla(var(--card), 0.02) 75%, hsla(var(--card), 0.02));
+    background-size: 4px 4px; /* Finer carbon pattern */
   }
 
   .font-heading {
@@ -113,10 +116,11 @@
   }
   
   .card-m-glow {
-    @apply shadow-lg transition-shadow duration-300 ease-m-throttle;
+    @apply shadow-lg transition-m-throttle; /* Ensure throttle transition is applied */
   }
   .card-m-glow:hover {
-    @apply shadow-[0_10px_25px_-5px_hsl(var(--primary)/0.5),_0_6px_15px_-8px_hsl(var(--bmw-m-blue)/0.35)];
+    /* Refined, more vibrant glow */
+    @apply shadow-[0_12px_28px_-5px_hsl(var(--primary)/0.7),_0_8px_18px_-8px_hsl(var(--bmw-m-blue)/0.55),_0_0_15px_2px_hsl(var(--primary)/0.3)_inset];
   }
 
   /* === M5 APEX FINISH STYLES START === */
@@ -144,31 +148,35 @@
   }
   .nav-laser-crest::after {
     content: '';
-    @apply absolute left-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 transition-all duration-300 ease-in-out;
+    @apply absolute left-0 h-[6px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 transition-m-throttle; /* Use custom transition */
     bottom: -2px; /* Sits slightly below text */
     width: 0%;
     filter: blur(0.5px) drop-shadow(0 0 3px hsl(var(--primary)/0.5));
     transform-origin: center;
+    clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%); /* V-shape / angled bar */
   }
   .nav-laser-crest:hover::after,
   .nav-laser-crest.active-link::after {
     width: 100%;
     opacity: 1;
-    background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)), hsl(var(--primary))); /* M-color blend for active/hover */
+    background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)), hsl(var(--primary)));
     filter: blur(0px) drop-shadow(0 0 5px hsl(var(--primary)/0.7));
+  }
+  .nav-laser-crest.active-link::after {
+    opacity: 0.4; /* Settles at 40% for active */
   }
   .nav-laser-crest.active-link {
     @apply text-primary; /* Keep active link text primary */
   }
 
 
-  /* RPM-Inspired Navbar (Aggressive Elegance) */
+  /* RPM-Inspired Navbar (Aggressive Elegance) - Kept for reference or alternative styling */
   .nav-rpm-underline { 
     @apply relative text-muted-foreground hover:text-primary-foreground transition-m-throttle;
   }
   .nav-rpm-underline::after {
     content: '';
-    @apply absolute left-1/2 bottom-[-4px] h-[3px] bg-primary opacity-0 rounded-sm; 
+    @apply absolute left-1/2 bottom-[-4px] h-[3px] bg-primary opacity-0 rounded-full; /* Changed to pill */
     transition: all 200ms var(--ease-m-throttle); 
     transform: translateX(-50%) scaleX(0);
     box-shadow: 0 0 8px hsl(var(--primary)/0.5);
@@ -228,15 +236,14 @@
                 linear-gradient(135deg, hsl(var(--border)) 0%, hsl(var(--background)) 50%, hsl(var(--border)) 100%); 
     border: 2px solid transparent;
   }
-  /* Commented out problematic conic-gradient for build stability, can be revisited */
    .hero-medallion-nightfall-inner::before {
     content: '';
     position: absolute;
     inset: -3px; 
     border-radius: 9999px;
     z-index: -1;
-    /* background: var(--medallion-nightfall-gradient); */ /* Temporarily commented out */
-    background: conic-gradient( /* Using direct values for now */
+    /* background: var(--medallion-nightfall-gradient); */ /* Using direct values now */
+    background: conic-gradient(
       from 0deg,
       hsla(210, 100%, 50%, 0.7) 0%, 
       hsla(270, 100%, 65%, 0.7) 33.33%, 
@@ -355,7 +362,7 @@
   }
   /* === EMPIRE EDITION HERO STYLES END === */
   
-  /* RPM Widget */
+  /* RPM Widget (basic, can be expanded from previous prompts) */
   .rpm-widget-dial {
     @apply relative w-20 h-20 rounded-full bg-neutral-800 border-2 border-neutral-700 shadow-inner;
   }
@@ -414,7 +421,7 @@
   }
   .hud-console-settings-icon {
     @apply text-neutral-400 hover:text-primary transition-m-throttle;
-    animation: spin 3s linear infinite; /* Direct application */
+    animation: spin 3s linear infinite;
   }
   .hud-console-log { 
     @apply flex-grow overflow-y-auto text-[11px] leading-snug p-1 bg-black/20 rounded-sm min-h-[50px];
