@@ -118,8 +118,8 @@
   }
   .font-serif-display { font-family: var(--font-playfair-display); }
   .font-sans-condensed { font-family: var(--font-space-grotesk); }
-  .font-fraunces-var { font-family: var(--font-fraunces); }
-  .font-inter-var { font-family: var(--font-inter); }
+  .font-fraunces { font-family: var(--font-fraunces); }
+  .font-inter { font-family: var(--font-inter); }
 
 
   .button-m-glow, .card-m-glow {
@@ -147,23 +147,22 @@
   overflow: hidden;
 }
 
-/* === NAV GRILLE UNDERLINE / LASER CREST === */
-/* M5 Kidney-Grille Blade Style */
-.nav-laser-crest {
+/* === M5 Kidney-Grille Blade Style Navbar Underline === */
+.nav-grille-underline {
   position: relative;
   padding-bottom: 6px; /* Space for the underline */
   @apply text-muted-foreground hover:text-primary-foreground transition-m-throttle;
 }
 
-.nav-laser-crest::after {
+.nav-grille-underline::after {
   content: '';
   position: absolute;
   left: 50%;
-  bottom: 0px; /* Sits 2px below text baseline (padding-bottom on parent handles overall space) */
+  bottom: 0px; /* Sits below text baseline */
   height: 4px; /* Underline thickness */
   width: 0%; /* Starts at 0 width */
-  background: linear-gradient(to right, 
-    hsl(var(--bmw-m-blue)) var(--grille-blue-stop-percentage, 55%), 
+  background: linear-gradient(to right,
+    hsl(var(--bmw-m-blue)) var(--grille-blue-stop-percentage, 55%),
     hsl(var(--primary)) var(--grille-red-start-percentage, 55%)
   );
   border-radius: 9999px; /* Fully rounded ends for pill shape */
@@ -171,37 +170,34 @@
               0 0 4px 0px hsla(var(--accent)/0.5); /* Subtle outer glow - default accent */
   transform: translateX(-50%);
   transform-origin: center;
-  transition-property: width, opacity, filter, background;
-  transition-duration: 170ms;
-  transition-timing-function: var(--ease-m-throttle); /* Snappy throttle blip */
+  transition: width 170ms var(--ease-m-throttle),
+              opacity 170ms var(--ease-m-throttle),
+              filter 170ms var(--ease-m-throttle),
+              background 170ms var(--ease-m-throttle);
   will-change: width, opacity, filter, background;
   opacity: 0;
 }
 
-.nav-laser-crest:hover::after,
-.nav-laser-crest.active-link::after {
+.nav-grille-underline:hover::after,
+.nav-grille-underline.active-link::after {
   width: 120%; /* Grows to 120% */
   opacity: 1;
-  filter: brightness(1.1) drop-shadow(0 0 4px hsla(var(--primary)/0.7)); /* Enhanced glow */
 }
-.nav-laser-crest.active-link::after {
+.nav-grille-underline.active-link::after {
    opacity: 0.8; /* slightly less opacity for active but not hovered */
+   filter: brightness(1.1) drop-shadow(0 0 4px hsla(var(--primary)/0.7));
 }
-/* .nav-laser-crest:hover {
-  Shift gradient split on hover based on cursor position - handled by JS by setting CSS vars 
-} */
-.nav-laser-crest:hover::after {
+.nav-grille-underline:hover::after {
    box-shadow: inset 0 1px 3px hsla(0,0%,0%,0.6),
               0 0 6px 1px hsla(var(--bmw-m-blue)/0.7), /* Blue part of glow */
               0 0 6px 1px hsla(var(--primary)/0.7);   /* Red part of glow */
   filter: brightness(1.25); /* Brighter glow on hover */
 }
 
-.nav-laser-crest.active-link {
+.nav-grille-underline.active-link {
   @apply text-primary;
   text-shadow: 0 0 5px hsl(var(--primary)/0.5);
 }
-
 
 /* Hero Section Dimming */
 .hero-backdrop-dimmed {
@@ -239,11 +235,11 @@
   border-radius: 9999px; /* Ensure it's circular */
   z-index: 0; /* Behind the image content if any */
   background: conic-gradient(
-    from 0deg, /* Explicit 'from' */
-    hsla(210, 100%, 50%, 0.7) 0%,      /* M-Blue direct, using % for angle */
-    hsla(270, 100%, 65%, 0.7) 33.33%, /* M-Violet direct, 120deg as % */
-    hsla(0, 100%, 50%, 0.7) 66.67%,   /* Primary/M-Red direct, 240deg as % */
-    hsla(210, 100%, 50%, 0.7) 100%     /* M-Blue direct, 360deg as % */
+    from 0deg,
+    hsla(210, 100%, 50%, 0.7) 0%,      /* M Performance Blue */
+    hsla(270, 100%, 65%, 0.7) 33.33%,  /* M Violet */
+    hsla(0, 100%, 50%, 0.7) 66.67%,   /* M Red */
+    hsla(210, 100%, 50%, 0.7) 100%     /* M Performance Blue (to close loop) */
   );
   background-size: 100%;
   animation: mStripeConicPulse 3s linear infinite paused; /* Animation name */
@@ -359,33 +355,6 @@
   transition: opacity 0.3s ease-out, width 0.3s ease-out 0.3s; /* Delay for trail */
 }
 
-/* Keyframes for Nightfall Atelier */
-@keyframes mStripeConicPulse {
-  0%, 100% { opacity: 0.7; filter: blur(1px) brightness(1); }
-  50% { opacity: 1; filter: blur(0.5px) brightness(1.3); }
-}
-@keyframes liquidTitaniumSheen {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-@keyframes nanoParticleDrift {
-  0% { transform: translate(0, 0) scale(1); opacity: 0.02; }
-  50% { transform: translate(5px, -5px) scale(1.1); opacity: 0.05; }
-  100% { transform: translate(0, 0) scale(1); opacity: 0.02; }
-}
-@keyframes tachometerSineWave { /* For quantum tachometer */
-  0%, 100% { transform: translateY(0) scaleX(1); }
-  25% { transform: translateY(-1px) scaleX(1.01); }
-  50% { transform: translateY(0) scaleX(1); }
-  75% { transform: translateY(1px) scaleX(0.99); }
-}
-@keyframes neonSweep { /* For headline beam */
-  0% { width: 0%; left: 0%; opacity: 0.5; }
-  40% { width: 100%; left: 0%; opacity: 1; }
-  60% { width: 100%; left: 0%; opacity: 1; }
-  100% { width: 0%; left: 100%; opacity: 0.5; }
-}
 /* === NIGHTFALL ATELIER HERO STYLES END === */
 
 
@@ -418,17 +387,17 @@
 .hero-medallion-empire:focus-within { animation: goldGlint 1.2s linear infinite, mStripePulse 3s linear infinite, mStripePulseFocus 1s ease-in-out alternate infinite; }
 
 /* Hero Text Royal Alloy Typography */
-.hero-headline-empire { 
-  font-family: var(--font-playfair-display); 
+.hero-headline-empire {
+  font-family: var(--font-playfair-display);
   @apply text-[#E5E5E5] font-bold;
   text-shadow: 0 1px 1px #000, 0 0 5px rgba(0,0,0,.2), 0 0 10px rgba(0,0,0,.15);
 }
-.hero-tagline-empire { 
-  font-family: var(--font-space-grotesk); 
+.hero-tagline-empire {
+  font-family: var(--font-space-grotesk);
   @apply font-semibold uppercase tracking-[1px] text-transparent bg-clip-text relative;
   background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
-  background-size: 200% 100%; 
-  -webkit-text-stroke: 0.5px hsl(var(--foreground)/0.3); 
+  background-size: 200% 100%;
+  -webkit-text-stroke: 0.5px hsl(var(--foreground)/0.3);
 }
 .hero-tagline-empire::after { /* Shimmering metal strip underline */
   content: '';
@@ -440,7 +409,7 @@
   border-radius: 9999px; /* Pill shape */
   width: 0; /* Animates from 0 */
   transform: translateX(-50%);
-  transition: width 0.6s var(--ease-out-expo); 
+  transition: width 0.6s var(--ease-out-expo);
   box-shadow: 0 0 5px hsl(var(--bmw-m-blue)/0.5), 0 0 5px hsl(var(--primary)/0.5); /* Shimmer */
 }
 .hero-tagline-empire.animate-underline::after { /* Class added by JS when in view */
@@ -450,19 +419,19 @@
 /* Deep Empire Glow Background */
 .hero-empire-bg {
   background-image:
-    radial-gradient(circle at 30% 30%, hsla(var(--i-blue-fog-hsl), 0.3) 0%, transparent 60%), 
-    linear-gradient(45deg, hsla(var(--shadow-gray), 0.06) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.06) 75%, hsla(var(--shadow-gray), 0.06)), 
+    radial-gradient(circle at 30% 30%, hsla(var(--i-blue-fog-hsl), 0.3) 0%, transparent 60%),
+    linear-gradient(45deg, hsla(var(--shadow-gray), 0.06) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.06) 75%, hsla(var(--shadow-gray), 0.06)),
     linear-gradient(-45deg, hsla(var(--shadow-gray), 0.06) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.06) 75%, hsla(var(--shadow-gray), 0.06)),
-    hsl(var(--background)); 
+    hsl(var(--background));
   background-blend-mode: overlay, normal, normal, normal;
   background-size: 100% 100%, 16px 16px, 16px 16px, auto;
   position: relative;
-  overflow: hidden; 
+  overflow: hidden;
 }
 .hero-empire-bg .bloom-effect {
   position: absolute;
   border-radius: 50%;
-  opacity: 0; 
+  opacity: 0;
   filter: blur(50px);
   animation: bloomGlide 15s infinite ease-in-out alternate;
   will-change: transform, opacity;
@@ -470,47 +439,28 @@
 
 /* Empire Tachometer (Scroll RPM Bar) */
 .hero-empire-tachometer {
-  @apply fixed bottom-4 right-4 h-2 rounded-full transition-all duration-100 ease-linear; 
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5), 0 0 8px hsla(var(--gold-hsl),0.7); 
+  @apply fixed bottom-4 right-4 h-2 rounded-full transition-all duration-100 ease-linear;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5), 0 0 8px hsla(var(--gold-hsl),0.7);
 }
 .hero-empire-tachometer::before { /* Motion ghost trail */
   content: '';
   @apply absolute -inset-1 rounded-full opacity-20 blur-md;
-  background: inherit; 
+  background: inherit;
   z-index: -1;
-  transition: opacity 0.3s ease-out; 
+  transition: opacity 0.3s ease-out;
 }
 
 /* Gantry Light Sweep */
 .hero-gantry-light {
-  @apply absolute left-0 w-full h-1; 
+  @apply absolute left-0 w-full h-1;
   background: linear-gradient(to right, transparent, hsl(var(--foreground)/0.5) 20%, hsl(var(--foreground)/0.8) 50%, hsl(var(--foreground)/0.5) 80%, transparent);
-  box-shadow: 0 0 10px hsl(var(--bmw-m-blue)/0.5); 
-  opacity: 0; 
+  box-shadow: 0 0 10px hsl(var(--bmw-m-blue)/0.5);
+  opacity: 0;
   will-change: opacity, width;
 }
 .hero-gantry-light.top { @apply top-0; }
 .hero-gantry-light.bottom { @apply bottom-0; }
 
-/* Keyframes for Empire Edition */
-@keyframes mStripePulse { /* For medallion border */
-  0%, 100% { border-color: hsl(var(--bmw-m-blue)); box-shadow: 0 0 5px hsl(var(--bmw-m-blue)/0.5); }
-  33% { border-color: hsl(var(--uv-blue)); box-shadow: 0 0 7px hsl(var(--uv-blue)/0.6); }
-  66% { border-color: hsl(var(--primary)); box-shadow: 0 0 5px hsl(var(--primary)/0.5); }
-}
-@keyframes mStripePulseFocus { /* Focus-within pulse for medallion */
-  0%, 100% { transform: scale(1); box-shadow: 0 0 35px 0px hsla(var(--uv-blue), 0.25); }
-  50% { transform: scale(1.03); box-shadow: 0 0 45px 5px hsla(var(--uv-blue), 0.4); }
-}
-@keyframes goldGlint { /* Gold glint sweep for medallion */
-  0% { border-image-source: conic-gradient(from 0deg, hsl(var(--bmw-m-blue)) 0% 33%, hsl(var(--uv-blue)) 33% 66%, hsl(var(--primary)) 66% 100%); }
-  50% { border-image-source: conic-gradient(from 180deg, hsl(var(--gold-hsl)) 0% 33%, hsl(var(--foreground)/0.8) 33% 66%, hsl(var(--gold-hsl)) 66% 100%); }
-  100% { border-image-source: conic-gradient(from 360deg, hsl(var(--bmw-m-blue)) 0% 33%, hsl(var(--uv-blue)) 33% 66%, hsl(var(--primary)) 66% 100%); }
-}
-@keyframes bloomGlide { /* For background halo glows */
-  0% { transform: scale(0.8) translate(var(--tx-start, -20%), var(--ty-start, -20%)); opacity: 0.05; }
-  100% { transform: scale(1.2) translate(var(--tx-end, 20%), var(--ty-end, 20%)); opacity: 0.15; }
-}
 /* === EMPIRE EDITION HERO STYLES END === */
 
 
@@ -528,11 +478,6 @@
   pointer-events: none;
   z-index: -1;
   will-change: transform;
-}
-
-@keyframes headlightSweep {
-  0% { transform: translateX(-6vw) rotate(-15deg); }
-  100% { transform: translateX(6vw) rotate(-15deg); }
 }
 
 /* Content Burst Section Styles (Tilted Cards) */
@@ -808,7 +753,7 @@
 }
 
 .timeline-card {
-  @apply bg-card/80 backdrop-blur-sm p-5 rounded-lg shadow-xl border border-border/50 
+  @apply bg-card/80 backdrop-blur-sm p-5 rounded-lg shadow-xl border border-border/50
          min-h-[180px] flex flex-col justify-between transition-all duration-300 ease-in-out
          hover:border-primary hover:shadow-primary/40;
   /* Consistent card height */
@@ -911,7 +856,7 @@
 
 /* Section Grille Blade (Apex Finish) */
 .section-grille-blade {
-  content: ''; 
+  content: '';
   position: absolute;
   width: 3px; /* Blade thickness */
   background: linear-gradient(to bottom, hsl(var(--shadow-gray)/0.8), hsl(var(--border))); /* Charcoal -> steel */
@@ -1043,14 +988,14 @@
   /* Disable most animations and transitions */
   .carbon-weave-animated,
   .footer-diffuser-fin-dot,
-  .section-grille-blade, 
+  .section-grille-blade,
   .hero-headlight-sweep-bg,
-  .m-rpm-led-pulse, /*.m-rpm-gauge-fill-redline, */ /* Commented out to allow redline static style*/
+  .m-rpm-led-pulse,
   .animate-camera-flash,
   .hero-medallion-nightfall-inner::before,
   .hero-tagline-nightfall,
   .hero-atelier-bg::before,
-  .hero-rpm-quantum, 
+  .hero-rpm-quantum,
   .hero-lens-flare,
   .hero-headline-beam::before,
   .hero-medallion-empire, .hero-medallion-empire:hover, .hero-medallion-empire:focus-within,
@@ -1059,39 +1004,41 @@
   .hero-gantry-light,
   .carbon-card-burst::before,
   .light-sweep-overlay,
-  .rpm-widget-needle, 
+  .rpm-widget-needle,
   .skill-card-trail,
   .animate-skill-jitter,
   .erratic-glow,
   .rare-section-pulse-active,
   .hyperactive-scroll-feedback,
-  .neurolink-terminal-output .command-input::before, 
-  .hud-console-settings-icon, 
-  /* .m-rpm-tick-base, */ /* Keep ticks visible for gauge */
-  .nav-laser-crest::after,
+  .neurolink-terminal-output .command-input::before,
+  .hud-console-settings-icon,
+  .nav-laser-crest::after, /* Updated from nav-grille-underline to nav-laser-crest */
   .timeline-completion-indicator
+  /* Removed .nav-rpm-underline::after as it was redundant */
   {
     animation: none !important;
     transition: none !important;
   }
 
   /* Specific static states for reduced motion */
-  .nav-laser-crest::after { /* Keep underline visible but static */
+  .nav-laser-crest::after { /* Updated from nav-grille-underline */
     width: 70% !important; /* Or a fixed preferred width */
-    opacity: 0.4 !important; /* Keep visible */
+    opacity: 0.6 !important; /* Keep visible */
     filter: brightness(1) !important;
-    box-shadow: none !important; 
-    background: hsl(var(--primary)) !important; 
-    /* clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important; /* simple rectangle */
-    transform: translateX(-50%) skewX(0deg) !important;
+    box-shadow: none !important;
+    background: hsl(var(--primary)) !important;
+    transform: translateX(-50%) !important; /* Reset any dynamic transforms */
+    clip-path: none !important; /* Reset clip-path for a simple bar */
+    height: 2px !important; /* Simple bar height */
+    bottom: -2px !important; /* Positioned below text */
   }
   .nav-laser-crest.active-link::after {
-     width: 70% !important; opacity: 0.4 !important;
+     width: 70% !important; opacity: 0.6 !important;
   }
   .nav-laser-crest.active-link, .nav-laser-crest:hover {
     text-shadow: none !important;
   }
-  
+
   /* Ensure tooltip content is still styled simply */
   .tooltip-content-crystal {
     backdrop-filter: none !important;
@@ -1112,7 +1059,7 @@
   }
 
   .carbon-card-burst:hover {
-    transform: translateY(-6px) !important; 
+    transform: translateY(-6px) !important;
   }
 
   .m-rpm-gauge-fill-redline { /* Static redline look */
@@ -1126,4 +1073,45 @@
     transform: scaleY(1) !important; /* Ensure blades are visible if not hidden */
   }
 }
-    
+/* RPM Navbar Styles (Simplified Fallback/Base - ensure this doesn't conflict if .nav-laser-crest is primary) */
+.nav-rpm-underline::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -2px; /* Consistent with updated nav-laser-crest reduced motion */
+  height: 2px;
+  width: 0%;
+  background-color: hsl(var(--primary));
+  border-radius: 1px; /* Simple rounded ends for the fallback */
+  box-shadow: 0 0 4px hsl(var(--primary)/0.5);
+  transform: translateX(-50%);
+  transition: width 0.2s var(--ease-m-throttle), opacity 0.2s var(--ease-m-throttle), background-color 0.2s var(--ease-m-throttle);
+  opacity: 0;
+  will-change: width, opacity, background-color;
+}
+
+.nav-rpm-underline:hover::after,
+.nav-rpm-underline.active-link::after {
+  width: 70%;
+  opacity: 1;
+}
+
+.nav-rpm-underline:hover::after {
+  background-color: hsl(var(--accent));
+  box-shadow: 0 0 6px hsl(var(--accent)/0.6);
+}
+
+.nav-rpm-underline.active-link::after {
+  background-color: hsl(var(--primary));
+  box-shadow: 0 0 6px hsl(var(--primary)/0.6);
+}
+
+.nav-rpm-active-glow {
+  text-shadow: 0 0 6px hsl(var(--primary)/0.5);
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+.nav-rpm-item:hover {
+   color: hsl(var(--primary-foreground)) !important;
+}
+/* End RPM Navbar Styles */
