@@ -30,7 +30,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             alt={project.title}
             fill
             style={{ objectFit: "cover" }}
-            className="rounded-t-lg" // Image itself might not need rounded-t-lg if container clips
+            className="rounded-t-lg"
             data-ai-hint={project.dataAiHint || "project showcase"}
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 33vw"
           />
@@ -56,18 +56,20 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
               {project.longDescription}
             </DialogDescription>
 
-            <div>
-              <h3 className="text-lg md:text-xl font-semibold mb-3 text-primary-foreground font-heading">Technologies Used:</h3>
-              <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
-                  <Badge key={tech} variant="secondary" className="text-sm px-3 py-1 bg-accent/20 text-accent">
-                    {tech}
-                  </Badge>
-                ))}
+            {project.technologies && project.technologies.length > 0 && (
+              <div>
+                <h3 className="text-lg md:text-xl font-semibold mb-3 text-primary-foreground font-heading">Technologies Used:</h3>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((tech) => (
+                    <Badge key={tech} variant="secondary" className="text-sm px-3 py-1 bg-accent/20 text-accent">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            {project.tags.length > 0 && (
+            {project.tags && project.tags.length > 0 && (
               <div>
                 <h3 className="text-lg md:text-xl font-semibold mb-3 text-primary-foreground font-heading">Categories:</h3>
                 <div className="flex flex-wrap gap-2">
