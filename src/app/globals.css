@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    /* AGGRESSIVE ELEGANCE PALETTE (M5 Inspired) */
+    /* M5 AGGRESSIVE ELEGANCE PALETTE */
     --background: 220 10% 7%; /* Deep Matte Black/Gunmetal */
     --foreground: 0 0% 98%; /* Sharp White LED-like text */
 
@@ -24,48 +24,51 @@
     --muted: 220 10% 20%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 210 100% 50%; /* M Performance Blue / Also used as UV Blue base */
+    --accent: 210 100% 50%; /* M Performance Blue */
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 10% 18%; 
+    --border: 220 10% 18%;
     --input: 220 10% 12%;
     --ring: 210 100% 55%; /* M Performance Blue for focus rings */
 
     --radius: 0.3rem; /* Sharpened radius */
 
-    /* M Theme Specific Colors (some overlap/refine above) */
-    --bmw-m-blue: 210 100% 50%; /* Main M Blue, also used for accent */
-    --m-performance-blue: 210 100% 50%; /* Explicit alias for clarity */
+    /* M Theme Specific Colors */
+    --bmw-m-blue: 210 100% 50%;
+    --m-performance-blue: 210 100% 50%; /* Alias */
     --blood-red: 0 100% 50%; /* Primary is this */
     --shadow-gray: 240 6% 12%; /* For carbon fiber hints, dark shadows */
-    --uv-blue: 220 100% 65%; /* Specific for UV glows, slightly lighter/more electric than M Blue */
     
-    --m-light-blue-hsl: 210 100% 65%; /* Lighter M Blue for gradients/accents */
-    --m-red-hsl: 0 100% 50%;      /* Consistent with primary */
-    --m-violet-hsl: 270 100% 65%; /* For tricolor effects */
+    /* XENOFRAME & NIGHTFALL Colors */
+    --uv-blue: 220 100% 65%; /* Specific for UV glows, slightly lighter/more electric */
+    --m-light-blue-hsl: 210 100% 65%; /* Lighter M Blue for gradients/accents - Used in Nightfall */
+    --m-red-hsl: 0 100% 50%;      /* Consistent with primary - Used in Nightfall */
+    --m-violet-hsl: 270 100% 65%; /* For tricolor effects - Used in Nightfall */
+    
+    /* EMPIRE EDITION Colors */
     --royal-blue-hsl: 225 73% 57%;
     --crimson-hsl: 348 83% 47%;
     --gold-hsl: 45 100% 51%;
-    --i-blue-fog-hsl: 210 100% 20%;
+    --i-blue-fog-hsl: 210 100% 20%; /* For Empire background fog */
+
+    /* QUANTUM Tachometer Colors (Nightfall / XENOFRAME) */
     --hyper-violet-hsl: 270 100% 70%;
     --voltage-gold-hsl: 50 100% 60%;
 
 
     /* Easing Curves */
-    --ease-m-throttle: cubic-bezier(.36,1.08,.33,1); 
+    --ease-m-throttle: cubic-bezier(.36,1.08,.33,1); /* Throttle Blip / Kickback */
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1); 
-    --ease-torque-kick: cubic-bezier(.42,0, .2,1.2); 
-    --ease-acceleration-curve-in: cubic-bezier(0.6, 0.04, 0.98, 0.335); 
-    --ease-acceleration-curve-out: cubic-bezier(0.19, 1, 0.22, 1); 
-
-    /* Font Variables are set by next/font in layout.tsx */
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-torque-kick: cubic-bezier(.42,0, .2,1.2); /* For section grille blades */
+    --ease-acceleration-curve-in: cubic-bezier(0.6, 0.04, 0.98, 0.335); /* For page transitions */
+    --ease-acceleration-curve-out: cubic-bezier(0.19, 1, 0.22, 1);  /* For page transitions */
   }
 
-  :root.dark { 
+  :root.dark {
     --background: 220 10% 7%;
     --foreground: 0 0% 98%;
     --card: 220 10% 9%;
@@ -82,18 +85,17 @@
   }
   body {
     background-color: hsl(var(--background));
-    /* Carbon fiber texture overlay */
     background-image:
       linear-gradient(45deg, hsla(var(--shadow-gray), 0.06) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.06) 75%, hsla(var(--shadow-gray), 0.06)),
       linear-gradient(-45deg, hsla(var(--shadow-gray), 0.06) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.06) 75%, hsla(var(--shadow-gray), 0.06)),
       radial-gradient(circle at center, hsla(var(--card),0.1) 0%, transparent 40%),
-      hsl(var(--background)); /* Base matte black */
+      hsl(var(--background));
     background-size: 12px 12px, 12px 12px, 100% 100%, 100% 100%;
     @apply text-foreground font-sans;
     position: relative;
   }
 
-  body.dark::before { 
+  body.dark::before {
     content: '';
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -112,109 +114,93 @@
 
   .font-heading {
     font-family: var(--font-rajdhani);
-    @apply font-bold uppercase tracking-wider; /* M-badging style */
+    @apply font-bold uppercase tracking-wider;
   }
-  .font-serif-display { 
-    font-family: var(--font-playfair-display);
-  }
-  .font-sans-condensed { 
-    font-family: var(--font-space-grotesk);
-  }
+  .font-serif-display { font-family: var(--font-playfair-display); }
+  .font-sans-condensed { font-family: var(--font-space-grotesk); }
+  .font-fraunces-var { font-family: var(--font-fraunces); }
+  .font-inter-var { font-family: var(--font-inter); }
 
-  .button-m-glow, .card-m-glow { 
+
+  .button-m-glow, .card-m-glow {
     @apply shadow-[0_0_15px_hsl(var(--primary)/0.6)] transition-shadow duration-300 ease-in-out;
   }
   .button-m-glow:hover, .card-m-glow:hover {
-    @apply shadow-[0_0_25px_hsl(var(--primary)/0.9)]; /* Neon Red glow */
+    @apply shadow-[0_0_25px_hsl(var(--primary)/0.9)];
   }
 
-  /* Core transition utility with "throttle blip" easing */
-  .transition-m-throttle { 
+  .transition-m-throttle {
     @apply transition-[color,background-color,border-color,text-decoration-color,text-shadow,transform,box-shadow,opacity,filter] duration-150 ease-m-throttle;
   }
 }
 
-.DialogContent[data-state="open"] { 
+.DialogContent[data-state="open"] {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* RPM-Inspired Navigation System (Replaces .nav-laser-crest) */
+/* RPM-Inspired Navigation System - Simple Underline */
 .nav-rpm-underline {
   position: relative;
   overflow: visible;
   @apply text-muted-foreground hover:text-primary-foreground;
-  /* Apply throttle transition globally via utility if preferred, or specify here */
   transition: color 0.15s var(--ease-m-throttle), text-shadow 0.15s var(--ease-m-throttle);
 }
 
 .nav-rpm-underline::after {
   content: '';
   position: absolute;
-  left: 50%;
-  bottom: -4px; /* Slightly lower for RPM bar feel */
-  height: 3px; /* Thicker for RPM bar */
-  width: 0%;
-  background: hsl(var(--primary)); /* Neon Red for base underline */
-  border-radius: 1.5px; /* Slightly rounded for bar */
-  opacity: 0.7;
-  transform: translateX(-50%) scaleX(1);
-  transition: width 0.2s var(--ease-m-throttle), background-color 0.2s var(--ease-m-throttle), opacity 0.2s var(--ease-m-throttle), transform 0.2s var(--ease-m-throttle), box-shadow 0.2s var(--ease-m-throttle);
-  will-change: width, background-color, opacity, transform, box-shadow;
+  left: 0; 
+  bottom: -2px; 
+  height: 2px;
+  width: 0%; 
+  background: hsl(var(--primary));
+  transition: width 0.3s ease-in-out; 
+  will-change: width;
   pointer-events: none;
-  box-shadow: 0 0 6px hsl(var(--primary)/0.5);
 }
 
 .nav-rpm-underline:hover::after,
 .nav-rpm-underline.active-link::after {
-  width: 70%; /* Not full width for RPM segment feel */
-  opacity: 1;
-  transform: translateX(-50%) scaleX(1.1); /* Slight pulse on hover/active */
+  width: 100%; 
 }
 
-/* Active link glow - "hitting redline" */
 .nav-rpm-underline.active-link {
-  @apply text-primary; /* Neon red text */
-  text-shadow: 0 0 8px hsl(var(--primary)/0.7); /* Neon red text glow */
+  @apply text-primary;
+  text-shadow: 0 0 8px hsl(var(--primary)/0.7);
 }
-.nav-rpm-underline.active-link::after {
-  background: hsl(var(--primary));
-  box-shadow: 0 0 10px hsl(var(--primary)/0.8); /* Stronger redline glow */
+.nav-rpm-underline:hover:not(.active-link) {
+  text-shadow: 0 0 5px hsl(var(--accent)/0.6);
 }
-
-/* Pulsing shift indicator for hover */
-.nav-rpm-underline:hover {
-  text-shadow: 0 0 5px hsl(var(--accent)/0.6); /* UV Blue pulse on text */
-}
-.nav-rpm-underline:hover::after {
-  background: hsl(var(--accent)); /* UV Blue underline on hover */
-  box-shadow: 0 0 8px hsl(var(--accent)/0.6);
+.nav-rpm-underline:hover:not(.active-link)::after {
+  background: hsl(var(--accent));
 }
 
-.hero-backdrop-dimmed { 
+
+.hero-backdrop-dimmed {
   @apply transition-m-throttle;
   filter: brightness(0.85);
 }
 
-.form-container-halo { 
+.form-container-halo {
   box-shadow: 0 0 8px 2px hsla(var(--primary)/0.2);
   @apply transition-m-throttle;
 }
-.form-container-halo-active { 
+.form-container-halo-active {
   box-shadow: 0 0 20px 5px hsla(var(--primary)/0.7), 0 0 30px 10px hsla(var(--primary)/0.4);
   transition: box-shadow 0.3s var(--ease-m-throttle);
 }
 
-/* === NIGHTFALL ATELIER HERO STYLES START (Retained for reference/potential reuse) === */
+/* === NIGHTFALL ATELIER HERO STYLES START === */
 .hero-medallion-nightfall {
   @apply relative w-[120px] h-[120px] rounded-full p-0.5;
-  box-shadow: 0 0 20px 0px hsla(var(--uv-blue), 0.25); 
+  box-shadow: 0 0 20px 0px hsla(var(--uv-blue), 0.25);
   transition: box-shadow 0.9s ease-in-out;
 }
 .hero-medallion-nightfall-inner {
   @apply relative w-full h-full rounded-full overflow-hidden flex items-center justify-center;
-  background: linear-gradient(145deg, hsl(var(--shadow-gray)), hsl(var(--background))); 
+  background: linear-gradient(145deg, hsl(var(--shadow-gray)), hsl(var(--background)));
   border: 1px solid hsl(var(--border) / 0.3);
 }
 .hero-medallion-nightfall-inner::before {
@@ -222,8 +208,8 @@
   @apply absolute inset-[-2px] rounded-full z-0;
   background: conic-gradient(
     hsla(var(--bmw-m-blue),0.7) 0deg,
-    hsla(var(--uv-blue),0.7) 120deg, 
-    hsla(var(--primary),0.7) 240deg, 
+    hsla(var(--m-violet-hsl),0.7) 120deg,
+    hsla(var(--primary),0.7) 240deg,
     hsla(var(--bmw-m-blue),0.7) 360deg
   );
   background-size: 100%;
@@ -236,7 +222,7 @@
   animation-play-state: running;
 }
 .hero-medallion-nightfall:hover {
-  box-shadow: 0 0 35px 5px hsla(var(--uv-blue), 0.4), 
+  box-shadow: 0 0 35px 5px hsla(var(--uv-blue), 0.4),
               0 0 15px 2px hsla(var(--foreground), 0.1) inset;
 }
 .hero-medallion-nightfall.medallion-active .hero-medallion-nightfall-inner::before {
@@ -247,9 +233,9 @@
 }
 
 .hero-headline-nightfall {
-  font-family: var(--font-fraunces);
+  font-family: var(--font-fraunces-var);
   @apply text-foreground font-bold relative;
-  text-shadow: 0 1px 1px hsla(0,0%,0%,0.7), 0 2px 3px hsla(0,0%,0%,0.5); 
+  text-shadow: 0 1px 1px hsla(0,0%,0%,0.7), 0 2px 3px hsla(0,0%,0%,0.5);
 }
 .hero-headline-beam::before {
   content: '';
@@ -258,7 +244,7 @@
   left: 0;
   width: 0%;
   height: 2px;
-  background: hsl(var(--uv-blue)); 
+  background: hsl(var(--uv-blue));
   box-shadow: 0 0 5px hsl(var(--uv-blue)), 0 0 10px hsl(var(--uv-blue));
   mix-blend-mode: screen;
   animation: neonSweep 6s linear infinite;
@@ -279,10 +265,10 @@
   text-shadow: 0 0 8px hsl(var(--foreground)/0.5);
 }
 .hero-tagline-nightfall {
-  font-family: var(--font-inter);
+  font-family: var(--font-inter-var);
   @apply font-normal uppercase tracking-wider text-transparent bg-clip-text relative;
   background-image: linear-gradient(110deg,
-    hsl(var(--foreground)/0.9) 15%, 
+    hsl(var(--foreground)/0.9) 15%,
     hsl(var(--bmw-m-blue)/0.8) 35%,
     hsl(var(--foreground)/0.9) 55%,
     hsl(var(--bmw-m-blue)/0.8) 75%,
@@ -295,12 +281,12 @@
 
 .hero-atelier-bg {
   @apply relative overflow-hidden;
-  background: radial-gradient(ellipse at 50% 30%, hsl(var(--background), 0.9) 0%, hsl(var(--background)) 70%); 
+  background: radial-gradient(ellipse at 50% 30%, hsl(var(--background), 0.9) 0%, hsl(var(--background)) 70%);
 }
 .hero-atelier-bg::before {
   content: "";
   @apply absolute inset-0 -z-10;
-  background-image: radial-gradient(hsla(var(--uv-blue)/0.04) 0.5px, transparent 0.5px), 
+  background-image: radial-gradient(hsla(var(--uv-blue)/0.04) 0.5px, transparent 0.5px),
                     radial-gradient(hsla(var(--primary)/0.03) 0.5px, transparent 0.5px);
   background-size: 30px 30px, 45px 45px;
   background-position: 0 0, 15px 15px;
@@ -308,7 +294,7 @@
 }
 .hero-lens-flare {
   @apply absolute -z-10 pointer-events-none opacity-10;
-  background: linear-gradient(to bottom, hsla(var(--uv-blue),0.20) 0%, transparent 60%); 
+  background: linear-gradient(to bottom, hsla(var(--uv-blue),0.20) 0%, transparent 60%);
   border-radius: 50%;
   filter: blur(15px);
   will-change: transform, opacity;
@@ -318,11 +304,11 @@
   @apply fixed bottom-4 right-4 h-1.5 w-0 rounded-full transition-all duration-100 ease-linear;
   background: linear-gradient(to right,
     hsl(var(--bmw-m-blue)) var(--tach-q-stop1, 0%),
-    hsl(var(--uv-blue)) var(--tach-q-stop2, 33%), 
-    hsl(var(--primary)) var(--tach-q-stop3, 66%), 
-    hsl(var(--primary)) var(--tach-q-stop4, 100%)
+    hsl(var(--hyper-violet-hsl)) var(--tach-q-stop2, 33%),
+    hsl(var(--voltage-gold-hsl)) var(--tach-q-stop3, 66%), /* Switched from primary to voltage-gold */
+    hsl(var(--voltage-gold-hsl)) var(--tach-q-stop4, 100%)
   );
-  box-shadow: inset 0 0 3px hsla(0,0%,0%,0.4), 0 0 6px hsla(var(--primary),0.5); 
+  box-shadow: inset 0 0 3px hsla(0,0%,0%,0.4), 0 0 6px hsla(var(--voltage-gold-hsl),0.5); /* Glow matches end color */
   animation: tachometerSineWave 2s infinite ease-in-out;
 }
 .hero-rpm-quantum::before {
@@ -333,44 +319,36 @@
   transition: opacity 0.3s ease-out, width 0.3s ease-out 0.3s;
 }
 
-@keyframes mStripeConicPulse { /* Used by hero-medallion-nightfall */
+@keyframes mStripeConicPulse {
   0%, 100% { opacity: 0.7; filter: blur(1px) brightness(1); }
   50% { opacity: 1; filter: blur(0.5px) brightness(1.3); }
 }
-@keyframes liquidTitaniumSheen { /* Used by hero-tagline-nightfall */
+@keyframes liquidTitaniumSheen {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-@keyframes nanoParticleDrift { /* Used by hero-atelier-bg */
+@keyframes nanoParticleDrift {
   0% { transform: translate(0, 0) scale(1); opacity: 0.02; }
   50% { transform: translate(5px, -5px) scale(1.1); opacity: 0.05; }
   100% { transform: translate(0, 0) scale(1); opacity: 0.02; }
 }
-@keyframes tachometerSineWave { /* Used by hero-rpm-quantum */
+@keyframes tachometerSineWave {
   0%, 100% { transform: translateY(0) scaleX(1); }
   25% { transform: translateY(-1px) scaleX(1.01); }
   50% { transform: translateY(0) scaleX(1); }
   75% { transform: translateY(1px) scaleX(0.99); }
 }
-@keyframes neonSweep { /* Used by hero-headline-beam */
+@keyframes neonSweep {
   0% { width: 0%; left: 0%; opacity: 0.5; }
   40% { width: 100%; left: 0%; opacity: 1; }
   60% { width: 100%; left: 0%; opacity: 1; }
   100% { width: 0%; left: 100%; opacity: 0.5; }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-medallion-nightfall-inner::before { animation: none !important; }
-  .hero-tagline-nightfall { animation: none !important; background-size: 100% 100%; }
-  .hero-atelier-bg::before { animation: none !important; }
-  .hero-rpm-quantum { animation: none !important; }
-  .hero-lens-flare { animation: none !important; opacity: 0.05; }
-  .hero-headline-beam::before { animation: none !important; width: 100%; opacity: 0.5; }
-}
 /* === NIGHTFALL ATELIER HERO STYLES END === */
 
-/* === EMPIRE EDITION HERO STYLES START (Retained for reference/potential reuse) === */
+
+/* === EMPIRE EDITION HERO STYLES START === */
 .hero-medallion-empire {
   @apply relative w-[120px] h-[120px] rounded-full p-0.5;
   box-shadow: 0 0 35px 0px hsla(var(--uv-blue), 0.3);
@@ -381,8 +359,8 @@
   border-image-source: conic-gradient(
     from 0deg,
     hsl(var(--bmw-m-blue)) 0% 33%,
-    hsl(var(--uv-blue)) 33% 66%, 
-    hsl(var(--primary)) 66% 100% 
+    hsl(var(--uv-blue)) 33% 66%,
+    hsl(var(--primary)) 66% 100%
   );
   animation: mStripePulse 3s linear infinite;
 }
@@ -397,12 +375,12 @@
 .hero-medallion-empire:focus-within { animation: goldGlint 1.2s linear infinite, mStripePulse 3s linear infinite, mStripePulseFocus 1s ease-in-out alternate infinite; }
 
 .hero-headline-empire {
-  font-family: var(--font-playfair-display); 
-  @apply text-foreground font-bold; 
+  font-family: var(--font-playfair-display);
+  @apply text-foreground font-bold;
   text-shadow: 0 1px 1px #000, 0 0 5px rgba(0,0,0,.2), 0 0 10px rgba(0,0,0,.15);
 }
 .hero-tagline-empire {
-  font-family: var(--font-space-grotesk); 
+  font-family: var(--font-space-grotesk);
   @apply font-semibold uppercase tracking-[1px] text-transparent bg-clip-text relative;
   background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
   background-size: 200% 100%;
@@ -421,16 +399,14 @@
   transition: width 0.6s var(--ease-out-expo);
   box-shadow: 0 0 5px hsl(var(--bmw-m-blue)/0.5), 0 0 5px hsl(var(--primary)/0.5);
 }
-.hero-tagline-empire.animate-underline::after { /* JS adds 'animate-underline' */
+.hero-tagline-empire.animate-underline::after {
   width: 110%;
 }
 
 .hero-empire-bg {
-  background: radial-gradient(circle at 30% 30%, hsl(var(--uv-blue), 0.3) 0%, hsl(var(--background)) 60%), 
-              linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
   background-image:
-    radial-gradient(circle at 30% 30%, hsla(var(--uv-blue), 0.3) 0%, transparent 60%),
-    linear-gradient(45deg, hsla(var(--shadow-gray), 0.06) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.06) 75%, hsla(var(--shadow-gray), 0.06)),
+    radial-gradient(circle at 30% 30%, hsla(var(--i-blue-fog-hsl), 0.3) 0%, transparent 60%), /* i-blue fog */
+    linear-gradient(45deg, hsla(var(--shadow-gray), 0.06) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.06) 75%, hsla(var(--shadow-gray), 0.06)), /* steel pattern */
     linear-gradient(-45deg, hsla(var(--shadow-gray), 0.06) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.06) 75%, hsla(var(--shadow-gray), 0.06)),
     hsl(var(--background));
   background-blend-mode: overlay, normal, normal, normal;
@@ -438,7 +414,7 @@
   position: relative;
   overflow: hidden;
 }
-.hero-empire-bg .bloom-effect { /* For animated halo glows */
+.hero-empire-bg .bloom-effect {
   position: absolute;
   border-radius: 50%;
   opacity: 0;
@@ -447,9 +423,9 @@
   will-change: transform, opacity;
 }
 
-.hero-empire-tachometer { /* Specific tachometer for Empire Edition */
+.hero-empire-tachometer {
   @apply fixed bottom-4 right-4 h-2 rounded-full transition-all duration-100 ease-linear;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5), 0 0 8px hsla(var(--primary),0.7); 
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5), 0 0 8px hsla(var(--gold-hsl),0.7); /* Gold for 80-100% */
 }
 .hero-empire-tachometer::before {
   content: '';
@@ -459,7 +435,7 @@
   transition: opacity 0.3s ease-out;
 }
 
-.hero-gantry-light { /* Pulsing gantry lights for Empire */
+.hero-gantry-light {
   @apply absolute left-0 w-full h-1;
   background: linear-gradient(to right, transparent, hsl(var(--foreground)/0.5) 20%, hsl(var(--foreground)/0.8) 50%, hsl(var(--foreground)/0.5) 80%, transparent);
   box-shadow: 0 0 10px hsl(var(--bmw-m-blue)/0.5);
@@ -469,27 +445,28 @@
 .hero-gantry-light.top { @apply top-0; }
 .hero-gantry-light.bottom { @apply bottom-0; }
 
-@keyframes mStripePulse { /* Used by hero-medallion-empire */
+@keyframes mStripePulse {
   0%, 100% { border-color: hsl(var(--bmw-m-blue)); box-shadow: 0 0 5px hsl(var(--bmw-m-blue)/0.5); }
-  33% { border-color: hsl(var(--uv-blue)); box-shadow: 0 0 7px hsl(var(--uv-blue)/0.6); } 
-  66% { border-color: hsl(var(--primary)); box-shadow: 0 0 5px hsl(var(--primary)/0.5); } 
+  33% { border-color: hsl(var(--uv-blue)); box-shadow: 0 0 7px hsl(var(--uv-blue)/0.6); }
+  66% { border-color: hsl(var(--primary)); box-shadow: 0 0 5px hsl(var(--primary)/0.5); }
 }
-@keyframes mStripePulseFocus { /* Used by hero-medallion-empire */
-  0%, 100% { transform: scale(1); box-shadow: 0 0 35px 0px hsla(var(--uv-blue), 0.25); } 
+@keyframes mStripePulseFocus {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 35px 0px hsla(var(--uv-blue), 0.25); }
   50% { transform: scale(1.03); box-shadow: 0 0 45px 5px hsla(var(--uv-blue), 0.4); }
 }
-@keyframes goldGlint { /* Used by hero-medallion-empire */
+@keyframes goldGlint {
   0% { border-image-source: conic-gradient(from 0deg, hsl(var(--bmw-m-blue)) 0% 33%, hsl(var(--uv-blue)) 33% 66%, hsl(var(--primary)) 66% 100%); }
   50% { border-image-source: conic-gradient(from 180deg, hsl(var(--gold-hsl)) 0% 33%, hsl(var(--foreground)/0.8) 33% 66%, hsl(var(--gold-hsl)) 66% 100%); }
   100% { border-image-source: conic-gradient(from 360deg, hsl(var(--bmw-m-blue)) 0% 33%, hsl(var(--uv-blue)) 33% 66%, hsl(var(--primary)) 66% 100%); }
 }
-@keyframes bloomGlide { /* Used by hero-empire-bg .bloom-effect */
+@keyframes bloomGlide {
   0% { transform: scale(0.8) translate(var(--tx-start, -20%), var(--ty-start, -20%)); opacity: 0.05; }
   100% { transform: scale(1.2) translate(var(--tx-end, 20%), var(--ty-end, 20%)); opacity: 0.15; }
 }
 /* === EMPIRE EDITION HERO STYLES END === */
 
-/* APEX FINISH: Dynamic Headlight Sweep Background (used by current Hero) */
+
+/* APEX FINISH: Dynamic Headlight Sweep Background */
 .hero-headlight-sweep-bg {
   position: fixed;
   top: -20%;
@@ -514,50 +491,47 @@
 .carbon-card-burst {
   @apply block rounded-lg shadow-xl overflow-hidden transition-m-throttle;
   background-color: hsl(var(--card));
-  /* Carbon Fiber Texture */
   background-image:
     linear-gradient(45deg, hsla(var(--shadow-gray), 0.2) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.2) 75%, hsla(var(--shadow-gray), 0.2)),
     linear-gradient(-45deg, hsla(var(--shadow-gray), 0.2) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.2) 75%, hsla(var(--shadow-gray), 0.2));
   background-size: 10px 10px;
-  border: 1px solid hsl(var(--border)); 
+  border: 1px solid hsl(var(--border));
   position: relative;
 }
-
 .carbon-card-burst::before {
   content: "";
   position: absolute;
-  inset: -1px; 
-  border-radius: calc(var(--radius) + 1px); 
+  inset: -1px;
+  border-radius: calc(var(--radius) + 1px);
   background: conic-gradient(
     from 90deg,
     hsl(var(--bmw-m-blue)) 0deg 120deg,
-    hsl(var(--uv-blue)) 120deg 240deg, 
-    hsl(var(--primary)) 240deg 360deg 
+    hsl(var(--uv-blue)) 120deg 240deg,
+    hsl(var(--primary)) 240deg 360deg
   );
   z-index: -1;
   animation: mStripePulse 3s linear infinite paused;
-  filter: blur(2px); 
+  filter: blur(2px);
 }
 .carbon-card-burst:hover::before {
   animation-play-state: running;
 }
-
 .carbon-card-burst:hover {
   transform: translateY(-8px) rotateX(0deg) rotateY(0deg);
-  box-shadow: 0 15px 30px hsla(var(--shadow-gray), 0.7), 0 0 20px hsla(var(--primary)/0.5); 
-  border-color: hsl(var(--primary)); 
+  box-shadow: 0 15px 30px hsla(var(--shadow-gray), 0.7), 0 0 20px hsla(var(--primary)/0.5);
+  border-color: hsl(var(--primary));
 }
 
-.light-sweep-overlay { /* For tilted cards in ContentBurstSection */
+.light-sweep-overlay {
   @apply absolute inset-0 pointer-events-none;
   background: linear-gradient(
     100deg,
     transparent 30%,
-    hsla(var(--bmw-m-blue), 0.4) 45%, 
+    hsla(var(--bmw-m-blue), 0.4) 45%,
     hsla(var(--primary), 0.4) 55%,
     transparent 70%
   );
-  mix-blend-mode: screen; 
+  mix-blend-mode: screen;
   opacity: 0.9;
   transform: translateX(-100%);
   will-change: transform;
@@ -565,19 +539,19 @@
 
 /* RPM Widget Styles (Bottom Right Scroll Dial) */
 .rpm-widget-dial {
-  filter: drop-shadow(0 2px 8px hsla(var(--shadow-gray),0.5)); 
+  filter: drop-shadow(0 2px 8px hsla(var(--shadow-gray),0.5));
 }
 .rpm-widget-needle {
   /* Styles applied inline via motion.div */
 }
 
-/* HUD CONSOLE PANEL STYLES (Aggressive Elegance) */
+/* HUD CONSOLE PANEL STYLES (Aggressive Elegance & XENOFRAME) */
 .hud-console-panel {
   @apply fixed bottom-4 left-4 w-72 md:w-80 bg-black/80 backdrop-blur-md text-sm p-4 rounded-lg shadow-2xl border border-border/50 z-50;
-  color: hsl(var(--foreground)); 
-  box-shadow: 0 0 15px hsla(var(--uv-blue)/0.3), 
+  color: hsl(var(--foreground));
+  box-shadow: 0 0 15px hsla(var(--uv-blue)/0.3),
               0 0 5px hsla(var(--uv-blue)/0.2),
-              inset 0 1px 1px hsla(var(--foreground)/0.05); 
+              inset 0 1px 1px hsla(var(--foreground)/0.05);
   transition: box-shadow 0.3s var(--ease-m-throttle);
 }
 .hud-console-panel:hover {
@@ -587,84 +561,84 @@
 }
 
 .hud-console-header {
-  @apply flex items-center justify-between mb-3 pb-2 border-b border-border/30; 
+  @apply flex items-center justify-between mb-3 pb-2 border-b border-border/30;
 }
 .hud-console-title {
   @apply flex items-center space-x-2 font-heading text-base text-foreground uppercase;
 }
-.hud-console-title svg { /* Icon inside title */
-  @apply text-primary; 
+.hud-console-title svg {
+  @apply text-primary;
 }
-.hud-console-settings-icon { /* Settings icon in header */
+.hud-console-settings-icon {
   @apply text-muted-foreground animate-spin-slow;
 }
 
-.hud-console-log { /* Typewriter log area */
+.hud-console-log {
   @apply mb-3 h-5 overflow-hidden font-mono text-xs whitespace-nowrap;
-  color: hsl(var(--accent)); 
+  color: hsl(var(--accent));
 }
 
-.hud-gauge-item { /* Container for a label + value/meter */
+.hud-gauge-item {
   @apply flex items-center justify-between;
 }
-.hud-gauge-label { /* Text label for a gauge */
+.hud-gauge-label {
   @apply flex items-center text-muted-foreground text-xs;
 }
-.hud-gauge-label svg { /* Icon next to gauge label */
-  @apply mr-1.5 text-primary; 
+.hud-gauge-label svg {
+  @apply mr-1.5 text-primary;
 }
-.hud-gauge-value { /* Text value for a gauge */
-  @apply font-mono text-foreground; 
+.hud-gauge-value {
+  @apply font-mono text-foreground;
 }
 
-.hud-meter-track { /* Background track for a progress bar gauge */
-  @apply w-1/2 h-2.5 bg-input rounded-full overflow-hidden border border-border/30 shadow-inner; 
+.hud-meter-track {
+  @apply w-1/2 h-2.5 bg-input rounded-full overflow-hidden border border-border/30 shadow-inner;
 }
-.hud-meter-fill { /* Filled portion of the progress bar gauge */
+.hud-meter-fill {
   @apply h-full rounded-full transition-all duration-300 ease-m-throttle;
   background: linear-gradient(to right, hsl(var(--bmw-m-blue)), hsl(var(--primary)));
 }
 
-.hud-console-button { /* General style for buttons in console */
+.hud-console-button {
   @apply flex-1 text-xs py-1.5 px-2 h-auto border-border/40 hover:border-primary hover:bg-primary/10 transition-m-throttle;
   color: hsl(var(--muted-foreground));
 }
-.hud-console-button.active { /* Active state for console buttons */
-  @apply border-primary text-primary; 
+.hud-console-button.active {
+  @apply border-primary text-primary;
   box-shadow: 0 0 8px hsl(var(--primary)/0.5);
 }
-.hud-console-button svg { /* Icon inside console button */
+.hud-console-button svg {
   @apply mr-1.5;
 }
-.hud-console-button.ghostline-active { /* Specific for Ghostline toggle when active */
-   @apply border-uv-blue text-uv-blue; 
+.hud-console-button.ghostline-active {
+   @apply border-uv-blue text-uv-blue;
    box-shadow: 0 0 8px hsl(var(--uv-blue)/0.5);
 }
 
 /* XENOFRAME specific styles for HUD Console */
-.sentient-console-uv-glow { /* Applied to hud-console-panel when Ghostline full mode unlocked */
-  box-shadow: 0 0 25px hsla(var(--uv-blue), 0.6), 0 0 40px hsla(var(--uv-blue), 0.4), inset 0 0 15px hsla(var(--uv-blue),0.3);
+.sentient-console-uv-glow {
+  box-shadow: 0 0 25px hsla(var(--uv-blue), 0.6), 0 0 40px hsla(var(--uv-blue), 0.4), inset 0 0 15px hsla(var(--uv-blue),0.3) !important;
   border-color: hsla(var(--uv-blue),0.7) !important;
 }
 .sentient-console-uv-glow .hud-console-title svg,
 .sentient-console-uv-glow .hud-gauge-label svg {
-  color: hsl(var(--uv-blue)) !important; 
+  color: hsl(var(--uv-blue)) !important;
 }
 .sentient-console-uv-glow .hud-console-log {
-  color: hsl(var(--uv-blue)) !important; 
+  color: hsl(var(--uv-blue)) !important;
   text-shadow: 0 0 5px hsl(var(--uv-blue)/0.7);
 }
-.text-uv-accent { /* Utility class for UV text */
+.text-uv-accent {
   color: hsl(var(--uv-blue)) !important;
   text-shadow: 0 0 5px hsl(var(--uv-blue)/0.7);
 }
 
 /* Kinetic Skill Trail Styles */
-.skill-card-trail-container { /* Wrapper for skill card for overflow hidden */
+.skill-card-trail-container {
   position: relative;
   overflow: hidden;
 }
-.skill-card-trail { /* The trail pseudo-element */
+.skill-card-trail {
   position: absolute;
   top: 0;
   left: 0;
@@ -672,36 +646,36 @@
   height: 100%;
   background: linear-gradient(
     120deg,
-    hsla(var(--primary), 0.4) 0%, 
-    hsla(var(--accent), 0.3) 50%, 
+    hsla(var(--primary), 0.4) 0%,
+    hsla(var(--accent), 0.3) 50%,
     hsla(var(--primary), 0.4) 100%
   );
-  mix-blend-mode: lighten; 
+  mix-blend-mode: lighten;
   opacity: 0;
   transform: translateX(-100%) skewX(-30deg);
   transition: opacity 0.3s var(--ease-m-throttle), transform 0.3s var(--ease-m-throttle);
   pointer-events: none;
-  z-index: 0; /* Behind card content */
+  z-index: 0;
 }
 .skill-card-trail-container:hover .skill-card-trail {
   opacity: 0.7;
   transform: translateX(0%) skewX(-15deg);
   transition: opacity 0.15s ease-in, transform 0.15s ease-in;
 }
-.skill-card-trail-ghostline { /* Trail style when Ghostline is active */
+.skill-card-trail-ghostline {
   background: linear-gradient(
     120deg,
-    hsla(var(--uv-blue), 0.5) 0%, 
-    hsla(var(--primary), 0.4) 50%, 
+    hsla(var(--uv-blue), 0.5) 0%,
+    hsla(var(--primary), 0.4) 50%,
     hsla(var(--uv-blue), 0.5) 100%
   );
 }
-.skill-card-ghostline-active { /* Border/shadow for skill card when Ghostline is active */
-  border-color: hsl(var(--uv-blue)/0.6) !important; 
+.skill-card-ghostline-active {
+  border-color: hsl(var(--uv-blue)/0.6) !important;
   box-shadow: 0 0 15px hsl(var(--uv-blue)/0.4);
 }
 
-@keyframes skillJitter { /* For XENOFRAME skill card jitter */
+@keyframes skillJitter {
   0%, 100% { transform: translate(0, 0); }
   25% { transform: translate(0.5px, -0.5px); }
   50% { transform: translate(-0.5px, 0.5px); }
@@ -711,7 +685,6 @@
   animation: skillJitter 0.15s infinite linear;
 }
 
-/* XENOFRAME - ERRATIC GLOW (for repeated hover anomaly) */
 .erratic-glow {
   animation: erraticGlowPulse 0.5s infinite alternate;
   border-color: hsl(var(--destructive)/0.7) !important;
@@ -721,70 +694,68 @@
   100% { box-shadow: 0 0 25px hsl(var(--destructive)/0.8), 0 0 10px hsla(var(--uv-blue)/0.4); }
 }
 
-/* XENOFRAME - RARE SECTION PULSE (visual feedback for loading rare sections) */
-.rare-section-pulse-active { /* Applied to body temporarily */
+.rare-section-pulse-active {
   animation: rareSectionPulse 0.3s ease-out;
 }
 @keyframes rareSectionPulse {
-  0%, 100% { box-shadow: inset 0 0 0 0px hsl(var(--uv-blue)/0); } 
+  0%, 100% { box-shadow: inset 0 0 0 0px hsl(var(--uv-blue)/0); }
   50% { box-shadow: inset 0 0 0 15px hsl(var(--uv-blue)/0.25); }
 }
 
-/* XENOFRAME - HYPERACTIVE SCROLL FEEDBACK (visual feedback for fast scrolling) */
-.hyperactive-scroll-feedback { /* Applied to body temporarily */
+.hyperactive-scroll-feedback {
   animation: hyperactiveFeedbackFlash 0.2s ease-out;
 }
 @keyframes hyperactiveFeedbackFlash {
   0%, 100% { background-color: hsl(var(--background)); border: 2px solid transparent; }
-  50% { background-color: hsl(var(--background)); border: 2px solid hsl(var(--primary)/0.6); } 
+  50% { background-color: hsl(var(--background)); border: 2px solid hsl(var(--primary)/0.6); }
 }
 
 /* Neural Drift Timeline Styles */
-.neural-drift-timeline { /* Horizontal scroll container */
+.neural-drift-timeline {
   @apply flex overflow-x-auto space-x-8 md:space-x-12 py-4;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-.neural-drift-timeline::-webkit-scrollbar { /* Chrome, Safari, Opera */
-  display: none; 
+.neural-drift-timeline::-webkit-scrollbar {
+  display: none;
 }
 .timeline-milestone {
-  @apply relative flex-shrink-0 w-64 md:w-72; /* Ensure items don't shrink too much */
+  @apply relative flex-shrink-0 w-64 md:w-72;
 }
-.timeline-milestone-connector { /* The horizontal line connecting milestones */
+.timeline-milestone-connector {
   @apply absolute top-1/2 left-0 w-full h-0.5 bg-border/40 -translate-y-1/2 -z-10;
 }
-.timeline-milestone-node { /* The dot on the timeline for each milestone */
+.timeline-milestone-node {
   @apply absolute -top-1 left-1/2 w-3 h-3 rounded-full border-2 border-background shadow-md z-10 transition-m-throttle;
-  background-color: hsl(var(--primary)); 
+  background-color: hsl(var(--primary));
   transform: translateX(-50%) scale(1);
 }
 .timeline-milestone:hover .timeline-milestone-node,
-.timeline-milestone-highlight .timeline-milestone-node { /* Hover/active state for node */
+.timeline-milestone-highlight .timeline-milestone-node {
   transform: translateX(-50%) scale(1.3);
-  background-color: hsl(var(--accent)); 
+  background-color: hsl(var(--accent));
   box-shadow: 0 0 8px hsl(var(--accent)/0.7);
 }
-.timeline-milestone-content { /* Card content for each milestone */
+.timeline-milestone-content {
   @apply bg-card/80 backdrop-blur-sm p-4 rounded-lg shadow-xl border border-border/50 min-h-[150px] flex flex-col justify-between transition-m-throttle;
-  min-width: 200px; 
+  min-width: 200px;
 }
 .timeline-milestone-content:hover {
   border-color: hsl(var(--primary));
   box-shadow: 0 0 15px hsla(var(--primary)/0.4);
 }
-.timeline-milestone-highlight .timeline-milestone-content { /* Style for "current" or focused item */
+.timeline-milestone-highlight .timeline-milestone-content {
   border-color: hsl(var(--accent));
   box-shadow: 0 0 20px hsla(var(--accent)/0.5);
 }
 
-/* NeuroLink Terminal Styles (Keyboard Easter Egg) */
+/* NeuroLink Terminal Styles */
 .neurolink-terminal-overlay {
   @apply fixed inset-0 bg-black/90 backdrop-blur-md z-[9999] flex items-center justify-center p-4;
 }
 .neurolink-terminal {
   @apply w-full max-w-2xl h-[70vh] max-h-[600px] bg-black border-2 rounded-lg shadow-2xl flex flex-col overflow-hidden;
-  border-color: hsl(var(--uv-blue)/0.5); 
+  border-color: hsl(var(--uv-blue)/0.5);
   box-shadow: 0 0 30px hsla(var(--uv-blue)/0.4);
 }
 .neurolink-terminal-header {
@@ -795,46 +766,46 @@
 }
 .neurolink-terminal-output {
   @apply flex-grow p-3 overflow-y-auto font-mono text-sm space-y-1;
-  color: hsl(var(--foreground)); 
+  color: hsl(var(--foreground));
 }
 .neurolink-terminal-output .command-input::before {
   content: 'XENO_CMD> ';
-  color: hsl(var(--primary)); 
+  color: hsl(var(--primary));
 }
 .neurolink-terminal-output .command-output {
-  color: hsl(var(--accent)); 
-  white-space: pre-wrap; 
+  color: hsl(var(--accent));
+  white-space: pre-wrap;
 }
 .neurolink-terminal-output .command-error {
-  color: hsl(var(--destructive)); 
+  color: hsl(var(--destructive));
 }
 .neurolink-terminal-input-area {
   @apply p-3 border-t border-border/30 flex items-center;
 }
-.neurolink-terminal-input-area span { /* Prompt symbol in input area */
-  @apply font-mono text-primary mr-2; 
+.neurolink-terminal-input-area span {
+  @apply font-mono text-primary mr-2;
 }
 .neurolink-terminal-input {
   @apply flex-grow bg-transparent border-none outline-none font-mono text-foreground text-sm p-0;
 }
 
-/* Carbon Wave Footer (Apex Finish) */
-.carbon-weave-animated { /* Applied to footer */
+/* Carbon Wave Footer */
+.carbon-weave-animated {
   background-image:
     linear-gradient(45deg, hsla(var(--shadow-gray), 0.1) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.1) 75%, hsla(var(--shadow-gray), 0.1)),
     linear-gradient(-45deg, hsla(var(--shadow-gray), 0.1) 25%, transparent 25%, transparent 75%, hsla(var(--shadow-gray), 0.1) 75%, hsla(var(--shadow-gray), 0.1));
-  background-size: 8px 8px; 
+  background-size: 8px 8px;
   animation: carbonWeaveShift 8s linear infinite;
 }
 @keyframes carbonWeaveShift {
   0% { background-position: 0 0; }
-  100% { background-position: 16px 16px; } 
+  100% { background-position: 16px 16px; }
 }
 
-.footer-diffuser-fin-dot { /* LED dots on footer */
-  @apply absolute w-1.5 h-1.5 rounded-full bg-primary; 
+.footer-diffuser-fin-dot {
+  @apply absolute w-1.5 h-1.5 rounded-full bg-primary;
   animation: pulseLed 10s infinite ease-in-out;
-  box-shadow: 0 0 4px 1px hsl(var(--primary)/0.8); 
+  box-shadow: 0 0 4px 1px hsl(var(--primary)/0.8);
 }
 @keyframes pulseLed {
   0%, 100% { opacity: 0.3; transform: scale(0.8); }
@@ -842,35 +813,31 @@
   10% { opacity: 0.3; transform: scale(0.8); }
 }
 
-/* Section Grille Blade (Apex Finish) */
-.section-grille-blade { /* Vertical border for sections */
-  content: ''; /* Ensure this is applied in ::before or ::after or styled div */
+/* Section Grille Blade */
+.section-grille-blade {
+  content: ''; 
   position: absolute;
   width: 3px;
   background: linear-gradient(to bottom, hsl(var(--shadow-gray)/0.8), hsl(var(--border)));
-  z-index: 0; /* Behind section content if needed */
+  z-index: 0;
 }
 
-/* Crystal HUD Tooltips (Apex Finish - Base Styling) */
-.tooltip-content-crystal { /* Apply to ShadCN TooltipContent */
+/* Crystal HUD Tooltips */
+.tooltip-content-crystal {
   @apply relative text-xs px-3 py-2 rounded-sm text-primary-foreground;
-  background: hsla(var(--card), 0.75); 
-  backdrop-filter: blur(8px); 
+  background: hsla(var(--card), 0.75);
+  backdrop-filter: blur(8px);
   border: 1px solid;
   border-image-slice: 1;
   border-image-source: linear-gradient(to bottom right, hsl(var(--bmw-m-blue)/0.9), hsl(var(--primary)/0.9));
   clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%);
-  box-shadow: 0 0 10px hsla(var(--uv-blue)/0.3); 
+  box-shadow: 0 0 10px hsla(var(--uv-blue)/0.3);
 }
 
-/* M-Chrono Scroll Gauge / RPM Gauge Styles (Apex Finish & M-Gauge Update) */
-.m-chrono-scroll-gauge-container { /* Main container for top-left scroll bar */
+/* M-Chrono Scroll Gauge / RPM Gauge Styles */
+.m-chrono-scroll-gauge-container {
   @apply fixed top-4 left-4 w-48 h-4 bg-neutral-900/80 rounded-sm overflow-hidden z-50 shadow-lg border border-neutral-700/60 backdrop-blur-sm;
-  clip-path: polygon(0 0, 100% 0, 100% 70%, 90% 100%, 10% 100%, 0% 70%); /* Angular shape */
-  box-shadow: 0 0 15px hsla(var(--uv-blue), 0.4), 
-              0 0 25px hsla(var(--uv-blue), 0.2),
-              inset 0 1px 1px hsla(0,0%,0%,0.5);
-  /* Carbon fiber texture for gauge background */
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 90% 100%, 10% 100%, 0% 70%);
   background-image:
     linear-gradient(135deg, hsla(var(--shadow-gray),0.95) 25%, transparent 25%),
     linear-gradient(225deg, hsla(var(--shadow-gray),0.95) 25%, transparent 25%),
@@ -879,56 +846,52 @@
     linear-gradient(to bottom, hsl(var(--shadow-gray)/0.98), hsl(var(--background)/0.95));
   background-position: 0 0, 2px 2px, 2px 2px, 0 0, 0 0;
   background-size: 4px 4px, 4px 4px, 4px 4px, 4px 4px, 100% 100%;
+  box-shadow: 0 0 15px hsla(var(--uv-blue), 0.4),
+              0 0 25px hsla(var(--uv-blue), 0.2),
+              inset 0 1px 1px hsla(0,0%,0%,0.5);
 }
 
-/* Tick marks for M-Chrono Scroll Gauge */
-.m-rpm-tick-base { /* Base for all ticks */
+.m-rpm-tick-base {
   @apply absolute top-1/2 -translate-y-1/2 h-[140%] w-[1.5px] transition-opacity duration-300;
-  background: linear-gradient(to bottom, hsla(var(--foreground),0.95), hsla(var(--foreground),0.7)); 
-  box-shadow: 0 0 2px hsla(var(--foreground),0.8), 0 0 4px hsla(var(--foreground),0.6); 
+  background: linear-gradient(to bottom, hsla(var(--foreground),0.95), hsla(var(--foreground),0.7));
+  box-shadow: 0 0 2px hsla(var(--foreground),0.8), 0 0 4px hsla(var(--foreground),0.6);
 }
-.m-rpm-tick-major { /* Major ticks (e.g., every 20%) */
-  @apply w-[2px] h-[160%]; /* Taller and thicker */
-  background: linear-gradient(to bottom, hsl(var(--foreground)), hsla(var(--foreground),0.8)); 
+.m-rpm-tick-major {
+  @apply w-[2px] h-[160%];
+  background: linear-gradient(to bottom, hsl(var(--foreground)), hsla(var(--foreground),0.8));
   box-shadow: 0 0 3px hsl(var(--foreground)), 0 0 6px hsla(var(--foreground),0.7);
 }
-.m-rpm-tick-redzone-highlight { /* Ticks in the redline zone */
-  background: linear-gradient(to bottom, hsl(var(--primary)), hsla(var(--primary), 0.85)) !important; 
-  box-shadow: 0 0 5px hsl(var(--primary)), 0 0 10px hsl(var(--primary)/0.9) !important; 
+.m-rpm-tick-redzone-highlight {
+  background: linear-gradient(to bottom, hsl(var(--primary)), hsla(var(--primary), 0.85)) !important;
+  box-shadow: 0 0 5px hsl(var(--primary)), 0 0 10px hsl(var(--primary)/0.9) !important;
 }
 
-/* Bar Fill / Digital Needle Styles for M-Chrono Scroll Gauge */
-.m-rpm-gauge-fill-low { /* 0-50% - Ice blue (M Performance Blue) */
+.m-rpm-gauge-fill-low {
   background: linear-gradient(to right, hsl(var(--bmw-m-blue)/0.8), hsl(var(--bmw-m-blue)));
   box-shadow: inset 0 0 3px hsla(var(--bmw-m-blue),0.4),
               0 0 4px hsla(var(--bmw-m-blue),0.3),
-              0 0 0 1px hsla(var(--bmw-m-blue), 0.6); /* Neon edge */
+              0 0 0 1px hsla(var(--bmw-m-blue), 0.6);
 }
-.m-rpm-gauge-fill-mid { /* 50-80% - UV Blue */
+.m-rpm-gauge-fill-mid {
   background: linear-gradient(to right, hsl(var(--bmw-m-blue)), hsl(var(--uv-blue)));
   box-shadow: inset 0 0 3px hsla(var(--uv-blue),0.4),
               0 0 4px hsla(var(--uv-blue),0.3),
-              0 0 0 1px hsla(var(--uv-blue), 0.6); /* Neon edge */
+              0 0 0 1px hsla(var(--uv-blue), 0.6);
 }
-.m-rpm-gauge-fill-high { /* 80-90% - Neon Red (Primary) */
+.m-rpm-gauge-fill-high {
   background: linear-gradient(to right, hsl(var(--uv-blue)), hsl(var(--primary)));
   box-shadow: inset 0 0 3px hsla(var(--primary),0.4),
               0 0 4px hsla(var(--primary),0.3),
-              0 0 0 1px hsla(var(--primary), 0.6); /* Neon edge */
+              0 0 0 1px hsla(var(--primary), 0.6);
 }
-.m-rpm-gauge-fill-redline { /* 90-100% - Intense Neon Red for redline */
+.m-rpm-gauge-fill-redline {
   background: linear-gradient(to right, hsl(var(--primary)/0.9), hsl(var(--primary)));
-  box-shadow: inset 0 0 4px hsla(var(--primary),0.5), /* Inner glow */
-              0 0 8px hsla(var(--primary),0.7),    /* Outer glow */
-              0 0 0 1.5px hsl(var(--primary), 0.8); /* Neon edge */
-  /* Animation is applied via JS if needed, or directly if .m-rpm-led-pulse is also on this element */
 }
 
-.m-rpm-led-pulse { /* Animation for redline flare / LED shift lights */
+.m-rpm-led-pulse {
   animation: m-rpm-redline-led-pulse 0.25s ease-out forwards;
 }
 
-/* Keyframes for M-RPM Redline LED Pulse */
 @keyframes m-rpm-redline-led-pulse {
   0% {
     filter: brightness(1.5) saturate(1.5);
@@ -937,14 +900,14 @@
                 0 0 20px hsla(var(--primary),0.6),
                 0 0 0 1.5px hsl(var(--primary), 0.7);
   }
-  50% { /* Peak of the pulse - very bright */
+  50% {
     filter: brightness(3.5) saturate(3.0);
-    box-shadow: inset 0 0 7px hsla(var(--primary),1), /* Intense inner glow */
-                0 0 25px hsla(var(--primary),1.5),   /* Wide outer glow */
-                0 0 50px hsla(var(--primary),1.2),   /* Ambient bloom */
-                0 0 0 2.5px hsla(var(--primary), 1); /* Sharper, brighter neon edge */
+    box-shadow: inset 0 0 7px hsla(var(--primary),1),
+                0 0 25px hsla(var(--primary),1.5),
+                0 0 50px hsla(var(--primary),1.2),
+                0 0 0 2.5px hsl(var(--primary), 1);
   }
-  100% { /* Settle back to a heightened redline state */
+  100% {
     filter: brightness(2.0) saturate(2.0);
     box-shadow: inset 0 0 5px hsla(var(--primary),0.8),
                 0 0 15px hsla(var(--primary),1),
@@ -953,13 +916,13 @@
   }
 }
 
-.hero-text-lift:hover, .hero-text-lift:focus-visible { /* Micro-lift for Hero text */
+.hero-text-lift:hover, .hero-text-lift:focus-visible {
   transform: translateY(-4px);
   text-shadow: 0 4px 12px hsla(0,0%,0%,0.4),
                0 1px 2px hsla(0,0%,0%,0.6);
-  @apply transition-m-throttle; 
+  @apply transition-m-throttle;
 }
-@keyframes cameraShutterFlash { /* For Hero medallion/headline hover */
+@keyframes cameraShutterFlash {
   0%, 100% { filter: saturate(1) brightness(1); }
   50% { filter: saturate(1.4) brightness(1.3); }
 }
@@ -969,55 +932,13 @@
 
 /* Reduced Motion Fallbacks */
 @media (prefers-reduced-motion: reduce) {
-  .carbon-weave-animated { animation: none; }
-  .footer-diffuser-fin-dot { animation: none; opacity: 0.5; }
-  
-  .nav-rpm-underline::after { 
-    transition: none;
-    width: 70%;
-    opacity: 0.6;
-    background: hsl(var(--primary));
-    transform: translateX(-50%);
-    filter: none;
-    bottom: -4px; /* Match normal state */
-    height: 3px; /* Match normal state */
-    border-radius: 1.5px;
-    clip-path: none;
-    box-shadow: none;
-  }
-  .nav-rpm-underline:hover::after,
-  .nav-rpm-underline.active-link::after {
-     background: hsl(var(--primary));
-     width: 70%;
-     opacity: 1;
-  }
-  .nav-rpm-underline.active-link, .nav-rpm-underline:hover {
-    text-shadow: none;
-  }
-
-
-  .section-grille-blade {
-    transform: scaleY(1) !important; /* Ensure visible */
-    opacity: 1 !important;
-  }
-  .tooltip-content-crystal { /* For ShadCN TooltipContent */
-    backdrop-filter: none;
-    background: hsl(var(--card)); /* Solid background */
-  }
-  .m-rpm-led-pulse, .m-rpm-gauge-fill-redline { /* Ensure redline visual is static if animations are off */
-     box-shadow: none; /* Remove intense animated shadow */
-     animation: none;
-     background: hsl(var(--primary)) !important; /* Static redline color */
-  }
-  .hero-text-lift:hover, .hero-text-lift:focus-visible {
-     transform: none; text-shadow: none;
-  }
-  .animate-camera-flash { animation: none; }
-  .hero-headlight-sweep-bg { animation: none; opacity: 0.05; } /* Keep subtle, static sweep */
-  .m-rpm-tick-base { transition: none; } /* Disable tick opacity transition */
-
-  /* Disable other complex animations */
-  .hero-medallion-nightfall-inner::before, 
+  .carbon-weave-animated,
+  .footer-diffuser-fin-dot,
+  .section-grille-blade,
+  .hero-headlight-sweep-bg,
+  .m-rpm-led-pulse, .m-rpm-gauge-fill-redline,
+  .animate-camera-flash,
+  .hero-medallion-nightfall-inner::before,
   .hero-tagline-nightfall,
   .hero-atelier-bg::before,
   .hero-rpm-quantum,
@@ -1036,20 +957,51 @@
   .rare-section-pulse-active,
   .hyperactive-scroll-feedback,
   .neurolink-terminal-output .command-input::before,
-  .timeline-milestone-node,
-  .timeline-milestone-content,
-  .hud-console-settings-icon {
+  .hud-console-settings-icon,
+  .m-rpm-tick-base
+  {
     animation: none !important;
     transition: none !important;
   }
-  .hud-console-settings-icon { /* Stop spin for settings icon */
-    transform: none !important;
+
+  .nav-rpm-underline::after {
+    transition: none;
+    width: 70%;
+    opacity: 0.6;
+    background: hsl(var(--primary));
+    transform: translateX(-50%) scaleX(1);
+    filter: none;
+    box-shadow: none;
+    clip-path: none;
+    height: 2px;
+    bottom: -2px;
   }
+  .nav-rpm-underline:hover::after,
+  .nav-rpm-underline.active-link::after {
+     background: hsl(var(--primary));
+     width: 100%;
+     opacity: 1;
+  }
+  .nav-rpm-underline.active-link, .nav-rpm-underline:hover {
+    text-shadow: none;
+  }
+  
+  .tooltip-content-crystal {
+    backdrop-filter: none;
+    background: hsl(var(--card));
+    clip-path: none;
+  }
+
+  .hero-text-lift:hover, .hero-text-lift:focus-visible {
+     transform: none; text-shadow: none;
+  }
+
   .timeline-milestone-node:hover, .timeline-milestone-highlight .timeline-milestone-node {
-    transform: translateX(-50%) scale(1) !important; /* No scale on hover */
+    transform: translateX(-50%) scale(1) !important;
   }
+
   .carbon-card-burst:hover {
-    transform: translateY(-6px); /* Simpler lift */
+    transform: translateY(-6px);
   }
 }
-
+    
