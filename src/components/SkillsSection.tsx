@@ -2,11 +2,11 @@
 "use client";
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge, Activity // Added Activity
+  Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge, Activity
 } from 'lucide-react';
 import Section from '@/components/Section';
-import { useUserInteraction } from '@/contexts/UserInteractionContext'; 
-import soundService from '@/services/soundService';
+// Removed: import { useUserInteraction } from '@/contexts/UserInteractionContext'; 
+// Removed: import soundService from '@/services/soundService';
 import { cn } from '@/lib/utils';
 
 const skills = [
@@ -16,7 +16,7 @@ const skills = [
   { name: 'Machine Learning', icon: <Brain size={32} />, modeName: 'Intelligent Traction', id: 'skill-ml' },
   { name: 'Python Programming', icon: <Code2 size={32} />, modeName: 'Core Engine (Python)', id: 'skill-python' },
   { name: 'Data Analysis', icon: <BarChart3 size={32} />, modeName: 'Performance Analytics', id: 'skill-data-analysis' },
-  { name: 'Web Development', icon: <Activity size={32} />, modeName: 'Chassis & Aero (Web)', id: 'skill-web-dev' }, // Changed icon
+  { name: 'Web Development', icon: <Activity size={32} />, modeName: 'Chassis & Aero (Web)', id: 'skill-web-dev' },
   { name: 'SQL & Databases', icon: <Database size={32} />, modeName: 'Fuel System (Data)', id: 'skill-sql' },
   { name: 'Unix/Linux', icon: <Terminal size={32} />, modeName: 'ECU (Unix/Linux)', id: 'skill-linux' },
   { name: 'Statistical Modeling', icon: <Gauge size={32} />, modeName: 'Precision Tuning', id: 'skill-stat-model' },
@@ -27,37 +27,37 @@ const skills = [
 
 export default function SkillsSection() {
   const prefersReducedMotion = useReducedMotion();
-  const { interactionData, incrementSkillHover, getSkillHoverDetail, unlockGhostlineFullMode } = useUserInteraction();
-  const { isSoundEnabled, isGhostlineFullModeUnlocked } = interactionData;
+  // Removed: const { interactionData, incrementSkillHover, getSkillHoverDetail, unlockGhostlineFullMode } = useUserInteraction();
+  // Removed: const { isSoundEnabled, isGhostlineFullModeUnlocked } = interactionData;
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.9 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
-      scale: prefersReducedMotion ? 1 : [1, 1.06, 1],
+      scale: prefersReducedMotion ? 1 : [1, 1.06, 1], // Simplified scale animation
       boxShadow: prefersReducedMotion 
         ? "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)" 
         : ["0 0 0px hsla(var(--primary)/0)", "0 0 12px hsla(var(--primary)/0.4)", "0 0 0px hsla(var(--primary)/0)"],
       transition: {
         delay: i * 0.06,
-        duration: prefersReducedMotion ? 0.4 : 0.2, 
-        ease: prefersReducedMotion ? [0.42, 0, 0.58, 1] : "easeInOut",
+        duration: prefersReducedMotion ? 0.4 : 0.3, // Adjusted duration
+        ease: prefersReducedMotion ? [0.42, 0, 0.58, 1] : "circOut", // Using circOut for a bit of bounce
         times: prefersReducedMotion ? undefined : [0, 0.5, 1], 
       },
     }),
     hover: prefersReducedMotion ? { scale: 1.02 } : {
       scale: 1.05, 
       boxShadow: "0px 0px 20px 0px hsl(var(--primary)/0.6)", 
-      borderColor: "hsl(var(--primary))", 
-      // transition: { type: 'spring', stiffness: 250, damping: 10 } // Using transition-m-throttle globally
+      borderColor: "hsl(var(--primary))",
+      transition: { type: 'spring', stiffness: 250, damping: 10, duration: 0.15 }
     }
   };
 
   const textVariants = {
     hover: {
       color: "hsl(var(--primary-foreground))",
-      // transition: { type: 'spring', stiffness: 300, damping: 10, duration: 0.1 } // Using transition-m-throttle globally
+      transition: { type: 'spring', stiffness: 300, damping: 10, duration: 0.1 }
     }
   };
 
@@ -65,26 +65,17 @@ export default function SkillsSection() {
     hover: {
       scale: 1.15,
       color: "hsl(var(--primary))", 
-      // transition: { duration: 0.2 } // Using transition-m-throttle globally
+      transition: { duration: 0.1 }
     }
   };
 
-  const handleSkillHover = (skillName: string) => {
-    incrementSkillHover(skillName);
-    unlockGhostlineFullMode(); 
-    if (isSoundEnabled) {
-      soundService.playSound('hoverChime', { note: 'G5' });
-      setTimeout(() => {
-        if (isSoundEnabled) soundService.playSound('electricCrackle');
-      }, 70);
-    }
-  };
+  // Removed: handleSkillHover function
   
   return (
     <Section id="skills" className="bg-card/30">
       <div className="text-center mb-12 md:mb-16">
         <motion.h2 
-          className="text-4xl md:text-5xl font-heading text-primary-foreground" // Uses .font-heading for M-badging style
+          className="text-4xl md:text-5xl font-heading text-primary-foreground"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -103,18 +94,18 @@ export default function SkillsSection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
         {skills.map((skill, index) => {
-          const hoverDetail = getSkillHoverDetail(skill.name);
-          const isRepeatedHover = hoverDetail && hoverDetail.count >= 3 && (Date.now() - hoverDetail.lastTimestamp < 10000); 
+          // Removed: const hoverDetail = getSkillHoverDetail(skill.name);
+          // Removed: const isRepeatedHover = hoverDetail && hoverDetail.count >= 3 && (Date.now() - hoverDetail.lastTimestamp < 10000); 
 
           return (
             <motion.div
               key={skill.id}
               className={cn(
-                "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40 skill-card-trail-container",
-                "transition-m-throttle", // Added M-throttle transition
-                isGhostlineFullModeUnlocked && "skill-card-ghostline-active",
-                isGhostlineFullModeUnlocked && Math.random() < 0.3 && !prefersReducedMotion && "animate-skill-jitter", 
-                isRepeatedHover && "erratic-glow"
+                "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40",
+                "transition-m-throttle" // Kept base transition for consistency
+                // Removed: isGhostlineFullModeUnlocked && "skill-card-ghostline-active",
+                // Removed: isGhostlineFullModeUnlocked && Math.random() < 0.3 && !prefersReducedMotion && "animate-skill-jitter", 
+                // Removed: isRepeatedHover && "erratic-glow"
               )}
               custom={index}
               variants={cardVariants}
@@ -122,28 +113,27 @@ export default function SkillsSection() {
               whileInView="visible"
               whileHover="hover"
               viewport={{ once: true, amount: 0.1 }}
-              onHoverStart={() => handleSkillHover(skill.name)}
+              // Removed: onHoverStart={() => handleSkillHover(skill.name)}
             >
-              <div className={cn(
-                "skill-card-trail",
-                isGhostlineFullModeUnlocked && "skill-card-trail-ghostline"
-              )}></div>
+              {/* Removed: skill-card-trail div */}
               <motion.div 
-                className="mb-3 md:mb-4 text-primary-foreground/80 inline-block transition-m-throttle" // Added transition
+                className="mb-3 md:mb-4 text-primary-foreground/80 inline-block transition-m-throttle"
                 variants={iconVariants}
               >
                 {skill.icon}
               </motion.div>
               <motion.h3 
-                className="text-sm md:text-base font-semibold text-muted-foreground transition-m-throttle" // Added transition
+                className="text-sm md:text-base font-semibold text-muted-foreground transition-m-throttle"
                 variants={textVariants}
               >
                 {skill.modeName}
               </motion.h3>
               <motion.p
-                className="text-xs text-muted-foreground/70 mt-1 transition-m-throttle" // Added transition
-                variants={{ hover: { opacity: 1} }}
-                initial={{ opacity: 0 }} 
+                className="text-xs text-muted-foreground/70 mt-1 transition-m-throttle"
+                variants={{ hover: { opacity: 1} }} // Show skill name on hover
+                initial={{ opacity: 0 }} // Initially hidden
+                animate={{ opacity: 1, transition: {delay: index * 0.06 + 0.4} }} // Fade in slightly after card
+                whileHover={{opacity: 1}} // Keep visible on hover
               >
                 ({skill.name})
               </motion.p>
@@ -154,4 +144,3 @@ export default function SkillsSection() {
     </Section>
   );
 }
-

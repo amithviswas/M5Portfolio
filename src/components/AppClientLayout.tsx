@@ -7,95 +7,40 @@ import { useIntroContext } from '@/contexts/IntroContext';
 import IntroAnimation from '@/components/IntroAnimation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import ScrollMomentumBar from '@/components/ScrollMomentumBar';
 import { Toaster } from "@/components/ui/toaster";
 import { AnimatePresence, motion } from 'framer-motion';
-import { useUserInteraction } from '@/contexts/UserInteractionContext';
-import { useEffect } from 'react';
-import soundService from '@/services/soundService';
 
-// Torque-Ramp Page Transition Variants
+// Basic page transition variants
 const pageTransitionVariants = {
   initial: {
     opacity: 0,
-    x: '8vw', // Incoming page slides from right
-    filter: 'blur(0px)',
+    // x: '8vw', // Original "Torque-Ramp"
   },
   animate: {
     opacity: 1,
-    x: '0vw',
-    filter: 'blur(0px)',
+    // x: '0vw', // Original "Torque-Ramp"
     transition: {
-      duration: 0.4, // Total duration 400ms for entry
-      ease: [0.6, 0.04, 0.98, 0.335], // "acceleration curve in"
+      duration: 0.4, // Simpler duration
+      ease: [0.42, 0, 0.58, 1], // Standard ease-in-out
     }
   },
   exit: {
     opacity: 0,
-    x: '-8vw', // Outgoing page slides left
-    filter: 'blur(4px)',
+    // x: '-8vw', // Original "Torque-Ramp"
+    // filter: 'blur(4px)', // Removed blur for simplicity
     transition: {
-      duration: 0.3, // Total duration 300ms for exit
-      ease: [0.42, 0, 1, 1], // Fast out
+      duration: 0.3, // Simpler duration
+      ease: [0.42, 0, 0.58, 1], // Standard ease-in-out
     }
   }
 };
 
-
 export default function AppClientLayout({ children }: { children: ReactNode }) {
   const { introCompleted } = useIntroContext();
   const pathname = usePathname();
-  const { interactionData, logFastScroll } = useUserInteraction();
-
-  useEffect(() => {
-    const rareSections = ['/achievements', '/certifications', '/resume'];
-    if (rareSections.includes(pathname)) {
-      document.body.classList.add('rare-section-pulse-active');
-      if (interactionData.isSoundEnabled && soundService.isAudioContextStarted()) {
-         soundService.playSound('timelineRumble', { duration: '0.5s', note: 'C2' });
-      }
-      setTimeout(() => {
-        document.body.classList.remove('rare-section-pulse-active');
-      }, 300);
-    }
-  }, [pathname, interactionData.isSoundEnabled]);
-
-
-  useEffect(() => {
-    let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-    let lastScrollTime = Date.now();
-    const fastScrollThreshold = 300;
-    const timeThreshold = 100;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const currentTime = Date.now();
-      const deltaY = Math.abs(currentScrollY - lastScrollY);
-      const deltaTime = currentTime - lastScrollTime;
-
-      if (deltaTime < timeThreshold && deltaY > fastScrollThreshold) {
-        logFastScroll();
-        document.body.classList.add('hyperactive-scroll-feedback');
-        setTimeout(() => document.body.classList.remove('hyperactive-scroll-feedback'), 200);
-      }
-      lastScrollY = currentScrollY;
-      lastScrollTime = currentTime;
-    };
-
-    if (typeof window !== 'undefined') {
-        window.addEventListener('scroll', handleScroll, { passive: true });
-    }
-    return () => {
-        if (typeof window !== 'undefined') {
-            window.removeEventListener('scroll', handleScroll);
-        }
-    };
-  }, [logFastScroll]);
-
 
   return (
     <>
-      {/* Intro Animation - Fullscreen and fixed */}
       <AnimatePresence>
         {!introCompleted && <IntroAnimation />}
       </AnimatePresence>
@@ -103,7 +48,7 @@ export default function AppClientLayout({ children }: { children: ReactNode }) {
       {/* Static elements that appear after intro, but don't participate in page-to-page transitions */}
       {introCompleted && (
         <>
-          <ScrollMomentumBar />
+          {/* ScrollMomentumBar removed for rollback */}
           <Navbar />
         </>
       )}
@@ -112,14 +57,12 @@ export default function AppClientLayout({ children }: { children: ReactNode }) {
       <AnimatePresence mode="wait">
         {introCompleted && (
           <motion.div
-            key={pathname} // Ensures re-animation on path change
+            key={pathname}
             initial="initial"
             animate="animate"
             exit="exit"
             variants={pageTransitionVariants}
-            // This div will contain the scrollable content area.
-            // The main content needs padding for the fixed navbar.
-            // className="flex flex-col min-h-screen" // Keep this for overall structure
+            className="flex flex-col min-h-screen" // Ensuring structure
           >
             <main className="flex-grow pt-20"> {/* Padding for Navbar height */}
               {children}

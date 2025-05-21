@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Rajdhani, Playfair_Display, Space_Grotesk, Fraunces, Inter } from 'next/font/google';
 import './globals.css';
 import { IntroProvider } from '@/contexts/IntroContext';
-import { UserInteractionProvider } from '@/contexts/UserInteractionContext'; // Added
+// UserInteractionProvider is removed for rollback
 import AppClientLayout from '@/components/AppClientLayout';
 
 const rajdhani = Rajdhani({
@@ -35,10 +35,9 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-
 export const metadata: Metadata = {
   title: "Amith's M-Powered Portfolio",
-  description: 'High-performance portfolio of Amith Viswas Reddy, AI/ML Engineer & Data Scientist.',
+  description: 'Personal portfolio of Amith Viswas Reddy, Data Scientist and AI/ML Enthusiast.',
 };
 
 export default function RootLayout({
@@ -49,11 +48,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${rajdhani.variable} ${playfairDisplay.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${inter.variable} font-sans antialiased bg-background text-foreground`}>
-        <UserInteractionProvider> {/* Added Provider */}
-          <IntroProvider>
-            <AppClientLayout>{children}</AppClientLayout>
-          </IntroProvider>
-        </UserInteractionProvider>
+        {/* UserInteractionProvider removed */}
+        <IntroProvider>
+          <AppClientLayout>{children}</AppClientLayout>
+        </IntroProvider>
       </body>
     </html>
   );
