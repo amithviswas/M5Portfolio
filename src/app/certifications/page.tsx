@@ -45,8 +45,8 @@ const cardVariants = {
   }),
   hover: {
     scale: 1.02, 
-    y: -6, // Enhanced lift
-    boxShadow: "0px 10px 25px -5px hsl(var(--primary)/0.5), 0px 6px 15px -8px hsl(var(--bmw-m-blue)/0.3)", // Enhanced M-glow
+    y: -6, 
+    boxShadow: "0px 10px 25px -5px hsl(var(--primary)/0.5), 0px 6px 15px -8px hsl(var(--bmw-m-blue)/0.3)", 
     transition: { type: "spring", stiffness: 200, damping: 12 }
   }
 };
@@ -81,12 +81,12 @@ export default function CertificationsPage() {
             animate="animate" 
             whileHover="hover"
             viewport={{ once: true, amount: 0.1 }}
-            className="transition-m-throttle" // Apply global throttle transition
+            className="transition-m-throttle" 
           >
             <Card className={cn(
-              "bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary shadow-xl card-m-glow overflow-hidden h-full flex flex-col md:flex-row group rounded-lg"
+              "bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary shadow-xl card-m-glow overflow-hidden h-full flex flex-col md:flex-row group rounded-sm carbon-texture-panel card-with-glowing-seal" // Added carbon-texture and seal
             )}> 
-                <div className="w-full md:w-2/5 h-60 md:h-auto relative overflow-hidden p-2 bg-black/30 rounded-l-lg md:rounded-l-lg md:rounded-r-none"> 
+                <div className="w-full md:w-2/5 h-60 md:h-auto relative overflow-hidden p-2 bg-black/30 rounded-l-sm md:rounded-r-none"> 
                   <Image
                     src={cert.image}
                     alt={cert.title}

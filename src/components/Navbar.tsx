@@ -9,6 +9,9 @@ import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+// Assuming UserInteractionContext is still used for tracking visits or other interactions
+// If not, this import and related logic can be removed.
+import { useUserInteraction } from '@/contexts/UserInteractionContext';
 
 const navLinks = [
   { name: 'Home', href: '/#home', id: 'home' },
@@ -26,15 +29,18 @@ export default function Navbar() {
   const pathname = usePathname();
   const [activeLink, setActiveLink] = useState('');
   const [isMounted, setIsMounted] = useState(false);
-  const navLinkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sectionRefs = useRef<Map<string, HTMLElement | null>>(new Map());
+  const { incrementSectionVisit } = useUserInteraction(); // Keep if still used
 
   useEffect(() => {
     setIsMounted(true);
     navLinks.forEach(link => {
       if (link.id) {
-        sectionRefs.current.set(link.id, document.getElementById(link.id));
+        const element = document.getElementById(link.id);
+        if (element) {
+          sectionRefs.current.set(link.id, element);
+        }
       }
     });
   }, []);
@@ -42,75 +48,59 @@ export default function Navbar() {
   const setActiveLinkAndTrack = useCallback((href: string, sectionId?: string) => {
     if (activeLink !== href) {
       setActiveLink(href);
-      // Placeholder for incrementSectionVisit if context were re-added
-      // if (sectionId && pathname === '/') {
-      //   console.log("Section visited (placeholder):", sectionId);
-      // }
+      if (sectionId && pathname === '/' && isMounted) { // Ensure isMounted before calling context
+         incrementSectionVisit(sectionId);
+      }
     }
-  }, [activeLink, pathname]);
+  }, [activeLink, pathname, incrementSectionVisit, isMounted]);
 
   useEffect(() => {
     if (!isMounted) return;
 
-    if (pathname === '/') {
-      const currentHash = window.location.hash;
-      if (currentHash) {
-        const matchedLink = navLinks.find(link => link.href === `/${currentHash}`);
-        if (matchedLink) {
-          setActiveLinkAndTrack(matchedLink.href, matchedLink.id);
-        }
-      } else if (window.scrollY < 100) {
-        setActiveLinkAndTrack('/#home', 'home');
-      }
-
-      const observerCallback: IntersectionObserverCallback = (entries) => {
-        if (window.scrollY < 100 && !window.location.hash) {
-            setActiveLinkAndTrack('/#home', 'home');
-            return;
-        }
-
-        let highestVisibleSection: IntersectionObserverEntry | null = null;
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+        let currentBestMatch: IntersectionObserverEntry | null = null;
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const entryTop = entry.boundingClientRect.top;
-            // Prioritize sections whose top is closer to the top of the viewport (within the -30% margin)
-            if (!highestVisibleSection || entryTop < highestVisibleSection.boundingClientRect.top) {
-                 // Check if it's within the "active" part of the rootMargin
-                const viewportHeight = window.innerHeight;
-                if (entryTop < viewportHeight * 0.7) { // Roughly top 70% consider, adjust as needed
-                    highestVisibleSection = entry;
+            if (entry.isIntersecting) {
+                if (!currentBestMatch || entry.boundingClientRect.top < currentBestMatch.boundingClientRect.top) {
+                    currentBestMatch = entry;
                 }
             }
-          }
         });
-        
-        if (highestVisibleSection) {
-          const activeNav = navLinks.find(link => link.id === highestVisibleSection!.target.id);
-          if (activeNav) {
-            setActiveLinkAndTrack(activeNav.href, activeNav.id);
-          }
-        }
-      };
-      
-      observerRef.current = new IntersectionObserver(observerCallback, { 
-        rootMargin: "-30% 0px -45% 0px", // Active when section is in the upper-middle of viewport
-        threshold: 0.01 
-      });
 
-      navLinks.forEach(link => {
-        if (link.href.startsWith('/#')) {
-          const sectionElement = sectionRefs.current.get(link.id);
-          if (sectionElement) {
-            observerRef.current?.observe(sectionElement);
-          }
+        if (window.scrollY < 100 && pathname === '/') {
+            setActiveLinkAndTrack('/#home', 'home');
+        } else if (currentBestMatch) {
+            const activeNav = navLinks.find(link => link.id === currentBestMatch!.target.id);
+            if (activeNav) {
+                setActiveLinkAndTrack(activeNav.href, activeNav.id);
+            }
         }
-      });
+    };
 
-    } else { 
-      setActiveLinkAndTrack(pathname);
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
+    if (pathname === '/') {
+        observerRef.current = new IntersectionObserver(observerCallback, {
+            rootMargin: "-40% 0px -40% 0px", // Middle 20% of the viewport
+            threshold: 0.01,
+        });
+
+        sectionRefs.current.forEach(sectionEl => {
+            if (sectionEl) observerRef.current?.observe(sectionEl);
+        });
+
+        // Initial check
+        const currentHash = window.location.hash;
+        if (currentHash) {
+            const matchedLink = navLinks.find(link => link.href === `/${currentHash}`);
+            if (matchedLink) setActiveLinkAndTrack(matchedLink.href, matchedLink.id);
+        } else if (window.scrollY < 100) {
+            setActiveLinkAndTrack('/#home', 'home');
+        }
+
+    } else {
+        setActiveLinkAndTrack(pathname);
+        if (observerRef.current) {
+            observerRef.current.disconnect();
+        }
     }
 
     const handleHashChange = () => {
@@ -152,33 +142,8 @@ export default function Navbar() {
     }
   };
   
-  const handleNavLinkMouseMove = (event: React.MouseEvent<HTMLAnchorElement>, index: number) => {
-    const linkElement = navLinkRefs.current[index];
-    if (!linkElement || !linkElement.classList.contains('nav-rpm-underline')) return;
-
-    const rect = linkElement.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const percent = mouseX / rect.width;
-
-    let blueStop = 55; 
-    if (percent < 0.3) blueStop = 60; 
-    else if (percent > 0.7) blueStop = 50; 
-    
-    linkElement.style.setProperty('--grille-blue-stop-percentage', `${blueStop}%`);
-    linkElement.style.setProperty('--grille-red-start-percentage', `${blueStop}%`);
-  };
-
-  const handleNavLinkMouseLeave = (index: number) => {
-    const linkElement = navLinkRefs.current[index];
-    if (linkElement && linkElement.classList.contains('nav-rpm-underline')) {
-      linkElement.style.setProperty('--grille-blue-stop-percentage', `55%`); 
-      linkElement.style.setProperty('--grille-red-start-percentage', `55%`);
-    }
-  };
-
-
   return (
-    <motion.nav
+    <nav // Changed from motion.nav to nav for simplicity as animations are on links
       className={cn(
         "fixed top-0 left-0 right-0 z-50 font-sans",
         "bg-background shadow-md" 
@@ -186,7 +151,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center group" onClick={(e) => handleNavLinkClick(e, '/#home', 'home')}>
+          <Link href="/" className="flex items-center group" onClick={(e) => handleNavLinkClick(e as any, '/#home', 'home')}>
              <Image
               src="https://i.ibb.co/N2v0V2R8/Amith-Viswas-Reddy.png"
               alt="Amith Viswas Reddy Logo"
@@ -198,20 +163,18 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden md:flex space-x-1">
-            {navLinks.map((link, index) => {
+            {navLinks.map((link) => {
               const isActive = activeLink === link.href || (pathname === '/' && activeLink === '' && link.href === '/#home');
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  ref={el => navLinkRefs.current[index] = el}
-                  onMouseMove={(e) => handleNavLinkMouseMove(e, index)}
-                  onMouseLeave={() => handleNavLinkMouseLeave(index)}
                   className={cn(
-                    'px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider nav-rpm-underline', 
-                    isActive ? 'active-link nav-rpm-active-glow' : 'text-muted-foreground hover:text-primary-foreground'
+                    'px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider nav-m-stripe-underline', // Updated class for new M-stripe underline
+                    isActive ? 'active-link text-primary' : 'text-muted-foreground hover:text-primary-foreground' // Ensure active link text color
                   )}
                   onClick={(e) => handleNavLinkClick(e, link.href, link.id)}
+                  aria-current={isActive ? 'page' : undefined}
                 >
                   {link.name}
                 </Link>
@@ -253,10 +216,11 @@ export default function Navbar() {
                     key={link.name}
                     href={link.href}
                     className={cn(
-                      'block px-3 py-3 rounded-md text-base font-medium uppercase tracking-wider nav-rpm-underline',
-                      isActive ? 'active-link nav-rpm-active-glow' : 'text-muted-foreground hover:text-primary-foreground hover:bg-card/50'
+                      'block px-3 py-3 rounded-md text-base font-medium uppercase tracking-wider nav-m-stripe-underline', // Updated class
+                      isActive ? 'active-link text-primary' : 'text-muted-foreground hover:text-primary-foreground hover:bg-card/50'
                     )}
                     onClick={(e) => handleNavLinkClick(e, link.href, link.id)}
+                    aria-current={isActive ? 'page' : undefined}
                   >
                     {link.name}
                   </Link>
@@ -266,8 +230,6 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </nav>
   );
 }
-
-    

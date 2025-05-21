@@ -2,37 +2,48 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Activity, Server, Cog, Volume2, VolumeX, Eye, EyeOff, Zap, Settings2, Power } from 'lucide-react'; 
+import { Activity, Server, Cog, Power, Zap, Eye, EyeOff, Volume2, VolumeX, Settings2 } from 'lucide-react'; 
 import { usePathname } from 'next/navigation';
 import { M5DriveToggle } from '@/components/M5StyledComponents'; 
 import { cn } from '@/lib/utils';
-import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Re-added for toggles
+import { useUserInteraction } from '@/contexts/UserInteractionContext'; 
 
 const consoleLogMessagesBase = [
-  "SYSTEM ONLINE. M-DRIVE OS v5.8 INITIALIZED.",
-  "PERFORMANCE METRICS CALIBRATED.",
-  "AWAITING DIRECTIVE...",
-  "MONITORING TELEMETRY DATA.",
+  "XENOFRAME OS v1.0 Initialized.",
+  "M|PERFORMANCE CORE: ONLINE.",
+  "AWAITING DRIVER INPUT...",
+  "MONITORING COGNITIVE LOAD.",
   "ACTIVE TERRAIN: DIGITAL GRID",
-  "DRIVE MODE: SPORT PLUS ENGAGED"
+  "DRIVE MODE: SPORT PLUS [AGGRESSIVE]"
 ];
 
 export default function SentientConsole() {
-  const [isVisible, setIsVisible] = useState(false);
+  const { interactionData, toggleSoundEnabled, toggleGhostlineMode, logFastScroll } = useUserInteraction();
+  const [isVisible, setIsVisible] = useState(false); // Controls overall console visibility
   const [consoleLog, setConsoleLog] = useState<string[]>([]);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [displayedMessage, setDisplayedMessage] = useState("");
   const [timeOnPage, setTimeOnPage] = useState(0);
   const [scrollDepth, setScrollDepth] = useState(0);
   
-  const { interactionData, toggleSoundEnabled, toggleGhostlineMode } = useUserInteraction();
-
   const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
   const logAreaRef = useRef<HTMLDivElement>(null);
 
+  // Determine if console should have UV glow (e.g., Ghostline active or other criteria)
+  // For now, let's tie it to Ghostline mode for demonstration
+  const showUvGlow = interactionData.isGhostlineModeEnabled;
+
+
   useEffect(() => {
-    setConsoleLog([consoleLogMessagesBase[0]]);
+    // Simulate loading previous interactions for "memory replay"
+    let memoryReplay = "MEMORY LOG: No prior session data.";
+    const totalHovers = Object.values(interactionData.skillHoverCounts).reduce((sum, skill) => sum + skill.count, 0);
+    if (interactionData.fastScrollCount > 0 || totalHovers > 0) {
+      memoryReplay = `MEMORY LOG: Last session anomalies: Scroll Surges (${interactionData.fastScrollCount}), Skill Node Interactions (${totalHovers}).`;
+    }
+    
+    setConsoleLog([consoleLogMessagesBase[0], memoryReplay, ...consoleLogMessagesBase.slice(1)]);
     setDisplayedMessage("");
     setCurrentMessageIndex(0);
 
@@ -50,14 +61,16 @@ export default function SentientConsole() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); 
 
-    const visibilityTimer = setTimeout(() => setIsVisible(true), 6500);
+    // Delay visibility for dramatic effect, if desired
+    const visibilityTimer = setTimeout(() => setIsVisible(true), 6500); // Example: show after intro
 
     return () => {
       clearInterval(timer);
       window.removeEventListener('scroll', handleScroll);
       clearTimeout(visibilityTimer);
     };
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
 
   useEffect(() => {
     if (consoleLog.length === 0 || currentMessageIndex >= consoleLog.length) return;
@@ -66,24 +79,14 @@ export default function SentientConsole() {
     if (displayedMessage.length < messageToDisplay.length) {
       const timeoutId = setTimeout(() => {
         setDisplayedMessage(messageToDisplay.substring(0, displayedMessage.length + 1));
-      }, prefersReducedMotion ? 0 : 30); 
+      }, prefersReducedMotion ? 0 : 25); // Faster typewriter
       return () => clearTimeout(timeoutId);
     } else if (currentMessageIndex < consoleLog.length -1 ) { 
        const nextMessageTimer = setTimeout(() => {
             setCurrentMessageIndex(prev => prev + 1);
             setDisplayedMessage("");
-        }, prefersReducedMotion ? 100 : 1200); 
+        }, prefersReducedMotion ? 300 : 1000); // Shorter pause
         return () => clearTimeout(nextMessageTimer);
-    } else if (consoleLog.length < consoleLogMessagesBase.length ) { 
-        const addMoreMessagesTimer = setTimeout(() => {
-            const nextBaseMessageIndex = consoleLog.length;
-            if(consoleLogMessagesBase[nextBaseMessageIndex]) {
-                setConsoleLog(prev => [...prev, consoleLogMessagesBase[nextBaseMessageIndex]]);
-                setCurrentMessageIndex(prev => prev + 1);
-                setDisplayedMessage("");
-            }
-        }, prefersReducedMotion ? 500 : 2500); 
-        return () => clearTimeout(addMoreMessagesTimer);
     }
   }, [displayedMessage, consoleLog, currentMessageIndex, prefersReducedMotion]);
 
@@ -93,31 +96,26 @@ export default function SentientConsole() {
     }
   }, [displayedMessage, consoleLog]);
 
-  // Calculate SYSTEM LOAD (previously ENGINE TEMP / AI Energy)
-  const systemLoad = Math.min(
+  const systemLoad = Math.min( // Re-themed as "SYSTEM LOAD"
     100,
-    (scrollDepth / 2) + // Scroll depth contributes up to 50%
-    (timeOnPage / 6) +  // Time on page contributes up to 50% for 5 mins (300s / 6 = 50)
-    (interactionData.fastScrollCount * 5) + // Each fast scroll adds 5%
-    (Object.values(interactionData.skillHoverCounts).reduce((sum, count) => sum + count.count, 0) / 2) // Each skill hover adds 0.5%
+    (scrollDepth / 2) + 
+    (timeOnPage / 12) + // Slower fill from time
+    (interactionData.fastScrollCount * 2) + 
+    (Object.values(interactionData.skillHoverCounts).reduce((sum, count) => sum + count.count, 0) / 4)
   );
 
   const getSystemLoadGradient = (load: number) => {
-    const blue = 'hsl(var(--bmw-m-blue))'; // M Performance Blue
-    const violet = 'hsl(var(--m-violet-hsl))'; // M Violet
-    const red = 'hsl(var(--primary))'; // Neon Red
+    const blue = 'hsl(var(--bmw-m-blue))'; 
+    const violet = 'hsl(var(--m-violet-hsl))'; 
+    const red = 'hsl(var(--primary))';
 
-    if (load <= 50) {
-      const percent = load / 50;
-      return `linear-gradient(to right, ${blue} ${percent * 50}%, ${violet} ${percent * 100}%, transparent ${percent * 100}%)`;
-    } else {
-      const percentFromMid = (load - 50) / 50;
-      return `linear-gradient(to right, ${blue}, ${violet} 50%, ${red} ${50 + percentFromMid * 50}%, transparent ${50 + percentFromMid * 50}%)`;
-    }
+    if (load <= 33) return `linear-gradient(to right, ${blue} ${load * 3}%, transparent ${load * 3}%)`;
+    if (load <= 66) return `linear-gradient(to right, ${blue}, ${violet} ${(load - 33) * 3}%, transparent ${(load - 33) * 3}%)`;
+    return `linear-gradient(to right, ${blue}, ${violet}, ${red} ${(load - 66) * 3}%, transparent ${(load - 66) * 3}%)`;
   };
   
 
-  if (!isVisible && !prefersReducedMotion) {
+  if (!isVisible && !prefersReducedMotion) { // Keep initial hide for effect
     return null;
   }
 
@@ -138,15 +136,15 @@ export default function SentientConsole() {
   return (
     <motion.div
       className={cn(
-        "hud-console-panel",
-        interactionData.isGhostlineFullModeUnlocked && "uv-glow"
+        "hud-console-panel", // Base style for HUD panel
+        showUvGlow && "uv-glow" // Conditional UV glow
       )}
       initial={{ opacity: 0, x: -50 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 0.2, ease: "easeOut" }} // Faster entry
     >
       <div className="hud-console-header">
-        <h4 className="hud-console-title">M-DRIVE OS</h4> {/* Updated title for theme */}
+        <h4 className="hud-console-title">XENOFRAME OS</h4>
         <Settings2 size={14} className="hud-console-settings-icon" />
       </div>
 
@@ -164,19 +162,19 @@ export default function SentientConsole() {
       
       <div className="space-y-1 py-1">
         <div className="hud-gauge-item">
-          <span className="hud-gauge-label"><Activity size={12}/> THROTTLE</span>
+          <span className="hud-gauge-label"><Activity size={12}/> THROTTLE</span> {/* Re-labeled */}
           <span className="hud-gauge-value">{scrollDepth.toFixed(0)}%</span>
         </div>
         <div className="hud-gauge-item">
-          <span className="hud-gauge-label"><Server size={12}/> GEAR</span>
+          <span className="hud-gauge-label"><Server size={12}/> GEAR</span> {/* Re-labeled */}
           <span className="hud-gauge-value">{getGearIndicator()}</span>
         </div>
          <div className="hud-gauge-item">
-          <span className="hud-gauge-label"><Cog size={12}/> SESSION UPTIME</span>
+          <span className="hud-gauge-label"><Cog size={12}/> SESSION UPTIME</span> {/* Re-labeled */}
           <span className="hud-gauge-value">{formatTime(timeOnPage)}</span>
         </div>
         <div className="hud-gauge-item">
-          <span className="hud-gauge-label"><Power size={12}/> SYSTEM LOAD</span> {/* Re-labeled to ENGINE TEMP (or SYSTEM LOAD) */}
+          <span className="hud-gauge-label"><Power size={12}/> SYSTEM LOAD</span> {/* Re-labeled (was AI Energy/Engine Temp) */}
           <span className="hud-gauge-value">{systemLoad.toFixed(0)}%</span>
         </div>
         <div className="hud-meter-track">
@@ -197,7 +195,7 @@ export default function SentientConsole() {
           className={cn("hud-console-button", interactionData.isSoundEnabled && "active-toggle")}
         >
           {interactionData.isSoundEnabled ? <Volume2 size={12} /> : <VolumeX size={12} />}
-          <span className="ml-1">SOUND</span>
+          <span className="ml-1 font-monospace-subheader">SOUND</span>
         </M5DriveToggle>
         <M5DriveToggle
           enabled={interactionData.isGhostlineModeEnabled}
@@ -205,11 +203,9 @@ export default function SentientConsole() {
           className={cn("hud-console-button", interactionData.isGhostlineModeEnabled && "active-toggle")}
         >
           {interactionData.isGhostlineModeEnabled ? <Eye size={12} /> : <EyeOff size={12} />}
-           <span className="ml-1">GHOST</span>
+           <span className="ml-1 font-monospace-subheader">GHOST</span>
         </M5DriveToggle>
       </div>
     </motion.div>
   );
 }
-
-    

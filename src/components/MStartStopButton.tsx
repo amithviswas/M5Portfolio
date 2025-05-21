@@ -13,19 +13,17 @@ const MStartStopButton = React.forwardRef<
   
   const obsidianClasses = cn(
     "group relative inline-flex items-center justify-center text-lg font-bold uppercase tracking-wider",
-    "text-primary-foreground rounded-md",
+    "text-primary-foreground rounded-sm", // Sharper radius
     "w-28 h-16 md:w-32 md:h-20", 
     "bg-gradient-to-b from-neutral-800 to-black", 
     "border-2 border-neutral-700",
     "focus:outline-none focus:ring-4 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background",
     "transition-m-throttle overflow-hidden",
-    // Aggressive default shadow
-    "shadow-[0_0_35px_2px_hsl(var(--primary)/0.65),_0_0_22px_1px_hsl(var(--bmw-m-blue)/0.55),inset_1px_1px_5px_hsl(0_0%_100%/0.35),inset_-2px_-2px_7px_hsl(0_0%_0%/0.9)]",
-    // Aggressive hover shadow
-    "hover:shadow-[0_0_50px_5px_hsl(var(--primary)/1),_0_0_35px_3px_hsl(var(--bmw-m-blue)/0.75),inset_1px_1px_4px_hsl(0_0%_100%/0.3),inset_-1px_-1px_6px_hsl(0_0%_0%/0.8)]",
+    // Laser-etched feel through sharper shadows
+    "shadow-[0_0_25px_1px_hsl(var(--primary)/0.55),_0_0_15px_0px_hsl(var(--bmw-m-blue)/0.45),inset_1px_1px_3px_hsl(0_0%_100%/0.25),inset_-1px_-1px_5px_hsl(0_0%_0%/0.8)]",
+    "hover:shadow-[0_0_40px_3px_hsl(var(--primary)/0.85),_0_0_25px_1px_hsl(var(--bmw-m-blue)/0.65),inset_1px_1px_2px_hsl(0_0%_100%/0.2),inset_-1px_-1px_4px_hsl(0_0%_0%/0.7)]",
     "before:content-[''] before:absolute before:inset-[-2px] before:rounded-[calc(var(--radius)-2px)] before:opacity-0 before:transition-opacity before:duration-300", 
     "before:bg-transparent", 
-    // The ::before element gets the MStartStopButton-hover-ring styles on hover (from globals.css)
     "hover:before:opacity-100 MStartStopButton-base-style", 
     className
   );

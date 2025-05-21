@@ -7,8 +7,8 @@ import {
 } from 'lucide-react';
 import Section from '@/components/Section'; 
 import { cn } from '@/lib/utils';
-import { useUserInteraction } from '@/contexts/UserInteractionContext';
-import soundService from '@/services/soundService';
+import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Re-added
+import soundService from '@/services/soundService'; // Re-added
 
 const skills = [
   { name: 'AI Model Training', icon: <Zap size={32} />, modeName: 'Turbo Boost', id: 'skill-ai-training' },
@@ -35,9 +35,8 @@ export default function SkillsSection() {
 
   const handleSkillHover = (skillName: string) => {
     incrementSkillHover(skillName);
-    if (interactionData.isSoundEnabled) {
+    if (interactionData.isSoundEnabled && soundService) {
       soundService.playSound('hoverChime');
-      // setTimeout(() => soundService.playSound('electricCrackle'), 100); // Optional delayed sound
     }
   };
   
@@ -104,17 +103,22 @@ export default function SkillsSection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
         {skills.map((skill, index) => {
-          const isRepeatedHover = interactionData.skillHoverCounts[skill.name]?.count >= 3;
-          const isGhostlineSkill = interactionData.isGhostlineFullModeUnlocked;
+          // Check if skillHovers exists and then access the count
+          const hoverCount = interactionData.skillHoverCounts?.[skill.name]?.count || 0;
+          const isRepeatedHover = hoverCount >= 3;
+          // isGhostlineSkill is not used in this version after rollback, can be removed if not planned
+          // const isGhostlineSkill = interactionData.isGhostlineFullModeUnlocked; 
+          
           return (
             <motion.div
               key={skill.id}
               className={cn(
-                "skill-card-trail-container", 
-                "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40",
-                "transition-m-throttle card-m-glow", // ensures smooth transition on hover
-                isGhostlineSkill && "animate-skill-jitter",
-                isRepeatedHover && isGhostlineSkill && "erratic-glow"
+                "skill-card-trail-container carbon-texture-panel", // Added carbon-texture-panel
+                "p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40",
+                "transition-m-throttle card-m-glow",
+                isRepeatedHover && "skill-overclocked", // Apply overclocked style on repeated hover
+                // isGhostlineSkill && "animate-skill-jitter", // Original jitter on ghostline
+                "hover:animate-skill-jitter" // Apply jitter on hover
               )}
               custom={index}
               variants={cardVariants}
@@ -126,7 +130,7 @@ export default function SkillsSection() {
             >
               <div className={cn(
                 "skill-card-trail",
-                 isGhostlineSkill && "electric-trail"
+                isRepeatedHover && "electric-trail" // More intense trail for overclocked
               )}/>
               <motion.div 
                 className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
@@ -156,4 +160,3 @@ export default function SkillsSection() {
     </Section>
   );
 }
-

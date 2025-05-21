@@ -28,7 +28,7 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
     const rect = cardElement.getBoundingClientRect();
     const cursorX = event.clientX - rect.left;
     const normalizedX = cursorX / rect.width; 
-    const newRotateY = (normalizedX - 0.5) * 6; // Reduced tilt for subtlety
+    const newRotateY = (normalizedX - 0.5) * 6; 
     rotateY.set(newRotateY);
   };
 
@@ -37,11 +37,37 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
     rotateY.set(0);
   };
 
-  const handleClickEffect = () => {
+  const handleClickEffect = (e: React.MouseEvent) => {
     if (prefersReducedMotion) return;
+    
+    // Ripple effect
+    const button = e.currentTarget as HTMLElement;
+    const ripple = document.createElement("span");
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    ripple.classList.add("ripple-span"); // For specific ripple styling if needed beyond .click-ripple-effect
+
+    // Check if a ripple already exists and remove it
+    const existingRipple = button.querySelector(".ripple-span");
+    if (existingRipple) {
+      existingRipple.remove();
+    }
+    button.appendChild(ripple);
+    
+    // Click blur effect
     setIsClicked(true);
-    setTimeout(() => setIsClicked(false), 120);
+    setTimeout(() => {
+        setIsClicked(false);
+        ripple.remove(); // Clean up ripple after animation
+    }, 600); // Match ripple animation duration
   };
+
 
   return (
     <motion.div
@@ -50,16 +76,16 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
       onMouseLeave={handleMouseLeave}
       className={cn(
         isClicked && !prefersReducedMotion && "filter blur-[1px] brightness-90", 
-        "transition-m-throttle h-full" // Ensure motion div takes full height
+        "transition-m-throttle h-full card-with-glowing-seal" // Add glowing seal class
       )} 
       whileHover={{ y: -8, scale: 1.03 }} 
     >
       <Card className={cn(
-        "flex flex-col h-full overflow-hidden card-m-glow", // Removed shadow-xl as card-m-glow covers it
-        "border border-border/50 hover:border-primary group bg-card rounded-lg transition-m-throttle"
+        "flex flex-col h-full overflow-hidden card-m-glow carbon-texture-panel", 
+        "group transition-m-throttle" // Removed hover:border-primary, border is on carbon-texture-panel
       )}>
         <CardHeader className="p-0">
-          <div className="aspect-video relative w-full overflow-hidden rounded-t-lg"> 
+          <div className="aspect-video relative w-full overflow-hidden rounded-t-sm"> {/* Sharper radius from global */}
             <Image
               src={project.imageUrl}
               alt={project.title}
@@ -84,19 +110,18 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
         </CardContent>
         <CardFooter className="p-6 pt-0 flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 sm:space-x-3">
           <Button 
-            onClick={() => { onViewDetails(project); handleClickEffect(); }} 
+            onClick={(e) => { onViewDetails(project); handleClickEffect(e); }} 
             variant="outline"
-            className="w-full sm:w-auto hover:bg-accent hover:text-accent-foreground hover:border-accent transition-m-throttle" // Removed button-m-glow to avoid double glow
+            className="w-full sm:w-auto hover:bg-accent hover:text-accent-foreground hover:border-accent transition-m-throttle click-ripple-effect neon-edge-accent"
           >
             <Eye className="mr-2 h-4 w-4" /> View Specs
           </Button>
           {project.projectUrl && project.projectUrl !== '#' && (
             <Button 
               asChild 
-              className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-primary-foreground transition-m-throttle" // Removed button-m-glow
-              onClick={handleClickEffect} 
+              className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-primary-foreground transition-m-throttle click-ripple-effect neon-edge-primary"
             >
-              <Link href={project.projectUrl} target="_blank" rel="noopener noreferrer">
+              <Link href={project.projectUrl} target="_blank" rel="noopener noreferrer" onClick={handleClickEffect}>
                 <Zap className="mr-2 h-4 w-4 group-hover:animate-ping" /> LAUNCH
               </Link>
             </Button>
@@ -106,5 +131,3 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
     </motion.div>
   );
 }
-
-    
