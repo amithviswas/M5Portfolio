@@ -9,6 +9,7 @@ import type { Project } from '@/lib/types';
 import { ExternalLink, Github, X } from 'lucide-react';
 import Link from 'next/link';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -22,7 +23,8 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-3xl max-h-[90vh] flex flex-col p-0 bg-card border-border shadow-2xl rounded-lg overflow-hidden">
-        <div className="relative w-full aspect-video flex-shrink-0">
+        {/* Image container with fixed height to make image smaller */}
+        <div className="relative w-full h-48 md:h-56 flex-shrink-0 overflow-hidden">
           <Image
             src={project.imageUrl}
             alt={project.title}
@@ -30,7 +32,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             style={{ objectFit: "cover" }}
             className="rounded-t-lg"
             data-ai-hint={project.dataAiHint || "project showcase"}
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 33vw" // Adjusted sizes
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 33vw"
           />
            <Button
               variant="ghost"
@@ -42,7 +44,9 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
               <X className="h-5 w-5" />
           </Button>
         </div>
-        <ScrollArea className="flex-grow min-h-0"> {/* Ensures ScrollArea can shrink and grow */}
+
+        {/* Scrollable area for project details */}
+        <ScrollArea className="flex-grow min-h-0">
           <div className="p-6 md:p-8 space-y-6">
             <DialogHeader className="text-left">
               <DialogTitle className="text-2xl md:text-3xl font-bold text-primary font-heading">{project.title}</DialogTitle>
@@ -78,6 +82,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
           </div>
         </ScrollArea>
         
+        {/* Footer with action buttons */}
         <div className="flex flex-col sm:flex-row gap-3 p-6 md:p-8 border-t border-border/50 bg-card/50 rounded-b-lg flex-shrink-0">
           {project.projectUrl && project.projectUrl !== '#' && (
             <Button asChild size="lg" className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-primary/50 transition-m-throttle">
