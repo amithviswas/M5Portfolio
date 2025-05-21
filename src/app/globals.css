@@ -55,17 +55,17 @@
 
 
     /* Easing Curves */
-    --ease-m-throttle: cubic-bezier(.36,1.08,.33,1); /* Renamed for clarity - primary "kickback" ease */
+    --ease-m-throttle: cubic-bezier(.36,1.08,.33,1); 
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1); /* For spring-like arrivals */
-    --ease-torque-kick: cubic-bezier(.42,0, .2,1.2); /* For sharp section border reveals */
-    --ease-acceleration-curve-in: cubic-bezier(0.6, 0.04, 0.98, 0.335); /* For page transitions (entry start) */
-    --ease-acceleration-curve-out: cubic-bezier(0.19, 1, 0.22, 1); /* For page transitions (entry end) */
+    --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1); 
+    --ease-torque-kick: cubic-bezier(.42,0, .2,1.2); 
+    --ease-acceleration-curve-in: cubic-bezier(0.6, 0.04, 0.98, 0.335); 
+    --ease-acceleration-curve-out: cubic-bezier(0.19, 1, 0.22, 1); 
 
     /* Font Variables are set by next/font in layout.tsx */
   }
 
-  :root.dark { /* Ensure dark theme uses the M5-inspired values */
+  :root.dark { 
     --background: 220 10% 7%;
     --foreground: 0 0% 98%;
     --card: 220 10% 9%;
@@ -93,7 +93,7 @@
     position: relative;
   }
 
-  body.dark::before { /* Retained carbon pattern for body */
+  body.dark::before { 
     content: '';
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -114,15 +114,14 @@
     font-family: var(--font-rajdhani);
     @apply font-bold uppercase tracking-wider; /* M-badging style */
   }
-  .font-serif-display { /* For "Empire Edition" headline */
+  .font-serif-display { 
     font-family: var(--font-playfair-display);
   }
-  .font-sans-condensed { /* For "Empire Edition" tagline */
+  .font-sans-condensed { 
     font-family: var(--font-space-grotesk);
   }
 
-
-  .button-m-glow, .card-m-glow { /* General M-Glow for CTAs and cards */
+  .button-m-glow, .card-m-glow { 
     @apply shadow-[0_0_15px_hsl(var(--primary)/0.6)] transition-shadow duration-300 ease-in-out;
   }
   .button-m-glow:hover, .card-m-glow:hover {
@@ -135,20 +134,22 @@
   }
 }
 
-.DialogContent[data-state="open"] { /* Ensure dialog content can flex */
+.DialogContent[data-state="open"] { 
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* RPM-Inspired Navigation System (was Laser Crest) */
-.nav-rpm-underline { /* Base class for nav links */
+/* RPM-Inspired Navigation System (Replaces .nav-laser-crest) */
+.nav-rpm-underline {
   position: relative;
-  overflow: visible; /* Allows underline to extend slightly if needed */
-  @apply transition-m-throttle text-muted-foreground hover:text-primary-foreground;
+  overflow: visible;
+  @apply text-muted-foreground hover:text-primary-foreground;
+  /* Apply throttle transition globally via utility if preferred, or specify here */
+  transition: color 0.15s var(--ease-m-throttle), text-shadow 0.15s var(--ease-m-throttle);
 }
 
-.nav-rpm-underline::after { /* The underline itself, styled like an RPM segment */
+.nav-rpm-underline::after {
   content: '';
   position: absolute;
   left: 50%;
@@ -159,8 +160,8 @@
   border-radius: 1.5px; /* Slightly rounded for bar */
   opacity: 0.7;
   transform: translateX(-50%) scaleX(1);
-  transition: width 0.2s var(--ease-m-throttle), background-color 0.2s var(--ease-m-throttle), opacity 0.2s var(--ease-m-throttle), transform 0.2s var(--ease-m-throttle);
-  will-change: width, background-color, opacity, transform;
+  transition: width 0.2s var(--ease-m-throttle), background-color 0.2s var(--ease-m-throttle), opacity 0.2s var(--ease-m-throttle), transform 0.2s var(--ease-m-throttle), box-shadow 0.2s var(--ease-m-throttle);
+  will-change: width, background-color, opacity, transform, box-shadow;
   pointer-events: none;
   box-shadow: 0 0 6px hsl(var(--primary)/0.5);
 }
@@ -191,21 +192,19 @@
   box-shadow: 0 0 8px hsl(var(--accent)/0.6);
 }
 
-
-.hero-backdrop-dimmed { /* For Hero section dimming on scroll */
+.hero-backdrop-dimmed { 
   @apply transition-m-throttle;
   filter: brightness(0.85);
 }
 
-.form-container-halo { /* Base halo for contact form */
+.form-container-halo { 
   box-shadow: 0 0 8px 2px hsla(var(--primary)/0.2);
   @apply transition-m-throttle;
 }
-.form-container-halo-active { /* Active halo for contact form textarea focus */
+.form-container-halo-active { 
   box-shadow: 0 0 20px 5px hsla(var(--primary)/0.7), 0 0 30px 10px hsla(var(--primary)/0.4);
   transition: box-shadow 0.3s var(--ease-m-throttle);
 }
-
 
 /* === NIGHTFALL ATELIER HERO STYLES START (Retained for reference/potential reuse) === */
 .hero-medallion-nightfall {
@@ -250,8 +249,6 @@
 .hero-headline-nightfall {
   font-family: var(--font-fraunces);
   @apply text-foreground font-bold relative;
-  font-optical-sizing: auto;
-  font-variation-settings: "opsz" 36, "wght" 700, "SOFT" 50, "WONK" 0.2;
   text-shadow: 0 1px 1px hsla(0,0%,0%,0.7), 0 2px 3px hsla(0,0%,0%,0.5); 
 }
 .hero-headline-beam::before {
@@ -400,12 +397,12 @@
 .hero-medallion-empire:focus-within { animation: goldGlint 1.2s linear infinite, mStripePulse 3s linear infinite, mStripePulseFocus 1s ease-in-out alternate infinite; }
 
 .hero-headline-empire {
-  font-family: var(--font-playfair-display); /* Uses specific font */
+  font-family: var(--font-playfair-display); 
   @apply text-foreground font-bold; 
   text-shadow: 0 1px 1px #000, 0 0 5px rgba(0,0,0,.2), 0 0 10px rgba(0,0,0,.15);
 }
 .hero-tagline-empire {
-  font-family: var(--font-space-grotesk); /* Uses specific font */
+  font-family: var(--font-space-grotesk); 
   @apply font-semibold uppercase tracking-[1px] text-transparent bg-clip-text relative;
   background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
   background-size: 200% 100%;
@@ -513,7 +510,6 @@
   100% { transform: translateX(6vw) rotate(-15deg); }
 }
 
-
 /* Content Burst Section Styles (Tilted Cards) */
 .carbon-card-burst {
   @apply block rounded-lg shadow-xl overflow-hidden transition-m-throttle;
@@ -575,7 +571,6 @@
   /* Styles applied inline via motion.div */
 }
 
-
 /* HUD CONSOLE PANEL STYLES (Aggressive Elegance) */
 .hud-console-panel {
   @apply fixed bottom-4 left-4 w-72 md:w-80 bg-black/80 backdrop-blur-md text-sm p-4 rounded-lg shadow-2xl border border-border/50 z-50;
@@ -627,7 +622,6 @@
 }
 .hud-meter-fill { /* Filled portion of the progress bar gauge */
   @apply h-full rounded-full transition-all duration-300 ease-m-throttle;
-  /* Example: Gradient for "Engine Temp" / "System Load" */
   background: linear-gradient(to right, hsl(var(--bmw-m-blue)), hsl(var(--primary)));
 }
 
@@ -643,10 +637,9 @@
   @apply mr-1.5;
 }
 .hud-console-button.ghostline-active { /* Specific for Ghostline toggle when active */
-   @apply border-uv-blue text-uv-blue; /* Use --uv-blue defined at root */
+   @apply border-uv-blue text-uv-blue; 
    box-shadow: 0 0 8px hsl(var(--uv-blue)/0.5);
 }
-
 
 /* XENOFRAME specific styles for HUD Console */
 .sentient-console-uv-glow { /* Applied to hud-console-panel when Ghostline full mode unlocked */
@@ -746,7 +739,6 @@
   50% { background-color: hsl(var(--background)); border: 2px solid hsl(var(--primary)/0.6); } 
 }
 
-
 /* Neural Drift Timeline Styles */
 .neural-drift-timeline { /* Horizontal scroll container */
   @apply flex overflow-x-auto space-x-8 md:space-x-12 py-4;
@@ -826,7 +818,6 @@
   @apply flex-grow bg-transparent border-none outline-none font-mono text-foreground text-sm p-0;
 }
 
-
 /* Carbon Wave Footer (Apex Finish) */
 .carbon-weave-animated { /* Applied to footer */
   background-image:
@@ -861,7 +852,7 @@
 }
 
 /* Crystal HUD Tooltips (Apex Finish - Base Styling) */
-.crystal-hud-tooltip .tooltip-content-crystal { /* Apply to ShadCN TooltipContent */
+.tooltip-content-crystal { /* Apply to ShadCN TooltipContent */
   @apply relative text-xs px-3 py-2 rounded-sm text-primary-foreground;
   background: hsla(var(--card), 0.75); 
   backdrop-filter: blur(8px); 
@@ -962,7 +953,6 @@
   }
 }
 
-
 .hero-text-lift:hover, .hero-text-lift:focus-visible { /* Micro-lift for Hero text */
   transform: translateY(-4px);
   text-shadow: 0 4px 12px hsla(0,0%,0%,0.4),
@@ -1010,7 +1000,7 @@
     transform: scaleY(1) !important; /* Ensure visible */
     opacity: 1 !important;
   }
-  .crystal-hud-tooltip .tooltip-content-crystal { /* For ShadCN TooltipContent */
+  .tooltip-content-crystal { /* For ShadCN TooltipContent */
     backdrop-filter: none;
     background: hsl(var(--card)); /* Solid background */
   }
