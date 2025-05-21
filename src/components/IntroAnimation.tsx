@@ -8,16 +8,15 @@ import { useIntroContext } from '@/contexts/IntroContext';
 // GlitchText sub-component
 const GlitchText = ({ text, resolved, className }: { text: string, resolved: boolean, className?: string }) => {
   const [displayText, setDisplayText] = useState(resolved ? text : text.replace(/./g, '\u00A0'));
-  const [hasMounted, setHasMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const chars = "!<>-_\\/[]{}—=+*^?#_M5";
 
   useEffect(() => {
-    setHasMounted(true);
+    setIsMounted(true);
   }, []);
 
   useEffect(() => {
-    if (!hasMounted) {
-      // Ensure server and initial client render are consistent before effects
+    if (!isMounted) {
       setDisplayText(resolved ? text : text.replace(/./g, '\u00A0'));
       return;
     }
@@ -38,7 +37,7 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
       animationFrameId = requestAnimationFrame(updateText);
     };
 
-    if (hasMounted) { // Only run glitch effect on client after mount
+    if (isMounted) {
       updateText();
     }
 
@@ -47,15 +46,17 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [resolved, text, hasMounted, chars]); // Added hasMounted dependency
+  }, [resolved, text, isMounted, chars]);
 
-  if (!hasMounted && !resolved) { // During SSR or initial client render before mount, render spaces if not resolved
+  if (!isMounted && !resolved) {
     return <span className={`font-heading tracking-wider ${className}`}>{text.replace(/./g, '\u00A0')}</span>;
   }
-  if (!hasMounted && resolved) { // During SSR or initial client render before mount, render actual text if resolved
+  if (!isMounted && resolved) {
     return <span className={`font-heading tracking-wider ${className}`}>{text}</span>;
   }
-
+  if (!isMounted) { // Fallback for server render or pre-mount client render
+    return <span className={`font-heading tracking-wider ${className}`}>{resolved ? text : text.replace(/./g, '\u00A0')}</span>;
+  }
 
   return (
     <span className={`font-heading tracking-wider ${className}`}>
@@ -68,11 +69,13 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
 export default function IntroAnimation() {
   const { setIntroCompleted } = useIntroContext();
   const [step, setStep] = useState(0);
+  const [hasMounted, setHasMounted] = useState(false); // New state for client-side rendering
 
   useEffect(() => {
+    setHasMounted(true); // Component has mounted on client
+
     const timers: NodeJS.Timeout[] = [];
 
-    // Adjusted timings for ~6 second animation
     timers.push(setTimeout(() => setStep(1), 100));      // Start glitch
     timers.push(setTimeout(() => setStep(2), 3800));     // Resolve name
     timers.push(setTimeout(() => setStep(3), 4300));     // Final visual pulse
@@ -89,39 +92,43 @@ export default function IntroAnimation() {
       {step < 4 && (
         <motion.div
           key="intro-screen"
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black overflow-hidden" // Black background
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black overflow-hidden"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.4 } }} // Adjusted fade out duration
+          exit={{ opacity: 0, transition: { duration: 0.4 } }}
         >
           {/* Background Image */}
           <motion.img
             src="https://i.ibb.co/DHPKdq3n/generated-image-1.png"
             alt="Aggressive BMW M5 backdrop"
-            className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
+            className="absolute inset-0 w-full h-full object-cover z-[-2]"
             initial={{ scale: 1.05 }}
-            animate={{ scale: 1, transition: { duration: 6.0, ease: "easeInOut" } }} // Match new duration
+            animate={{ scale: 1, transition: { duration: 6.0, ease: "easeInOut" } }}
           />
 
           {/* Dark Overlay */}
           <div className="absolute inset-0 w-full h-full bg-black opacity-40 z-[-1]"></div>
 
-          {/* Subtle headlight beam hint */}
-           <motion.div
-            className="absolute top-1/2 left-0 w-1/2 h-64 bg-gradient-to-r from-white/5 to-transparent opacity-50 blur-3xl transform -translate-y-1/2"
-            initial={{ x: "-100%" }}
-            animate={{ x: "50%", transition: {delay: 2.8, duration: 0.7, ease: "circOut"} }} 
-            exit={{ x: "-100%"}}
-          ></motion.div>
-          <motion.div
-            className="absolute top-1/2 right-0 w-1/2 h-64 bg-gradient-to-l from-white/5 to-transparent opacity-50 blur-3xl transform -translate-y-1/2"
-            initial={{ x: "100%" }}
-            animate={{ x: "-50%", transition: {delay: 2.8, duration: 0.7, ease: "circOut"} }} 
-            exit={{ x: "100%"}}
-          ></motion.div>
+          {/* Subtle headlight beam hint - Render only on client after mount */}
+          {hasMounted && (
+            <>
+              <motion.div
+                className="absolute top-1/2 left-0 w-1/2 h-64 bg-gradient-to-r from-white/5 to-transparent opacity-50 blur-3xl transform -translate-y-1/2"
+                initial={{ x: "-100%" }}
+                animate={{ x: "50%", transition: {delay: 2.8, duration: 0.7, ease: "circOut"} }} 
+                exit={{ x: "-100%"}}
+              ></motion.div>
+              <motion.div
+                className="absolute top-1/2 right-0 w-1/2 h-64 bg-gradient-to-l from-white/5 to-transparent opacity-50 blur-3xl transform -translate-y-1/2"
+                initial={{ x: "100%" }}
+                animate={{ x: "-50%", transition: {delay: 2.8, duration: 0.7, ease: "circOut"} }} 
+                exit={{ x: "100%"}}
+              ></motion.div>
+            </>
+          )}
 
           <motion.div
             className="relative flex flex-col items-center justify-center"
-            animate={ step === 2 ? { scale: [1, 1.02, 1], transition: { duration: 0.3 } } : {} } // Subtle "thump"
+            animate={ step === 2 ? { scale: [1, 1.02, 1], transition: { duration: 0.3 } } : {} } 
           >
             <div className="mb-8">
                {/* Placeholder for tachometer */}
