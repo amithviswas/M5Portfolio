@@ -63,11 +63,11 @@ const MStartStopButton = React.forwardRef<
     });
     return (
       <motion.button
-        className={cn(obsidianClasses, "p-0 m-0 w-full h-full !bg-transparent !border-none !shadow-none !ring-0")} // Apply styles to motion.button directly
+        className={cn(obsidianClasses, "p-0 m-0 w-full h-full !bg-transparent !border-none !shadow-none !ring-0")}
         ref={ref}
+        whileHover={{ scale: 1.05, y: -2 }} // Added y-translate on hover
         whileTap={{ scale: 0.96, filter: 'brightness(0.9)' }}
-        // Pass original Button props if needed, or ensure ShadCN Button props are passed if it's a child
-        {...(props as any)} // Use ShadCN Button props if they are intended to be passed
+        {...(props as any)} 
       >
         <Button asChild className="w-full h-full !bg-transparent !border-none !shadow-none !ring-0 p-0">
             {clonedChild}
@@ -80,6 +80,7 @@ const MStartStopButton = React.forwardRef<
     <motion.button
       ref={ref}
       className={obsidianClasses}
+      whileHover={{ scale: 1.05, y: -2 }} // Added y-translate on hover
       whileTap={{ scale: 0.96, filter: 'brightness(0.9)' }}
       {...(props as any)} 
     >
