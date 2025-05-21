@@ -21,13 +21,7 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
       return;
     }
 
-    if (resolved) {
-      setDisplayText(text);
-      return;
-    }
-
-    // Only run glitch effect if mounted and not resolved
-    let animationFrameId: number;
+    let animationFrameId: number | undefined;
     const updateText = () => {
       setDisplayText(
         text
@@ -38,8 +32,16 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
       animationFrameId = requestAnimationFrame(updateText);
     };
 
-    updateText(); // Start the animation
-
+    if (resolved) {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = undefined;
+      }
+      setDisplayText(text);
+    } else {
+      updateText(); // Start the animation only if not resolved
+    }
+    
     return () => {
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
@@ -47,7 +49,6 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
     };
   }, [resolved, text, isMounted, chars]); // Rerun effect if these change
 
-  // Render static text or placeholder before mount to avoid hydration mismatch
   if (!isMounted) {
     return <span className={`font-heading tracking-wider ${className}`}>{resolved ? text : text.replace(/./g, '\u00A0')}</span>;
   }
@@ -66,7 +67,7 @@ export default function IntroAnimation() {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setHasMounted(true);
+    setHasMounted(true); // Set mounted state on client
 
     const timers: NodeJS.Timeout[] = [];
 
@@ -74,12 +75,16 @@ export default function IntroAnimation() {
     timers.push(setTimeout(() => setStep(2), 3800));     // Resolve name
     timers.push(setTimeout(() => setStep(3), 4300));     // Final visual pulse
     timers.push(setTimeout(() => setStep(4), 5500));     // Fade out intro screen
-    timers.push(setTimeout(() => setIntroCompleted(true), 6000)); // Intro complete
+    timers.push(setTimeout(() => setIntroCompleted(true), 6000)); // Intro complete (6 seconds total)
 
     return () => timers.forEach(clearTimeout);
   }, [setIntroCompleted]);
 
   const nameResolved = step >= 2;
+
+  if (!hasMounted) {
+    return null; // Render nothing on the server or initial client render
+  }
 
   return (
     <AnimatePresence>
@@ -94,7 +99,7 @@ export default function IntroAnimation() {
           <motion.img
             src="https://i.ibb.co/DHPKdq3n/generated-image-1.png"
             alt="Aggressive BMW M5 backdrop"
-            className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
+            className="absolute inset-0 w-full h-full object-cover z-[-2]"
             initial={{ scale: 1.05 }}
             animate={{ scale: 1, transition: { duration: 6.0, ease: "easeInOut" } }}
           />
@@ -103,7 +108,8 @@ export default function IntroAnimation() {
           <div className="absolute inset-0 w-full h-full bg-black opacity-40 z-[-1]"></div>
 
           {/* Subtle headlight beam hint - Render only on client after mount */}
-          {hasMounted && (
+          {/* This inner hasMounted check is technically redundant now but harmless */}
+          {hasMounted && ( 
             <>
               <motion.div
                 className="absolute top-1/2 left-0 w-1/2 h-64 bg-gradient-to-r from-white/5 to-transparent opacity-50 blur-3xl transform -translate-y-1/2"
@@ -120,6 +126,7 @@ export default function IntroAnimation() {
             </>
           )}
 
+          {/* This inner hasMounted check is technically redundant now but harmless */}
           {hasMounted && (
             <motion.div
               className="relative flex flex-col items-center justify-center"
