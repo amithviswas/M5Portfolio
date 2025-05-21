@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Section from '@/components/Section';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
-import { TrendingUp, Briefcase, Award } from 'lucide-react'; // Icons for "Performance Specs"
+import { TrendingUp, Briefcase, Award, Code, Package, TerminalSquare, Brain } from 'lucide-react'; // Added new icons
 
 // Helper for animated counters (simplified)
 const AnimatedCounter = ({ value, label, icon }: { value: string | number, label: string, icon: React.ReactNode }) => {
@@ -19,7 +19,33 @@ const AnimatedCounter = ({ value, label, icon }: { value: string | number, label
   );
 };
 
+const TechBadge = ({ children }: { children: React.ReactNode }) => (
+  <motion.div 
+    className="bg-primary/10 text-primary-foreground/90 border border-primary/30 px-3 py-1 rounded-md text-sm font-medium hover:bg-primary/20 hover:shadow-primary/30 transition-all duration-150 ease-m-throttle"
+    whileHover={{ y: -2, scale: 1.05 }}
+  >
+    {children}
+  </motion.div>
+);
+
 export default function AboutMeSection() {
+  const techSectionVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        staggerChildren: 0.1,
+        delayChildren: 0.2 
+      } 
+    }
+  };
+
+  const techCategoryVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } }
+  };
+
   return (
     <Section id="about" className="bg-background/70 backdrop-blur-md">
       <div className="text-center mb-12 md:mb-16">
@@ -41,7 +67,7 @@ export default function AboutMeSection() {
         />
       </div>
 
-      <div className="grid md:grid-cols-3 gap-8 items-center">
+      <div className="grid md:grid-cols-3 gap-8 items-start"> {/* Changed items-center to items-start */}
         {/* Column 1: Profile Image */}
         <motion.div 
           className="md:col-span-1 flex justify-center"
@@ -51,7 +77,6 @@ export default function AboutMeSection() {
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <div className="relative w-56 h-56 md:w-64 md:h-64 rounded-full overflow-hidden p-1 bg-gradient-to-br from-primary via-accent to-m-performance-blue shadow-xl card-m-glow">
-             {/* Carbon fiber frame effect (subtle border or actual pattern if texture added) */}
             <div className="absolute inset-0 rounded-full border-4 border-card opacity-50"></div>
             <Image
               src="https://i.ibb.co/PGgTrngH/d2d27295-61a5-43fa-bd33-5f44c25e813a.png"
@@ -78,10 +103,63 @@ export default function AboutMeSection() {
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
             A dynamic AI/ML Engineer and Data Scientist, architecting intelligent solutions that drive innovation and real-world impact. My expertise lies in leveraging cutting-edge AI to transform data into actionable insights and build high-performance systems.
           </p>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">
-            With a foundation in Computer Science from Lovely Professional University and a toolkit including Python, Java, and advanced ML frameworks, I specialize in AI model training, prompt engineering, and developing scalable data-driven applications. My technical vision is to push the boundaries of AI to create intuitive, efficient, and impactful technologies.
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-3">
+            With a robust foundation in Computer Science from Lovely Professional University, my technical arsenal is built for versatility and power. I specialize in AI model training, sophisticated prompt engineering, and developing scalable, data-driven applications. My technical vision is to push the boundaries of AI to create intuitive, efficient, and impactful technologies.
           </p>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+          
+          <motion.div 
+            className="mt-8 space-y-6"
+            variants={techSectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            <motion.div variants={techCategoryVariants}>
+              <h4 className="flex items-center text-xl font-heading text-primary mb-3">
+                <Code size={22} className="mr-2" /> Languages
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {["Python", "Java", "JavaScript", "TypeScript", "SQL", "R", "HTML/CSS"].map(lang => (
+                  <TechBadge key={lang}>{lang}</TechBadge>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div variants={techCategoryVariants}>
+              <h4 className="flex items-center text-xl font-heading text-primary mb-3">
+                <Package size={22} className="mr-2" /> Frameworks & Libraries
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {["Next.js", "React", "Genkit", "TensorFlow/PyTorch", "Django", "ShadCN UI", "Tailwind CSS", "Framer Motion"].map(fw => (
+                  <TechBadge key={fw}>{fw}</TechBadge>
+                ))}
+              </div>
+            </motion.div>
+            
+            <motion.div variants={techCategoryVariants}>
+              <h4 className="flex items-center text-xl font-heading text-primary mb-3">
+                <TerminalSquare size={22} className="mr-2" /> Platforms & Tools
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {["Firebase", "Git/GitHub", "Docker", "Hadoop", "Spark", "Unix/Linux"].map(tool => (
+                  <TechBadge key={tool}>{tool}</TechBadge>
+                ))}
+              </div>
+            </motion.div>
+
+             <motion.div variants={techCategoryVariants}>
+              <h4 className="flex items-center text-xl font-heading text-primary mb-3">
+                <Brain size={22} className="mr-2" /> Concepts & Expertise
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {["AI Model Training", "Prompt Engineering", "Data Analysis", "Data Visualization", "Statistical Modeling", "Web Development", "Big Data Processing"].map(concept => (
+                  <TechBadge key={concept}>{concept}</TechBadge>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mt-8">
             Explore my <Link href="/#projects" passHref><span className="text-primary hover:text-accent transition-colors duration-300 underline underline-offset-4 cursor-pointer">Track History</span></Link> or download my full <Link href="/resume" passHref><span className="text-primary hover:text-accent transition-colors duration-300 underline underline-offset-4 cursor-pointer">Spec Sheet</span></Link>.
           </p>
         </motion.div>
@@ -101,3 +179,6 @@ export default function AboutMeSection() {
     </Section>
   );
 }
+
+
+    
