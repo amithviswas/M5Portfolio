@@ -7,84 +7,80 @@ import {
 } from 'lucide-react';
 import Section from '@/components/Section'; 
 import { cn } from '@/lib/utils';
-import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Re-added
-import soundService from '@/services/soundService'; // Re-added
+// import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Removed as context was cleared
+// import soundService from '@/services/soundService'; // Removed
 
 const skills = [
-  { name: 'AI Model Training', icon: <Zap size={32} />, modeName: 'Turbo Boost', id: 'skill-ai-training' },
-  { name: 'Prompt Engineering', icon: <Bot size={32} />, modeName: 'Drive Logic', id: 'skill-prompt-eng' },
-  { name: 'Data Visualization', icon: <Palette size={32} />, modeName: 'Heads-Up Display', id: 'skill-data-viz' },
-  { name: 'Machine Learning', icon: <Brain size={32} />, modeName: 'Intelligent Traction', id: 'skill-ml' },
-  { name: 'Python Programming', icon: <Code2 size={32} />, modeName: 'Core Engine (Python)', id: 'skill-python' },
-  { name: 'Data Analysis', icon: <BarChart3 size={32} />, modeName: 'Performance Analytics', id: 'skill-data-analysis' },
-  { name: 'Web Development', icon: <Activity size={32} />, modeName: 'Chassis & Aero (Web)', id: 'skill-web-dev' },
-  { name: 'SQL & Databases', icon: <Database size={32} />, modeName: 'Fuel System (Data)', id: 'skill-sql' },
-  { name: 'Unix/Linux', icon: <Terminal size={32} />, modeName: 'ECU (Unix/Linux)', id: 'skill-linux' },
-  { name: 'Statistical Modeling', icon: <Gauge size={32} />, modeName: 'Precision Tuning', id: 'skill-stat-model' },
-  { name: 'AI Chatbot Dev', icon: <Bot size={32} />, modeName: 'Co-Pilot AI', id: 'skill-chatbot' },
-  { name: 'Big Data (Hadoop, Spark)', icon: <Server size={32} />, modeName: 'Powertrain (Big Data)', id: 'skill-big-data' },
-  { name: 'R Programming', icon: <Code2 size={32} />, modeName: 'Auxiliary Engine (R)', id: 'skill-r-prog' },
-  { name: 'Natural Language Processing', icon: <Languages size={32} />, modeName: 'Linguistic Dynamics', id: 'skill-nlp' },
-  { name: 'Cloud Platforms', icon: <Cloud size={32} />, modeName: 'SkyNet Computing', id: 'skill-cloud' },
-  { name: 'API Development', icon: <Webhook size={32} />, modeName: 'Interface Protocol', id: 'skill-api-dev' },
+  { name: 'AI Model Training', icon: <Zap size={28} />, modeName: 'Turbo Boost', id: 'skill-ai-training' }, // Icon size adjusted
+  { name: 'Prompt Engineering', icon: <Bot size={28} />, modeName: 'Drive Logic', id: 'skill-prompt-eng' },
+  { name: 'Data Visualization', icon: <Palette size={28} />, modeName: 'Heads-Up Display', id: 'skill-data-viz' },
+  { name: 'Machine Learning', icon: <Brain size={28} />, modeName: 'Intelligent Traction', id: 'skill-ml' },
+  { name: 'Python Programming', icon: <Code2 size={28} />, modeName: 'Core Engine (Python)', id: 'skill-python' },
+  { name: 'Data Analysis', icon: <BarChart3 size={28} />, modeName: 'Performance Analytics', id: 'skill-data-analysis' },
+  { name: 'Web Development', icon: <Activity size={28} />, modeName: 'Chassis & Aero (Web)', id: 'skill-web-dev' },
+  { name: 'SQL & Databases', icon: <Database size={28} />, modeName: 'Fuel System (Data)', id: 'skill-sql' },
+  { name: 'Unix/Linux', icon: <Terminal size={28} />, modeName: 'ECU (Unix/Linux)', id: 'skill-linux' },
+  { name: 'Statistical Modeling', icon: <Gauge size={28} />, modeName: 'Precision Tuning', id: 'skill-stat-model' },
+  { name: 'AI Chatbot Dev', icon: <Bot size={28} />, modeName: 'Co-Pilot AI', id: 'skill-chatbot' },
+  { name: 'Big Data (Hadoop, Spark)', icon: <Server size={28} />, modeName: 'Powertrain (Big Data)', id: 'skill-big-data' },
+  { name: 'R Programming', icon: <Code2 size={28} />, modeName: 'Auxiliary Engine (R)', id: 'skill-r-prog' },
+  { name: 'Natural Language Processing', icon: <Languages size={28} />, modeName: 'Linguistic Dynamics', id: 'skill-nlp' },
+  { name: 'Cloud Platforms', icon: <Cloud size={28} />, modeName: 'SkyNet Computing', id: 'skill-cloud' },
+  { name: 'API Development', icon: <Webhook size={28} />, modeName: 'Interface Protocol', id: 'skill-api-dev' },
 ];
 
 export default function SkillsSection() {
   const prefersReducedMotion = useReducedMotion();
-  const { interactionData, incrementSkillHover } = useUserInteraction();
+  // const { interactionData, incrementSkillHover } = useUserInteraction(); // Removed
 
-  const handleSkillHover = (skillName: string) => {
-    incrementSkillHover(skillName);
-    if (interactionData.isSoundEnabled && soundService) {
-      soundService.playSound('hoverChime');
-    }
-  };
+  // const handleSkillHover = (skillName: string) => { // Removed
+  //   if (incrementSkillHover) incrementSkillHover(skillName);
+  //   if (interactionData?.isSoundEnabled && soundService) {
+  //     soundService.playSound('hoverChime');
+  //   }
+  // };
   
   const cardVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.9 },
+    hidden: { opacity: 0, y: 20, scale: 0.95 }, // Slightly adjusted initial state
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
-      scale: prefersReducedMotion ? 1 : [1, 1.06, 1], 
-      boxShadow: prefersReducedMotion 
-        ? "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)" 
-        : ["0 0 0px hsla(var(--primary)/0)", "0 0 12px hsla(var(--primary)/0.4)", "0 0 0px hsla(var(--primary)/0)"],
+      scale: 1, 
       transition: {
-        delay: i * 0.06,
-        duration: prefersReducedMotion ? 0.4 : 0.3, 
+        delay: i * 0.05, // Faster stagger
+        duration: prefersReducedMotion ? 0.3 : 0.25, 
         ease: prefersReducedMotion ? [0.42, 0, 0.58, 1] : "circOut" as any, 
-        times: prefersReducedMotion ? undefined : [0, 0.5, 1], 
       },
     }),
-    hover: {
-      scale: 1.07, 
-      y: -5, 
-      boxShadow: "0px 0px 28px 2px hsl(var(--primary)/0.65), 0 0 18px hsl(var(--bmw-m-blue)/0.45)", 
-      borderColor: "hsl(var(--primary))",
-      transition: { type: 'spring', stiffness: 250, damping: 10, duration: 0.15 }
+    hover: { // "Drive-Mode Engage" hover from CSL prompt
+      scale: 1.05, 
+      y: -8, 
+      // Twin-shadow neon glow and text skew will be handled by .card-m-glow:hover in globals.css
+      transition: { type: 'spring', stiffness: 280, damping: 12, duration: 0.1 } // Snappier spring
     }
   };
 
-  const textVariants = {
+  const textVariants = { // For text skew on hover
     hover: {
+      skewX: "1deg",
       color: "hsl(var(--primary-foreground))",
-      transition: { type: 'spring', stiffness: 300, damping: 10, duration: 0.1 }
+      transition: { duration: 0.1 }
     }
   };
 
   const iconVariants = {
     hover: {
-      scale: 1.15,
+      scale: 1.1,
       color: "hsl(var(--primary))", 
       transition: { duration: 0.1 }
     }
   };
   
   return (
-    <Section id="skills" className="bg-card/30">
+    <Section id="skills" className="bg-card/20"> {/* Slightly lighter card background for skills section */}
       <div className="text-center mb-12 md:mb-16">
         <motion.h2 
-          className="text-4xl md:text-5xl font-heading text-primary-foreground"
+          className="text-3xl md:text-4xl font-heading text-primary-foreground" // Adjusted size
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -93,7 +89,7 @@ export default function SkillsSection() {
           Engine <span className="text-primary">Modes</span>
         </motion.h2>
         <motion.div 
-          className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"
+          className="w-40 h-0.5 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-3 rounded-full" // Thinner underline
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -101,58 +97,58 @@ export default function SkillsSection() {
         />
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4"> {/* Smaller gaps */}
         {skills.map((skill, index) => {
-          // Check if skillHovers exists and then access the count
-          const hoverCount = interactionData.skillHoverCounts?.[skill.name]?.count || 0;
-          const isRepeatedHover = hoverCount >= 3;
-          // isGhostlineSkill is not used in this version after rollback, can be removed if not planned
-          // const isGhostlineSkill = interactionData.isGhostlineFullModeUnlocked; 
+          // const hoverCount = interactionData?.skillHoverCounts?.[skill.name]?.count || 0; // Removed
+          // const isSkillOverclocked = hoverCount >= 3; // Removed
+          const isSkillOverclocked = false; // Placeholder, logic removed
           
           return (
             <motion.div
               key={skill.id}
               className={cn(
-                "skill-card-trail-container carbon-texture-panel", // Added carbon-texture-panel
-                "p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40",
-                "transition-m-throttle card-m-glow",
-                isRepeatedHover && "skill-overclocked", // Apply overclocked style on repeated hover
-                // isGhostlineSkill && "animate-skill-jitter", // Original jitter on ghostline
-                "hover:animate-skill-jitter" // Apply jitter on hover
+                "skill-card-trail-container carbon-texture-panel card-m-glow", // Apply carbon texture and glow
+                "p-3 md:p-4 text-center cursor-default", // Adjusted padding
+                "transition-m-throttle", // Apply throttle transition
+                isSkillOverclocked && "skill-overclocked animate-skill-jitter", // Apply overclocked and jitter
+                "hover:animate-skill-jitter" 
               )}
               custom={index}
               variants={cardVariants}
               initial="hidden"
               whileInView="visible"
               whileHover="hover"
-              onHoverStart={() => handleSkillHover(skill.name)}
+              // onHoverStart={() => handleSkillHover(skill.name)} // Removed
               viewport={{ once: true, amount: 0.1 }}
             >
               <div className={cn(
                 "skill-card-trail",
-                isRepeatedHover && "electric-trail" // More intense trail for overclocked
+                isSkillOverclocked && "electric-trail" 
               )}/>
               <motion.div 
-                className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
+                className="mb-2 md:mb-3 text-primary-foreground/80 inline-block"
                 variants={iconVariants}
               >
                 {skill.icon}
               </motion.div>
-              <motion.h3 
-                className="text-sm md:text-base font-semibold text-muted-foreground" 
-                variants={textVariants}
-              >
-                {skill.modeName}
-              </motion.h3>
-              <motion.p
-                className="text-xs text-muted-foreground/70 mt-1"
-                variants={{ hover: { opacity: 1} }} 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1, transition: {delay: index * 0.06 + 0.4} }} 
-                whileHover={{opacity: 1}} 
-              >
-                ({skill.name})
-              </motion.p>
+              {/* Wrapper for text skew effect */}
+              <div className="card-text-skew transition-transform duration-100 ease-m-throttle">
+                <motion.h3 
+                  className="text-xs md:text-sm font-semibold text-muted-foreground" // Adjusted text size
+                  variants={textVariants}
+                >
+                  {skill.modeName}
+                </motion.h3>
+                <motion.p
+                  className="text-[10px] md:text-xs text-muted-foreground/60 mt-0.5" // Adjusted text size and opacity
+                  variants={{ hover: { opacity: 1} }} 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1, transition: {delay: index * 0.05 + 0.3} }} 
+                  whileHover={{opacity: 1}} 
+                >
+                  ({skill.name})
+                </motion.p>
+              </div>
             </motion.div>
           );
         })}

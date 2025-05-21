@@ -32,22 +32,22 @@ const certifications = [
 ];
 
 const cardVariants = {
-  initial: { opacity: 0, x: -50, filter: "blur(5px)" }, 
+  initial: { opacity: 0, x: -40, filter: "blur(4px)" }, // Adjusted initial state
   animate: (i: number) => ({
     opacity: 1,
     x: 0,
     filter: "blur(0px)",
     transition: {
-      delay: i * 0.15,
-      duration: 0.7, 
+      delay: i * 0.1, // Faster stagger
+      duration: 0.6, 
       ease: [0.6, 0.01, 0.0, 0.95], 
     },
   }),
-  hover: {
-    scale: 1.02, 
-    y: -6, 
-    boxShadow: "0px 10px 25px -5px hsl(var(--primary)/0.5), 0px 6px 15px -8px hsl(var(--bmw-m-blue)/0.3)", 
-    transition: { type: "spring", stiffness: 200, damping: 12 }
+  hover: { // "Drive-Mode Engage" style handled by .card-m-glow:hover
+    // scale: 1.03, 
+    // y: -8, 
+    // boxShadow: "0px 10px 25px -5px hsl(var(--primary)/0.5), 0px 6px 15px -8px hsl(var(--bmw-m-blue)/0.3)", 
+    transition: { type: "spring", stiffness: 280, damping: 12 } // Snappy spring
   }
 };
 
@@ -56,7 +56,7 @@ export default function CertificationsPage() {
     <Section id="certifications" className="min-h-screen">
       <div className="text-center mb-12 md:mb-16">
         <motion.h1 
-          className="text-4xl md:text-5xl font-heading text-primary-foreground" 
+          className="text-3xl md:text-4xl font-heading text-primary-foreground" // Adjusted size
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -64,29 +64,30 @@ export default function CertificationsPage() {
           Racing <span className="text-primary">Credentials</span> 
         </motion.h1>
         <motion.div 
-          className="w-48 h-1 bg-primary mx-auto mt-4 rounded-full" 
+          className="w-40 h-0.5 bg-primary mx-auto mt-3 rounded-full" // Thinner underline
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
         />
       </div>
 
-      <div className="space-y-8 md:space-y-10"> 
+      <div className="space-y-6 md:space-y-8"> {/* Adjusted spacing */}
         {certifications.map((cert, index) => (
           <motion.div
             key={cert.title}
             custom={index}
             variants={cardVariants}
             initial="initial"
-            animate="animate" 
+            whileInView="animate" // Changed to whileInView for scroll-triggered animation
             whileHover="hover"
             viewport={{ once: true, amount: 0.1 }}
             className="transition-m-throttle" 
           >
             <Card className={cn(
-              "bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary shadow-xl card-m-glow overflow-hidden h-full flex flex-col md:flex-row group rounded-sm carbon-texture-panel card-with-glowing-seal" // Added carbon-texture and seal
+              "carbon-texture-panel card-m-glow card-with-glowing-seal", // Apply CSL styles
+              "h-full flex flex-col md:flex-row group overflow-hidden"
             )}> 
-                <div className="w-full md:w-2/5 h-60 md:h-auto relative overflow-hidden p-2 bg-black/30 rounded-l-sm md:rounded-r-none"> 
+                <div className="w-full md:w-2/5 h-52 md:h-auto relative overflow-hidden p-1.5 bg-black/35 rounded-l-sm md:rounded-r-none"> {/* Adjusted padding/height */}
                   <Image
                     src={cert.image}
                     alt={cert.title}
@@ -97,11 +98,11 @@ export default function CertificationsPage() {
                     sizes="(max-width: 768px) 100vw, 40vw"
                   />
                 </div>
-                <CardContent className="p-6 md:p-8 w-full md:w-3/5 flex flex-col justify-center">
-                  <h3 className="text-2xl font-bold text-primary-foreground mb-2 group-hover:text-primary transition-colors duration-300 font-heading">{cert.title}</h3>
-                  <p className="text-sm text-accent font-medium mb-3 uppercase tracking-wider">{cert.issuer}</p>
-                  <p className="text-muted-foreground leading-relaxed text-base">{cert.description}</p>
-                  <Award className="mt-4 h-6 w-6 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 self-start md:self-end" />
+                <CardContent className="p-5 md:p-6 w-full md:w-3/5 flex flex-col justify-center card-text-skew transition-transform duration-100 ease-m-throttle"> {/* Text skew on hover */}
+                  <h3 className="text-xl md:text-2xl font-bold text-primary-foreground mb-1.5 group-hover:text-primary transition-colors duration-300 font-heading">{cert.title}</h3> {/* Adjusted size */}
+                  <p className="text-xs text-accent font-medium mb-2.5 uppercase tracking-wider">{cert.issuer}</p> {/* Adjusted size */}
+                  <p className="text-muted-foreground leading-relaxed text-sm md:text-base">{cert.description}</p> {/* Adjusted size */}
+                  <Award className="mt-3 h-5 w-5 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300 self-start md:self-end" /> {/* Adjusted size */}
                 </CardContent>
             </Card>
           </motion.div>

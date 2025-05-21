@@ -9,9 +9,7 @@ import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-// Assuming UserInteractionContext is still used for tracking visits or other interactions
-// If not, this import and related logic can be removed.
-import { useUserInteraction } from '@/contexts/UserInteractionContext';
+// import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Removed as context was cleared
 
 const navLinks = [
   { name: 'Home', href: '/#home', id: 'home' },
@@ -31,7 +29,7 @@ export default function Navbar() {
   const [isMounted, setIsMounted] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sectionRefs = useRef<Map<string, HTMLElement | null>>(new Map());
-  const { incrementSectionVisit } = useUserInteraction(); // Keep if still used
+  // const { incrementSectionVisit } = useUserInteraction(); // Removed
 
   useEffect(() => {
     setIsMounted(true);
@@ -48,11 +46,11 @@ export default function Navbar() {
   const setActiveLinkAndTrack = useCallback((href: string, sectionId?: string) => {
     if (activeLink !== href) {
       setActiveLink(href);
-      if (sectionId && pathname === '/' && isMounted) { // Ensure isMounted before calling context
-         incrementSectionVisit(sectionId);
-      }
+      // if (sectionId && pathname === '/' && isMounted && incrementSectionVisit) { // Check if incrementSectionVisit exists
+      //    incrementSectionVisit(sectionId);
+      // }
     }
-  }, [activeLink, pathname, incrementSectionVisit, isMounted]);
+  }, [activeLink, pathname, /*incrementSectionVisit,*/ isMounted]); // Removed incrementSectionVisit from dependencies
 
   useEffect(() => {
     if (!isMounted) return;
@@ -79,7 +77,7 @@ export default function Navbar() {
 
     if (pathname === '/') {
         observerRef.current = new IntersectionObserver(observerCallback, {
-            rootMargin: "-40% 0px -40% 0px", // Middle 20% of the viewport
+            rootMargin: "-30% 0px -45% 0px", 
             threshold: 0.01,
         });
 
@@ -87,7 +85,6 @@ export default function Navbar() {
             if (sectionEl) observerRef.current?.observe(sectionEl);
         });
 
-        // Initial check
         const currentHash = window.location.hash;
         if (currentHash) {
             const matchedLink = navLinks.find(link => link.href === `/${currentHash}`);
@@ -143,20 +140,20 @@ export default function Navbar() {
   };
   
   return (
-    <nav // Changed from motion.nav to nav for simplicity as animations are on links
+    <nav
       className={cn(
         "fixed top-0 left-0 right-0 z-50 font-sans",
         "bg-background shadow-md" 
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 md:h-20"> {/* Standardized height */}
           <Link href="/" className="flex items-center group" onClick={(e) => handleNavLinkClick(e as any, '/#home', 'home')}>
              <Image
-              src="https://i.ibb.co/N2v0V2R8/Amith-Viswas-Reddy.png"
+              src="https://i.ibb.co/N2v0V2R8/Amith-Viswas-Reddy.png" 
               alt="Amith Viswas Reddy Logo"
-              width={180} 
-              height={40} 
+              width={160} // Slightly smaller for sharpness
+              height={36} 
               className="object-contain group-hover:opacity-80 transition-opacity duration-300"
               priority
             />
@@ -170,8 +167,8 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   className={cn(
-                    'px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wider nav-m-stripe-underline', // Updated class for new M-stripe underline
-                    isActive ? 'active-link text-primary' : 'text-muted-foreground hover:text-primary-foreground' // Ensure active link text color
+                    'px-3 py-2 rounded-sm text-sm font-medium uppercase tracking-wider nav-m-stripe-underline', // Use new M-stripe underline
+                    isActive ? 'active-link text-primary' : 'text-muted-foreground hover:text-primary-foreground'
                   )}
                   onClick={(e) => handleNavLinkClick(e, link.href, link.id)}
                   aria-current={isActive ? 'page' : undefined}
@@ -216,7 +213,7 @@ export default function Navbar() {
                     key={link.name}
                     href={link.href}
                     className={cn(
-                      'block px-3 py-3 rounded-md text-base font-medium uppercase tracking-wider nav-m-stripe-underline', // Updated class
+                      'block px-3 py-3 rounded-sm text-base font-medium uppercase tracking-wider nav-m-stripe-underline', 
                       isActive ? 'active-link text-primary' : 'text-muted-foreground hover:text-primary-foreground hover:bg-card/50'
                     )}
                     onClick={(e) => handleNavLinkClick(e, link.href, link.id)}

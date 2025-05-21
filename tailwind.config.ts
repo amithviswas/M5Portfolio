@@ -12,12 +12,14 @@ export default {
   theme: {
   	extend: {
       fontFamily: {
-        sans: ['var(--font-rajdhani)', ...fontFamily.sans],
+        sans: ['var(--font-inter)', ...fontFamily.sans], // Changed default sans to Inter
         rajdhani: ['var(--font-rajdhani)', ...fontFamily.sans],
         'playfair-display': ['var(--font-playfair-display)', ...fontFamily.serif],
         'space-grotesk': ['var(--font-space-grotesk)', ...fontFamily.sans],
         fraunces: ['var(--font-fraunces)', ...fontFamily.serif],
         inter: ['var(--font-inter)', ...fontFamily.sans],
+        orbitron: ['Orbitron', ...fontFamily.sans], // Added Orbitron
+        'exo-2': ['"Exo 2"', ...fontFamily.sans], // Added Exo 2
       },
   		colors: {
         border: "hsl(var(--border))",
@@ -62,9 +64,9 @@ export default {
         'neutral-300a': 'hsla(var(--neutral-300-hsl), var(--tw-text-opacity, 1))',
       },
   		borderRadius: {
-  			lg: 'var(--radius)', // Should be 0.2rem based on globals
-  			md: 'calc(var(--radius) - 0.05rem)', // e.g., 0.15rem
-  			sm: 'calc(var(--radius) - 0.1rem)'  // e.g., 0.1rem
+  			lg: 'var(--radius)', // Will be 0.1rem
+  			md: 'calc(var(--radius))', // Adjusted to be same as --radius for sharpness
+  			sm: 'calc(var(--radius))'  // Adjusted to be same as --radius for sharpness
   		},
   		keyframes: {
   			'accordion-down': {
@@ -86,43 +88,37 @@ export default {
         'spin-slow': {
           'to': { transform: 'rotate(360deg)' },
         },
-        'carbonWeaveShift': {
+        'carbonWeaveShift': { // Kept from Apex Finish, subtle
           '0%': { 'background-position': '0 0' },
-          '100%': { 'background-position': '20px 20px' },
+          '100%': { 'background-position': '10px 10px' }, // Smaller shift for finer weave feel
         },
-        'pulseDot': {
-          '0%, 100%': { opacity: '0.7', transform: 'scale(1)' },
-          '50%': { opacity: '1', transform: 'scale(1.2)' }, // Simplified from 5%, 10%
+        'pulseDot': { // For M-stripe LED dots on footer
+          '0%, 100%': { opacity: '0.6', transform: 'scale(0.9)' },
+          '50%': { opacity: '1', transform: 'scale(1.1)', boxShadow: '0 0 8px hsl(var(--primary))' },
         },
-        'm-rpm-redline-led-pulse': { // More aggressive pulse for redline
-          '0%, 100%': {
-            boxShadow: 'inset 0 0 8px hsl(var(--background)/0.5), 0 0 25px 8px hsl(var(--primary)/1), 0 0 50px 15px hsl(var(--primary)/0.8)',
-            filter: 'brightness(2.5) saturate(2.5)'
+        'm-rpm-redline-led-pulse': { // For Apex Meter redline
+           '0%, 100%': {
+            boxShadow: 'inset 0 0 5px hsla(0,0%,0%,0.6), 0 0 20px 5px hsl(var(--primary)/0.8), 0 0 40px 10px hsl(var(--primary)/0.6)',
+            filter: 'brightness(2.2) saturate(2.2)'
           },
           '50%': {
-            boxShadow: 'inset 0 0 12px hsl(var(--background)/0.6), 0 0 40px 12px hsl(var(--primary)/1), 0 0 80px 25px hsl(var(--primary)/0.9)',
-            filter: 'brightness(3.5) saturate(3.5)'
+            boxShadow: 'inset 0 0 8px hsla(0,0%,0%,0.7), 0 0 30px 8px hsl(var(--primary)/1), 0 0 60px 15px hsl(var(--primary)/0.9)',
+            filter: 'brightness(3.0) saturate(3.0)'
           }
         },
-        'empireMedallionPulse': { // Kept for reference if needed, adjust as per new theme
-          '0%, 100%': { 'box-shadow': '0 0 15px 3px hsla(var(--bmw-m-blue), 0.75), 0 0 8px 1px hsla(var(--bmw-m-blue), 0.55) inset, 0 0 20px 2px hsla(var(--uv-blue),.3)' },
-          '33%': { 'box-shadow': '0 0 18px 4px hsla(var(--m-violet-hsl), 0.85), 0 0 10px 2px hsla(var(--m-violet-hsl), 0.65) inset, 0 0 25px 3px hsla(var(--uv-blue),.4)' },
-          '66%': { 'box-shadow': '0 0 15px 3px hsla(var(--primary), 0.75), 0 0 8px 1px hsla(var(--primary), 0.55) inset, 0 0 20px 2px hsla(var(--uv-blue),.3)' },
+        'navMStripeAnimation': { // For navbar underline laser sweep
+          '0%': { backgroundPosition: '200% 0%' }, // Start off-screen to the right
+          '100%': { backgroundPosition: '-100% 0%' }, // Sweep to off-screen to the left
         },
-        'navMStripeAnimation': {
-          '0%': { 'background-position': '0% 50%' },
-          '100%': { 'background-position': '100% 50%' },
+        'skillFluxPulse': { // For Overclocked Skill Engine
+          '0%, 100%': { borderColor: 'hsl(var(--uv-blue)/0.5)', boxShadow: '0 0 8px hsl(var(--uv-blue)/0.3), 0 0 4px hsl(var(--primary)/0.2)' },
+          '50%': { borderColor: 'hsl(var(--uv-blue))', boxShadow: '0 0 20px hsl(var(--uv-blue)/0.7), 0 0 10px hsl(var(--primary)/0.4), inset 0 0 4px hsl(var(--uv-blue)/0.3)' },
         },
-        'skillFluxPulse': {
-          '0%, 100%': { boxShadow: '0 0 10px hsl(var(--uv-blue)/0.5), 0 0 5px hsl(var(--primary)/0.3)' },
-          '50%': { boxShadow: '0 0 25px hsl(var(--uv-blue)/0.8), 0 0 15px hsl(var(--primary)/0.5), inset 0 0 5px hsl(var(--uv-blue)/0.2)' },
-        },
-        'skillJitter': {
-          '0%': { transform: 'translate(0, 0) rotate(0)' },
-          '25%': { transform: 'translate(0.5px, -0.5px) rotate(0.2deg)' },
-          '50%': { transform: 'translate(-0.5px, 0.5px) rotate(-0.2deg)' },
-          '75%': { transform: 'translate(0.5px, 0.5px) rotate(0.1deg)' },
-          '100%': { transform: 'translate(0, 0) rotate(0)' },
+        'skillJitter': { // For Overclocked Skill Engine
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '25%': { transform: 'translate(0.5px, -0.5px)' },
+          '50%': { transform: 'translate(-0.5px, 0.5px)' },
+          '75%': { transform: 'translate(0.5px, 0.5px)' },
         },
         'clickRipple': {
           'to': {
@@ -130,24 +126,44 @@ export default {
             opacity: '0'
           }
         },
-        // Keep other existing keyframes like goldGlintSweep, bloomGlide, etc.
+        'fadeInSlideUpCustomTiming': { // Kept for Hero elements
+          '0%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
+        // Keyframes from previous themes if still relevant and don't conflict
+        'empireMedallionPulse': {
+          '0%, 100%': { 'box-shadow': '0 0 12px 2px hsla(var(--bmw-m-blue), 0.6), 0 0 6px 1px hsla(var(--bmw-m-blue), 0.4) inset, 0 0 15px 1px hsla(var(--uv-blue),.25)' },
+          '33%': { 'box-shadow': '0 0 15px 3px hsla(var(--m-violet-hsl), 0.7), 0 0 8px 2px hsla(var(--m-violet-hsl), 0.5) inset, 0 0 20px 2px hsla(var(--uv-blue),.3)' },
+          '66%': { 'box-shadow': '0 0 12px 2px hsla(var(--primary), 0.6), 0 0 6px 1px hsla(var(--primary), 0.4) inset, 0 0 15px 1px hsla(var(--uv-blue),.25)' },
+        },
+        'headlightSweep': { // For hero background sweep
+          '0%': { transform: 'translateX(-6vw) rotate(-15deg)' },
+          '100%': { transform: 'translateX(6vw) rotate(-15deg)' },
+        },
+        'gantrySweepAnimation': { // For section teaser lights
+          '0%': { transform: 'translateX(-100%)', opacity: '0.5' },
+          '50%': { transform: 'translateX(0)', opacity: '1' },
+          '100%': { transform: 'translateX(100%)', opacity: '0.5' },
+        },
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
         'spin-slow': 'spin 3s linear infinite',
         'carbon-weave-shift': 'carbonWeaveShift 8s linear infinite',
-        'pulse-dot': 'pulseDot 2s infinite ease-in-out', // Standardized pulseDot
+        'pulse-dot': 'pulseDot 2s infinite ease-in-out',
         'm-rpm-redline-led-pulse': 'm-rpm-redline-led-pulse 0.15s infinite alternate ease-in-out',
-        'empire-medallion-pulse': 'empireMedallionPulse 2.5s infinite linear',
-        'nav-m-stripe': 'navMStripeAnimation 0.6s ease-in-out alternate infinite',
+        'nav-m-stripe': 'navMStripeAnimation 1.2s linear infinite paused', // Control play state with class
         'skill-flux-pulse': 'skillFluxPulse 0.8s infinite ease-in-out',
-        'skill-jitter': 'skillJitter 0.15s infinite alternate ease-in-out',
+        'skill-jitter': 'skillJitter 0.3s infinite alternate ease-in-out',
         'click-ripple': 'clickRipple 0.6s linear',
-        // Keep other existing animations
+        'hero-text-reveal': 'fadeInSlideUpCustomTiming 0.7s var(--ease-m-throttle) forwards',
+        'empire-medallion-pulse': 'empireMedallionPulse 2.5s infinite linear',
+        'headlight-sweep': 'headlightSweep 18s infinite alternate ease-in-out',
+        'gantry-sweep': 'gantrySweepAnimation 0.7s ease-out forwards',
   		},
       transitionTimingFunction: {
-        'm-throttle': 'var(--ease-m-throttle)',
+        'm-throttle': 'var(--ease-m-throttle)', // cubic-bezier(.36,1.08,.33,1)
       }
     },
   },
