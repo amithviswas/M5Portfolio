@@ -30,7 +30,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             style={{ objectFit: "cover" }}
             className="rounded-t-lg"
             data-ai-hint={project.dataAiHint || "project showcase"}
-            sizes="(max-width: 768px) 100vw, 70vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 33vw" // Adjusted sizes
           />
            <Button
               variant="ghost"
@@ -80,14 +80,14 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
         
         <div className="flex flex-col sm:flex-row gap-3 p-6 md:p-8 border-t border-border/50 bg-card/50 rounded-b-lg flex-shrink-0">
           {project.projectUrl && project.projectUrl !== '#' && (
-            <Button asChild size="lg" className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-primary/50">
+            <Button asChild size="lg" className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-primary/50 transition-m-throttle">
               <Link href={project.projectUrl} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="mr-2 h-5 w-5" /> Visit Project
               </Link>
             </Button>
           )}
           {project.repoUrl && project.repoUrl !== '#' && (
-            <Button variant="outline" asChild size="lg" className="flex-1 hover:border-accent hover:text-accent">
+            <Button variant="outline" asChild size="lg" className="flex-1 hover:border-accent hover:text-accent transition-m-throttle">
               <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
                 <Github className="mr-2 h-5 w-5" /> View Source
               </Link>
