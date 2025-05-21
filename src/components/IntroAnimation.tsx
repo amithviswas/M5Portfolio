@@ -8,15 +8,15 @@ import { useIntroContext } from '@/contexts/IntroContext';
 // GlitchText sub-component
 const GlitchText = ({ text, resolved, className }: { text: string, resolved: boolean, className?: string }) => {
   const [displayText, setDisplayText] = useState(resolved ? text : text.replace(/./g, '\u00A0'));
-  const [isMounted, setIsMounted] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const chars = "!<>-_\\/[]{}—=+*^?#_M5";
 
   useEffect(() => {
-    setIsMounted(true);
+    setHasMounted(true);
   }, []);
 
   useEffect(() => {
-    if (!isMounted) {
+    if (!hasMounted) {
       // Ensure server and initial client render are consistent before effects
       setDisplayText(resolved ? text : text.replace(/./g, '\u00A0'));
       return;
@@ -38,7 +38,7 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
       animationFrameId = requestAnimationFrame(updateText);
     };
 
-    if (isMounted) {
+    if (hasMounted) {
       updateText();
     }
 
@@ -47,14 +47,12 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [resolved, text, isMounted, chars]);
+  }, [resolved, text, hasMounted, chars]);
 
-  if (!isMounted && !resolved) {
-    return <span className={`font-heading tracking-wider ${className}`}>{text.replace(/./g, '\u00A0')}</span>;
+  if (!hasMounted) {
+    return <span className={`font-heading tracking-wider ${className}`}>{resolved ? text : text.replace(/./g, '\u00A0')}</span>;
   }
-  if (!isMounted && resolved) {
-    return <span className={`font-heading tracking-wider ${className}`}>{text}</span>;
-  }
+
 
   return (
     <span className={`font-heading tracking-wider ${className}`}>
@@ -71,12 +69,12 @@ export default function IntroAnimation() {
   useEffect(() => {
     const timers: NodeJS.Timeout[] = [];
 
-    // Adjusted timings for ~3.5 second animation
-    timers.push(setTimeout(() => setStep(1), 100)); // Start glitch
-    timers.push(setTimeout(() => setStep(2), 2000));  // Resolve name
-    timers.push(setTimeout(() => setStep(3), 2500)); // Final visual pulse
-    timers.push(setTimeout(() => setStep(4), 3100)); // Fade out intro screen
-    timers.push(setTimeout(() => setIntroCompleted(true), 3500)); // Intro complete
+    // Adjusted timings for ~5 second animation
+    timers.push(setTimeout(() => setStep(1), 100));      // Start glitch
+    timers.push(setTimeout(() => setStep(2), 3000));     // Resolve name
+    timers.push(setTimeout(() => setStep(3), 3500));     // Final visual pulse
+    timers.push(setTimeout(() => setStep(4), 4500));     // Fade out intro screen
+    timers.push(setTimeout(() => setIntroCompleted(true), 5000)); // Intro complete
 
     return () => timers.forEach(clearTimeout);
   }, [setIntroCompleted]);
@@ -98,7 +96,7 @@ export default function IntroAnimation() {
             alt="Aggressive BMW M5 backdrop"
             className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
             initial={{ scale: 1.05 }}
-            animate={{ scale: 1, transition: { duration: 3.5, ease: "easeInOut" } }} // Match new duration
+            animate={{ scale: 1, transition: { duration: 5.0, ease: "easeInOut" } }} // Match new duration
           />
 
           {/* Dark Overlay */}
@@ -108,13 +106,13 @@ export default function IntroAnimation() {
            <motion.div
             className="absolute top-1/2 left-0 w-1/2 h-64 bg-gradient-to-r from-white/5 to-transparent opacity-50 blur-3xl transform -translate-y-1/2"
             initial={{ x: "-100%" }}
-            animate={{ x: "50%", transition: {delay: 1.5, duration: 0.7, ease: "circOut"} }} // Adjusted delay and duration
+            animate={{ x: "50%", transition: {delay: 2.2, duration: 0.6, ease: "circOut"} }} 
             exit={{ x: "-100%"}}
           ></motion.div>
           <motion.div
             className="absolute top-1/2 right-0 w-1/2 h-64 bg-gradient-to-l from-white/5 to-transparent opacity-50 blur-3xl transform -translate-y-1/2"
             initial={{ x: "100%" }}
-            animate={{ x: "-50%", transition: {delay: 1.5, duration: 0.7, ease: "circOut"} }} // Adjusted delay and duration
+            animate={{ x: "-50%", transition: {delay: 2.2, duration: 0.6, ease: "circOut"} }} 
             exit={{ x: "100%"}}
           ></motion.div>
 
