@@ -57,13 +57,12 @@
     --nightfall-titanium-sheen-start-hsl: 210 15% 70%;
     --nightfall-titanium-sheen-end-hsl: 210 100% 85%;
     
-    /* Using direct values now */
     --medallion-nightfall-gradient: conic-gradient(
       from 0deg,
-      hsla(210, 100%, 50%, 0.7) 0%, 
-      hsla(270, 100%, 65%, 0.7) 33.33%, 
-      hsla(0, 100%, 50%, 0.7) 66.67%, 
-      hsla(210, 100%, 50%, 0.7) 100% 
+      hsla(210, 100%, 50%, 0.7) 0%, /* 0deg */
+      hsla(270, 100%, 65%, 0.7) 33.33%, /* 120deg */
+      hsla(0, 100%, 50%, 0.7) 66.67%, /* 240deg */
+      hsla(210, 100%, 50%, 0.7) 100% /* 360deg */
     );
 
 
@@ -123,6 +122,44 @@
     @apply shadow-[0_12px_28px_-5px_hsl(var(--primary)/0.7),_0_8px_18px_-8px_hsl(var(--bmw-m-blue)/0.55),_0_0_15px_2px_hsl(var(--primary)/0.3)_inset];
   }
 
+  /* === MStartStopButton Specific Hover Ring Enhancement === */
+  /* Defined in MStartStopButton.tsx: .group:hover:before:opacity-100 */
+  /* Target the :before pseudo-element when the .group (button) is hovered */
+  .group:hover .MStartStopButton-before-pseudo { /* Assuming a marker class or direct targeting */
+    box-shadow: 0 0 0 2px hsl(var(--background)),
+                0 0 0 6px hsl(var(--primary)), /* Thicker primary ring */
+                0 0 0 10px hsl(var(--bmw-m-blue)), /* Thicker, more vibrant blue ring */
+                0 0 35px 10px hsl(var(--primary)/0.85); /* Larger, more intense outer glow */
+  }
+  /* If MStartStopButton.tsx applies a class like 'hover:before:custom-shadow' */
+  .MStartStopButton-hover-ring {
+    box-shadow: 0 0 0 2px hsl(var(--background)),
+                0 0 0 6px hsl(var(--primary)), 
+                0 0 0 10px hsl(var(--bmw-m-blue)), 
+                0 0 35px 10px hsl(var(--primary)/0.85);
+  }
+   /* Ensure the ::before is set up for this in MStartStopButton.tsx if not already */
+  .MStartStopButton-base-style::before { /* Example class for the button itself */
+    content: '';
+    position: absolute;
+    inset: -2px; /* Or as defined */
+    border-radius: calc(var(--radius) - 2px); /* Or as defined */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Ensure smooth transition */
+    background: transparent; /* Should be transparent */
+    pointer-events: none; /* To not interfere with button clicks */
+    z-index: -1; /* If needed to be behind content */
+  }
+  .group:hover .MStartStopButton-base-style::before {
+      opacity: 1;
+      /* The shadow is applied here directly or via a specific class like .MStartStopButton-hover-ring */
+      box-shadow: 0 0 0 2px hsl(var(--background)),
+                  0 0 0 6px hsl(var(--primary)), 
+                  0 0 0 10px hsl(var(--bmw-m-blue)), 
+                  0 0 35px 10px hsl(var(--primary)/0.85);
+  }
+
+
   /* === M5 APEX FINISH STYLES START === */
   .carbon-wave-animated::before {
     content: '';
@@ -148,21 +185,28 @@
   }
   .nav-laser-crest::after {
     content: '';
-    @apply absolute left-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 transition-m-throttle;
-    bottom: -2px;
+    @apply absolute left-0 h-[2px] bg-primary opacity-0 transition-m-throttle;
+    bottom: -2px; /* Sits 2px below the text */
     width: 0%;
-    filter: blur(0.5px) drop-shadow(0 0 3px hsl(var(--primary)/0.5));
+    border-radius: 9999px; /* Fully rounded ends for a pill shape */
+    background: linear-gradient(to right, hsl(var(--bmw-m-blue)) 55%, hsl(var(--primary)) 55%);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.3), 
+                0 0 4px 1px hsl(var(--bmw-m-blue)/0.5),
+                0 0 4px 1px hsl(var(--primary)/0.5);
     transform-origin: center;
+    transition: width 170ms var(--ease-m-throttle), 
+                opacity 170ms var(--ease-m-throttle),
+                background 170ms var(--ease-m-throttle),
+                box-shadow 170ms var(--ease-m-throttle);
   }
   .nav-laser-crest:hover::after,
   .nav-laser-crest.active-link::after {
-    width: 100%;
+    width: 70%; /* Adjusted for better visual balance, can be 100% or 120% if preferred */
     opacity: 1;
-    background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)), hsl(var(--primary)));
-    filter: blur(0px) drop-shadow(0 0 5px hsl(var(--primary)/0.7));
-  }
-  .nav-laser-crest.active-link::after {
-    opacity: 0.8; /* Keep active underline more visible */
+    background: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.3), 
+                0 0 8px 2px hsl(var(--bmw-m-blue)/0.7),
+                0 0 8px 2px hsl(var(--primary)/0.7);
   }
   .nav-laser-crest.active-link {
     @apply text-primary; 
@@ -208,18 +252,20 @@
    .hero-medallion-nightfall-inner::before {
     content: '';
     position: absolute;
-    inset: -3px; 
+    inset: -3px; /* Controls the thickness of the gradient ring */
     border-radius: 9999px;
-    z-index: -1;
-    background: var(--medallion-nightfall-gradient);
+    z-index: -1; /* Behind the main medallion content */
+    background: var(--medallion-nightfall-gradient); /* Using the CSS variable */
     animation: spin 4s linear infinite, nightfallPulse 2s infinite ease-in-out alternate;
     filter: blur(2px);
   }
   .hero-headline-nightfall {
     font-family: var(--font-fraunces); 
+    @apply text-primary-foreground;
   }
   .hero-subtext-nightfall {
     font-family: var(--font-inter); 
+    @apply text-muted-foreground;
   }
   .liquid-titanium-effect {
     @apply relative;
@@ -263,8 +309,8 @@
     background: linear-gradient(135deg, rgba(255,255,255,.15) 0%, transparent 60%); /* Adjusted for better highlight */
   }
   .hero-headline-empire {
-    font-family: var(--font-playfair-display); /* Defaulting to Playfair for Empire */
-    @apply text-[#E5E5E5] font-bold; /* Ensuring bold as per screenshot */
+    font-family: var(--font-playfair-display); 
+    @apply text-[#E5E5E5];
     text-shadow: var(--empire-text-shadow);
   }
   .hero-tagline-empire {
@@ -381,8 +427,7 @@
     @apply text-sm font-bold uppercase tracking-wider text-primary-foreground font-heading;
   }
   .hud-console-settings-icon {
-    @apply text-neutral-400 hover:text-primary transition-m-throttle;
-    animation: spin 3s linear infinite;
+    @apply text-neutral-400 hover:text-primary transition-m-throttle animate-spin-slow;
   }
   .hud-console-log { 
     @apply flex-grow overflow-y-auto text-[11px] leading-snug p-1 bg-black/20 rounded-sm min-h-[50px];
