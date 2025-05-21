@@ -2,9 +2,10 @@
 "use client";
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge, Activity
+  Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge, Activity,
+  Languages, Cloud, Webhook // Added new icons
 } from 'lucide-react';
-import Section from '@/components/Section';
+import Section from '@/components/Section'; // Default import
 import { cn } from '@/lib/utils';
 
 const skills = [
@@ -21,18 +22,23 @@ const skills = [
   { name: 'AI Chatbot Dev', icon: <Bot size={32} />, modeName: 'Co-Pilot AI', id: 'skill-chatbot' },
   { name: 'Big Data (Hadoop, Spark)', icon: <Server size={32} />, modeName: 'Powertrain (Big Data)', id: 'skill-big-data' },
   { name: 'R Programming', icon: <Code2 size={32} />, modeName: 'Auxiliary Engine (R)', id: 'skill-r-prog' },
+  { name: 'Natural Language Processing', icon: <Languages size={32} />, modeName: 'Linguistic Dynamics', id: 'skill-nlp' },
+  { name: 'Cloud Platforms', icon: <Cloud size={32} />, modeName: 'SkyNet Computing', id: 'skill-cloud' },
+  { name: 'API Development', icon: <Webhook size={32} />, modeName: 'Interface Protocol', id: 'skill-api-dev' },
 ];
 
 export default function SkillsSection() {
   const prefersReducedMotion = useReducedMotion();
   
-  const interactionData = { 
-    skillHovers: {}, 
-    isGhostlineFullModeUnlocked: false 
-  };
-  const incrementSkillHover = (skillName: string) => {
-    console.log("Hovered (placeholder):", skillName);
-  };
+  // Placeholder for interaction data if context was used
+  // const interactionData = { 
+  //   skillHovers: {}, 
+  //   isGhostlineFullModeUnlocked: false 
+  // };
+  // Placeholder for incrementSkillHover if context was used
+  // const incrementSkillHover = (skillName: string) => {
+  //   console.log("Hovered (placeholder):", skillName);
+  // };
 
 
   const cardVariants = {
@@ -98,8 +104,8 @@ export default function SkillsSection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
         {skills.map((skill, index) => {
-          const isRepeatedHover = false; 
-          const isGhostlineActive = false; 
+          // const isRepeatedHover = false; 
+          // const isGhostlineActive = false; 
 
           return (
             <motion.div
@@ -108,8 +114,8 @@ export default function SkillsSection() {
                 "skill-card-trail-container", 
                 "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40",
                 "transition-m-throttle card-m-glow",
-                isRepeatedHover && !prefersReducedMotion && "erratic-glow", 
-                isGhostlineActive && !prefersReducedMotion && (index % 3 === 0) && "animate-skill-jitter" 
+                // isRepeatedHover && !prefersReducedMotion && "erratic-glow", 
+                // isGhostlineActive && !prefersReducedMotion && (index % 3 === 0) && "animate-skill-jitter" 
               )}
               custom={index}
               variants={cardVariants}
@@ -117,10 +123,17 @@ export default function SkillsSection() {
               whileInView="visible"
               whileHover="hover"
               viewport={{ once: true, amount: 0.1 }}
+              // onHoverStart={() => {
+              //   incrementSkillHover(skill.name);
+              //   if (isSoundEnabled) { // Assuming isSoundEnabled is available from context if sounds were implemented
+              //     // playSound('hoverChime');
+              //     // setTimeout(() => playSound('electricCrackle'), 80);
+              //   }
+              // }}
             >
               <div className={cn(
                 "skill-card-trail",
-                isGhostlineActive && "skill-card-electric-trail" 
+                // isGhostlineActive && "skill-card-electric-trail" 
               )}/>
               <motion.div 
                 className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
