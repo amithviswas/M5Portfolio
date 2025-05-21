@@ -50,14 +50,13 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
       onMouseLeave={handleMouseLeave}
       className={cn(
         isClicked && !prefersReducedMotion && "filter blur-[1px] brightness-90", 
-        "transition-m-throttle", // Ensure this uses the aggressive ease
-        "hover:scale-[1.02] hover:-translate-y-1.5" 
+        "transition-m-throttle"
       )} 
-      whileHover={{ y: -6 }} 
+      whileHover={{ y: -8, scale: 1.03 }} 
     >
       <Card className={cn(
         "flex flex-col h-full overflow-hidden shadow-xl card-m-glow", 
-        "border border-border/50 hover:border-primary group bg-card rounded-lg transition-m-throttle" // Added transition here
+        "border border-border/50 hover:border-primary group bg-card rounded-lg transition-m-throttle"
       )}>
         <CardHeader className="p-0">
           <div className="aspect-video relative w-full overflow-hidden rounded-t-lg"> 
@@ -107,3 +106,4 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
     </motion.div>
   );
 }
+

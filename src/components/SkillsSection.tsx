@@ -3,9 +3,9 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge, Activity,
-  Languages, Cloud, Webhook // Added new icons
+  Languages, Cloud, Webhook
 } from 'lucide-react';
-import Section from '@/components/Section'; // Default import
+import Section from '@/components/Section'; 
 import { cn } from '@/lib/utils';
 
 const skills = [
@@ -30,17 +30,6 @@ const skills = [
 export default function SkillsSection() {
   const prefersReducedMotion = useReducedMotion();
   
-  // Placeholder for interaction data if context was used
-  // const interactionData = { 
-  //   skillHovers: {}, 
-  //   isGhostlineFullModeUnlocked: false 
-  // };
-  // Placeholder for incrementSkillHover if context was used
-  // const incrementSkillHover = (skillName: string) => {
-  //   console.log("Hovered (placeholder):", skillName);
-  // };
-
-
   const cardVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.9 },
     visible: (i: number) => ({
@@ -58,9 +47,9 @@ export default function SkillsSection() {
       },
     }),
     hover: prefersReducedMotion ? { scale: 1.02, y: -2 } : {
-      scale: 1.05,
-      y: -4, 
-      boxShadow: "0px 0px 25px 0px hsl(var(--primary)/0.6), 0 0 15px hsl(var(--bmw-m-blue)/0.4)", 
+      scale: 1.07, // Increased scale
+      y: -5, // Increased lift
+      boxShadow: "0px 0px 28px 2px hsl(var(--primary)/0.65), 0 0 18px hsl(var(--bmw-m-blue)/0.45)", 
       borderColor: "hsl(var(--primary))",
       transition: { type: 'spring', stiffness: 250, damping: 10, duration: 0.15 }
     }
@@ -104,18 +93,13 @@ export default function SkillsSection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
         {skills.map((skill, index) => {
-          // const isRepeatedHover = false; 
-          // const isGhostlineActive = false; 
-
           return (
             <motion.div
               key={skill.id}
               className={cn(
                 "skill-card-trail-container", 
                 "bg-card/70 border border-border/30 rounded-lg p-4 md:p-6 text-center cursor-default shadow-lg hover:shadow-primary/40",
-                "transition-m-throttle card-m-glow",
-                // isRepeatedHover && !prefersReducedMotion && "erratic-glow", 
-                // isGhostlineActive && !prefersReducedMotion && (index % 3 === 0) && "animate-skill-jitter" 
+                "transition-m-throttle card-m-glow"
               )}
               custom={index}
               variants={cardVariants}
@@ -123,17 +107,9 @@ export default function SkillsSection() {
               whileInView="visible"
               whileHover="hover"
               viewport={{ once: true, amount: 0.1 }}
-              // onHoverStart={() => {
-              //   incrementSkillHover(skill.name);
-              //   if (isSoundEnabled) { // Assuming isSoundEnabled is available from context if sounds were implemented
-              //     // playSound('hoverChime');
-              //     // setTimeout(() => playSound('electricCrackle'), 80);
-              //   }
-              // }}
             >
               <div className={cn(
-                "skill-card-trail",
-                // isGhostlineActive && "skill-card-electric-trail" 
+                "skill-card-trail"
               )}/>
               <motion.div 
                 className="mb-3 md:mb-4 text-primary-foreground/80 inline-block"
@@ -163,3 +139,4 @@ export default function SkillsSection() {
     </Section>
   );
 }
+

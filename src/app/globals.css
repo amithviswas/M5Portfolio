@@ -59,10 +59,10 @@
     
     --medallion-nightfall-gradient: conic-gradient(
       from 0deg,
-      hsla(210, 100%, 50%, 0.7) 0%, /* 0deg */
-      hsla(270, 100%, 65%, 0.7) 33.33%, /* 120deg */
-      hsla(0, 100%, 50%, 0.7) 66.67%, /* 240deg */
-      hsla(210, 100%, 50%, 0.7) 100% /* 360deg */
+      hsla(210, 100%, 50%, 0.7) 0%,
+      hsla(270, 100%, 65%, 0.7) 33.33%,
+      hsla(0, 100%, 50%, 0.7) 66.67%,
+      hsla(210, 100%, 50%, 0.7) 100%
     );
 
 
@@ -119,7 +119,7 @@
     @apply shadow-lg transition-m-throttle; 
   }
   .card-m-glow:hover {
-    @apply shadow-[0_12px_28px_-5px_hsl(var(--primary)/0.7),_0_8px_18px_-8px_hsl(var(--bmw-m-blue)/0.55),_0_0_15px_2px_hsl(var(--primary)/0.3)_inset];
+    @apply shadow-[0_18px_35px_-10px_hsl(var(--primary)/0.85),_0_12px_28px_-14px_hsl(var(--bmw-m-blue)/0.7),_0_0_22px_5px_hsl(var(--primary)/0.45)_inset];
   }
 
   /* === MStartStopButton Specific Hover Ring Enhancement === */
@@ -154,9 +154,9 @@
       opacity: 1;
       /* The shadow is applied here directly or via a specific class like .MStartStopButton-hover-ring */
       box-shadow: 0 0 0 2px hsl(var(--background)),
-                  0 0 0 6px hsl(var(--primary)), 
-                  0 0 0 10px hsl(var(--bmw-m-blue)), 
-                  0 0 35px 10px hsl(var(--primary)/0.85);
+                  0 0 0 7px hsl(var(--primary)), 
+                  0 0 0 12px hsl(var(--bmw-m-blue)), 
+                  0 0 40px 12px hsl(var(--primary)/0.9);
   }
 
 
@@ -189,10 +189,10 @@
     bottom: -2px; /* Sits 2px below the text */
     width: 0%;
     border-radius: 9999px; /* Fully rounded ends for a pill shape */
-    background: linear-gradient(to right, hsl(var(--bmw-m-blue)) 55%, hsl(var(--primary)) 55%);
+    background: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
     box-shadow: inset 0 1px 1px rgba(0,0,0,0.3), 
-                0 0 4px 1px hsl(var(--bmw-m-blue)/0.5),
-                0 0 4px 1px hsl(var(--primary)/0.5);
+                0 0 8px 2px hsl(var(--bmw-m-blue)/0.7),
+                0 0 8px 2px hsl(var(--primary)/0.7);
     transform-origin: center;
     transition: width 170ms var(--ease-m-throttle), 
                 opacity 170ms var(--ease-m-throttle),
@@ -201,15 +201,20 @@
   }
   .nav-laser-crest:hover::after,
   .nav-laser-crest.active-link::after {
-    width: 70%; /* Adjusted for better visual balance, can be 100% or 120% if preferred */
+    width: 100%; 
     opacity: 1;
-    background: linear-gradient(to right, hsl(var(--bmw-m-blue)) 50%, hsl(var(--primary)) 50%);
+    background: linear-gradient(to right, hsl(var(--bmw-m-blue)) var(--grille-blue-stop-percentage, 55%), hsl(var(--primary)) var(--grille-red-start-percentage, 55%));
     box-shadow: inset 0 1px 1px rgba(0,0,0,0.3), 
-                0 0 8px 2px hsl(var(--bmw-m-blue)/0.7),
-                0 0 8px 2px hsl(var(--primary)/0.7);
+                0 0 10px 2px hsl(var(--bmw-m-blue)/0.8),
+                0 0 10px 2px hsl(var(--primary)/0.8);
+    filter: brightness(1.1);
   }
   .nav-laser-crest.active-link {
     @apply text-primary; 
+    filter: brightness(1.1);
+  }
+  .nav-laser-crest:hover {
+    filter: brightness(1.05);
   }
 
 
@@ -252,10 +257,10 @@
    .hero-medallion-nightfall-inner::before {
     content: '';
     position: absolute;
-    inset: -3px; /* Controls the thickness of the gradient ring */
+    inset: -3px; 
     border-radius: 9999px;
-    z-index: -1; /* Behind the main medallion content */
-    background: var(--medallion-nightfall-gradient); /* Using the CSS variable */
+    z-index: -1; 
+    background: var(--medallion-nightfall-gradient);
     animation: spin 4s linear infinite, nightfallPulse 2s infinite ease-in-out alternate;
     filter: blur(2px);
   }
@@ -293,10 +298,10 @@
   }
   .hero-medallion-empire::before { 
     content: '';
-    @apply absolute inset-[-3px] rounded-full -z-10; /* Increased inset for thicker pulse */
+    @apply absolute inset-[-3px] rounded-full -z-10; 
     background: transparent; 
     animation: empireMedallionPulse 2.5s infinite linear; 
-    box-shadow: 0 0 15px 0 hsla(var(--uv-blue),.25); /* Initial state for pulse */
+    box-shadow: 0 0 20px 2px hsla(var(--uv-blue),.3), 0 0 10px 0 hsla(var(--primary)/.2) inset; 
   }
   .hero-medallion-empire:hover::after { 
     content: '';
@@ -418,7 +423,7 @@
     transition: box-shadow 0.3s ease-m-throttle;
   }
   .hud-console-panel.uv-glow { 
-    box-shadow: 0 0 30px hsl(var(--uv-blue)/0.5), 0 0 15px hsl(var(--uv-blue)/0.3) inset, 0 0 5px hsl(var(--primary)/0.3);
+    box-shadow: 0 0 40px 8px hsl(var(--uv-blue)/0.75), 0 0 20px 5px hsl(var(--uv-blue)/0.4) inset, 0 0 10px 3px hsl(var(--primary)/0.4);
   }
   .hud-console-header {
     @apply flex justify-between items-center pb-1 mb-1 border-b border-neutral-700;
@@ -573,7 +578,7 @@
   }
   .m-rpm-tick-active { opacity: 1; transform: scaleY(1.15); } 
   .chrono-gauge-redline .m-rpm-gauge-fill { 
-    animation: m-rpm-redline-led-pulse 0.3s infinite alternate ease-in-out; 
+    animation: m-rpm-redline-led-pulse 0.15s infinite alternate ease-in-out; 
   }
   /* === SCROLL MOMENTUM BAR / APEX METER / RPM GAUGE STYLES END === */
 
@@ -623,12 +628,12 @@
 
   @keyframes m-rpm-redline-led-pulse { 
     0% {
-      box-shadow: inset 0 0 6px hsl(var(--background)/0.4), 0 0 15px 4px hsl(var(--primary)/0.9), 0 0 30px 8px hsl(var(--primary)/0.6);
-      filter: brightness(1.5) saturate(1.5);
+      box-shadow: inset 0 0 5px hsl(var(--background)/0.3), 0 0 20px 7px hsl(var(--primary)/1), 0 0 40px 12px hsl(var(--primary)/0.75);
+      filter: brightness(2.0) saturate(2.0);
     }
     100% {
-      box-shadow: inset 0 0 10px hsl(var(--background)/0.5), 0 0 25px 7px hsl(var(--primary)/1), 0 0 50px 15px hsl(var(--primary)/0.8);
-      filter: brightness(2.0) saturate(2.0);
+      box-shadow: inset 0 0 8px hsl(var(--background)/0.4), 0 0 35px 10px hsl(var(--primary)/1), 0 0 70px 20px hsl(var(--primary)/0.9);
+      filter: brightness(3.0) saturate(3.0);
     }
   }
 
@@ -655,9 +660,9 @@
     to   { transform: translateX(-50%) scaleX(0.8); box-shadow: 0 0 15px hsl(var(--primary)/0.8); }
   }
   @keyframes empireMedallionPulse {
-    0%, 100% { box-shadow: 0 0 8px 2px hsla(var(--bmw-m-blue), 0.7), 0 0 4px 1px hsla(var(--bmw-m-blue), 0.5) inset, 0 0 15px 0 hsla(var(--uv-blue),.25); }
-    33% { box-shadow: 0 0 10px 3px hsla(var(--m-violet-hsl), 0.8), 0 0 5px 1px hsla(var(--m-violet-hsl), 0.6) inset, 0 0 20px 0 hsla(var(--uv-blue),.35); }
-    66% { box-shadow: 0 0 8px 2px hsla(var(--primary), 0.7), 0 0 4px 1px hsla(var(--primary), 0.5) inset, 0 0 15px 0 hsla(var(--uv-blue),.25); }
+    0%, 100% { box-shadow: 0 0 15px 3px hsla(var(--bmw-m-blue), 0.75), 0 0 8px 1px hsla(var(--bmw-m-blue), 0.55) inset, 0 0 20px 2px hsla(var(--uv-blue),.3); }
+    33% { box-shadow: 0 0 18px 4px hsla(var(--m-violet-hsl), 0.85), 0 0 10px 2px hsla(var(--m-violet-hsl), 0.65) inset, 0 0 25px 3px hsla(var(--uv-blue),.4); }
+    66% { box-shadow: 0 0 15px 3px hsla(var(--primary), 0.75), 0 0 8px 1px hsla(var(--primary), 0.55) inset, 0 0 20px 2px hsla(var(--uv-blue),.3); }
   }
   @keyframes goldGlintSweep {
     0% { opacity: 0; background-position: -100% 0; }
@@ -786,3 +791,4 @@
     
 
     
+
