@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIntroContext } from '@/contexts/IntroContext';
+import Image from 'next/image'; // For the background image
 
 // Simplified tachometer-like icon, focusing on a sweeping line
 const RevNeedle = ({ sweepAngle }: { sweepAngle: number }) => (
@@ -31,10 +32,17 @@ const RevNeedle = ({ sweepAngle }: { sweepAngle: number }) => (
 
 
 const GlitchText = ({ text, resolved, className }: { text: string, resolved: boolean, className?: string }) => {
-  const [displayText, setDisplayText] = useState('');
-  const chars = "!<>-_\\/[]{}—=+*^?#_M5"; // Added M5 for flavor
+  const [displayText, setDisplayText] = useState(resolved ? text : text.replace(/./g, '\u00A0')); // Use non-breaking spaces for initial static render
+  const [isMounted, setIsMounted] = useState(false);
+  const chars = "!<>-_\\/[]{}—=+*^?#_M5";
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return; // Don't run animation logic until mounted
+
     if (resolved) {
       setDisplayText(text);
       return;
@@ -50,9 +58,9 @@ const GlitchText = ({ text, resolved, className }: { text: string, resolved: boo
       );
       animationFrameId = requestAnimationFrame(updateText);
     };
-    updateText();
+    updateText(); // Start the animation
     return () => cancelAnimationFrame(animationFrameId);
-  }, [resolved, text]);
+  }, [resolved, text, isMounted, chars]); // Added chars to dependency array for correctness, though it's constant
 
   return (
     <span className={`font-heading tracking-wider ${className}`}>
@@ -91,16 +99,16 @@ export default function IntroAnimation() {
           exit={{ opacity: 0, transition: { duration: 0.5 } }}
         >
           {/* Background Image */}
- <motion.img
- src="https://i.ibb.co/DHPKdq3n/generated-image-1.png"
- alt="Aggressive BMW M5 backdrop"
- className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
- initial={{ scale: 1.05 }}
- animate={{ scale: 1, transition: { duration: 2, ease: "easeInOut" } }}
- />
+          <motion.img
+            src="https://i.ibb.co/DHPKdq3n/generated-image-1.png"
+            alt="Aggressive BMW M5 backdrop"
+            className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
+            initial={{ scale: 1.05 }}
+            animate={{ scale: 1, transition: { duration: 2, ease: "easeInOut" } }}
+          />
 
- {/* Dark Overlay */}
- <div className="absolute inset-0 w-full h-full bg-black opacity-40 z-[-1]"></div> {/* Ensure overlay is behind text */}
+          {/* Dark Overlay */}
+          <div className="absolute inset-0 w-full h-full bg-black opacity-40 z-[-1]"></div> {/* Ensure overlay is behind text */}
 
 
           {/* Subtle headlight beam hint */}
@@ -161,3 +169,4 @@ export default function IntroAnimation() {
     </AnimatePresence>
   );
 }
+
