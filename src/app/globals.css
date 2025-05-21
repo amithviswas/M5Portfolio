@@ -66,19 +66,12 @@
     --ease-acceleration-curve-in: cubic-bezier(0.6, 0.04, 0.98, 0.335); /* For page transitions */
     --ease-acceleration-curve-out: cubic-bezier(0.19, 1, 0.22, 1);  /* For page transitions */
 
-     /* --medallion-nightfall-gradient: conic-gradient(
-      from 0deg,
-      hsla(210, 100%, 50%, 0.7) 0deg,
-      hsla(270, 100%, 65%, 0.7) 120deg,
-      hsla(0, 100%, 50%, 0.7) 240deg,
-      hsla(210, 100%, 50%, 0.7) 360deg
-    ); */
     --medallion-nightfall-gradient: conic-gradient(
       from 0deg,
-      hsla(210, 100%, 50%, 0.7) 0%, /* 0deg */
-      hsla(270, 100%, 65%, 0.7) 33.33%, /* 120deg */
-      hsla(0, 100%, 50%, 0.7) 66.67%, /* 240deg */
-      hsla(210, 100%, 50%, 0.7) 100% /* 360deg */
+      hsla(210, 100%, 50%, 0.7) 0%,
+      hsla(270, 100%, 65%, 0.7) 33.33%,
+      hsla(0, 100%, 50%, 0.7) 66.67%,
+      hsla(210, 100%, 50%, 0.7) 100%
     );
   }
 
@@ -173,7 +166,7 @@
   content: '';
   position: absolute;
   left: 50%;
-  bottom: 0px; /* Adjusted bottom position */
+  bottom: -2px; /* Lowered to sit just below baseline */
   height: 2px; /* Thinner, more precise line */
   width: 0%;
   background: hsl(var(--primary));
@@ -243,15 +236,7 @@
   inset: -2px;
   border-radius: 9999px;
   z-index: 0;
-  /* Problematic conic-gradient temporarily commented out to pass build */
-  /* background: var(--medallion-nightfall-gradient); */
-  background: conic-gradient(
-    from 0deg,
-    hsla(210, 100%, 50%, 0.7) 0%, /* M-Light Blue direct, 0deg */
-    hsla(270, 100%, 65%, 0.7) 33.33%, /* M-Violet direct, 120deg as % */
-    hsla(0, 100%, 50%, 0.7) 66.67%, /* M-Red direct, 240deg as % */
-    hsla(210, 100%, 50%, 0.7) 100% /* M-Light Blue direct, 360deg as % */
-  );
+  background: var(--medallion-nightfall-gradient);
   background-size: 100%;
   animation: mStripeConicPulse 3s linear infinite paused;
   filter: blur(1px);
@@ -1111,3 +1096,43 @@
 }
 
     
+```Okay, I'll apply the "Apex Finish: Carbon Symphony" enhancements. This involves significant updates to your global styles, several components like the Footer, Navbar, Section, Hero, and ScrollMomentumBar, as well as the AppClientLayout for page transitions.
+
+Here's a summary of the implementation based on your detailed prompt:
+
+1.  **`src/app/globals.css`**:
+    *   **Carbon-Wave Footer**: Styles for `.carbon-weave-animated` (for the footer background) and `.footer-diffuser-fin-dot` (for the LED dots).
+    *   **Laser Crest Navbar Hover**: The `.nav-laser-crest::after` pseudo-element will be restyled for the V-crest shape (approximated with `clip-path`), icy-blue to violet flash, and opacity changes on hover/active.
+    *   **Grille-Blade Section Frames**: Styles for `.section-grille-blade` (charcoal to steel gradient).
+    *   **Torque-Ramp Page Transitions**: The easing variables `--ease-acceleration-curve-in` and `--ease-acceleration-curve-out` are defined for Framer Motion.
+    *   **Crystal HUD Tooltips**: Base styling for `.tooltip-content-crystal` (glass shard look with backdrop-filter and border gradient).
+    *   **Dynamic Headlight Sweep Background**: Styles for `.hero-headlight-sweep-bg` (fixed position, large radial gradient, animation for sweeping).
+    *   **M-Chrono Scroll Gauge**: Styles for `.m-chrono-scroll-gauge-container` (carbon-fiber look, angular clip-path), tick marks (`.m-rpm-tick-base`, `.m-rpm-tick-major`, `.m-rpm-tick-redzone-highlight`), and bar fill states (`.m-rpm-gauge-fill-low`, etc.), including the redline pulse animation (`@keyframes m-rpm-redline-led-pulse`).
+    *   **Micro-Lift on Hero Content**: Styles for `.hero-text-lift` hover effect.
+    *   **Camera Shutter Flash**: Keyframes and class (`.animate-camera-flash`) for hero image/headline hover.
+    *   **Reduced Motion Fallbacks**: All new animations will be disabled or simplified within an `@media (prefers-reduced-motion: reduce)` block.
+
+2.  **`src/components/Footer.tsx`**:
+    *   The main footer `div` will use `clip-path` for the diffuser shape and the `.carbon-weave-animated` class.
+    *   `div` elements will be added for the `.footer-diffuser-fin-dot` effect.
+
+3.  **`src/components/Navbar.tsx`**:
+    *   Links will continue to use the `.nav-laser-crest` class for the new underline effect.
+
+4.  **`src/components/Section.tsx`**:
+    *   Will include two `motion.div` elements for the left and right `.section-grille-blade` borders, animated with `whileInView` and the "torque kick" easing.
+
+5.  **`src/components/AppClientLayout.tsx`**:
+    *   The `pageTransitionVariants` will be updated to use the new "acceleration curve" easing variables.
+
+6.  **`src/components/HeroSection.tsx`**:
+    *   Will include the `div` for the `.hero-headlight-sweep-bg`.
+    *   Relevant text elements will get the `.hero-text-lift` class.
+    *   The profile image and headline container will get the `.animate-camera-flash` class triggered by JS on hover (this JS part is simplified for now, primarily relying on CSS :hover for the flash if possible or basic JS state).
+
+7.  **`src/components/ScrollMomentumBar.tsx`**:
+    *   The main container will use the `.m-chrono-scroll-gauge-container` class.
+    *   Logic to render tick marks (`motion.div` elements) that fade in as scroll progress passes them.
+    *   Logic to apply the `.m-rpm-led-pulse` class when scroll percentage is >= 90%.
+
+This is a very extensive set of changes. Let's apply them.
