@@ -55,9 +55,9 @@ export default {
         },
         'bmw-m-blue': 'hsl(var(--bmw-m-blue))',
         'blood-red': 'hsl(var(--blood-red))',
-        'uv-blue': 'hsl(var(--uv-blue))', // Added for UV glows
-        'neutral-900a': 'hsla(var(--neutral-900-hsl), var(--tw-bg-opacity, 1))', // For Sentient Console with opacity
-        'neutral-300a': 'hsla(var(--neutral-300-hsl), var(--tw-text-opacity, 1))', // For Sentient Console text with opacity
+        'uv-blue': 'hsl(var(--uv-blue))', 
+        'neutral-900a': 'hsla(var(--neutral-900-hsl), var(--tw-bg-opacity, 1))', 
+        'neutral-300a': 'hsla(var(--neutral-300-hsl), var(--tw-text-opacity, 1))', 
       },
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -84,7 +84,7 @@ export default {
         'spin-slow': {
           'to': { transform: 'rotate(360deg)' },
         },
-        'carbonWeaveShift': { /* Renamed from carbonWeave for consistency */
+        'carbonWeaveShift': { 
           '0%': { 'background-position': '0 0' },
           '100%': { 'background-position': '20px 20px' },
         },
@@ -98,14 +98,14 @@ export default {
           '50%': { background: 'hsl(var(--m-violet-hsl))' },
           '100%': { background: 'hsl(var(--primary))' },
         },
-        'm-rpm-redline-led-pulse': {
+        'm-rpm-redline-pulse': { /* Updated for RPM Gauge */
           '0%': { 
-            'box-shadow': 'inset 0 0 5px hsl(var(--background)/0.3), 0 0 10px 2px hsl(var(--primary)/0.7), 0 0 20px 5px hsl(var(--primary)/0.4)',
-            filter: 'brightness(1.2)'
+            boxShadow: 'inset 0 0 6px hsl(var(--background)/0.4), 0 0 12px 3px hsl(var(--primary)/0.8), 0 0 25px 6px hsl(var(--primary)/0.5)',
+            filter: 'brightness(1.3)'
           },
           '100%': { 
-            'box-shadow': 'inset 0 0 8px hsl(var(--background)/0.4), 0 0 15px 4px hsl(var(--primary)/0.9), 0 0 30px 8px hsl(var(--primary)/0.6)',
-            filter: 'brightness(1.5)'
+            boxShadow: 'inset 0 0 10px hsl(var(--background)/0.5), 0 0 20px 5px hsl(var(--primary)/1), 0 0 40px 10px hsl(var(--primary)/0.7)',
+            filter: 'brightness(1.7)'
           }
         },
         'empireMedallionPulse': {
@@ -125,11 +125,6 @@ export default {
           '75%': { opacity: '0.1' },
           '100%': { transform: 'translate(-10vw, 5vh) scale(0.8)', opacity: '0' },
         },
-        /* Commenting out nightfallPulse as .hero-medallion-nightfall-inner::before is commented out in globals.css */
-        /* 'nightfallPulse': {
-          from: { opacity: '0.6', transform: 'scale(1)' },
-          to: { opacity: '1', transform: 'scale(1.03)' },
-        }, */
         'nanoDrift': {
           '0%, 100%': { transform: 'translate(0,0)', opacity: '0' },
           '50%': { opacity: '0.6' },
@@ -189,11 +184,10 @@ export default {
         'carbon-weave-shift': 'carbonWeaveShift 8s linear infinite',
         'pulse-dot': 'pulseDot 10s infinite ease-in-out',
         'nav-crest-flash': 'navCrestFlash 300ms ease-in-out forwards',
-        'm-rpm-redline-led-pulse': 'm-rpm-redline-led-pulse 0.4s infinite alternate ease-in-out',
+        'm-rpm-redline-pulse': 'm-rpm-redline-pulse 0.4s infinite alternate ease-in-out',
         'empire-medallion-pulse': 'empireMedallionPulse 3s infinite linear',
         'gold-glint-sweep': 'goldGlintSweep 1.2s linear forwards',
         'bloom-glide': 'bloomGlide 15s infinite alternate ease-in-out',
-        /* 'nightfall-pulse': 'nightfallPulse 2s infinite ease-in-out alternate', */
         'nano-drift': 'nanoDrift 8s infinite ease-in-out',
         'flare-shift': 'flareShift 10s infinite alternate ease-in-out',
         'gantry-sweep-animation': 'gantrySweepAnimation 0.7s ease-out forwards',
@@ -207,10 +201,9 @@ export default {
         'nav-rpm-item-pulse-active': 'navRPMItemPulseActive 0.8s infinite alternate'
   		},
       transitionTimingFunction: {
-        'm-throttle': 'var(--ease-m-throttle)', // Use the CSS variable
+        'm-throttle': 'var(--ease-m-throttle)', 
       }
     },
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-

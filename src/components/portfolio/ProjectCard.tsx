@@ -27,8 +27,8 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
     const cardElement = event.currentTarget;
     const rect = cardElement.getBoundingClientRect();
     const cursorX = event.clientX - rect.left;
-    const normalizedX = cursorX / rect.width; // 0 to 1
-    const newRotateY = (normalizedX - 0.5) * 12; // -6deg to +6deg
+    const normalizedX = cursorX / rect.width; 
+    const newRotateY = (normalizedX - 0.5) * 12; 
     rotateY.set(newRotateY);
   };
 
@@ -48,15 +48,19 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
       style={{ rotateY: prefersReducedMotion ? 0 : rotateY, perspective: 1000 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={cn(isClicked && !prefersReducedMotion && "filter blur-[1px] brightness-90", "transition-m-throttle")}
+      className={cn(
+        isClicked && !prefersReducedMotion && "filter blur-[1px] brightness-90", 
+        "transition-m-throttle", // Ensure this uses the aggressive ease
+        "hover:scale-[1.02] hover:-translate-y-1.5" 
+      )} 
+      whileHover={{ y: -6 }} 
     >
       <Card className={cn(
-        "flex flex-col h-full overflow-hidden shadow-xl hover:shadow-primary/40 card-m-glow",
-        "transition-m-throttle transform hover:scale-[1.03]", 
-        "border border-border/50 hover:border-primary group bg-card rounded-lg"
+        "flex flex-col h-full overflow-hidden shadow-xl card-m-glow", 
+        "border border-border/50 hover:border-primary group bg-card rounded-lg transition-m-throttle" // Added transition here
       )}>
         <CardHeader className="p-0">
-          <div className="aspect-video relative w-full overflow-hidden rounded-t-lg">
+          <div className="aspect-video relative w-full overflow-hidden rounded-t-lg"> 
             <Image
               src={project.imageUrl}
               alt={project.title}
@@ -103,4 +107,3 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
     </motion.div>
   );
 }
-

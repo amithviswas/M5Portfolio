@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Section from '@/components/Section';
 import { Card, CardContent } from '@/components/ui/card';
 import { Award, CheckCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const certifications = [
   {
@@ -31,20 +32,21 @@ const certifications = [
 ];
 
 const cardVariants = {
-  initial: { opacity: 0, x: -50, filter: "blur(5px)" }, // Slide in from left
+  initial: { opacity: 0, x: -50, filter: "blur(5px)" }, 
   animate: (i: number) => ({
     opacity: 1,
     x: 0,
     filter: "blur(0px)",
     transition: {
       delay: i * 0.15,
-      duration: 0.7, // Snappy like DCT gear transition
+      duration: 0.7, 
       ease: [0.6, 0.01, 0.0, 0.95], 
     },
   }),
   hover: {
-    scale: 1.02, // Subtle scale
-    boxShadow: "0px 8px 25px -5px hsl(var(--primary)/0.5), 0px 5px 15px -8px hsl(var(--bmw-m-blue)/0.3)", // M-glow
+    scale: 1.02, 
+    y: -6, // Enhanced lift
+    boxShadow: "0px 10px 25px -5px hsl(var(--primary)/0.5), 0px 6px 15px -8px hsl(var(--bmw-m-blue)/0.3)", // Enhanced M-glow
     transition: { type: "spring", stiffness: 200, damping: 12 }
   }
 };
@@ -54,22 +56,22 @@ export default function CertificationsPage() {
     <Section id="certifications" className="min-h-screen">
       <div className="text-center mb-12 md:mb-16">
         <motion.h1 
-          className="text-4xl md:text-5xl font-heading text-primary-foreground" // Font heading
+          className="text-4xl md:text-5xl font-heading text-primary-foreground" 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          Racing <span className="text-primary">Credentials</span> {/* Updated Title */}
+          Racing <span className="text-primary">Credentials</span> 
         </motion.h1>
         <motion.div 
-          className="w-48 h-1 bg-primary mx-auto mt-4 rounded-full" // Wider underline
+          className="w-48 h-1 bg-primary mx-auto mt-4 rounded-full" 
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
         />
       </div>
 
-      <div className="space-y-8 md:space-y-10"> {/* Increased spacing for trail effect */}
+      <div className="space-y-8 md:space-y-10"> 
         {certifications.map((cert, index) => (
           <motion.div
             key={cert.title}
@@ -79,15 +81,17 @@ export default function CertificationsPage() {
             animate="animate" 
             whileHover="hover"
             viewport={{ once: true, amount: 0.1 }}
+            className="transition-m-throttle" // Apply global throttle transition
           >
-            {/* Card styled like M instrument cluster - focus on border and bg */}
-            <Card className="bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary shadow-xl card-m-glow overflow-hidden h-full flex flex-col md:flex-row group">
-                <div className="w-full md:w-2/5 h-60 md:h-auto relative overflow-hidden p-2 bg-black/30"> {/* Inner "frame" */}
+            <Card className={cn(
+              "bg-card/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary shadow-xl card-m-glow overflow-hidden h-full flex flex-col md:flex-row group rounded-lg"
+            )}> 
+                <div className="w-full md:w-2/5 h-60 md:h-auto relative overflow-hidden p-2 bg-black/30 rounded-l-lg md:rounded-l-lg md:rounded-r-none"> 
                   <Image
                     src={cert.image}
                     alt={cert.title}
                     fill
-                    style={{ objectFit: "contain" }} // Contain to see full cert
+                    style={{ objectFit: "contain" }} 
                     className="transition-transform duration-500 ease-in-out group-hover:scale-105 rounded-sm"
                     data-ai-hint={cert.dataAiHint}
                     sizes="(max-width: 768px) 100vw, 40vw"

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Section from '@/components/Section';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Trophy, Users, Zap, BarChart } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const achievements = [
   {
@@ -43,8 +44,9 @@ const cardVariants = {
   }),
    hover: {
     opacity: 1, 
-    transform: "translateY(-8px) scale(1.02)",
-    boxShadow: "0px 10px 25px -5px hsl(var(--primary)/0.6), 0px 6px 15px -8px hsl(var(--bmw-m-blue)/0.4)",
+    y: -6, // Consistent lift with other cards
+    scale: 1.02, 
+    boxShadow: "0px 10px 25px -5px hsl(var(--primary)/0.6), 0px 6px 15px -8px hsl(var(--bmw-m-blue)/0.4)", 
     transition: { type: "spring", stiffness: 220, damping: 14 }
   }
 };
@@ -79,17 +81,19 @@ export default function AchievementsPage() {
             whileInView="animate"
             whileHover="hover"
             viewport={{ once: true, amount: 0.1 }}
-            className="flex" // Added to ensure cards in grid take full height available if content differs
+            className="flex transition-m-throttle" // Added throttle transition to motion.div
           >
-            <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-xl card-m-glow overflow-hidden group flex flex-col w-full">
-              <div className="relative w-full aspect-video overflow-hidden rounded-t-lg"> {/* Changed aspect ratio */}
+            <Card className={cn(
+              "bg-card/80 backdrop-blur-sm border-border/50 shadow-xl card-m-glow overflow-hidden group flex flex-col w-full rounded-lg"
+            )}> 
+              <div className="relative w-full aspect-video overflow-hidden rounded-t-lg"> 
                 <Image
                   src={achievement.imageUrl}
                   alt={achievement.title}
                   fill
                   style={{ objectFit: "cover" }}
                   className="transition-transform duration-500 ease-in-out group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" // Adjusted sizes
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" 
                 />
               </div>
               <CardHeader className="flex flex-row items-start gap-4 p-6 md:p-8">
