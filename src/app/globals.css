@@ -56,7 +56,7 @@
     --nightfall-obsidian: 0 0% 5%;
      --medallion-nightfall-gradient: conic-gradient(
       from 0deg,
-      hsla(210, 100%, 50%, 0.7) 0deg,
+      hsla(210, 100%, 50%, 0.7) 0deg, /* Using direct HSL values */
       hsla(270, 100%, 65%, 0.7) 120deg,
       hsla(0, 100%, 50%, 0.7) 240deg,
       hsla(210, 100%, 50%, 0.7) 360deg
@@ -87,7 +87,7 @@
 
   .font-heading {
     font-family: var(--font-rajdhani);
-    @apply font-bold uppercase tracking-[0.02em]; /* Adjusted tracking */
+    @apply font-bold uppercase tracking-[0.02em]; /* Adjusted tracking for M-Badging feel */
   }
   
   .font-monospace-subheader {
@@ -125,6 +125,7 @@
   /* Navbar Underline - M-Stripe Laser Sweep (M5 CSL) */
   .nav-laser-crest {
     @apply relative text-muted-foreground hover:text-primary-foreground transition-m-throttle;
+    animation: navLinkIdle 2s infinite alternate; /* Subtle idle pulse for non-active links */
   }
   .nav-laser-crest::after {
     content: '';
@@ -141,16 +142,20 @@
     transition-timing-function: var(--ease-m-throttle);
     transition-duration: 200ms;
   }
+  .nav-laser-crest:hover {
+    animation: navLinkHoverPulse 0.4s ease-out; /* Quick pulse on hover */
+  }
   .nav-laser-crest:hover::after,
   .nav-laser-crest.active-link::after {
     width: 100%; 
     opacity: 1;
     animation-play-state: running;
-    box-shadow: 0 0 8px hsl(var(--m-light-blue-hsl)/0.8), 0 0 12px hsl(var(--m-red-hsl)/0.8); 
+    box-shadow: 0 0 10px hsl(var(--m-light-blue-hsl)/0.9), 0 0 16px hsl(var(--m-red-hsl)/0.9); /* Brighter glow */
   }
   .nav-laser-crest.active-link {
     @apply text-primary; 
-    text-shadow: 0 0 8px hsl(var(--primary)/0.6); 
+    text-shadow: 0 0 12px hsl(var(--primary)/0.8); /* More intense redline glow for active text */
+    animation: navLinkActivePulse 1.5s infinite ease-in-out; /* Continuous pulse for active link */
   }
 
   /* Carbon Texture Panel for Cards (M5 CSL) */
@@ -282,7 +287,7 @@
     transition-property: transform, box-shadow;
   }
    .hero-medallion-empire:hover {
-     transform: scale(1.05) translateY(-5px); 
+     transform: scale(1.03) translateY(-3px); /* Reduced hover scale */
      box-shadow: 0 0 35px 0px hsla(var(--uv-blue), .35), 
                  0 0 15px 0px hsla(var(--primary), .2);
   }
