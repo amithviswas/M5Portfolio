@@ -34,7 +34,7 @@
     --input: 220 8% 8%;
     --ring: 210 100% 55%; /* M Blue for focus rings */
 
-    --radius: 0.3rem; /* Sharper corners by default now */
+    --radius: 0.1rem; /* Sharper corners by default now */
 
     /* M-Specific & Theme Colors (Dark Theme Default) */
     --bmw-m-blue: 210 100% 50%;
@@ -60,17 +60,13 @@
     --nightfall-liquid-titanium-start: hsl(210, 15%, 25%); /* Darker for dark theme */
     --nightfall-liquid-titanium-end: hsl(200, 30%, 35%); /* Darker for dark theme */
     --nightfall-ice-blue-sheen: hsl(195, 100%, 45%); /* Darker for dark theme */
-
-    /* Themed Animation Variables - Now using dark theme values directly in keyframes */
-    /* Removed: --skill-flux-border-color-start, --skill-flux-box-shadow-start, etc. */
-    /* Removed: --gantry-light-pulse-shadow */
     
     --medallion-nightfall-gradient: conic-gradient(
       from 0deg,
-      hsla(210, 100%, 50%, 0.7) 0%,
-      hsla(270, 100%, 65%, 0.7) 33.33%,
-      hsla(0, 100%, 50%, 0.7) 66.67%,
-      hsla(210, 100%, 50%, 0.7) 100%
+      hsla(210, 100%, 50%, 0.7) 0deg,
+      hsla(270, 100%, 65%, 0.7) 120deg,
+      hsla(0, 100%, 50%, 0.7) 240deg,
+      hsla(210, 100%, 50%, 0.7) 360deg
     );
   }
 
@@ -292,9 +288,12 @@
     @apply relative inline-block p-0.5 rounded-full shadow-2xl transition-m-throttle;
     background: radial-gradient(circle, hsl(var(--card)) 40%, hsl(var(--border)) 65%, hsl(var(--background)) 80%, hsl(var(--border)) 100%); 
     border: 1px solid hsla(var(--border),0.5);
+    transition-property: transform, box-shadow; /* Ensure box-shadow is transitioned */
   }
    .hero-medallion-empire:hover {
-     transform: scale(1.03) translateY(-5px); 
+     transform: scale(1.05) translateY(-5px); /* Keep scale 1.05 for hover from prompt */
+     box-shadow: 0 0 35px 0px hsla(var(--uv-blue), .35), /* Adjusted spotlight */
+                 0 0 15px 0px hsla(var(--primary), .2);
   }
 
   .hero-medallion-empire::before { 
@@ -405,84 +404,6 @@
     animation: verticalFlareSweep 12s infinite ease-in-out; 
   }
   /* End Nano Particle Shimmer & Lens Flares */
-
-  /* === HUD STYLES (Sentient Console - XENOFRAME / M|Empire Precision / M5 CSL) === */
-  .hud-console-panel {
-    @apply fixed bottom-3 left-3 p-2 md:p-2.5 rounded-md shadow-2xl text-[11px] backdrop-blur-lg border border-neutral-700/60;
-    background-color: hsla(var(--background), 0.9); 
-    color: hsl(var(--foreground)); 
-    font-family: var(--font-monospace-subheader); 
-    width: 260px; 
-    max-height: 260px; 
-    display: flex;
-    flex-direction: column;
-    gap: 1.5px; 
-    box-shadow: 0 0 18px hsl(var(--uv-blue)/0.3), 0 0 8px hsl(var(--uv-blue)/0.15) inset; 
-    transition: box-shadow 0.25s var(--ease-m-throttle);
-    border-radius: var(--radius); 
-  }
-  .hud-console-panel.uv-glow { 
-    box-shadow: 0 0 25px 5px hsl(var(--uv-blue)/0.5), 0 0 12px 3px hsl(var(--uv-blue)/0.25) inset, 0 0 6px 1.5px hsl(var(--primary)/0.25);
-  }
-  .hud-console-header {
-    @apply flex justify-between items-center pb-1 mb-1 border-b border-neutral-700/80; 
-  }
-  .hud-console-title {
-    @apply text-[11px] font-bold uppercase tracking-wider text-primary-foreground font-heading;
-  }
-  .hud-console-settings-icon {
-    @apply text-neutral-400 hover:text-primary transition-m-throttle;
-    animation: spin 3s linear infinite; 
-  }
-  .hud-console-log { 
-    @apply flex-grow overflow-y-auto text-[10px] leading-relaxed p-1 bg-black/40 rounded-sm min-h-[40px]; 
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--primary)) hsl(var(--background)); 
-  }
-  .hud-console-log .console-log-line { @apply mb-0.5; } 
-  .hud-console-log .console-log-line.input::before { content: '> SYS_CMD: '; @apply text-accent; } 
-  .hud-console-log .console-log-line.output { @apply text-green-300; } 
-  .hud-console-log .console-log-line.error { @apply text-red-300; } 
-  .hud-console-log .console-log-line.info { @apply text-sky-300; } 
-  .hud-console-log .console-log-line.system { @apply text-purple-300 italic; } 
-  .hud-console-log .typewriter-cursor {
-    @apply inline-block bg-primary w-1.5 h-2.5 ml-0.5 animate-pulse; 
-  }
-  .hud-gauge-item {
-    @apply flex justify-between items-center text-[10px] py-0.5; 
-  }
-  .hud-gauge-label { 
-    @apply flex items-center gap-1 text-neutral-500 uppercase tracking-wider font-monospace-subheader;
-  }
-  .hud-gauge-label svg { @apply w-2.5 h-2.5 text-accent; } 
-  .hud-gauge-value {
-    @apply font-mono text-neutral-300 font-semibold; 
-  }
-  .hud-meter-track { 
-    @apply h-1 w-full bg-neutral-700/70 rounded-full overflow-hidden my-1; 
-  }
-  .hud-meter-fill { 
-    @apply h-full rounded-full;
-    transition-property: width, background; 
-    transition-timing-function: linear;
-    transition-duration: 250ms;
-    box-shadow: inset 0 0 2px hsl(var(--background)/0.6); 
-  }
-  .hud-console-button-container {
-    @apply grid grid-cols-2 gap-1 pt-1 mt-1 border-t border-neutral-700/80; 
-  }
-  .hud-console-button { 
-    @apply !w-full !h-7 !text-[9px] !tracking-normal !border-neutral-600/80; 
-  }
-  .hud-console-button.active-toggle { 
-    @apply !bg-gradient-to-r !from-accent !to-sky-500 !text-primary-foreground !border-accent/80 shadow-[0_0_8px_hsl(var(--accent)/0.45)]; 
-  }
-  .form-container-halo { 
-    transition: box-shadow 0.3s var(--ease-m-throttle);
-  }
-  .form-container-halo-active { 
-    box-shadow: 0 0 20px 4px hsl(var(--primary)/0.5), 0 0 8px 1.5px hsl(var(--primary)/0.25); 
-  }
   
   /* === SKILL SECTION (Overclocked Skill Flux Engine - M5 CSL) === */
   .skill-card-trail-container { 
@@ -595,6 +516,47 @@
     flex-direction: column !important; 
     overflow: hidden !important; 
   }
+
+  /* Form Container Halo for Contact Page */
+  .form-container-halo { 
+    transition: box-shadow 0.3s var(--ease-m-throttle);
+  }
+  .form-container-halo-active { 
+    box-shadow: 0 0 20px 4px hsl(var(--primary)/0.5), 0 0 8px 1.5px hsl(var(--primary)/0.25); 
+  }
+  
+  /* Speedometer Widget Styles */
+  .speedometer-widget {
+    @apply fixed bottom-5 left-5 w-36 h-36 md:w-40 md:h-40 z-40;
+  }
+  .static-speedo .speedometer-dial {
+    @apply relative w-full h-full bg-neutral-900/80 backdrop-blur-sm border-2 border-neutral-700 rounded-full shadow-2xl;
+    box-shadow: 0 0 15px hsl(var(--accent)/0.3), inset 0 0 10px hsl(var(--background)/0.5);
+  }
+  .static-speedo .static-speedo-needle {
+    @apply absolute left-1/2 top-1/2 w-1 h-1/3 bg-primary rounded-t-full origin-bottom transform -translate-x-1/2 -translate-y-full rotate-[var(--static-needle-angle,0deg)];
+    box-shadow: 0 0 8px hsl(var(--primary)/0.7);
+    --static-needle-angle: -135deg; /* Default static position */
+  }
+   .static-speedo .speedometer-center-hub {
+    @apply absolute left-1/2 top-1/2 w-4 h-4 bg-neutral-700 border-2 border-neutral-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 shadow-md;
+  }
+
+
+  .speedometer-dial {
+    @apply relative w-full h-full bg-neutral-900/80 backdrop-blur-sm border-2 border-neutral-700 rounded-full shadow-2xl flex items-center justify-center;
+    box-shadow: 0 0 20px hsl(var(--accent)/0.4), inset 0 0 15px hsl(var(--background)/0.6);
+  }
+
+  .speedometer-needle {
+    @apply absolute left-1/2 top-1/2 w-1.5 h-[40%] bg-primary rounded-t-full origin-bottom transform -translate-x-1/2 -translate-y-full;
+    box-shadow: 0 0 10px hsl(var(--primary)/0.8);
+  }
+
+  .speedometer-center-hub {
+    @apply absolute w-5 h-5 bg-neutral-700 border-2 border-neutral-600 rounded-full shadow-md;
+  }
+
 
 } /* End of @layer components */
 
@@ -750,7 +712,7 @@
     background-size: 100% 100%;
     background-position: center;
   }
-  .hud-console-settings-icon { animation: none; } 
+  /* Removed .hud-console-settings-icon { animation: none; } */
   .carbon-wave-animated::before { animation: none !important; } 
   .footer-diffuser-fin-dot { animation: none !important; opacity: 0.7; } 
   .hero-headlight-sweep-bg { animation: none !important; opacity: 0.05 !important; } 
@@ -773,6 +735,8 @@
   .nano-particle { animation: none; opacity: 0.12; }
   .vertical-lens-flare { animation: none; opacity: 0.18; }
   .hero-gantry-light { animation: none; opacity: 0.7; transform: scaleX(1); }
+  .speedometer-widget {animation: none; opacity: 1;} /* Static for reduced motion */
+
 }
 
     
