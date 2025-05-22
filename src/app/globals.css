@@ -45,31 +45,22 @@
     --m-light-blue-hsl: 210 100% 65%; /* Part of M-stripe */
     --m-red-hsl: 0 100% 50%; /* Part of M-stripe */
     
-    /* Transition Easing */
-    --ease-m-throttle: cubic-bezier(.36,1.08,.33,1); /* Throttle blip */
+    /* Transition Easing (Throttle Blip) */
+    --ease-m-throttle: cubic-bezier(.36,1.08,.33,1);
 
-    /* Empire Edition Specific (can be merged or kept separate) */
+    /* Empire Edition Specific (Retained if elements use them, can be pruned if not) */
     --empire-gold-hsl: 45 100% 50%;
     --empire-royal-blue-hsl: 220 70% 55%;
     --empire-crimson-hsl: 0 80% 55%;
     --empire-i-blue-fog-start-hsl: 210 100% 45%;
     --empire-text-shadow: 0 1px 1px rgba(0,0,0,0.6), 0 0 5px rgba(0,0,0,0.2), 0 1px 2px rgba(255,255,255,0.1) inset;
 
-    /* Nightfall Atelier Specific */
+    /* Nightfall Atelier Specific (Retained if elements use them) */
     --nightfall-deep-navy: 225 30% 10%;
     --nightfall-obsidian: 0 0% 5%;
     --nightfall-liquid-titanium-start: hsl(210, 15%, 75%);
     --nightfall-liquid-titanium-end: hsl(200, 30%, 85%);
     --nightfall-ice-blue-sheen: hsl(195, 100%, 75%);
-
-    /* Medallion Nightfall Gradient */
-     --medallion-nightfall-gradient: conic-gradient(
-      from 0deg,
-      hsla(210, 100%, 50%, 0.7) 0%, /* M Blue */
-      hsla(270, 100%, 65%, 0.7) 33.33%, /* M Violet */
-      hsla(0, 100%, 50%, 0.7) 66.67%, /* M Red */
-      hsla(210, 100%, 50%, 0.7) 100% /* M Blue to close loop */
-    );
   }
 
   html {
@@ -83,48 +74,49 @@
       linear-gradient(45deg, transparent 75%, hsla(var(--card), 0.02) 75%),
       linear-gradient(45deg, hsla(var(--card), 0.02) 25%, transparent 25%),
       linear-gradient(45deg, transparent 75%, hsla(var(--card), 0.02) 75%);
-    background-size: 3px 3px;
+    background-size: 3px 3px; /* Tighter weave for CSL */
     background-position: 0 0, 1.5px 1.5px, 1.5px 1.5px, 0 0;
   }
 
   .font-heading {
     font-family: var(--font-rajdhani);
     @apply font-bold uppercase; /* M-Badging Style */
-    letter-spacing: 0.02em; /* Tighter tracking for aggressive feel */
+    letter-spacing: 0.02em; /* Tighter tracking for CSL aggressive feel */
   }
   
   .font-monospace-subheader {
     font-family: 'Orbitron', 'Exo 2', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     @apply uppercase tracking-wider text-xs font-medium text-muted-foreground;
   }
+} /* End of @layer base */
 
+@layer components {
   /* Global Transition Utility */
   .transition-m-throttle {
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
     transition-timing-function: var(--ease-m-throttle);
-    transition-duration: 150ms;
+    transition-duration: 150ms; /* Default snappy duration */
   }
 
-  /* Card Styling - Base for M-Performance look */
+  /* Card Styling - Base for M-Performance look (M5 CSL) */
   .card-m-glow {
-    @apply shadow-lg border-border/30; /* Added border for definition */
+    @apply shadow-lg border-border/30;
     transition-property: box-shadow, transform;
     transition-timing-function: var(--ease-m-throttle);
-    transition-duration: 200ms; /* Specific duration for card glow/lift */
-    /* Deeper shadow, more focused glow */
+    transition-duration: 200ms;
     box-shadow: 0 10px 25px -10px hsl(var(--background)/0.9),
-                0 0 20px -8px hsla(var(--primary)/0.45), /* Primary red glow */
-                0 0 18px -8px hsla(var(--accent)/0.35);  /* M Blue glow */
+                0 0 20px -8px hsla(var(--primary)/0.55), /* Primary red glow - CSL intensity */
+                0 0 18px -8px hsla(var(--accent)/0.45);  /* M Blue glow - CSL intensity */
   }
   .card-m-glow:hover {
-    @apply shadow-[0_18px_40px_-18px_hsl(var(--background)/0.95),_0_0_30px_-8px_hsla(var(--primary)/0.7),_0_0_25px_-8px_hsla(var(--accent)/0.6)];
+    @apply shadow-[0_18px_40px_-18px_hsl(var(--background)/0.95),_0_0_30px_-8px_hsla(var(--primary)/0.8),_0_0_25px_-8px_hsla(var(--accent)/0.7)]; /* CSL hover glow */
     transform: translateY(-8px); /* Lift effect for "Drive-Mode Engage" */
   }
   .card-m-glow:hover .card-text-skew { /* Text skew on card hover */
     transform: skewX(1deg);
   }
 
-  /* Navbar Underline - M-Stripe Laser Sweep */
+  /* Navbar Underline - M-Stripe Laser Sweep (M5 CSL) */
   .nav-laser-crest {
     @apply relative text-muted-foreground hover:text-primary-foreground;
     transition-property: color, text-shadow;
@@ -133,14 +125,14 @@
   }
   .nav-laser-crest::after {
     content: '';
-    @apply absolute left-1/2 h-[3px] opacity-0;
-    bottom: -4px;
+    @apply absolute left-1/2 h-[3px] opacity-0; /* Height of the M-stripe bar */
+    bottom: -4px; /* Position below text */
     width: 0%;
-    border-radius: var(--radius); /* Sharper radius */
+    border-radius: var(--radius); /* Sharper radius for CSL */
     transform: translateX(-50%);
     background: linear-gradient(90deg, hsl(var(--m-light-blue-hsl)) 0%, hsl(var(--m-violet-hsl)) 33%, hsl(var(--m-red-hsl)) 66%, hsl(var(--m-light-blue-hsl)) 100%);
-    background-size: 300% 100%;
-    animation: navMStripeAnimation 1s linear infinite paused;
+    background-size: 300% 100%; /* For sweep animation */
+    animation: navMStripeAnimation 1s linear infinite paused; /* CSL: slightly faster sweep */
     box-shadow: 0 0 6px hsl(var(--m-light-blue-hsl)/0), 0 0 10px hsl(var(--m-red-hsl)/0);
     transition-property: width, opacity, box-shadow;
     transition-timing-function: var(--ease-m-throttle);
@@ -148,17 +140,17 @@
   }
   .nav-laser-crest:hover::after,
   .nav-laser-crest.active-link::after {
-    width: 100%;
+    width: 100%; /* CSL: Full width underline */
     opacity: 1;
     animation-play-state: running;
-    box-shadow: 0 0 8px hsl(var(--m-light-blue-hsl)/0.8), 0 0 12px hsl(var(--m-red-hsl)/0.8);
+    box-shadow: 0 0 8px hsl(var(--m-light-blue-hsl)/0.8), 0 0 12px hsl(var(--m-red-hsl)/0.8); /* CSL: defined glow */
   }
   .nav-laser-crest.active-link {
     @apply text-primary; /* M Red for active link text */
     text-shadow: 0 0 8px hsl(var(--primary)/0.6); /* Red glow on active text */
   }
 
-  /* Carbon Texture Panel for Cards */
+  /* Carbon Texture Panel for Cards (M5 CSL) */
   .carbon-texture-panel {
     background-color: hsl(var(--card)); /* Dark Gunmetal Grey */
     background-image: 
@@ -173,7 +165,7 @@
     border-radius: var(--radius); /* Knife-edge radius */
   }
 
-  /* Neon Edge Lights Utilities */
+  /* Neon Edge Lights Utilities (M5 CSL) */
   .neon-edge-white { /* Ice-white edge glow */
     box-shadow: 0 0 2px hsl(var(--foreground)), 0 0 5px hsla(var(--foreground)/0.7), 0 0 8px hsla(var(--foreground)/0.5);
   }
@@ -184,17 +176,17 @@
      box-shadow: 0 0 3px hsl(var(--accent)), 0 0 6px hsl(var(--accent)/0.75), 0 0 9px hsl(var(--accent)/0.55);
   }
 
-  /* Glowing Red Seal Stamp for Mission-Log Cards */
+  /* Glowing Red Seal Stamp for Mission-Log Cards (M5 CSL) */
   .card-with-glowing-seal::before {
     content: '';
-    @apply absolute top-1 right-1 w-2 h-2 rounded-sm bg-primary opacity-0 transition-opacity duration-300 ease-m-throttle; /* Sharper seal */
-    box-shadow: 0 0 7px 2.5px hsl(var(--primary)/0.8);
+    @apply absolute top-1 right-1 w-2 h-2 rounded-sm bg-primary opacity-0 transition-opacity duration-300 ease-m-throttle; /* Sharper seal for CSL */
+    box-shadow: 0 0 7px 2.5px hsl(var(--primary)/0.8); /* CSL seal glow */
   }
   .card-with-glowing-seal:hover::before {
     opacity: 1;
   }
   
-  /* Click Ripple Effect for Laser-Etched Buttons */
+  /* Click Ripple Effect for Laser-Etched Buttons (M5 CSL) */
   .click-ripple-effect {
     @apply relative overflow-hidden;
   }
@@ -211,11 +203,11 @@
     animation: clickRipple 0.6s linear;
   }
 
-  /* MStartStopButton Hover Ring Enhancement (Obsidian Crown / Jet Crystal) */
+  /* MStartStopButton Hover Ring Enhancement (Obsidian Crown / Jet Crystal - M5 CSL) */
   .MStartStopButton-base-style::before { 
     content: '';
     position: absolute;
-    inset: -1.5px; 
+    inset: -1.5px; /* For the ring to appear outside the button */
     border-radius: var(--radius); /* Sharper radius for button */
     opacity: 0;
     transition: opacity 0.25s ease-in-out, box-shadow 0.25s ease-in-out; 
@@ -232,7 +224,7 @@
   }
 
 
-  /* Footer Diffuser */
+  /* Footer Diffuser (M5 CSL) */
   .carbon-wave-animated::before {
     content: '';
     position: absolute;
@@ -246,19 +238,19 @@
     animation: carbonWeaveShift 8s linear infinite; /* Slightly faster shift for footer */
   }
   .footer-diffuser-fin-dot {
-    @apply w-1.5 h-1.5 rounded-sm bg-primary shadow-[0_0_6px_2px_hsl(var(--primary)/0.7)]; /* Sharper dots */
+    @apply w-1.5 h-1.5 rounded-sm bg-primary shadow-[0_0_6px_2px_hsl(var(--primary)/0.7)]; /* Sharper dots for CSL */
     animation: pulseDot 3s infinite ease-in-out;
   }
 
-  /* Section Grille-Blade Frames */
+  /* Section Grille-Blade Frames (M5 CSL) */
   .section-grille-blade {
-    @apply absolute w-[3px] bg-gradient-to-b from-neutral-700/90 via-neutral-600 to-neutral-700/90 shadow-lg; /* Thicker, more defined blades */
+    @apply absolute w-[3px] bg-gradient-to-b from-neutral-700/90 via-neutral-600 to-neutral-700/90 shadow-lg; /* Thicker, more defined blades for CSL */
   }
   
-  /* Crystal HUD Tooltips */
+  /* Crystal HUD Tooltips (M5 CSL) */
   .crystal-hud-tooltip-content {
-    @apply bg-black/85 backdrop-blur-lg border-gradient-m-blue-red p-0 shadow-xl; /* Darker, sharper */
-    clip-path: polygon(0% 10%, 10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%); /* More angular shard */
+    @apply bg-black/85 backdrop-blur-lg border-gradient-m-blue-red p-0 shadow-xl; /* Darker, sharper for CSL */
+    clip-path: polygon(0% 10%, 10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%); /* More angular shard for CSL */
   }
   .crystal-hud-tooltip-content .tooltip-inner-padding { 
      @apply p-1.5 px-2.5 text-[11px] text-primary-foreground; /* Adjusted padding */
@@ -271,56 +263,50 @@
                       linear-gradient(135deg, hsl(var(--bmw-m-blue)), hsl(var(--primary)));
   }
 
-  /* Dynamic Headlight Sweep Background (Hero) */
+  /* Dynamic Headlight Sweep Background (Hero - M5 CSL) */
   .hero-headlight-sweep-bg {
-    @apply fixed -z-10 opacity-[0.05] mix-blend-screen; /* Slightly more visible */
+    @apply fixed -z-10 opacity-[0.05] mix-blend-screen; /* Slightly more visible for CSL */
     top: -25%; left: -45%; width: 190vw; height: 190vh;
     background: radial-gradient(ellipse at center, hsla(var(--accent), 0.4) 0%, transparent 50%); /* M Blue sweep */
     transform-origin: center center;
-    animation: headlightSweep 18s infinite alternate ease-in-out; /* Slightly faster sweep */
+    animation: headlightSweep 18s infinite alternate ease-in-out; /* Slightly faster sweep for CSL */
   }
   
-  /* === HERO MEDALLION STYLES (Nocturne Crown Halo / Imperial Crown) === */
+  /* === HERO MEDALLION STYLES (Nocturne Crown Halo / Imperial Crown - M5 CSL) === */
   .hero-medallion-empire { /* Base for crown bezel */
-    @apply relative inline-block p-0.5 rounded-full shadow-2xl transition-transform duration-300 ease-m-throttle;
-    /* Multi-step radial for embossed metallic feel */
+    @apply relative inline-block p-0.5 rounded-full shadow-2xl;
     background: radial-gradient(circle, hsl(var(--card)) 40%, hsl(var(--border)) 65%, hsl(var(--background)) 80%, hsl(var(--border)) 100%); 
-    border: 1px solid hsl(var(--border)/0.5); /* Thinner border */
+    border: 1px solid hsl(var(--border)/0.5);
+    transition: transform 0.3s var(--ease-m-throttle); 
   }
-  .hero-medallion-empire:hover {
-    transform: scale(1.03) translateY(-4px); /* Consistent hover lift */
+   .hero-medallion-empire:hover {
+     transform: scale(1.03) translateY(-5px); /* CSL refined hover lift */
   }
-  .hero-medallion-empire::before { /* For M-stripe pulse or gold glint */
+
+  .hero-medallion-empire::before { /* Animated M-stripe inner glow */
     content: '';
-    @apply absolute inset-[-3px] rounded-full -z-10; /* Thicker ring for effect */
-    background: var(--medallion-nightfall-gradient); 
-    animation: nightfallMedallionSpin 5s linear infinite, nightfallMedallionPulse 2s infinite ease-in-out; 
-    box-shadow: 0 0 18px 3px hsla(var(--uv-blue),.35), 0 0 8px hsla(var(--primary)/.25) inset; /* UV Blue + M Red glow */
+    @apply absolute inset-[-3px] rounded-full opacity-80 transition-opacity duration-300 ease-m-throttle pointer-events-none -z-[1];
+    background: conic-gradient(
+      from 0deg,
+      hsla(210, 100%, 65%, 0.7) 0%, /* M Light Blue */
+      hsla(270, 100%, 65%, 0.7) 33.33%, /* M Violet */
+      hsla(0, 100%, 50%, 0.7) 66.67%,   /* M Red */
+      hsla(210, 100%, 65%, 0.7) 100%  /* M Light Blue */
+    );
+    background-size: 200% 200%; /* For smooth animation */
+    animation: empireMedallionPulse 2.5s linear infinite, nightfallMedallionSpin 8s linear infinite; /* Pulse + Spin */
+    filter: blur(4px);
   }
-  .hero-medallion-nightfall-inner::before { /* Conic gradient for Nightfall Atelier specific pulse */
-    content: '';
-    @apply absolute inset-[-2px] rounded-full opacity-70 -z-[1];
-    background: var(--medallion-nightfall-gradient);
-    animation: nightfallMedallionSpin 4s linear infinite; /* Using the same spin but can be different */
-    filter: blur(3px) brightness(0.9);
-    transition: opacity 0.3s, filter 0.3s;
-  }
-  .hero-medallion-empire:hover .hero-medallion-nightfall-inner::before,
-  .hero-medallion-empire:focus-within .hero-medallion-nightfall-inner::before {
-      opacity: 1;
-      filter: blur(2px) brightness(1.2);
-      animation-play-state: paused; /* Pause spin on hover/focus for defined look */
-  }
+
   .hero-medallion-empire .spec-highlight-arc { /* Lacquer highlight */
     @apply absolute inset-0 rounded-full;
-    background: linear-gradient(135deg, hsla(0,0%,100%,.25) 0%, transparent 60%); /* Brighter spec highlight */
+    background: linear-gradient(135deg, hsla(0,0%,100%,.25) 0%, transparent 60%); /* Brighter spec highlight for CSL */
   }
   .hero-medallion-empire:hover::before {
-    animation-play-state: paused, running; /* Pause spin, keep pulse on hover */
-    filter: brightness(1.3);
+    animation-play-state: running, running; /* Ensure both animations run on hover */
+    filter: brightness(1.3) blur(3px);
   }
   /* End Hero Medallion */
-
 
   .hero-headline-empire { 
     font-family: var(--font-playfair-display); 
@@ -343,7 +329,7 @@
   .hero-tagline-empire.underline-visible::after {
     width: 105%;
   }
-  .hero-empire-bg { /* For "Empire Edition" / "Nightfall Atelier" hero variant */
+  .hero-empire-bg { /* For "Empire Edition" / "Nightfall Atelier" hero variant (M5 CSL) */
     @apply relative overflow-hidden; 
     background-image: 
       radial-gradient(ellipse at 50% 15%, hsla(var(--empire-i-blue-fog-start-hsl), 0.12) 0%, transparent 50%), /* BMW i-blue radial fog */
@@ -353,7 +339,7 @@
     background-size: cover, 3px 3px, 3px 3px, cover; /* Dark brushed steel / carbon pattern base */
   }
   
-  /* Halo glows & Gantry lights (Empire / Nightfall) */
+  /* Halo glows & Gantry lights (Empire / Nightfall - M5 CSL) */
   .halo-glow { 
     @apply absolute rounded-full mix-blend-soft-light pointer-events-none -z-[5];
     animation: bloomGlide 18s infinite alternate ease-in-out;
@@ -364,69 +350,74 @@
     background: radial-gradient(circle, hsla(var(--m-violet-hsl), 0.06) 0%, transparent 55%); /* Violet bloom */
     animation: bloomGlide 22s infinite alternate ease-in-out 1.8s;
   }
-  .hero-empire-tachometer { /* Scroll RPM Bar - Apex Meter style */
+  .hero-empire-tachometer { /* Scroll RPM Bar - Apex Meter style (M5 CSL) */
     @apply fixed bottom-3 right-3 w-16 h-8 rounded-sm p-0.5 overflow-hidden; /* Slightly larger */
     background: linear-gradient(135deg, hsl(var(--card) / 0.8), hsl(var(--background) / 0.8));
     backdrop-filter: blur(5px);
     border: 0.5px solid hsl(var(--border) / 0.5);
     box-shadow: 0 0 10px hsl(var(--accent)/0.2), inset 0 0.5px 1px hsl(var(--foreground)/0.08); /* Enhanced shadow */
-    border-radius: var(--radius); /* Knife-edge */
+    border-radius: var(--radius); /* Knife-edge for CSL */
     clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%); /* Apex Meter shape */
   }
   .hero-empire-tachometer-bar {
-    @apply h-full rounded-sm transition-all duration-200 ease-linear;
-    border-radius: var(--radius); /* Knife-edge */
+    @apply h-full rounded-sm ease-linear; /* Removed transition-all and added specific properties if needed by Framer */
+    transition-property: width, background-image; /* Added background-image if animated */
+    transition-duration: 200ms; /* Explicit duration for Tailwind JIT */
+    border-radius: var(--radius); /* Knife-edge for CSL */
     box-shadow: inset 0 0 3px hsla(0,0%,0%,0.6), 0 0 8px hsl(var(--m-violet-hsl)/0.4); /* Inset glow */
   }
    .hero-empire-tachometer-trail { /* Ghost trail */
-    @apply absolute top-0 left-0 h-full w-full rounded-sm opacity-0 blur-sm transition-opacity duration-400;
+    @apply absolute top-0 left-0 h-full w-full rounded-sm opacity-0 blur-sm;
     background: inherit; 
     border-radius: var(--radius);
     filter: brightness(0.8);
+    transition-property: opacity;
+    transition-duration: 400ms; /* Direct CSS transition */
+    transition-timing-function: var(--ease-m-throttle);
   }
-  .hero-gantry-light { /* LED Gantry Strips */
+  .hero-gantry-light { /* LED Gantry Strips (M5 CSL) */
     @apply absolute left-0 w-full h-[2px] opacity-0;
     background: linear-gradient(90deg, transparent, hsl(var(--gunmetal-silver)/0.6) 30%, hsl(var(--foreground)/0.8) 50%, hsl(var(--gunmetal-silver)/0.6) 70%, transparent);
     box-shadow: 0 0 5px 1px hsl(var(--bmw-m-blue)/0.35); /* Neon blue edge glow */
     animation: gantryLightPulse 1.5s ease-in-out; /* Pulse animation */
   }
 
-  /* Nano Particle Shimmer & Lens Flares (Nightfall Atelier) */
+  /* Nano Particle Shimmer & Lens Flares (Nightfall Atelier - M5 CSL) */
   .nano-particle-shimmer {
     @apply absolute inset-0 overflow-hidden pointer-events-none -z-[4];
   }
   .nano-particle {
     @apply absolute rounded-full bg-white opacity-0;
-    animation: nanoDriftAndFade 10s infinite ease-in-out; /* Slower, more ethereal drift */
+    animation: nanoDriftAndFade 10s infinite ease-in-out; /* Slower, more ethereal drift for CSL */
   }
-  .vertical-lens-flare { /* Vertical lens flare beams */
+  .vertical-lens-flare { /* Vertical lens flare beams (M5 CSL) */
     @apply absolute top-0 w-[1.5px] h-[160%] pointer-events-none opacity-0 -z-[3];
     background: linear-gradient(to bottom, transparent, hsla(var(--uv-blue),0.3) 35%, hsla(var(--uv-blue),0.5) 50%, hsla(var(--uv-blue),0.3) 65%, transparent);
     filter: blur(1px);
-    animation: verticalFlareSweep 12s infinite ease-in-out; /* Slower sweep */
+    animation: verticalFlareSweep 12s infinite ease-in-out; /* Slower sweep for CSL */
   }
   /* End Nano Particle Shimmer & Lens Flares */
 
-  /* === HUD STYLES (Sentient Console - XENOFRAME / M|Empire Precision) === */
+  /* === HUD STYLES (Sentient Console - XENOFRAME / M|Empire Precision / M5 CSL) === */
   .hud-console-panel {
     @apply fixed bottom-3 left-3 p-2 md:p-2.5 rounded-md shadow-2xl text-[11px] backdrop-blur-lg border border-neutral-700/60;
-    background-color: hsla(var(--background), 0.9); /* Slightly more opaque */
+    background-color: hsla(var(--background), 0.9); /* Slightly more opaque for CSL */
     color: hsl(var(--foreground)); 
     font-family: var(--font-monospace-subheader); 
-    width: 260px; /* Slightly wider */
+    width: 260px; /* Slightly wider for CSL */
     max-height: 260px; 
     display: flex;
     flex-direction: column;
     gap: 1.5px; 
-    box-shadow: 0 0 18px hsl(var(--uv-blue)/0.3), 0 0 8px hsl(var(--uv-blue)/0.15) inset; /* Enhanced UV glow */
+    box-shadow: 0 0 18px hsl(var(--uv-blue)/0.3), 0 0 8px hsl(var(--uv-blue)/0.15) inset; /* Enhanced UV glow for CSL */
     transition: box-shadow 0.25s var(--ease-m-throttle);
-    border-radius: var(--radius); /* Knife-edge */
+    border-radius: var(--radius); /* Knife-edge for CSL */
   }
-  .hud-console-panel.uv-glow { /* Active UV Glow (e.g., for Ghostline) */
+  .hud-console-panel.uv-glow { /* Active UV Glow (e.g., for Ghostline - CSL) */
     box-shadow: 0 0 25px 5px hsl(var(--uv-blue)/0.5), 0 0 12px 3px hsl(var(--uv-blue)/0.25) inset, 0 0 6px 1.5px hsl(var(--primary)/0.25);
   }
   .hud-console-header {
-    @apply flex justify-between items-center pb-1 mb-1 border-b border-neutral-700/80; /* Sharper border */
+    @apply flex justify-between items-center pb-1 mb-1 border-b border-neutral-700/80; /* Sharper border for CSL */
   }
   .hud-console-title {
     @apply text-[11px] font-bold uppercase tracking-wider text-primary-foreground font-heading;
@@ -436,56 +427,56 @@
     animation: spin 3s linear infinite; 
   }
   .hud-console-log { 
-    @apply flex-grow overflow-y-auto text-[10px] leading-relaxed p-1 bg-black/40 rounded-sm min-h-[40px]; /* Larger log area */
+    @apply flex-grow overflow-y-auto text-[10px] leading-relaxed p-1 bg-black/40 rounded-sm min-h-[40px]; /* Larger log area for CSL */
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--primary)) hsl(var(--background)); 
   }
   .hud-console-log .console-log-line { @apply mb-0.5; } 
   .hud-console-log .console-log-line.input::before { content: '> SYS_CMD: '; @apply text-accent; } 
-  .hud-console-log .console-log-line.output { @apply text-green-300; } /* Brighter green */
-  .hud-console-log .console-log-line.error { @apply text-red-300; } /* Brighter red */
-  .hud-console-log .console-log-line.info { @apply text-sky-300; } /* Brighter sky */
-  .hud-console-log .console-log-line.system { @apply text-purple-300 italic; } /* Brighter purple */
+  .hud-console-log .console-log-line.output { @apply text-green-300; } /* Brighter green for CSL */
+  .hud-console-log .console-log-line.error { @apply text-red-300; } /* Brighter red for CSL */
+  .hud-console-log .console-log-line.info { @apply text-sky-300; } /* Brighter sky for CSL */
+  .hud-console-log .console-log-line.system { @apply text-purple-300 italic; } /* Brighter purple for CSL */
   .hud-console-log .typewriter-cursor {
-    @apply inline-block bg-primary w-1.5 h-2.5 ml-0.5 animate-pulse; /* Sharper cursor */
+    @apply inline-block bg-primary w-1.5 h-2.5 ml-0.5 animate-pulse; /* Sharper cursor for CSL */
   }
   .hud-gauge-item {
-    @apply flex justify-between items-center text-[10px] py-0.5; /* Tighter spacing */
+    @apply flex justify-between items-center text-[10px] py-0.5; /* Tighter spacing for CSL */
   }
   .hud-gauge-label { 
     @apply flex items-center gap-1 text-neutral-500 uppercase tracking-wider font-monospace-subheader;
   }
-  .hud-gauge-label svg { @apply w-2.5 h-2.5 text-accent; } /* Slightly larger icons */
+  .hud-gauge-label svg { @apply w-2.5 h-2.5 text-accent; } /* Slightly larger icons for CSL */
   .hud-gauge-value {
-    @apply font-mono text-neutral-300 font-semibold; /* Brighter value */
+    @apply font-mono text-neutral-300 font-semibold; /* Brighter value for CSL */
   }
-  .hud-meter-track { /* For "Engine Temp" / "System Load" bar */
-    @apply h-1 w-full bg-neutral-700/70 rounded-full overflow-hidden my-1; /* Thicker bar */
+  .hud-meter-track { /* For "Engine Temp" / "System Load" bar (CSL) */
+    @apply h-1 w-full bg-neutral-700/70 rounded-full overflow-hidden my-1; /* Thicker bar for CSL */
   }
   .hud-meter-fill { 
     @apply h-full rounded-full;
     transition-property: width, background; /* Added background to transition */
     transition-timing-function: linear;
     transition-duration: 250ms;
-    box-shadow: inset 0 0 2px hsl(var(--background)/0.6); /* More defined inset */
+    box-shadow: inset 0 0 2px hsl(var(--background)/0.6); /* More defined inset for CSL */
   }
   .hud-console-button-container {
-    @apply grid grid-cols-2 gap-1 pt-1 mt-1 border-t border-neutral-700/80; /* Sharper border */
+    @apply grid grid-cols-2 gap-1 pt-1 mt-1 border-t border-neutral-700/80; /* Sharper border for CSL */
   }
   .hud-console-button { 
-    @apply !w-full !h-7 !text-[9px] !tracking-normal !border-neutral-600/80; /* Slightly larger button */
+    @apply !w-full !h-7 !text-[9px] !tracking-normal !border-neutral-600/80; /* Slightly larger button for CSL */
   }
   .hud-console-button.active-toggle { 
-    @apply !bg-gradient-to-r !from-accent !to-sky-500 !text-primary-foreground !border-accent/80 shadow-[0_0_8px_hsl(var(--accent)/0.45)]; /* Brighter active glow */
+    @apply !bg-gradient-to-r !from-accent !to-sky-500 !text-primary-foreground !border-accent/80 shadow-[0_0_8px_hsl(var(--accent)/0.45)]; /* Brighter active glow for CSL */
   }
   .form-container-halo { /* For Contact Page form */
     transition: box-shadow 0.3s var(--ease-m-throttle);
   }
   .form-container-halo-active { 
-    box-shadow: 0 0 20px 4px hsl(var(--primary)/0.5), 0 0 8px 1.5px hsl(var(--primary)/0.25); /* More intense halo */
+    box-shadow: 0 0 20px 4px hsl(var(--primary)/0.5), 0 0 8px 1.5px hsl(var(--primary)/0.25); /* More intense halo for CSL */
   }
   
-  /* === SKILL SECTION (Overclocked Skill Flux Engine) === */
+  /* === SKILL SECTION (Overclocked Skill Flux Engine - M5 CSL) === */
   .skill-card-trail-container { 
     @apply relative; 
   }
@@ -493,7 +484,7 @@
     @apply absolute inset-0 -z-10 rounded-lg opacity-0;
     transition-property: opacity;
     transition-duration: 250ms;
-    background: radial-gradient(circle at center, hsl(var(--primary)/0.12) 0%, transparent 65%); /* Slightly more visible trail */
+    background: radial-gradient(circle at center, hsl(var(--primary)/0.12) 0%, transparent 65%); /* Slightly more visible trail for CSL */
     transform: scale(1.12); 
     filter: blur(6px);
   }
@@ -502,39 +493,39 @@
     animation: skillTrailFadeOut 0.4s 0.1s forwards; 
   }
   .skill-card-trail.electric-trail { /* For Overclocked state */
-    background: radial-gradient(circle at center, hsl(var(--uv-blue)/0.4) 0%, transparent 45%), /* Brighter UV */
-                radial-gradient(circle at center, hsl(var(--primary)/0.25) 0%, transparent 55%); /* Brighter primary */
+    background: radial-gradient(circle at center, hsl(var(--uv-blue)/0.4) 0%, transparent 45%), /* Brighter UV for CSL */
+                radial-gradient(circle at center, hsl(var(--primary)/0.25) 0%, transparent 55%); /* Brighter primary for CSL */
     filter: blur(4px) brightness(1.4);
     animation: skillFluxPulse 0.4s infinite alternate; 
   }
-  .skill-overclocked { /* Applied when skill is "overclocked" (e.g., repeated hover) */
+  .skill-overclocked { /* Applied when skill is "overclocked" (e.g., repeated hover) - CSL */
     animation: skillFluxPulse 0.5s infinite ease-in-out, skillJitter 0.08s infinite alternate ease-in-out;
-    border-color: hsl(var(--uv-blue)/0.85) !important; /* More intense border */
-    box-shadow: 0 0 15px hsl(var(--uv-blue)/0.6), 0 0 8px hsl(var(--primary)/0.35); /* Brighter glow */
+    border-color: hsl(var(--uv-blue)/0.85) !important; /* More intense border for CSL */
+    box-shadow: 0 0 15px hsl(var(--uv-blue)/0.6), 0 0 8px hsl(var(--primary)/0.35); /* Brighter glow for CSL */
   }
-  .animate-skill-jitter { /* Generic jitter for hover on all skill cards */
+  .animate-skill-jitter { /* Generic jitter for hover on all skill cards - CSL */
     animation: skillJitter 0.2s infinite alternate ease-in-out;
   }
 
 
   /* === SCROLL MOMENTUM BAR / APEX METER (M|XENOFRAME / M5 CSL Precision) === */
-  .m-chrono-scroll-gauge-container { /* Apex Meter styling */
-    @apply fixed top-2.5 left-2.5 h-7 w-44 bg-neutral-900/80 backdrop-blur-lg rounded-sm overflow-hidden shadow-xl border border-neutral-700/60; /* Adjusted size/opacity */
+  .m-chrono-scroll-gauge-container { /* Apex Meter styling for CSL */
+    @apply fixed top-2.5 left-2.5 h-7 w-44 bg-neutral-900/80 backdrop-blur-lg rounded-sm overflow-hidden shadow-xl border border-neutral-700/60; /* Adjusted size/opacity for CSL */
     clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%); /* Retain Apex Meter shape */
-    box-shadow: 0 0 12px 1.5px hsl(var(--uv-blue)/0.35), inset 0 0.5px 1px hsl(var(--foreground)/0.05), 0 0 4px hsl(var(--background)/0.25) inset; /* Enhanced shadow */
-    border-radius: var(--radius); /* Knife-edge */
+    box-shadow: 0 0 12px 1.5px hsl(var(--uv-blue)/0.35), inset 0 0.5px 1px hsl(var(--foreground)/0.05), 0 0 4px hsl(var(--background)/0.25) inset; /* Enhanced shadow for CSL */
+    border-radius: var(--radius); /* Knife-edge for CSL */
   }
   .m-rpm-gauge-fill { /* Base fill style for the bar */
     @apply h-full;
     transition-property: width, background-image; /* Added background-image for transition */
     transition-timing-function: linear;
     transition-duration: 100ms;
-    border-radius: var(--radius); /* Knife-edge */
-    box-shadow: inset 0 0 6px hsl(var(--background)/0.6), 0 0 8px hsl(var(--primary)/0.5); /* Sharper glow */
+    border-radius: var(--radius); /* Knife-edge for CSL */
+    box-shadow: inset 0 0 6px hsl(var(--background)/0.6), 0 0 8px hsl(var(--primary)/0.5); /* Sharper glow for CSL */
   }
-  .m-rpm-gauge-fill-xenoflame { /* Gradient: BMW iBlue → Hyper Violet → Voltage Gold/Red */
+  .m-rpm-gauge-fill-xenoflame { /* Gradient: BMW iBlue → Hyper Violet → Voltage Gold/Red (CSL Theme) */
     background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)) 0%, hsl(var(--m-violet-hsl)) 50%, hsl(var(--primary)) 100%); 
-    box-shadow: inset 0 0 4px hsla(0,0%,0%,0.6), 0 0 7px hsl(var(--m-violet-hsl)/0.6), 0 0 12px hsl(var(--primary)/0.45); /* Brighter glow */
+    box-shadow: inset 0 0 4px hsla(0,0%,0%,0.6), 0 0 7px hsl(var(--m-violet-hsl)/0.6), 0 0 12px hsl(var(--primary)/0.45); /* Brighter glow for CSL */
   }
   .m-chrono-tick-container {
     @apply absolute inset-0 flex justify-between px-1 items-center pointer-events-none; /* Adjusted padding */
@@ -544,76 +535,90 @@
     transition-property: opacity, transform;
     transition-timing-function: ease-in-out;
     transition-duration: 250ms;
-    box-shadow: 0 0 2.5px hsl(var(--foreground)/0.7), 0 0 1px hsl(var(--foreground)/0.9); /* Sharper glow */
+    box-shadow: 0 0 2.5px hsl(var(--foreground)/0.7), 0 0 1px hsl(var(--foreground)/0.9); /* Sharper glow for CSL */
   }
-  .m-rpm-tick-major { width: 2px; background-color: hsl(var(--foreground)/0.9); } /* Thicker major */
+  .m-rpm-tick-major { width: 2px; background-color: hsl(var(--foreground)/0.9); } /* Thicker major for CSL */
   .m-rpm-tick-minor { width: 1px; background-color: hsl(var(--foreground)/0.6); }
   .m-rpm-tick-redzone { 
     background-color: hsl(var(--primary)/0.9) !important; 
-    box-shadow: 0 0 5px hsl(var(--primary)/0.8), 0 0 2px hsl(var(--primary)/1) !important; /* Brighter redzone glow */
+    box-shadow: 0 0 5px hsl(var(--primary)/0.8), 0 0 2px hsl(var(--primary)/1) !important; /* Brighter redzone glow for CSL */
   }
-  .m-rpm-tick-active { opacity: 1; transform: scaleY(1.15); } /* More pronounced active state */
-  .chrono-gauge-redline .m-rpm-gauge-fill { /* Color surge on fast scroll / redline */
-    animation: m-rpm-redline-led-pulse 0.08s infinite alternate ease-in-out; /* Aggressive LED pulse */
+  .m-rpm-tick-active { opacity: 1; transform: scaleY(1.15); } /* More pronounced active state for CSL */
+  .chrono-gauge-redline .m-rpm-gauge-fill { /* Color surge on fast scroll / redline (CSL) */
+    animation: m-rpm-redline-led-pulse 0.08s infinite alternate ease-in-out; /* Aggressive LED pulse for CSL */
   }
 
-  /* === NEUROLINK TERMINAL STYLES (XENOFRAME adapted for M|Empire Precision) === */
+  /* === NEUROLINK TERMINAL STYLES (XENOFRAME adapted for M|Empire Precision / M5 CSL) === */
   .neurolink-terminal-overlay {
-    @apply fixed inset-0 bg-black/95 backdrop-blur-lg z-[200] flex items-center justify-center p-2.5; /* Darker, more blur */
+    @apply fixed inset-0 bg-black/95 backdrop-blur-lg z-[200] flex items-center justify-center p-2.5; /* Darker, more blur for CSL */
     animation: fadeIn 0.2s ease-out;
   }
   .neurolink-terminal {
-    @apply bg-neutral-900/95 border border-primary/45 rounded-md shadow-2xl w-full max-w-xl h-[65vh] flex flex-col overflow-hidden; /* Larger, sharper border */
+    @apply bg-neutral-900/95 border border-primary/45 rounded-md shadow-2xl w-full max-w-xl h-[65vh] flex flex-col overflow-hidden; /* Larger, sharper border for CSL */
     box-shadow: 0 0 25px hsl(var(--primary)/0.4);
     animation: slideInFromBottom 0.3s ease-out;
-    border-radius: var(--radius); /* Knife-edge */
+    border-radius: var(--radius); /* Knife-edge for CSL */
   }
   .neurolink-terminal-header {
-    @apply p-1.5 bg-neutral-800/90 border-b border-primary/45 text-xs text-primary font-monospace-subheader flex justify-between items-center; /* Adjusted font/padding */
+    @apply p-1.5 bg-neutral-800/90 border-b border-primary/45 text-xs text-primary font-monospace-subheader flex justify-between items-center; /* Adjusted font/padding for CSL */
   }
   .neurolink-terminal-output {
-    @apply flex-grow p-2 overflow-y-auto font-mono text-xs; /* Adjusted font/padding */
+    @apply flex-grow p-2 overflow-y-auto font-mono text-xs; /* Adjusted font/padding for CSL */
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--primary)) hsl(var(--background)); 
   }
   .neurolink-terminal-output div { @apply mb-1 whitespace-pre-wrap break-words; } 
   .neurolink-terminal-output .input-line::before { content: 'M_DRIVE:> '; @apply text-accent; } 
-  .neurolink-terminal-output .output-line { @apply text-green-300; } /* Brighter */
-  .neurolink-terminal-output .error-line { @apply text-red-300; } /* Brighter */
-  .neurolink-terminal-output .info-line { @apply text-sky-300; } /* Brighter */
+  .neurolink-terminal-output .output-line { @apply text-green-300; } /* Brighter for CSL */
+  .neurolink-terminal-output .error-line { @apply text-red-300; } /* Brighter for CSL */
+  .neurolink-terminal-output .info-line { @apply text-sky-300; } /* Brighter for CSL */
   .neurolink-terminal-input-area {
-    @apply p-1.5 border-t border-primary/45 flex items-center bg-neutral-800/90; /* Adjusted padding */
+    @apply p-1.5 border-t border-primary/45 flex items-center bg-neutral-800/90; /* Adjusted padding for CSL */
   }
-  .neurolink-terminal-prompt { @apply text-accent font-mono text-xs mr-1.5; } /* Adjusted font/margin */
+  .neurolink-terminal-prompt { @apply text-accent font-mono text-xs mr-1.5; } /* Adjusted font/margin for CSL */
   .neurolink-terminal-input {
-    @apply flex-grow bg-transparent border-none outline-none text-primary-foreground font-mono text-xs p-1; /* Adjusted font/padding */
-    text-shadow: 0 0 4px hsl(var(--primary)/0.4); /* Brighter text shadow */
+    @apply flex-grow bg-transparent border-none outline-none text-primary-foreground font-mono text-xs p-1; /* Adjusted font/padding for CSL */
+    text-shadow: 0 0 4px hsl(var(--primary)/0.4); /* Brighter text shadow for CSL */
   }
 
-  /* General Dialog Content Fix */
+  /* General Dialog Content Fix (M5 CSL - ensures consistent flex behavior) */
   .DialogContent[data-state="open"] {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    display: flex !important; /* Ensure flex is applied */
+    flex-direction: column !important; /* Ensure column direction */
+    overflow: hidden !important; /* Ensure overflow is hidden for max-h */
   }
 
+} /* End of @layer components */
+
+@layer utilities {
   /* Keyframes (Consolidated, updated, and new for M5 CSL "Aggressive Elegance") */
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes slideInFromBottom { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } } /* Slightly more travel */
+  @keyframes slideInFromBottom { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } } /* Slightly more travel for CSL */
 
   @keyframes spin { to { transform: rotate(360deg); } } /* Base spin for HUD icon */
   
-  /* Pulse for Empire/Nightfall Medallion */
+  /* Pulse for Empire/Nightfall Medallion - M5 CSL (Simplified to border animation if conic gradient problematic) */
   @keyframes nightfallMedallionSpin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
-  @keyframes nightfallMedallionPulse { /* More intense pulse */
+  @keyframes nightfallMedallionPulse { /* More intense pulse for CSL */
     0%, 100% { box-shadow: 0 0 18px 3px hsla(var(--uv-blue), 0.35), 0 0 8px hsla(var(--primary), 0.25), inset 0 0 10px hsla(var(--uv-blue),0.2); opacity: 0.75; }
     50% { box-shadow: 0 0 28px 5px hsla(var(--uv-blue), 0.55), 0 0 12px hsla(var(--primary), 0.35), inset 0 0 15px hsla(var(--uv-blue),0.3); opacity: 1; }
   }
+   /* Combined empireMedallionPulse and nightfallMedallionSpin (using the conic gradient directly for pulse) */
+  @keyframes empireMedallionPulse { /* CSL: Intense M-stripe pulse using conic border */
+    0%, 100% {
+      filter: brightness(1.1) blur(3.5px);
+      opacity: 0.85;
+    }
+    50% {
+      filter: brightness(1.5) blur(2.5px) saturate(1.2);
+      opacity: 1;
+    }
+  }
 
-  @keyframes m-rpm-redline-led-pulse { /* Sharper, more aggressive redline pulse */
+  @keyframes m-rpm-redline-led-pulse { /* Sharper, more aggressive redline pulse for CSL */
     0%, 100% {
       box-shadow: inset 0 0 8px hsl(var(--background)/0.7), 0 0 35px 12px hsl(var(--primary)/1), 0 0 70px 25px hsl(var(--primary)/0.85);
       filter: brightness(4.0) saturate(4.0); 
@@ -624,86 +629,86 @@
     }
   }
 
-  @keyframes carbonWeaveShift { /* Subtle diagonal shift for carbon patterns */
+  @keyframes carbonWeaveShift { /* Subtle diagonal shift for carbon patterns - CSL */
     0% { background-position: 0 0; }
-    100% { background-position: 4px 4px; } /* Fine-tuned shift */
+    100% { background-position: 4px 4px; } /* Fine-tuned shift for CSL */
   }
-  @keyframes pulseDot { /* For footer LED dots */
+  @keyframes pulseDot { /* For footer LED dots - CSL */
     0%, 100% { opacity: 0.6; transform: scale(0.9); box-shadow: 0 0 4px hsl(var(--primary)/0.5); }
-    50% { opacity: 1; transform: scale(1.1); box-shadow: 0 0 8px hsl(var(--primary)/1); } /* Brighter pulse */
+    50% { opacity: 1; transform: scale(1.1); box-shadow: 0 0 8px hsl(var(--primary)/1); } /* Brighter pulse for CSL */
   }
 
-  /* Nav M-Stripe Animation - Laser Sweep */
+  /* Nav M-Stripe Animation - Laser Sweep (M5 CSL) */
   @keyframes navMStripeAnimation {
-    0% { background-position: 150% 0; } 
-    100% { background-position: -50% 0; }
+    0% { background-position: 150% 0; } /* Start off-screen for CSL */
+    100% { background-position: -50% 0; } /* Sweep off-screen for CSL */
   }
 
-  /* Skill Flux Animations - Overclocked Engine */
-  @keyframes skillFluxPulse { /* Brighter, more electric pulse */
+  /* Skill Flux Animations - Overclocked Engine (M5 CSL) */
+  @keyframes skillFluxPulse { /* Brighter, more electric pulse for CSL */
     0%, 100% { border-color: hsl(var(--uv-blue)/0.6); box-shadow: 0 0 10px hsl(var(--uv-blue)/0.4), 0 0 5px hsl(var(--primary)/0.25); }
     50% { border-color: hsl(var(--uv-blue)/0.9); box-shadow: 0 0 25px hsl(var(--uv-blue)/0.8), 0 0 12px hsl(var(--primary)/0.5), inset 0 0 6px hsl(var(--uv-blue)/0.4); }
   }
-  @keyframes skillJitter { /* Sharper jitter */
+  @keyframes skillJitter { /* Sharper jitter for CSL */
     0% { transform: translate(0, 0) rotate(0); }
     25% { transform: translate(0.6px, -0.6px) rotate(0.15deg); } 
     50% { transform: translate(-0.6px, 0.6px) rotate(-0.15deg); }
     75% { transform: translate(0.6px, 0.6px) rotate(0.08deg); }
     100% { transform: translate(0, 0) rotate(0); }
   }
-  @keyframes skillTrailFadeOut { /* Sharper trail fade */
+  @keyframes skillTrailFadeOut { /* Sharper trail fade for CSL */
     from { opacity: 0.7; transform: scale(1.12); }
     to { opacity: 0; transform: scale(1.25); filter: blur(8px); } 
   }
   
-  @keyframes clickRipple { /* Laser-etched button ripple */
+  @keyframes clickRipple { /* Laser-etched button ripple (M5 CSL) */
     to {
-      transform: scale(4.5); /* Larger ripple */
+      transform: scale(4.5); /* Larger ripple for CSL */
       opacity: 0;
     }
   }
 
-  @keyframes headlightSweep { /* For hero background sweep */
-    0% { transform: translateX(-7vw) rotate(-15deg); } /* Wider sweep */
+  @keyframes headlightSweep { /* For hero background sweep (M5 CSL) */
+    0% { transform: translateX(-7vw) rotate(-15deg); } /* Wider sweep for CSL */
     100% { transform: translateX(7vw) rotate(-15deg); }
   }
     
-  @keyframes bloomGlide { /* For Hero Background Halos */
+  @keyframes bloomGlide { /* For Hero Background Halos (M5 CSL) */
     0% { transform: translate(0, 0) scale(1); opacity: 0.06; } 
-    50% { transform: translate(12px, 8px) scale(1.08); opacity: 0.09; } /* More pronounced bloom */
+    50% { transform: translate(12px, 8px) scale(1.08); opacity: 0.09; } /* More pronounced bloom for CSL */
     100% { transform: translate(0, 0) scale(1); opacity: 0.06; }
   }
 
-  @keyframes nanoDriftAndFade { /* For Nightfall Atelier nano particles */
+  @keyframes nanoDriftAndFade { /* For Nightfall Atelier nano particles (M5 CSL) */
     0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
-    20% { opacity: 0.75; transform: scale(1.1); } /* Brighter, slightly larger particles */
+    20% { opacity: 0.75; transform: scale(1.1); } /* Brighter, slightly larger particles for CSL */
     80% { opacity: 0.75; transform: scale(1.1); }
     100% { transform: translate(var(--drift-x, 0px), var(--drift-y, 0px)) scale(0.4); opacity: 0; }
   }
-  @keyframes verticalFlareSweep { /* For Nightfall Atelier lens flares */
-    0% { transform: translateY(-120%) scaleY(0.4); opacity: 0; } /* Wider travel */
-    10%, 20% { transform: translateY(0) scaleY(1.1); opacity: 1; } /* Slightly larger flare */
+  @keyframes verticalFlareSweep { /* For Nightfall Atelier lens flares (M5 CSL) */
+    0% { transform: translateY(-120%) scaleY(0.4); opacity: 0; } /* Wider travel for CSL */
+    10%, 20% { transform: translateY(0) scaleY(1.1); opacity: 1; } /* Slightly larger flare for CSL */
     30%, 100% { transform: translateY(120%) scaleY(0.4); opacity: 0; }
   }
   
-  /* Rare Section Pulse (Body visual feedback) */
+  /* Rare Section Pulse (Body visual feedback - CSL) */
   @keyframes rareSectionVisualPulse {
     0% { box-shadow: inset 0 0 0 0px hsl(var(--primary)/0); }
-    50% { box-shadow: inset 0 0 0 5px hsl(var(--primary)/0.2); } /* More noticeable pulse */
+    50% { box-shadow: inset 0 0 0 5px hsl(var(--primary)/0.2); } /* More noticeable pulse for CSL */
     100% { box-shadow: inset 0 0 0 0px hsl(var(--primary)/0); }
   }
-  /* Hyper Scroll Feedback (Body visual feedback) */
+  /* Hyper Scroll Feedback (Body visual feedback - CSL) */
   @keyframes hyperScrollVisualFeedback {
     0% { filter: brightness(1); }
-    50% { filter: brightness(0.9) saturate(1.4); } /* More aggressive dim/saturate */
+    50% { filter: brightness(0.9) saturate(1.4); } /* More aggressive dim/saturate for CSL */
     100% { filter: brightness(1); }
   }
-  /* Ghostline Skill Pulse (Feedback) */
+  /* Ghostline Skill Pulse (Feedback - CSL) */
   @keyframes ghostlineSkillPulse {
-    0%, 100% { border-color: hsl(var(--uv-blue)/0.85); } /* Brighter base */
+    0%, 100% { border-color: hsl(var(--uv-blue)/0.85); } /* Brighter base for CSL */
     50% { border-color: hsl(var(--uv-blue)/0.45); }
   }
-  /* Erratic Glow (Feedback) */
+  /* Erratic Glow (Feedback - CSL) */
   @keyframes erraticGlowAnimation {
     0% { box-shadow: 0 0 10px hsl(var(--primary)/0.4), 0 0 5px hsl(var(--accent)/0.2); }
     25% { box-shadow: 0 0 15px hsl(var(--primary)/0.6), 0 0 8px hsl(var(--accent)/0.3), 0 0 5px hsl(var(--uv-blue)/0.2); }
@@ -712,12 +717,12 @@
     100% { box-shadow: 0 0 10px hsl(var(--primary)/0.4), 0 0 5px hsl(var(--accent)/0.2); }
   }
 
-  @keyframes gantryLightPulse { /* For Section Gantry Lights */
+  @keyframes gantryLightPulse { /* For Section Gantry Lights (M5 CSL) */
     0%, 100% { opacity: 0; transform: scaleX(0.8); }
-    50% { opacity: 1; transform: scaleX(1); box-shadow: 0 0 8px 2px hsl(var(--bmw-m-blue)/0.5), 0 0 15px 3px hsl(var(--foreground)/0.3); }
+    50% { opacity: 1; transform: scaleX(1); box-shadow: 0 0 8px 2px hsla(var(--bmw-m-blue), 0.5), 0 0 15px 3px hsla(var(--foreground), 0.3); }
   }
 
-} /* Base Layer End */
+} /* End of @layer utilities */
 
 /* Reduced Motion Fallbacks (M5 CSL "Aggressive Elegance" Theme) */
 @media (prefers-reduced-motion: reduce) {
@@ -758,3 +763,4 @@
 }
 
     
+```
