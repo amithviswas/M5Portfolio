@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    /* Base M5 CSL Palette - Focused on Dark Tech & Precision */
+    /* M5 CSL Palette - Focused on Dark Tech & Precision */
     --background: 0 0% 2%; /* Jet Black Matte */
     --foreground: 0 0% 98%; /* Ice-White LED-like text */
 
@@ -48,19 +48,27 @@
     /* Transition Easing */
     --ease-m-throttle: cubic-bezier(.36,1.08,.33,1); /* Throttle blip */
 
-    /* Empire Edition Hero Specific */
-    --empire-royal-blue-hsl: 210 80% 35%;
-    --empire-crimson-hsl: 0 70% 30%;
-    --empire-gold-hsl: 45 100% 45%;
-    --empire-i-blue-fog-start-hsl: 210 70% 20%;
+    /* Empire Edition Specific (can be merged or kept separate) */
+    --empire-gold-hsl: 45 100% 50%;
+    --empire-royal-blue-hsl: 220 70% 55%;
+    --empire-crimson-hsl: 0 80% 55%;
+    --empire-i-blue-fog-start-hsl: 210 100% 45%;
     --empire-text-shadow: 0 1px 1px rgba(0,0,0,0.6), 0 0 5px rgba(0,0,0,0.2), 0 1px 2px rgba(255,255,255,0.1) inset;
-    
-    --medallion-nightfall-gradient: conic-gradient(
+
+    /* Nightfall Atelier Specific */
+    --nightfall-deep-navy: 225 30% 10%;
+    --nightfall-obsidian: 0 0% 5%;
+    --nightfall-liquid-titanium-start: hsl(210, 15%, 75%);
+    --nightfall-liquid-titanium-end: hsl(200, 30%, 85%);
+    --nightfall-ice-blue-sheen: hsl(195, 100%, 75%);
+
+    /* Medallion Nightfall Gradient */
+     --medallion-nightfall-gradient: conic-gradient(
       from 0deg,
-      hsla(210, 100%, 50%, 0.7) 0%,
-      hsla(270, 100%, 65%, 0.7) 33.33%,
-      hsla(0, 100%, 50%, 0.7) 66.67%,
-      hsla(210, 100%, 50%, 0.7) 100%
+      hsla(210, 100%, 50%, 0.7) 0%, /* M Blue */
+      hsla(270, 100%, 65%, 0.7) 33.33%, /* M Violet */
+      hsla(0, 100%, 50%, 0.7) 66.67%, /* M Red */
+      hsla(210, 100%, 50%, 0.7) 100% /* M Blue to close loop */
     );
   }
 
@@ -89,12 +97,6 @@
     font-family: 'Orbitron', 'Exo 2', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     @apply uppercase tracking-wider text-xs font-medium text-muted-foreground;
   }
-
-  /* Specific Hero Fonts */
-  .font-fraunces { font-family: var(--font-fraunces); }
-  .font-inter { font-family: var(--font-inter); }
-  .font-playfair-display { font-family: var(--font-playfair-display); }
-  .font-space-grotesk { font-family: var(--font-space-grotesk); }
 
   /* Global Transition Utility */
   .transition-m-throttle {
@@ -280,16 +282,13 @@
   
   /* === HERO MEDALLION STYLES (Nocturne Crown Halo / Imperial Crown) === */
   .hero-medallion-empire { /* Base for crown bezel */
-    @apply relative inline-block p-0.5 rounded-full shadow-2xl;
-    transition-property: transform; /* Only animate transform */
-    transition-timing-function: var(--ease-m-throttle);
-    transition-duration: 300ms;
+    @apply relative inline-block p-0.5 rounded-full shadow-2xl transition-transform duration-300 ease-m-throttle;
     /* Multi-step radial for embossed metallic feel */
     background: radial-gradient(circle, hsl(var(--card)) 40%, hsl(var(--border)) 65%, hsl(var(--background)) 80%, hsl(var(--border)) 100%); 
     border: 1px solid hsl(var(--border)/0.5); /* Thinner border */
   }
   .hero-medallion-empire:hover {
-    transform: scale(1.05) translateY(-4px); /* Consistent hover lift, changed from 1.03 */
+    transform: scale(1.03) translateY(-4px); /* Consistent hover lift */
   }
   .hero-medallion-empire::before { /* For M-stripe pulse or gold glint */
     content: '';
@@ -297,6 +296,20 @@
     background: var(--medallion-nightfall-gradient); 
     animation: nightfallMedallionSpin 5s linear infinite, nightfallMedallionPulse 2s infinite ease-in-out; 
     box-shadow: 0 0 18px 3px hsla(var(--uv-blue),.35), 0 0 8px hsla(var(--primary)/.25) inset; /* UV Blue + M Red glow */
+  }
+  .hero-medallion-nightfall-inner::before { /* Conic gradient for Nightfall Atelier specific pulse */
+    content: '';
+    @apply absolute inset-[-2px] rounded-full opacity-70 -z-[1];
+    background: var(--medallion-nightfall-gradient);
+    animation: nightfallMedallionSpin 4s linear infinite; /* Using the same spin but can be different */
+    filter: blur(3px) brightness(0.9);
+    transition: opacity 0.3s, filter 0.3s;
+  }
+  .hero-medallion-empire:hover .hero-medallion-nightfall-inner::before,
+  .hero-medallion-empire:focus-within .hero-medallion-nightfall-inner::before {
+      opacity: 1;
+      filter: blur(2px) brightness(1.2);
+      animation-play-state: paused; /* Pause spin on hover/focus for defined look */
   }
   .hero-medallion-empire .spec-highlight-arc { /* Lacquer highlight */
     @apply absolute inset-0 rounded-full;
@@ -310,7 +323,7 @@
 
 
   .hero-headline-empire { 
-    font-family: var(--font-fraunces); 
+    font-family: var(--font-playfair-display); 
     @apply text-[#E5E5E5]; 
     text-shadow: var(--empire-text-shadow);
   }
@@ -336,7 +349,7 @@
       radial-gradient(ellipse at 50% 15%, hsla(var(--empire-i-blue-fog-start-hsl), 0.12) 0%, transparent 50%), /* BMW i-blue radial fog */
       linear-gradient(45deg, hsla(var(--card), 0.015) 25%, transparent 25%), 
       linear-gradient(-45deg, hsla(var(--card), 0.015) 25%, transparent 25%),
-      radial-gradient(circle at 30% 30%, #1d1d1f 0%, #0d0d0e 60%); /* Deep navy-to-black vignette */
+      radial-gradient(circle at 30% 30%, var(--nightfall-deep-navy) 0%, var(--nightfall-obsidian) 60%); /* Deep navy-to-black vignette */
     background-size: cover, 3px 3px, 3px 3px, cover; /* Dark brushed steel / carbon pattern base */
   }
   
@@ -419,10 +432,7 @@
     @apply text-[11px] font-bold uppercase tracking-wider text-primary-foreground font-heading;
   }
   .hud-console-settings-icon {
-    @apply text-neutral-400 hover:text-primary;
-    transition-property: color;
-    transition-timing-function: var(--ease-m-throttle);
-    transition-duration: 150ms;
+    @apply text-neutral-400 hover:text-primary transition-m-throttle;
     animation: spin 3s linear infinite; 
   }
   .hud-console-log { 
@@ -516,7 +526,7 @@
   }
   .m-rpm-gauge-fill { /* Base fill style for the bar */
     @apply h-full;
-    transition-property: width, background-image; /* Added background-image for gradient transition */
+    transition-property: width, background-image; /* Added background-image for transition */
     transition-timing-function: linear;
     transition-duration: 100ms;
     border-radius: var(--radius); /* Knife-edge */
@@ -742,12 +752,9 @@
   .MStartStopButton-base-style::before { animation: none !important; }
   .group:hover .MStartStopButton-base-style::before { animation: none !important; box-shadow: 0 0 0 0.5px hsl(var(--foreground)), 0 0 0 2.5px hsl(var(--primary)), 0 0 0 4px hsl(var(--bmw-m-blue)/0.8), 0 0 15px 5px hsl(var(--primary)/0.6); }
   .click-ripple-effect.rippling::after { animation: none; display: none; }
-  /* .hero-medallion-nightfall-inner::before { animation: nightfallMedallionPulse 3s infinite ease-in-out; } */ /* This was commented out due to build errors */
   .nano-particle { animation: none; opacity: 0.12; }
   .vertical-lens-flare { animation: none; opacity: 0.18; }
   .hero-gantry-light { animation: none; opacity: 0.7; transform: scaleX(1); }
 }
 
     
-
-```
