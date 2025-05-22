@@ -46,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark"> {/* Site is now permanently dark themed */}
+    <html lang="en" className="dark">
       <body className={`${rajdhani.variable} ${playfairDisplay.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${inter.variable} font-sans antialiased bg-background text-foreground`}>
           <UserInteractionProvider>
             <IntroProvider>
