@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    /* M5 CSL Palette - Focused on Dark Tech & Precision (Now Default) */
+    /* M5 CSL Palette - Focused on Dark Tech & Precision */
     --background: 0 0% 2%; /* Jet Black Matte */
     --foreground: 0 0% 98%; /* Ice-White LED-like text */
 
@@ -34,34 +34,27 @@
     --input: 220 8% 8%;
     --ring: 210 100% 55%; /* M Blue for focus rings */
 
-    --radius: 0.1rem; /* Sharper corners by default now */
+    --radius: 0.3rem; /* Sharper corners for M5 CSL theme */
 
-    /* M-Specific & Theme Colors (Dark Theme Default) */
+    /* M-Specific & Theme Colors */
     --bmw-m-blue: 210 100% 50%;
     --blood-red: 0 100% 50%;
     --m-violet-hsl: 270 100% 65%;
-    --uv-blue: 220 100% 60%;
+    --uv-blue: 220 100% 60%; /* For neon glows */
     --gunmetal-silver: 210 10% 45%;
-    --m-light-blue-hsl: 210 100% 65%;
-    --m-red-hsl: 0 100% 50%;
+    --m-light-blue-hsl: 210 100% 65%; /* For M-stripe */
+    --m-red-hsl: 0 100% 50%; /* For M-stripe */
     
     --ease-m-throttle: cubic-bezier(.36,1.08,.33,1);
 
-    /* Empire Edition Specific (Retained, assumed for dark theme styling) */
+    /* Empire Edition Specific (Retained for potential reuse) */
     --empire-gold-hsl: 45 100% 50%;
-    --empire-royal-blue-hsl: 220 70% 55%;
-    --empire-crimson-hsl: 0 80% 55%;
-    --empire-i-blue-fog-start-hsl: 210 100% 45%;
     --empire-text-shadow: 0 1px 1px rgba(0,0,0,0.6), 0 0 5px rgba(0,0,0,0.2), 0 1px 2px rgba(255,255,255,0.1) inset;
 
-    /* Nightfall Atelier Specific (Retained, assumed for dark theme styling) */
+     /* Nightfall Atelier Specific (Retained for potential reuse) */
     --nightfall-deep-navy: 225 30% 10%;
     --nightfall-obsidian: 0 0% 5%;
-    --nightfall-liquid-titanium-start: hsl(210, 15%, 25%); /* Darker for dark theme */
-    --nightfall-liquid-titanium-end: hsl(200, 30%, 35%); /* Darker for dark theme */
-    --nightfall-ice-blue-sheen: hsl(195, 100%, 45%); /* Darker for dark theme */
-    
-    --medallion-nightfall-gradient: conic-gradient(
+     --medallion-nightfall-gradient: conic-gradient(
       from 0deg,
       hsla(210, 100%, 50%, 0.7) 0deg,
       hsla(270, 100%, 65%, 0.7) 120deg,
@@ -77,7 +70,7 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 
-  /* Carbon Fiber Weave for Dark Theme (now default body::before) */
+  /* Carbon Fiber Weave for Dark Theme */
   body::before {
     content: '';
     @apply fixed inset-0 -z-10 opacity-[0.03]; /* Made slightly more subtle */
@@ -94,8 +87,7 @@
 
   .font-heading {
     font-family: var(--font-rajdhani);
-    @apply font-bold uppercase; 
-    letter-spacing: 0.02em; 
+    @apply font-bold uppercase tracking-[0.02em]; /* Adjusted tracking */
   }
   
   .font-monospace-subheader {
@@ -119,12 +111,12 @@
     transition-timing-function: var(--ease-m-throttle);
     transition-duration: 200ms;
     box-shadow: 0 10px 25px -10px hsl(var(--background)/0.9),
-                0 0 20px -8px hsla(var(--primary)/0.7), /* More intense primary glow */
-                0 0 18px -8px hsla(var(--accent)/0.6);  /* More intense accent glow */
+                0 0 18px -8px hsla(var(--primary)/0.7), 
+                0 0 15px -8px hsla(var(--accent)/0.6);  
   }
   .card-m-glow:hover {
-    @apply shadow-[0_18px_40px_-18px_hsl(var(--background)/0.95),_0_0_30px_-8px_hsla(var(--primary)/0.9),_0_0_25px_-8px_hsla(var(--accent)/0.8)]; /* More intense hover glow */
-    transform: translateY(-8px); 
+    @apply shadow-[0_18px_40px_-18px_hsl(var(--background)/0.95),_0_0_30px_-8px_hsla(var(--primary)/0.9),_0_0_25px_-8px_hsla(var(--accent)/0.8)]; 
+    transform: translateY(-6px) scale(1.03); /* Refined hover lift */
   }
   .card-m-glow:hover .card-text-skew { 
     transform: skewX(1deg);
@@ -187,7 +179,7 @@
      box-shadow: 0 0 3px hsl(var(--accent)), 0 0 6px hsl(var(--accent)/0.75), 0 0 9px hsl(var(--accent)/0.55);
   }
 
-  /* Glowing Red Seal Stamp for Mission-Log Cards (M5 CSL) */
+  /* Glowing Red Seal Stamp for Cards (M5 CSL) */
   .card-with-glowing-seal::before {
     content: '';
     @apply absolute top-1 right-1 w-2 h-2 rounded-sm bg-primary opacity-0 transition-opacity duration-300 ease-m-throttle; 
@@ -197,7 +189,7 @@
     opacity: 1;
   }
   
-  /* Click Ripple Effect for Laser-Etched Buttons (M5 CSL) */
+  /* Click Ripple Effect (M5 CSL) */
   .click-ripple-effect {
     @apply relative overflow-hidden;
   }
@@ -214,7 +206,7 @@
     animation: clickRipple 0.6s linear;
   }
 
-  /* MStartStopButton Hover Ring Enhancement (Obsidian Crown / Jet Crystal - M5 CSL) */
+  /* MStartStopButton Hover Ring Enhancement (M5 CSL) */
   .MStartStopButton-base-style::before { 
     content: '';
     position: absolute;
@@ -234,9 +226,8 @@
                   0 0 25px 5px hsl(var(--primary)/0.7); 
   }
 
-
   /* Footer Diffuser (M5 CSL) */
-  .carbon-wave-animated::before { /* Now applies to dark theme */
+  .carbon-wave-animated::before { 
     content: '';
     position: absolute;
     inset: 0;
@@ -275,7 +266,7 @@
   }
 
   /* Dynamic Headlight Sweep Background (Hero - M5 CSL) */
-  .hero-headlight-sweep-bg { /* Now applies to dark theme */
+  .hero-headlight-sweep-bg { 
     @apply fixed -z-10 opacity-[0.05] mix-blend-screen; 
     top: -25%; left: -45%; width: 190vw; height: 190vh;
     background: radial-gradient(ellipse at center, hsla(var(--accent), 0.4) 0%, transparent 50%); 
@@ -283,23 +274,23 @@
     animation: headlightSweep 18s infinite alternate ease-in-out; 
   }
   
-  /* === HERO MEDALLION STYLES (Nocturne Crown Halo / Imperial Crown - M5 CSL) === */
+  /* === HERO MEDALLION STYLES (M5 CSL) === */
   .hero-medallion-empire { 
     @apply relative inline-block p-0.5 rounded-full shadow-2xl transition-m-throttle;
     background: radial-gradient(circle, hsl(var(--card)) 40%, hsl(var(--border)) 65%, hsl(var(--background)) 80%, hsl(var(--border)) 100%); 
     border: 1px solid hsla(var(--border),0.5);
-    transition-property: transform, box-shadow; /* Ensure box-shadow is transitioned */
+    transition-property: transform, box-shadow;
   }
    .hero-medallion-empire:hover {
-     transform: scale(1.05) translateY(-5px); /* Keep scale 1.05 for hover from prompt */
-     box-shadow: 0 0 35px 0px hsla(var(--uv-blue), .35), /* Adjusted spotlight */
+     transform: scale(1.05) translateY(-5px); 
+     box-shadow: 0 0 35px 0px hsla(var(--uv-blue), .35), 
                  0 0 15px 0px hsla(var(--primary), .2);
   }
 
   .hero-medallion-empire::before { 
     content: '';
     @apply absolute inset-[-3px] rounded-full opacity-80 transition-opacity duration-300 ease-m-throttle pointer-events-none -z-[1];
-    background: var(--medallion-nightfall-gradient); /* Use CSS Variable */
+    background: var(--medallion-nightfall-gradient); 
     background-size: 200% 200%; 
     animation: empireMedallionPulse 2.5s linear infinite, nightfallMedallionSpin 8s linear infinite; 
     filter: blur(4px);
@@ -336,13 +327,13 @@
   .hero-tagline-empire.underline-visible::after {
     width: 105%;
   }
-  .hero-empire-bg { /* Now applies to dark theme */
+  .hero-empire-bg { 
     @apply relative overflow-hidden; 
     background-image: 
-      radial-gradient(ellipse at 50% 15%, hsla(var(--empire-i-blue-fog-start-hsl), 0.12) 0%, transparent 50%), 
+      radial-gradient(ellipse at 50% 15%, hsla(210, 100%, 45%, 0.12) 0%, transparent 50%), /* empire-i-blue-fog-start-hsl */
       linear-gradient(45deg, hsla(var(--card), 0.015) 25%, transparent 25%), 
       linear-gradient(-45deg, hsla(var(--card), 0.015) 25%, transparent 25%),
-      radial-gradient(circle at 30% 30%, var(--nightfall-deep-navy) 0%, var(--nightfall-obsidian) 60%); 
+      radial-gradient(circle at 30% 30%, hsl(var(--nightfall-deep-navy)) 0%, hsl(var(--nightfall-obsidian)) 60%); 
     background-size: cover, 3px 3px, 3px 3px, cover; 
   }
   
@@ -390,7 +381,7 @@
   }
 
   /* Nano Particle Shimmer & Lens Flares (Nightfall Atelier - M5 CSL) */
-  .nano-particle-shimmer { /* Now applies to dark theme */
+  .nano-particle-shimmer { 
     @apply absolute inset-0 overflow-hidden pointer-events-none -z-[4];
   }
   .nano-particle {
@@ -437,10 +428,10 @@
   }
 
 
-  /* === SCROLL MOMENTUM BAR / APEX METER (M|XENOFRAME / M5 CSL Precision) === */
+  /* === SCROLL MOMENTUM BAR / APEX METER (M5 CSL Precision) === */
   .m-chrono-scroll-gauge-container { 
     @apply fixed top-2.5 left-2.5 h-7 w-44 bg-neutral-900/80 backdrop-blur-lg rounded-sm overflow-hidden shadow-xl border border-neutral-700/60; 
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%); 
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%); /* Apex Meter Shape */
     box-shadow: 0 0 12px 1.5px hsl(var(--uv-blue)/0.35), inset 0 0.5px 1px hsl(var(--foreground)/0.05), 0 0 4px hsl(var(--background)/0.25) inset; 
     border-radius: var(--radius); 
   }
@@ -452,7 +443,7 @@
     border-radius: var(--radius); 
     box-shadow: inset 0 0 6px hsl(var(--background)/0.6), 0 0 8px hsl(var(--primary)/0.5); 
   }
-  .m-rpm-gauge-fill-xenoflame { 
+  .m-rpm-gauge-fill-xenoflame { /* For M5 Apex Meter (Blue -> Violet -> Red) */
     background-image: linear-gradient(to right, hsl(var(--bmw-m-blue)) 0%, hsl(var(--m-violet-hsl)) 50%, hsl(var(--primary)) 100%); 
     box-shadow: inset 0 0 4px hsla(0,0%,0%,0.6), 0 0 7px hsl(var(--m-violet-hsl)/0.6), 0 0 12px hsl(var(--primary)/0.45); 
   }
@@ -473,11 +464,11 @@
     box-shadow: 0 0 5px hsl(var(--primary)/0.8), 0 0 2px hsl(var(--primary)/1) !important; 
   }
   .m-rpm-tick-active { opacity: 1; transform: scaleY(1.15); } 
-  .chrono-gauge-redline .m-rpm-gauge-fill { 
-    animation: m-rpm-redline-led-pulse 0.08s infinite alternate ease-in-out; 
+  .chrono-gauge-redline .m-rpm-gauge-fill { /* For M5 Apex Meter Redline Flare */
+    animation: m-rpm-redline-led-pulse 0.15s infinite alternate ease-in-out; 
   }
 
-  /* === NEUROLINK TERMINAL STYLES (XENOFRAME adapted for M|Empire Precision / M5 CSL) === */
+  /* === NEUROLINK TERMINAL STYLES (XENOFRAME adapted for M5 CSL Precision) === */
   .neurolink-terminal-overlay {
     @apply fixed inset-0 bg-black/95 backdrop-blur-lg z-[200] flex items-center justify-center p-2.5; 
     animation: fadeIn 0.2s ease-out;
@@ -510,14 +501,14 @@
     text-shadow: 0 0 4px hsl(var(--primary)/0.4); 
   }
 
-  /* General Dialog Content Fix (M5 CSL - ensures consistent flex behavior) */
+  /* General Dialog Content Flex Fix (M5 CSL) */
   .DialogContent[data-state="open"] {
     display: flex !important; 
     flex-direction: column !important; 
     overflow: hidden !important; 
   }
 
-  /* Form Container Halo for Contact Page */
+  /* Form Container Halo for Contact Page (M5 CSL) */
   .form-container-halo { 
     transition: box-shadow 0.3s var(--ease-m-throttle);
   }
@@ -525,9 +516,6 @@
     box-shadow: 0 0 20px 4px hsl(var(--primary)/0.5), 0 0 8px 1.5px hsl(var(--primary)/0.25); 
   }
   
-  /* Speedometer Widget Styles */
-  /* Removed Speedometer styles */
-
 
 } /* End of @layer components */
 
@@ -554,7 +542,7 @@
     }
   }
 
-  @keyframes m-rpm-redline-led-pulse { 
+  @keyframes m-rpm-redline-led-pulse { /* M5 Apex Meter Redline Flare */
     0%, 100% {
       box-shadow: inset 0 0 8px hsl(var(--background)/0.7), 0 0 35px 12px hsl(var(--primary)/1), 0 0 70px 25px hsl(var(--primary)/0.85);
       filter: brightness(4.0) saturate(4.0); 
@@ -677,13 +665,12 @@
   }
   .nav-laser-crest::after { 
     animation: none !important;
-    width: 75% !important; /* Static underline width */
+    width: 75% !important; 
     opacity: 0.95 !important;
     background: linear-gradient(90deg, hsl(var(--m-light-blue-hsl)) 0%, hsl(var(--m-violet-hsl)) 50%, hsl(var(--m-red-hsl)) 100%);
     background-size: 100% 100%;
     background-position: center;
   }
-  /* Removed .hud-console-settings-icon { animation: none; } */
   .carbon-wave-animated::before { animation: none !important; } 
   .footer-diffuser-fin-dot { animation: none !important; opacity: 0.7; } 
   .hero-headlight-sweep-bg { animation: none !important; opacity: 0.05 !important; } 
@@ -706,8 +693,7 @@
   .nano-particle { animation: none; opacity: 0.12; }
   .vertical-lens-flare { animation: none; opacity: 0.18; }
   .hero-gantry-light { animation: none; opacity: 0.7; transform: scaleX(1); }
-  /* Removed .speedometer-widget {animation: none; opacity: 1;} */
-
+  
 }
 
     
