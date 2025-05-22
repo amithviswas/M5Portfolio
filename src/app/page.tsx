@@ -5,7 +5,7 @@ import HeroSection from '@/components/HeroSection';
 import AboutMeSection from '@/components/AboutMeSection';
 import SkillsSection from '@/components/SkillsSection';
 import ProjectsSection from '@/components/ProjectsSection';
-import SpeedometerWidget from '@/components/SpeedometerWidget'; // Changed import
+// SpeedometerWidget import removed
 // ContentBurstSection was removed in a previous step.
 // NeuralDriftTimeline was removed in a previous step.
 // SentientConsole was removed as per user request
@@ -26,8 +26,9 @@ export default function HomePage() {
         <AboutMeSection />
         <SkillsSection />
         <ProjectsSection />
-        <SpeedometerWidget /> {/* Added SpeedometerWidget */}
+        {/* SpeedometerWidget instance removed */}
       </div>
     </>
   );
 }
+
