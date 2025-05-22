@@ -1,10 +1,10 @@
-
 import type { Metadata } from 'next';
 import { Rajdhani, Playfair_Display, Space_Grotesk, Fraunces, Inter } from 'next/font/google';
 import './globals.css';
 import { IntroProvider } from '@/contexts/IntroContext';
 import { UserInteractionProvider } from '@/contexts/UserInteractionContext';
 import AppClientLayout from '@/components/AppClientLayout';
+import { ThemeProvider } from '@/contexts/ThemeContext'; // Import ThemeProvider
 
 const rajdhani = Rajdhani({
   subsets: ['latin'],
@@ -46,13 +46,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${rajdhani.variable} ${playfairDisplay.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${inter.variable} font-sans antialiased bg-background text-foreground`}>
+    <html lang="en" suppressHydrationWarning> {/* Site is now permanently dark themed by default, ThemeProvider handles class */}
+      <body className={`${rajdhani.variable} ${playfairDisplay.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${inter.variable} font-sans antialiased bg-background text-foreground`} suppressHydrationWarning>
+        <ThemeProvider> {/* Wrap with ThemeProvider */}
           <UserInteractionProvider>
             <IntroProvider>
               <AppClientLayout>{children}</AppClientLayout>
             </IntroProvider>
           </UserInteractionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
