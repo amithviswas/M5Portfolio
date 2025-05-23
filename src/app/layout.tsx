@@ -3,7 +3,7 @@ import { Rajdhani, Playfair_Display, Space_Grotesk, Fraunces, Inter } from 'next
 import './globals.css';
 import { IntroProvider } from '@/contexts/IntroContext';
 import { UserInteractionProvider } from '@/contexts/UserInteractionContext';
-import AppClientLayout from '@/components/AppClientLayout'; // Changed from dynamic import
+import AppClientLayout from '@/components/AppClientLayout';
 
 const rajdhani = Rajdhani({
   subsets: ['latin'],
@@ -25,7 +25,7 @@ const spaceGrotesk = Space_Grotesk({
 
 const fraunces = Fraunces({
   subsets: ['latin'],
-  axes: ['opsz', 'wght', 'SOFT', 'WONK'],
+  axes: ['opsz', 'SOFT', 'WONK'], // 'wght' removed from here
   variable: '--font-fraunces',
 });
 
