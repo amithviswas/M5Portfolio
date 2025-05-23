@@ -18,7 +18,7 @@ This is the personal portfolio of Amith Viswas Reddy, an AI/ML Engineer and Data
 
 ## 🖼️ Preview
 
-**Live Demo:** [**View Live Portfolio**](https://your-live-portfolio-url.com) <em>(Replace with your actual deployed URL)</em>
+**Live Demo:** [**View Live Portfolio**](https://avr-portfolio-m5.netlify.app/) <em>(Replace with your actual deployed URL)</em>
 
 <br />
 
