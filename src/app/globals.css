@@ -6,6 +6,7 @@
 @layer base {
   :root {
     /* M5 CSL Dark Palette - Focused on Dark Tech & Precision */
+    /* Base (Dark Mode - Default) */
     --background: 0 0% 2%; /* Jet Black Matte */
     --foreground: 0 0% 98%; /* Ice-White LED-like text */
 
@@ -45,6 +46,12 @@
     --m-light-blue-hsl: 210 100% 65%; 
     --m-red-hsl: 0 100% 50%; 
     
+    /* New M Stripe Colors from Logo */
+    --m-stripe-light-blue: 207 50% 55%;
+    --m-stripe-dark-blue: 225 55% 35%;
+    --m-stripe-red: 0 78% 50%;
+    --m-stripe-grey: 0 0% 82%;
+
     --ease-m-throttle: cubic-bezier(.36,1.08,.33,1);
 
     --empire-gold-hsl: 45 100% 50%; 
@@ -61,16 +68,79 @@
       hsla(210, 100%, 50%, 0.7) 360deg
     );
     
-    /* Skill Flux Pulse Animation Variables - Dark Theme */
+    /* Skill Flux Pulse Animation Variables - Dark Theme (Default) */
     --skill-flux-border-color-start: hsl(var(--uv-blue)/0.6);
     --skill-flux-box-shadow-start: 0 0 10px hsl(var(--uv-blue)/0.4), 0 0 5px hsl(var(--primary)/0.25);
     --skill-flux-border-color-mid: hsl(var(--uv-blue)/0.9);
     --skill-flux-box-shadow-mid: 0 0 25px hsl(var(--uv-blue)/0.8), 0 0 12px hsl(var(--primary)/0.5), inset 0 0 6px hsl(var(--uv-blue)/0.4);
     
-    /* Gantry Light Pulse Shadow - Dark Theme */
+    /* Gantry Light Pulse Shadow - Dark Theme (Default) */
     --gantry-light-pulse-shadow: 0 0 8px 2px hsla(var(--bmw-m-blue), 0.5), 0 0 15px 3px hsla(var(--foreground), 0.3);
+    
+    /* Footer stripes background */
+    --footer-stripes-bg-color: transparent;
   }
 
+  html.light :root {
+    /* Light Theme Overrides */
+    --background: 0 0% 98%; /* Off-white */
+    --foreground: 0 0% 10%; /* Dark Charcoal */
+
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 0 0% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 12%;
+
+    --primary: 0 85% 50%; /* Slightly less intense red for light bg */
+    /* --primary-foreground: 0 0% 98%; White text on red button still good */
+
+    --secondary: 0 0% 95%; /* Light grey secondary */
+    --secondary-foreground: 0 0% 20%;
+
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 210 90% 50%; /* Slightly less intense blue for light bg */
+    /* --accent-foreground: 0 0% 98%; */
+
+    --destructive: 0 70% 50%;
+    /* --destructive-foreground: 0 0% 98%; */
+
+    --border: 0 0% 85%; /* Light grey border */
+    --input: 0 0% 96%;
+    --ring: 210 90% 55%;
+
+    /* M-Specific & Theme Colors for Light Mode */
+    --bmw-m-blue: 210 90% 50%;
+    --blood-red: 0 85% 50%;
+    --m-violet-hsl: 270 90% 65%;
+    --uv-blue: 220 90% 60%; 
+    --gunmetal-silver: 210 15% 55%; /* Lighter gunmetal */
+
+    /* New M Stripe Colors (can be same as dark or adjusted if needed for light) */
+    --m-stripe-light-blue: 207 50% 55%;
+    --m-stripe-dark-blue: 225 55% 35%;
+    --m-stripe-red: 0 78% 50%;
+    --m-stripe-grey: 0 0% 82%;
+
+    --empire-text-shadow: 0 1px 1px rgba(0,0,0,0.1), 0 0 3px rgba(0,0,0,0.05); /* Softer shadow for light mode */
+
+    --nightfall-deep-navy: 225 25% 80%; /* Lighter for light theme */
+    --nightfall-obsidian: 0 0% 96%;
+
+    /* Skill Flux Pulse Animation Variables - Light Theme */
+    --skill-flux-border-color-start: hsl(var(--uv-blue)/0.4);
+    --skill-flux-box-shadow-start: 0 0 6px hsl(var(--uv-blue)/0.2), 0 0 3px hsl(var(--primary)/0.15);
+    --skill-flux-border-color-mid: hsl(var(--uv-blue)/0.7);
+    --skill-flux-box-shadow-mid: 0 0 15px hsl(var(--uv-blue)/0.5), 0 0 8px hsl(var(--primary)/0.25), inset 0 0 4px hsl(var(--uv-blue)/0.2);
+    
+    /* Gantry Light Pulse Shadow - Light Theme */
+    --gantry-light-pulse-shadow: 0 0 8px 2px hsla(var(--bmw-m-blue), 0.3), 0 0 15px 3px hsla(var(--foreground), 0.1);
+
+    /* Footer stripes background for Light Mode */
+    --footer-stripes-bg-color: hsl(0, 0%, 90%);
+  }
 
   html {
     scroll-behavior: smooth;
@@ -79,8 +149,8 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 
-  /* Carbon Fiber Weave for Dark Theme */
-  body::before {
+  /* Carbon Fiber Weave for Dark Theme (Default) */
+  body:not(.light)::before {
     content: '';
     @apply fixed inset-0 -z-10 opacity-[0.03]; 
     background-image: 
@@ -92,11 +162,17 @@
     background-position: 0 0, 1.5px 1.5px, 1.5px 1.5px, 0 0;
     pointer-events: none;
   }
+  html.light body::before { /* Remove carbon weave in light mode */
+    content: '';
+    @apply fixed inset-0 -z-10 opacity-0;
+    background-image: none;
+  }
   
 
   .font-heading {
     font-family: var(--font-rajdhani);
-    @apply font-bold uppercase tracking-[0.02em]; 
+    @apply font-bold uppercase; 
+    letter-spacing: 0.02em; 
   }
   
   .font-monospace-subheader {
@@ -120,15 +196,25 @@
     transition-timing-function: var(--ease-m-throttle);
     transition-duration: 200ms;
   }
-  .card-m-glow {
+  html:not(.light) .card-m-glow {
     box-shadow: 0 10px 25px -10px hsl(var(--background)/0.9),
                 0 0 18px -8px hsla(var(--primary)/0.7), 
                 0 0 15px -8px hsla(var(--accent)/0.6);  
   }
+  html.light .card-m-glow { /* Light theme card glow */
+    box-shadow: 0 10px 25px -10px hsl(var(--background)/0.1),
+                0 0 18px -8px hsla(var(--primary)/0.4), 
+                0 0 15px -8px hsla(var(--accent)/0.3);
+  }
 
   .card-m-glow:hover {
     transform: translateY(-8px) scale(1.03);
+  }
+   html:not(.light) .card-m-glow:hover {
      @apply shadow-[0_18px_40px_-18px_hsl(var(--background)/0.95),_0_0_30px_-8px_hsla(var(--primary)/0.9),_0_0_25px_-8px_hsla(var(--accent)/0.8)]; 
+  }
+  html.light .card-m-glow:hover { /* Light theme card hover glow */
+     @apply shadow-[0_18px_40px_-18px_hsl(var(--background)/0.15),_0_0_30px_-8px_hsla(var(--primary)/0.6),_0_0_25px_-8px_hsla(var(--accent)/0.5)]; 
   }
 
 
@@ -147,10 +233,16 @@
     width: 0%;
     border-radius: var(--radius); 
     transform: translateX(-50%);
-    background: linear-gradient(90deg, hsl(var(--m-light-blue-hsl)) 0%, hsl(var(--m-violet-hsl)) 33%, hsl(var(--m-red-hsl)) 66%, hsl(var(--m-light-blue-hsl)) 100%);
-    background-size: 300% 100%; 
-    animation: navMStripeAnimation 1.2s linear infinite paused; 
-    box-shadow: 0 0 6px hsl(var(--m-light-blue-hsl)/0), 0 0 10px hsl(var(--m-red-hsl)/0);
+    /* New M-Stripe 4-Color Gradient */
+    background-image: linear-gradient(
+      to right, 
+      hsl(var(--m-stripe-light-blue)) 0% 25%,
+      hsl(var(--m-stripe-dark-blue)) 25% 50%,
+      hsl(var(--m-stripe-red)) 50% 75%,
+      hsl(var(--m-stripe-grey)) 75% 100%
+    );
+    background-size: 100% 100%;
+    box-shadow: 0 0 6px hsl(var(--m-stripe-light-blue)/0), 0 0 10px hsl(var(--m-stripe-red)/0); /* Adjusted for new colors if needed */
     transition-property: width, opacity, box-shadow;
     transition-timing-function: var(--ease-m-throttle);
     transition-duration: 200ms;
@@ -162,18 +254,26 @@
 
   .nav-laser-crest:hover::after,
   .nav-laser-crest.active-link::after {
-    width: 100%; 
+    width: 70%; 
     opacity: 1;
-    animation-play-state: running;
   }
-  .nav-laser-crest:hover::after,
-  .nav-laser-crest.active-link::after {
-    box-shadow: 0 0 10px hsl(var(--m-light-blue-hsl)/0.9), 0 0 16px hsl(var(--m-red-hsl)/0.9); /* Brighter glow */
+  html:not(.light) .nav-laser-crest:hover::after,
+  html:not(.light) .nav-laser-crest.active-link::after {
+    box-shadow: 0 0 8px hsl(var(--m-stripe-light-blue)/0.7), 0 0 6px hsl(var(--m-stripe-dark-blue)/0.5), 0 0 8px hsl(var(--m-stripe-red)/0.7), 0 0 4px hsl(var(--m-stripe-grey)/0.3);
+  }
+  html.light .nav-laser-crest:hover::after, /* Light theme underline glow */
+  html.light .nav-laser-crest.active-link::after {
+    box-shadow: 0 0 6px hsl(var(--m-stripe-light-blue)/0.5), 0 0 4px hsl(var(--m-stripe-dark-blue)/0.3), 0 0 6px hsl(var(--m-stripe-red)/0.5), 0 0 3px hsl(var(--m-stripe-grey)/0.2);
   }
   
   .nav-laser-crest.active-link {
     @apply text-primary; 
+  }
+  html:not(.light) .nav-laser-crest.active-link {
     text-shadow: 0 0 8px hsl(var(--primary)/0.7), 0 0 15px hsl(var(--primary)/0.5);
+  }
+  html.light .nav-laser-crest.active-link { /* Light theme active link text shadow */
+    text-shadow: 0 0 6px hsl(var(--primary)/0.5), 0 0 10px hsl(var(--primary)/0.3);
   }
 
 
@@ -182,11 +282,23 @@
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius); 
     background-color: hsl(var(--card)); 
+  }
+  html:not(.light) .carbon-texture-panel {
     background-image: 
       linear-gradient(135deg, hsla(0,0%,0%,.15) 25%, transparent 25%), 
       linear-gradient(225deg, hsla(0,0%,0%,.15) 25%, transparent 25%),
       linear-gradient(45deg, hsla(0,0%,0%,.15) 25%, transparent 25%),
       linear-gradient(315deg, hsla(0,0%,0%,.15) 25%, transparent 25%);
+    background-position: 1.2px 0, 1.2px 0, 0 0, 0 0; 
+    background-size: 2.4px 2.4px; 
+    background-repeat: repeat;
+  }
+  html.light .carbon-texture-panel { /* Lighter carbon texture for light mode */
+    background-image: 
+      linear-gradient(135deg, hsla(0,0%,80%,.1) 25%, transparent 25%), 
+      linear-gradient(225deg, hsla(0,0%,80%,.1) 25%, transparent 25%),
+      linear-gradient(45deg, hsla(0,0%,80%,.1) 25%, transparent 25%),
+      linear-gradient(315deg, hsla(0,0%,80%,.1) 25%, transparent 25%);
     background-position: 1.2px 0, 1.2px 0, 0 0, 0 0; 
     background-size: 2.4px 2.4px; 
     background-repeat: repeat;
@@ -243,12 +355,19 @@
     pointer-events: none; 
     z-index: -1; 
   }
-  .group:hover .MStartStopButton-base-style::before { 
+  html:not(.light) .group:hover .MStartStopButton-base-style::before { 
       opacity: 1;
       box-shadow: 0 0 0 1px hsl(var(--foreground)), /* Thicker white ring */
                   0 0 0 3.5px hsl(var(--primary)), /* Thicker red ring */    
                   0 0 0 5.5px hsla(var(--bmw-m-blue), 0.9), /* Thicker blue ring */
                   0 0 35px 8px hsl(var(--primary)/0.8); /* Wider primary glow */
+  }
+   html.light .group:hover .MStartStopButton-base-style::before { /* Light theme button glow */
+    opacity: 1;
+    box-shadow: 0 0 0 1px hsl(var(--foreground)),
+                0 0 0 2.5px hsl(var(--primary)), 
+                0 0 0 4px hsla(var(--bmw-m-blue), 0.7),
+                0 0 25px 6px hsl(var(--primary)/0.6);
   }
 
 
@@ -259,15 +378,29 @@
     inset: 0;
     z-index: 0; 
     animation: carbonWeaveShift 8s linear infinite; 
+    opacity: 0.35; 
+  }
+  html:not(.light) .carbon-wave-animated::before {
     background-image: 
       linear-gradient(45deg, hsla(var(--card), 0.04) 25%, transparent 25%), 
       linear-gradient(-45deg, hsla(var(--card), 0.04) 25%, transparent 25%);
     background-size: 4px 4px; 
-    opacity: 0.35; 
   }
+  html.light .carbon-wave-animated::before { /* Light theme carbon wave */
+    background-image: 
+      linear-gradient(45deg, hsla(var(--card-foreground), 0.02) 25%, transparent 25%), 
+      linear-gradient(-45deg, hsla(var(--card-foreground), 0.02) 25%, transparent 25%);
+    background-size: 4px 4px; 
+  }
+
   .footer-stripes-container {
-    @apply bg-transparent; /* Dark mode specific */
+    background-color: var(--footer-stripes-bg-color); /* Uses themed variable */
+    @apply p-1 rounded-sm transition-m-throttle;
   }
+  html.light .footer-stripes-container {
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+
 
   .footer-diffuser-fin-dot {
     @apply w-1.5 h-1.5 rounded-sm bg-primary shadow-[0_0_6px_2px_hsl(var(--primary)/0.7)]; 
@@ -276,14 +409,25 @@
 
   /* Section Grille-Blade Frames (M5 CSL) */
   .section-grille-blade {
-    @apply absolute w-[3px] shadow-lg bg-gradient-to-b from-neutral-800/90 via-neutral-700/80 to-neutral-800/90; 
+    @apply absolute w-[3px] shadow-lg; 
   }
-
+  html:not(.light) .section-grille-blade {
+    @apply bg-gradient-to-b from-neutral-800/90 via-neutral-700/80 to-neutral-800/90;
+  }
+  html.light .section-grille-blade { /* Light theme grille blade */
+    @apply bg-gradient-to-b from-neutral-300/90 via-neutral-200/80 to-neutral-300/90;
+  }
   
   /* Crystal HUD Tooltips (M5 CSL) */
   .crystal-hud-tooltip-content {
-    @apply p-0 shadow-xl bg-black/85 backdrop-blur-lg border-gradient-m-blue-red; 
+    @apply p-0 shadow-xl backdrop-blur-lg border-gradient-m-blue-red; 
     clip-path: polygon(0% 10%, 10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%); 
+  }
+  html:not(.light) .crystal-hud-tooltip-content {
+    @apply bg-black/85;
+  }
+  html.light .crystal-hud-tooltip-content { /* Light theme tooltip */
+    @apply bg-white/85;
   }
   .crystal-hud-tooltip-content .tooltip-inner-padding { 
      @apply p-1.5 px-2.5 text-[11px] text-primary-foreground; 
@@ -293,6 +437,12 @@
     border: 1px solid transparent;
     background-clip: padding-box, border-box;
     background-origin: padding-box, border-box;
+  }
+  html:not(.light) .border-gradient-m-blue-red { 
+    background-image: linear-gradient(to right, hsl(var(--card)), hsl(var(--card))), 
+                      linear-gradient(135deg, hsl(var(--bmw-m-blue)), hsl(var(--primary)));
+  }
+  html.light .border-gradient-m-blue-red { /* Light theme gradient border */
     background-image: linear-gradient(to right, hsl(var(--card)), hsl(var(--card))), 
                       linear-gradient(135deg, hsl(var(--bmw-m-blue)), hsl(var(--primary)));
   }
@@ -304,7 +454,14 @@
     top: -25%; left: -45%; width: 190vw; height: 190vh;
     transform-origin: center center;
     animation: headlightSweep 18s infinite alternate ease-in-out; 
+  }
+  html:not(.light) .hero-headlight-sweep-bg { 
     background: radial-gradient(ellipse at center, hsla(var(--accent), 0.4) 0%, transparent 50%); 
+  }
+  html.light .hero-headlight-sweep-bg { /* Light theme headlight sweep */
+    mix-blend-mode: multiply; 
+    opacity: 0.08;
+    background: radial-gradient(ellipse at center, hsla(var(--accent), 0.2) 0%, transparent 50%);
   }
 
   
@@ -312,23 +469,32 @@
   .hero-medallion-empire { 
     @apply relative inline-block p-0.5 rounded-full shadow-2xl transition-m-throttle;
     border: 1px solid hsla(var(--border),0.5);
-    background: radial-gradient(circle, hsl(var(--card)) 40%, hsl(var(--border)) 65%, hsl(var(--background)) 80%, hsl(var(--border)) 100%); 
     transition-property: transform, box-shadow;
   }
-
-   .hero-medallion-empire:hover {
-     transform: scale(1.03) translateY(-3px); /* Reduced hover scale */
-     box-shadow: 0 0 35px 0px hsla(var(--uv-blue), .45), /* More intense UV blue glow */
-                 0 0 20px 0px hsla(var(--primary), .3); /* More intense primary glow */
+  html:not(.light) .hero-medallion-empire {
+    background: radial-gradient(circle, hsl(var(--card)) 40%, hsl(var(--border)) 65%, hsl(var(--background)) 80%, hsl(var(--border)) 100%); 
+  }
+  html.light .hero-medallion-empire { /* Light theme medallion background */
+    background: radial-gradient(circle, hsl(var(--card)) 40%, hsl(var(--border)) 65%, hsl(var(--background)) 80%, hsl(var(--border)) 100%);
   }
 
-  .hero-medallion-empire::before { 
+  .hero-medallion-empire:hover {
+    transform: translateY(-5px) scale(1.03); 
+  }
+  html:not(.light) .hero-medallion-empire:hover {
+    box-shadow: 0 0 25px 0px hsla(var(--uv-blue), .35), 0 0 15px 0px hsla(var(--primary), .25);
+  }
+  html.light .hero-medallion-empire:hover { /* Light theme medallion hover shadow */
+    box-shadow: 0 0 20px 0px hsla(var(--uv-blue), .25), 0 0 12px 0px hsla(var(--primary), .15);
+  }
+
+   .hero-medallion-empire::before { 
     content: '';
-    @apply absolute inset-[-3px] rounded-full opacity-80 transition-opacity duration-300 ease-m-throttle pointer-events-none -z-[1];
-    background: var(--medallion-nightfall-gradient); /* Uses themed conic gradient */
+    @apply absolute inset-[-2px] rounded-full opacity-70 transition-opacity duration-300 ease-m-throttle pointer-events-none -z-[1];
+    background: var(--medallion-nightfall-gradient); /* Uses themed variable */
     background-size: 200% 200%; 
-    animation: empireMedallionPulse 2.5s linear infinite, nightfallMedallionSpin 8s linear infinite; 
-    filter: blur(4px);
+    animation: empireMedallionPulse 3s linear infinite, nightfallMedallionSpin 10s linear infinite; 
+    filter: blur(3px);
   }
 
   .hero-medallion-empire .spec-highlight-arc { 
@@ -338,14 +504,18 @@
 
   .hero-medallion-empire:hover::before {
     animation-play-state: running, running; 
-    filter: brightness(1.3) blur(3px);
+    filter: brightness(1.2) blur(2.5px);
   }
   /* End Hero Medallion */
 
   .hero-headline-empire { 
     font-family: var(--font-playfair-display); 
-    text-shadow: var(--empire-text-shadow);
     @apply text-[#E5E5E5]; 
+    text-shadow: var(--empire-text-shadow);
+  }
+  html.light .hero-headline-empire { /* Light theme hero headline */
+    @apply text-neutral-800;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.6), 0 0 3px rgba(255,255,255,0.2);
   }
 
   .hero-tagline-empire { 
@@ -367,13 +537,21 @@
   .hero-empire-bg { 
     @apply relative overflow-hidden; 
     background-size: cover, 3px 3px, 3px 3px, cover; 
+  }
+  html:not(.light) .hero-empire-bg {
     background-image: 
-      radial-gradient(ellipse at 50% 15%, hsla(210, 100%, 45%, 0.12) 0%, transparent 50%), /* empire-i-blue-fog-start-hsl */
+      radial-gradient(ellipse at 50% 15%, hsla(210, 100%, 45%, 0.12) 0%, transparent 50%), 
       linear-gradient(45deg, hsla(var(--card), 0.015) 25%, transparent 25%), 
       linear-gradient(-45deg, hsla(var(--card), 0.015) 25%, transparent 25%),
       radial-gradient(circle at 30% 30%, hsl(var(--nightfall-deep-navy)) 0%, hsl(var(--nightfall-obsidian)) 60%); 
   }
-
+  html.light .hero-empire-bg { /* Light theme hero background */
+    background-image: 
+      radial-gradient(ellipse at 50% 15%, hsla(210, 100%, 75%, 0.15) 0%, transparent 50%), 
+      linear-gradient(45deg, hsla(var(--border), 0.02) 25%, transparent 25%), 
+      linear-gradient(-45deg, hsla(var(--border), 0.02) 25%, transparent 25%),
+      radial-gradient(circle at 30% 30%, hsl(var(--nightfall-deep-navy)) 0%, hsl(var(--background)) 60%);
+  }
   
   /* Halo glows & Gantry lights (Empire / Nightfall - M5 CSL) */
   .halo-glow { 
@@ -385,8 +563,14 @@
     @apply absolute -z-[6];
     width: 450px; height: 450px; top: 45%; left: 55%;
     animation: bloomGlide 22s infinite alternate ease-in-out 1.8s;
+  }
+  html:not(.light) .hero-bloom-extra {
     background: radial-gradient(circle, hsla(var(--m-violet-hsl), 0.06) 0%, transparent 55%); 
   }
+  html.light .hero-bloom-extra { /* Light theme bloom */
+    background: radial-gradient(circle, hsla(var(--m-violet-hsl), 0.03) 0%, transparent 55%); 
+  }
+
 
   .hero-empire-tachometer { 
     @apply fixed bottom-3 right-3 w-16 h-8 rounded-sm p-0.5 overflow-hidden; 
@@ -394,9 +578,17 @@
     border: 0.5px solid hsla(var(--border), 0.5);
     border-radius: var(--radius); 
     clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%); 
+    box-shadow: inset 0 0.5px 1px hsl(var(--foreground)/0.08); 
+  }
+  html:not(.light) .hero-empire-tachometer {
     background: linear-gradient(135deg, hsla(var(--card), 0.8), hsla(var(--background), 0.8));
     box-shadow: 0 0 10px hsl(var(--accent)/0.2), inset 0 0.5px 1px hsl(var(--foreground)/0.08); 
   }
+  html.light .hero-empire-tachometer { /* Light theme tachometer */
+    background: linear-gradient(135deg, hsla(var(--card), 0.7), hsla(var(--background), 0.7));
+    box-shadow: 0 0 8px hsl(var(--accent)/0.15), inset 0 0.5px 1px hsl(var(--foreground)/0.05); 
+  }
+
 
   .hero-empire-tachometer-bar {
     @apply h-full rounded-sm ease-linear; 
@@ -419,7 +611,7 @@
     @apply absolute left-0 w-full h-[2px] opacity-0;
     animation: gantryLightPulse 1.5s ease-in-out; 
     background: linear-gradient(90deg, transparent, hsla(var(--gunmetal-silver),0.6) 30%, hsla(var(--foreground),0.8) 50%, hsla(var(--gunmetal-silver),0.6) 70%, transparent);
-    box-shadow: var(--gantry-light-pulse-shadow);
+    box-shadow: var(--gantry-light-pulse-shadow); /* Themed variable */
   }
 
 
@@ -436,7 +628,12 @@
     @apply absolute top-0 w-[1.5px] h-[160%] pointer-events-none opacity-0 -z-[3];
     filter: blur(1px);
     animation: verticalFlareSweep 12s infinite ease-in-out; 
+  }
+  html:not(.light) .vertical-lens-flare {
     background: linear-gradient(to bottom, transparent, hsla(var(--uv-blue),0.3) 35%, hsla(var(--uv-blue),0.5) 50%, hsla(var(--uv-blue),0.3) 65%, transparent);
+  }
+  html.light .vertical-lens-flare { /* Light theme lens flare */
+    background: linear-gradient(to bottom, transparent, hsla(var(--uv-blue),0.15) 35%, hsla(var(--uv-blue),0.25) 50%, hsla(var(--uv-blue),0.15) 65%, transparent);
   }
   /* End Nano Particle Shimmer & Lens Flares */
   
@@ -450,7 +647,12 @@
     transition-duration: 250ms;
     transform: scale(1.12); 
     filter: blur(6px);
+  }
+  html:not(.light) .skill-card-trail {
     background: radial-gradient(circle at center, hsla(var(--primary), 0.12) 0%, transparent 65%); 
+  }
+  html.light .skill-card-trail { /* Light theme skill trail */
+    background: radial-gradient(circle at center, hsla(var(--primary), 0.08) 0%, transparent 65%); 
   }
 
   .skill-card-trail-container:hover .skill-card-trail { 
@@ -466,7 +668,12 @@
   .skill-overclocked { 
     animation: skillFluxPulse 0.5s infinite ease-in-out, skillJitter 0.08s infinite alternate ease-in-out;
     border-color: hsla(var(--uv-blue),0.85) !important; 
+  }
+  html:not(.light) .skill-overclocked {
     box-shadow: 0 0 15px hsl(var(--uv-blue)/0.6), 0 0 8px hsl(var(--primary)/0.35); 
+  }
+  html.light .skill-overclocked { /* Light theme skill overclocked */
+    box-shadow: 0 0 12px hsl(var(--uv-blue)/0.4), 0 0 6px hsl(var(--primary)/0.25); 
   }
 
   .animate-skill-jitter { 
@@ -479,9 +686,17 @@
     @apply fixed top-2.5 left-2.5 h-7 w-44 backdrop-blur-lg rounded-sm overflow-hidden shadow-xl border; 
     clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%); /* Apex Meter Shape */
     border-radius: var(--radius); 
+    box-shadow: inset 0 0.5px 1px hsl(var(--foreground)/0.05), 0 0 4px hsl(var(--background)/0.25) inset; 
+  }
+  html:not(.light) .m-chrono-scroll-gauge-container {
     @apply bg-neutral-900/80 border-neutral-700/60; 
     box-shadow: 0 0 12px 1.5px hsl(var(--uv-blue)/0.35), inset 0 0.5px 1px hsl(var(--foreground)/0.05), 0 0 4px hsl(var(--background)/0.25) inset; 
   }
+  html.light .m-chrono-scroll-gauge-container { /* Light theme scroll gauge */
+    @apply bg-neutral-100/80 border-neutral-300/60;
+    box-shadow: 0 0 10px 1px hsl(var(--uv-blue)/0.25), inset 0 0.5px 1px hsl(var(--foreground)/0.03), 0 0 3px hsl(var(--background)/0.15) inset;
+  }
+
 
   .m-rpm-gauge-fill { 
     @apply h-full;
@@ -523,42 +738,78 @@
 
   /* === NEUROLINK TERMINAL STYLES (XENOFRAME adapted for M5 CSL Precision) === */
   .neurolink-terminal-overlay {
-    @apply fixed inset-0 backdrop-blur-lg z-[200] flex items-center justify-center p-2.5 bg-black/95; 
+    @apply fixed inset-0 backdrop-blur-lg z-[200] flex items-center justify-center p-2.5; 
     animation: fadeIn 0.2s ease-out;
+  }
+  html:not(.light) .neurolink-terminal-overlay {
+    @apply bg-black/95;
+  }
+  html.light .neurolink-terminal-overlay { /* Light theme terminal overlay */
+    @apply bg-white/90; 
   }
 
   .neurolink-terminal {
-    @apply border border-primary/45 rounded-md shadow-2xl w-full max-w-xl h-[65vh] flex flex-col overflow-hidden bg-neutral-900/95; 
+    @apply border rounded-md shadow-2xl w-full max-w-xl h-[65vh] flex flex-col overflow-hidden; 
     animation: slideInFromBottom 0.3s ease-out;
     border-radius: var(--radius); 
+  }
+  html:not(.light) .neurolink-terminal {
+    @apply border-primary/45 bg-neutral-900/95;
     box-shadow: 0 0 25px hsl(var(--primary)/0.4);
+  }
+  html.light .neurolink-terminal { /* Light theme terminal */
+    @apply border-primary/30 bg-neutral-50/95; 
+    box-shadow: 0 0 20px hsl(var(--primary)/0.3);
   }
 
   .neurolink-terminal-header {
-    @apply p-1.5 border-b border-primary/45 text-xs text-primary font-monospace-subheader flex justify-between items-center bg-neutral-800/90; 
+    @apply p-1.5 border-b text-xs text-primary font-monospace-subheader flex justify-between items-center; 
+  }
+  html:not(.light) .neurolink-terminal-header {
+    @apply border-primary/45 bg-neutral-800/90; 
+  }
+  html.light .neurolink-terminal-header { /* Light theme terminal header */
+    @apply border-primary/30 bg-neutral-100/90;
   }
 
   .neurolink-terminal-output {
     @apply flex-grow p-2 overflow-y-auto font-mono text-xs; 
     scrollbar-width: thin;
+  }
+  html:not(.light) .neurolink-terminal-output {
+    scrollbar-color: hsl(var(--primary)) hsl(var(--background)); 
+  }
+  html.light .neurolink-terminal-output { /* Light theme terminal scrollbar */
     scrollbar-color: hsl(var(--primary)) hsl(var(--background)); 
   }
 
   .neurolink-terminal-output div { @apply mb-1 whitespace-pre-wrap break-words; } 
   .neurolink-terminal-output .input-line::before { content: 'M_DRIVE:> '; @apply text-accent; } 
 
-  .neurolink-terminal-output .output-line { @apply text-green-300; } 
-  .neurolink-terminal-output .error-line { @apply text-red-300; } 
-  .neurolink-terminal-output .info-line { @apply text-sky-300; } 
+  .neurolink-terminal-output .output-line { @apply text-green-400; } 
+  .neurolink-terminal-output .error-line { @apply text-red-400; } 
+  .neurolink-terminal-output .info-line { @apply text-sky-400; } 
 
   .neurolink-terminal-input-area {
-    @apply p-1.5 border-t border-primary/45 flex items-center bg-neutral-800/90; 
+    @apply p-1.5 border-t flex items-center; 
+  }
+  html:not(.light) .neurolink-terminal-input-area {
+    @apply border-primary/45 bg-neutral-800/90; 
+  }
+  html.light .neurolink-terminal-input-area { /* Light theme terminal input area */
+    @apply border-primary/30 bg-neutral-100/90;
   }
 
   .neurolink-terminal-prompt { @apply text-accent font-mono text-xs mr-1.5; } 
   .neurolink-terminal-input {
     @apply flex-grow bg-transparent border-none outline-none font-mono text-xs p-1 text-primary-foreground; 
+  }
+  html:not(.light) .neurolink-terminal-input {
     text-shadow: 0 0 4px hsl(var(--primary)/0.4); 
+  }
+  html.light .neurolink-terminal-input { /* Light theme terminal input text */
+    @apply text-neutral-800; 
+    text-shadow: 0 0 3px hsl(var(--primary)/0.2); 
   }
 
 
@@ -640,12 +891,12 @@
   /* Skill Flux Animations - Overclocked Engine (M5 CSL) */
    @keyframes skillFluxPulse {
     0%, 100% {
-      border-color: var(--skill-flux-border-color-start);
-      box-shadow: var(--skill-flux-box-shadow-start);
+      border-color: var(--skill-flux-border-color-start); /* Themed variable */
+      box-shadow: var(--skill-flux-box-shadow-start); /* Themed variable */
     }
     50% {
-      border-color: var(--skill-flux-border-color-mid);
-      box-shadow: var(--skill-flux-box-shadow-mid);
+      border-color: var(--skill-flux-border-color-mid); /* Themed variable */
+      box-shadow: var(--skill-flux-box-shadow-mid); /* Themed variable */
     }
   }
 
@@ -735,11 +986,18 @@
   }
   .nav-laser-crest::after { 
     animation: none !important;
-    width: 75% !important; 
+    width: 70% !important; /* Keep tricolor visible */
     opacity: 0.95 !important;
-    background: linear-gradient(90deg, hsl(var(--m-light-blue-hsl)) 0%, hsl(var(--m-violet-hsl)) 50%, hsl(var(--m-red-hsl)) 100%);
+    background-image: linear-gradient(
+      to right, 
+      hsl(var(--m-stripe-light-blue)) 0% 25%,
+      hsl(var(--m-stripe-dark-blue)) 25% 50%,
+      hsl(var(--m-stripe-red)) 50% 75%,
+      hsl(var(--m-stripe-grey)) 75% 100%
+    );
     background-size: 100% 100%;
     background-position: center;
+    box-shadow: 0 0 4px hsl(var(--m-stripe-red)/0.4), 0 0 2px hsl(var(--m-stripe-grey)/0.3), 0 0 4px hsl(var(--m-stripe-dark-blue)/0.4);
   }
   .nav-laser-crest:hover:not(.active-link) {
     animation: none;
@@ -762,8 +1020,10 @@
   .neurolink-terminal-overlay { animation: none; } 
   .neurolink-terminal { animation: none; }
   .MStartStopButton-base-style::before { animation: none !important; }
-  /* .light .group:hover .MStartStopButton-base-style::before { animation: none !important; box-shadow: 0 0 0 0.5px hsl(var(--foreground)), 0 0 0 2.5px hsl(var(--primary)), 0 0 0 4px hsla(var(--bmw-m-blue),0.8), 0 0 15px 5px hsl(var(--primary)/0.6); } */
-  .group:hover .MStartStopButton-base-style::before { animation: none !important; box-shadow: 0 0 0 1px hsl(var(--foreground)), 0 0 0 3.5px hsl(var(--primary)), 0 0 0 5.5px hsla(var(--bmw-m-blue),0.9), 0 0 25px 8px hsl(var(--primary)/0.7); }
+
+  html:not(.light) .group:hover .MStartStopButton-base-style::before { animation: none !important; box-shadow: 0 0 0 1px hsl(var(--foreground)), 0 0 0 3.5px hsl(var(--primary)), 0 0 0 5.5px hsla(var(--bmw-m-blue),0.9), 0 0 25px 8px hsl(var(--primary)/0.7); }
+  html.light .group:hover .MStartStopButton-base-style::before { animation: none !important; box-shadow: 0 0 0 1px hsl(var(--foreground)), 0 0 0 2.5px hsl(var(--primary)), 0 0 0 4px hsla(var(--bmw-m-blue),0.8), 0 0 15px 5px hsl(var(--primary)/0.6); }
+  
   .click-ripple-effect.rippling::after { animation: none; display: none; }
   .nano-particle { animation: none; opacity: 0.12; }
   .vertical-lens-flare { animation: none; opacity: 0.18; }
@@ -771,8 +1031,5 @@
   
 }
 
-    
-    
 
     
-
