@@ -27,10 +27,6 @@ This is the personal portfolio of Amith Viswas Reddy, an AI/ML Engineer and Data
 <!-- ![Portfolio Screenshot 1](https://example.com/path/to/screenshot1.png) -->
 <!-- ![Portfolio GIF](https://example.com/path/to/portfolio.gif) -->
 
-<p align="center">
-  <em>(Placeholder for a GIF or key screenshots showcasing the portfolio's look and feel)</em>
-</p>
-
 ## 🛠️ Tech Stack
 
 *   **Framework**: [Next.js](https://nextjs.org/) (App Router)
