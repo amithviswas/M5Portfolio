@@ -9,7 +9,7 @@ import { Power } from 'lucide-react'; // Changed to Power for Start/Stop button
 import { MStartStopButton } from '@/components/MStartStopButton'; // Import the new button
 
 const resumeImageUrl = "https://i.ibb.co/4RPKfS13/Screenshot-2025-05-23-111732.png";
-const resumeDownloadUrl = "https://pdfhost.io/edit?doc=e802a2f3-191a-4724-959a-9289cb91d5bb";
+const resumeDownloadUrl = "https://pdfhost.io/v/5kTt68QUQd_GENmainAI";
 
 export default function ResumePage() {
   return (
@@ -66,3 +66,4 @@ export default function ResumePage() {
     </Section>
   );
 }
+
