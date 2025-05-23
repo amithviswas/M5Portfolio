@@ -5,11 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Section from '@/components/Section';
-import { DownloadCloud, Power } from 'lucide-react'; // Changed to Power for Start/Stop button
+import { Power } from 'lucide-react'; // Changed to Power for Start/Stop button
 import { MStartStopButton } from '@/components/MStartStopButton'; // Import the new button
 
-const resumeImageUrl = "https://i.ibb.co/3Yv1RD0B/Screenshot-2025-04-21-224721.png";
-const resumeDownloadUrl = "https://pdfhost.io/v/QegTWTDJ58_General_CV_Template";
+const resumeImageUrl = "https://i.ibb.co/4RPKfS13/Screenshot-2025-05-23-111732.png";
+const resumeDownloadUrl = "https://pdfhost.io/edit?doc=e802a2f3-191a-4724-959a-9289cb91d5bb";
 
 export default function ResumePage() {
   return (
