@@ -1,3 +1,4 @@
+
 # Amith Viswas Reddy - BMW M5 Inspired Portfolio
 
 This is the personal portfolio of Amith Viswas Reddy, an AI/ML Engineer and Data Scientist. The portfolio is designed with a high-performance, aggressive elegance inspired by the BMW M5 Competition, showcasing projects, skills, and achievements.
@@ -14,6 +15,21 @@ This is the personal portfolio of Amith Viswas Reddy, an AI/ML Engineer and Data
     *   Interactive project modals and achievement timelines.
     *   "NeuroLink Terminal" easter egg (Ctrl+X or Cmd+X).
 *   **Content Sections**: Hero, About Me, Skills ("Engine Modes"), Projects ("Track History"), Certifications ("Racing Credentials"), Achievements ("Lap Records"), Resume ("Spec Sheet"), and a dedicated Contact page ("M Pit-Lane Command Center").
+
+## 🖼️ Preview
+
+**Live Demo:** [**View Live Portfolio**](https://your-live-portfolio-url.com) <em>(Replace with your actual deployed URL)</em>
+
+<br />
+
+<!-- Add a GIF or a few screenshots here -->
+<!-- Example: -->
+<!-- ![Portfolio Screenshot 1](https://example.com/path/to/screenshot1.png) -->
+<!-- ![Portfolio GIF](https://example.com/path/to/portfolio.gif) -->
+
+<p align="center">
+  <em>(Placeholder for a GIF or key screenshots showcasing the portfolio's look and feel)</em>
+</p>
 
 ## 🛠️ Tech Stack
 
