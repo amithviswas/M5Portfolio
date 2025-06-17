@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -30,10 +31,10 @@ export default function Navbar() {
   const sectionRefs = useRef<Map<string, HTMLElement | null>>(new Map());
   const navLinkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const { incrementSectionVisit } = useUserInteraction();
+  const [currentSectionIdToTrack, setCurrentSectionIdToTrack] = useState<string | undefined>();
 
   useEffect(() => {
     setIsMounted(true);
-    // Initialize section refs for observer
     navLinks.forEach(link => {
       if (link.href.startsWith('/#')) {
         const element = document.getElementById(link.id);
@@ -44,28 +45,46 @@ export default function Navbar() {
     });
   }, []);
 
-  const setActiveLinkAndTrack = useCallback((href: string, sectionId?: string) => {
-    if (activeLink !== href) {
-      setActiveLink(href);
-      if (sectionId && pathname === '/' && isMounted) {
-         incrementSectionVisit(sectionId);
+  const setActiveLinkAndTrack = useCallback((newHref: string, sectionId?: string) => {
+    setActiveLink(currentActiveLink => {
+      if (currentActiveLink !== newHref) {
+        return newHref;
       }
-    }
-  }, [activeLink, pathname, isMounted, incrementSectionVisit]);
+      return currentActiveLink;
+    });
 
-  // Effect for setting initial active link and managing IntersectionObserver
+    if (sectionId && pathname === '/' && isMounted) {
+      setCurrentSectionIdToTrack(currentTrackedId => {
+        // Only update if different to trigger the effect for incrementing visit
+        if (currentTrackedId !== sectionId) {
+          return sectionId;
+        }
+        return currentTrackedId;
+      });
+    } else if (pathname !== '/') { // If not on homepage, clear section tracking state
+        setCurrentSectionIdToTrack(undefined);
+    }
+  }, [pathname, isMounted, setActiveLink, setCurrentSectionIdToTrack]);
+
+  // Effect to call incrementSectionVisit when currentSectionIdToTrack changes
+  useEffect(() => {
+    if (currentSectionIdToTrack && isMounted && pathname === '/') {
+      incrementSectionVisit(currentSectionIdToTrack);
+    }
+  }, [currentSectionIdToTrack, isMounted, pathname, incrementSectionVisit]);
+
+
   useEffect(() => {
     if (!isMounted) return;
 
     const handleScrollOrLoad = () => {
       if (pathname !== '/') {
-        setActiveLinkAndTrack(pathname);
+        setActiveLinkAndTrack(pathname); 
         observerRef.current?.disconnect();
         return;
       }
 
-      // Setup observer if on homepage
-      if (!observerRef.current) {
+      if (!observerRef.current && sectionRefs.current.size > 0) {
         observerRef.current = new IntersectionObserver(
           (entries) => {
             let bestMatch: IntersectionObserverEntry | null = null;
@@ -77,7 +96,7 @@ export default function Navbar() {
               }
             });
 
-            if (window.scrollY < 100) {
+            if (window.scrollY < 100) { 
               setActiveLinkAndTrack('/#home', 'home');
             } else if (bestMatch) {
               const activeNav = navLinks.find(link => link.id === bestMatch!.target.id);
@@ -86,14 +105,13 @@ export default function Navbar() {
               }
             }
           },
-          { rootMargin: "-30% 0px -50% 0px", threshold: 0.01 } 
+          { rootMargin: "-25% 0px -25% 0px", threshold: 0.01 } 
         );
         sectionRefs.current.forEach(sectionEl => {
           if (sectionEl) observerRef.current?.observe(sectionEl);
         });
       }
       
-      // Initial check or hash change
       const currentHash = window.location.hash;
       if (currentHash) {
         const matchedLink = navLinks.find(link => link.href === `/${currentHash}`);
@@ -103,12 +121,12 @@ export default function Navbar() {
       }
     };
 
-    handleScrollOrLoad(); // Call on mount/pathname change
-    window.addEventListener('hashchange', handleScrollOrLoad); // Listen for hash changes
+    handleScrollOrLoad();
+    window.addEventListener('hashchange', handleScrollOrLoad);
 
     return () => {
       observerRef.current?.disconnect();
-      observerRef.current = null; // Clear the ref on cleanup
+      observerRef.current = null;
       window.removeEventListener('hashchange', handleScrollOrLoad);
     };
   }, [isMounted, pathname, setActiveLinkAndTrack]);
@@ -141,7 +159,7 @@ export default function Navbar() {
 
     if (href.startsWith('/#') && pathname === '/') {
       e.preventDefault();
-      const targetId = sectionId || href.substring(2); // Ensure correct ID extraction
+      const targetId = sectionId || href.substring(2); 
       if (window.location.hash !== `#${targetId}`) {
          history.pushState(null, '', `#${targetId}`);
       }
@@ -149,9 +167,6 @@ export default function Navbar() {
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-    } else if (href.startsWith('/#') && pathname !== '/') {
-      // If on a different page and clicking a hash link, just navigate
-      // Next.js Link component will handle navigation to '/' and the hash will trigger scroll by browser
     }
   };
   
@@ -174,7 +189,7 @@ export default function Navbar() {
 
           <div className="hidden md:flex space-x-1">
             {navLinks.map((link, index) => {
-              const isActive = activeLink === link.href || (pathname === '/' && activeLink === '' && link.href === '/#home' && window.location.hash === '');
+              const isActive = activeLink === link.href || (pathname === '/' && activeLink === '' && link.href === '/#home' && (!window.location.hash || window.location.hash === '#home'));
               return (
                 <Link
                   key={link.name}
@@ -220,7 +235,7 @@ export default function Navbar() {
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               {navLinks.map((link) => {
-                const isActive = activeLink === link.href || (pathname === '/' && activeLink === '' && link.href === '/#home' && window.location.hash === '');
+                const isActive = activeLink === link.href || (pathname === '/' && activeLink === '' && link.href === '/#home' && (!window.location.hash || window.location.hash === '#home'));
                 return (
                   <Link
                     key={link.name}
@@ -243,3 +258,4 @@ export default function Navbar() {
     </nav>
   );
 }
+
