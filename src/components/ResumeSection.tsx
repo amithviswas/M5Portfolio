@@ -8,8 +8,8 @@ import Section from '@/components/Section';
 import { Power } from 'lucide-react';
 import { MStartStopButton } from '@/components/MStartStopButton';
 
-const resumeImageUrl = "https://i.ibb.co/4RPKfS13/Screenshot-2025-05-23-111732.png";
-const resumeDownloadUrl = "https://pdfhost.io/v/5kTt68QUQd_GENmainAI";
+const resumeImageUrl = "https://i.ibb.co/kg7LrMfW/SPECmain-page-0001.jpg";
+const resumeDownloadUrl = "https://drive.google.com/file/d/1KGfnTG-dXnwmolefmNbpA7a5DrxeI0Le/view?usp=drive_link";
 
 export default function ResumeSection() {
   return (
