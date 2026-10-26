@@ -15,7 +15,7 @@ export default function Footer() {
           &copy; {new Date().getFullYear()} Amith Viswas Reddy. All rights reserved.
         </p>
         <p className="text-xs text-muted-foreground/70 mt-2">
-          Inspired by BMW M Performance. Designed with passion.
+          Designed and built by Amith Viswas Reddy.
         </p>
         <div className="mt-4 flex justify-center space-x-2">
           <div className="w-8 h-1 bg-primary rounded-full"></div>

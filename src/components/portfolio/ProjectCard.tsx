@@ -112,7 +112,7 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
             size="sm" // Smaller button
             className="w-full sm:w-auto hover:bg-accent hover:text-accent-foreground hover:border-accent transition-m-throttle click-ripple-effect neon-edge-accent"
           >
-            <Eye className="mr-1.5 h-3.5 w-3.5" /> View Specs {/* Smaller Icon */}
+            <Eye className="mr-1.5 h-3.5 w-3.5" /> Details
           </Button>
           {project.projectUrl && project.projectUrl !== '#' && (
             <Button 
@@ -121,7 +121,18 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
               className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-primary-foreground transition-m-throttle click-ripple-effect neon-edge-primary"
             >
               <Link href={project.projectUrl} target="_blank" rel="noopener noreferrer" onClick={handleClickEffect}>
-                <Zap className="mr-1.5 h-3.5 w-3.5 group-hover:animate-ping" /> LAUNCH {/* Smaller Icon */}
+                <Zap className="mr-1.5 h-3.5 w-3.5 group-hover:animate-ping" /> Live demo
+              </Link>
+            </Button>
+          )}
+          {(!project.projectUrl || project.projectUrl === '#') && project.repoUrl && (
+            <Button 
+              asChild 
+              size="sm"
+              className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-primary-foreground transition-m-throttle click-ripple-effect neon-edge-primary"
+            >
+              <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer" onClick={handleClickEffect}>
+                <Github className="mr-1.5 h-3.5 w-3.5" /> GitHub
               </Link>
             </Button>
           )}

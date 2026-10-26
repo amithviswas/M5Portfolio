@@ -1,77 +1,16 @@
-
 import type { Project } from './types';
 
 export const projectsData: Project[] = [
-  {
-    id: 'project-1',
-    title: 'CareerCompass: AI-Powered Career Mentor',
-    description: 'An AI-driven web app for resume analysis, ATS resume building, cover letter generation, and mock interviews.',
-    longDescription: 'This project demonstrates a sophisticated, AI-driven web application designed to assist users with career development. It features AI-powered resume analysis, ATS resume building, cover letter generation, and an interactive mock interview simulator with real-time feedback. The focus was on integrating cutting-edge AI capabilities with a professional, responsive user interface to provide actionable insights and tools for job seekers. The system leverages Genkit with Google AI models for its core intelligence, built on a modern Next.js and TypeScript stack.',
-    imageUrl: 'https://i.ibb.co/JWt10kzX/6555d160-0091-4b3b-841b-b85e201088c0.png',
-    tags: ["Next.js", "React", "TypeScript", "Genkit", "ShadCN UI", "Tailwind CSS", "Firebase", "Full-Stack", "AI Integration"],
-    projectUrl: 'https://carrercompassavr.netlify.app/',
-    repoUrl: 'https://github.com/amithviswas/career-compass',
-    technologies: ["Next.js (App Router)", "React", "TypeScript", "Genkit (Google AI)", "ShadCN UI", "Tailwind CSS", "Firebase"],
-    dataAiHint: 'AI career mentor',
-  },
-  {
-    id: 'project-2',
-    title: 'Home Theater Experience',
-    description: 'A web application simulating a home theater selection and viewing experience.',
-    longDescription: 'A web application simulating a home theater selection and viewing experience. Users can explore different setups and features, aiming to provide an immersive preview of home cinema possibilities. Built with foundational web technologies, this project showcases interactive UI elements and dynamic content presentation to help users visualize their ideal home entertainment system.',
-    imageUrl: 'https://i.ibb.co/G52Sq68/Screenshot-of-Home-Theater.png',
-    tags: ['HTML', 'CSS', 'JavaScript', 'UI/UX'],
-    projectUrl: 'https://amithviswas.github.io/Home-Theater-Experience/',
-    repoUrl: 'https://github.com/amithviswas/Home-Theater-Experience', // Added example repo link
-    technologies: ['HTML', 'CSS', 'JavaScript'],
-    dataAiHint: 'web application',
-  },
-  {
-    id: 'project-3',
-    title: 'Reverse-engineered Twitch.tv UI',
-    description: 'A recreation of the Twitch.tv user interface focusing on front-end details.',
-    longDescription: 'A front-end project aimed at meticulously recreating the Twitch.tv user interface. This exercise focused on attention to detail in UI/UX, implementing complex layouts and styling using HTML and CSS to mirror the popular streaming platform\'s design. It involved analyzing existing UI patterns and replicating them with vanilla web technologies.',
-    imageUrl: 'https://i.ibb.co/kqk32SP/Screenshot-of-Twitch-tv.png',
-    tags: ['UI/UX', 'HTML', 'CSS', 'Reverse Engineering'],
-    projectUrl: 'https://amithviswas.github.io/Twitch.tv-UI-Reversed-Engineered-/',
-    repoUrl: 'https://github.com/amithviswas/Twitch.tv-UI-Reversed-Engineered-', // Added example repo link
-    technologies: ['HTML', 'CSS'],
-    dataAiHint: 'website interface',
-  },
-  {
-    id: 'project-4',
-    title: 'Music Player with Slider',
-    description: 'A functional music player interface with playback controls and a progress slider.',
-    longDescription: 'A web-based music player featuring standard playback controls (play, pause, skip) and a dynamic progress slider. This project highlights JavaScript for interactivity and DOM manipulation, along with HTML and CSS for structuring and styling the user interface, providing a simple yet functional audio playback experience.',
-    imageUrl: 'https://i.ibb.co/tp12Hq5/Screenshot-2024-07-09-153458.png',
-    tags: ['JavaScript', 'HTML', 'CSS', 'UI Component'],
-    projectUrl: 'https://amithviswas.github.io/Music-Player-with-Slider/',
-    repoUrl: 'https://github.com/amithviswas/Music-Player-with-Slider', // Added example repo link
-    technologies: ['JavaScript', 'HTML', 'CSS'],
-    dataAiHint: 'web application',
-  },
-  {
-    id: 'project-5',
-    title: 'Dark Run Game',
-    description: 'An engaging scroll-based game named Dark Run, built with web technologies.',
-    longDescription: 'Dark Run is an engaging scroll-based game developed using web technologies. It showcases game logic implementation with JavaScript and rendering using HTML5 features, possibly Canvas, to create an interactive and entertaining player experience. The game involves navigating obstacles in a "dark" themed environment.',
-    imageUrl: 'https://i.ibb.co/cNNvz48/Screenshot-2024-07-09-154834.png',
-    tags: ['JavaScript', 'HTML5 Game', 'Canvas'],
-    projectUrl: 'https://amithviswas.github.io/Scroll-Game-Dark-Run/',
-    repoUrl: 'https://github.com/amithviswas/Scroll-Game-Dark-Run', // Added example repo link
-    technologies: ['JavaScript', 'HTML', 'CSS', 'Canvas API (potentially)'],
-    dataAiHint: 'game interface',
-  },
-  {
-    id: 'project-6',
-    title: 'Old Car Game',
-    description: 'A retro-style car game developed using web technologies.',
-    longDescription: 'A retro-style car game built with fundamental web technologies. This project aims to recreate a classic gaming experience, focusing on JavaScript for game mechanics and simple graphics to emulate older arcade games. Players control a car, navigating through challenges in a 2D environment.',
-    imageUrl: 'https://i.ibb.co/6XYKhGP/Screenshot-2024-07-09-105411.png',
-    tags: ['JavaScript', 'HTML5 Game', 'Retro'],
-    projectUrl: 'https://amithviswas.github.io/Old-Car-Game/',
-    repoUrl: 'https://github.com/amithviswas/Old-Car-Game', // Added example repo link
-    technologies: ['JavaScript', 'HTML', 'CSS'],
-    dataAiHint: 'game interface',
-  }
+  {"id": "project-1", "title": "ContextMesh: AI Team Memory", "description": "A shared memory layer for engineering teams, so decisions and context don't get lost.", "longDescription": "ContextMesh captures and organizes a team's context (decisions, notes and project knowledge) in one searchable place, with AI to surface what matters. Built with Next.js and Supabase and deployed on Vercel.", "imageUrl": "/images/projects/contextmesh.jpg", "tags": ["Next.js", "Supabase", "AI"], "technologies": ["Next.js", "TypeScript", "Supabase", "Vercel"], "repoUrl": "https://github.com/amithviswas/contextmesh", "projectUrl": "https://contextmesh-murex.vercel.app"},
+  {"id": "project-2", "title": "NeuralFlow: AI Agent Workflows", "description": "An open-source framework for chaining AI agent steps into workflows.", "longDescription": "NeuralFlow lets you chain AI agent steps into reusable workflows, with a web interface to explore them. Open source and deployed on Vercel.", "imageUrl": "/images/projects/neuralflow.jpg", "tags": ["AI Agents", "TypeScript", "Open Source"], "technologies": ["TypeScript", "Next.js", "LLM APIs", "Vercel"], "repoUrl": "https://github.com/amithviswas/neuralflow", "projectUrl": "https://neuralflow-six-gamma.vercel.app"},
+  {"id": "project-3", "title": "CareerCompass: AI Career Mentor", "description": "AI resume analysis, ATS resume builder, cover letters and mock interviews.", "longDescription": "An AI web app for job seekers: resume analysis, ATS resume building, cover letter generation and a mock interview simulator with feedback. Built with Next.js, TypeScript and Genkit (Google AI).", "imageUrl": "/images/projects/careercompass.jpg", "tags": ["Next.js", "Genkit", "AI"], "technologies": ["Next.js", "TypeScript", "Genkit (Google AI)", "Tailwind CSS", "Firebase"], "repoUrl": "https://github.com/amithviswas/career-compass", "projectUrl": "https://carrercompassavr.netlify.app/"},
+  {"id": "project-4", "title": "LinkedIn Automation Agent", "description": "An AI content engine that researches tech news and posts to LinkedIn on its own.", "longDescription": "A Python agent that uses Gemini 2.5 Flash to research tech news, write posts and publish them to LinkedIn on a schedule through GitHub Actions.", "imageUrl": "/images/projects/linkedin-automation-agent.jpg", "tags": ["Python", "Gemini", "Automation"], "technologies": ["Python", "Gemini 2.5 Flash", "GitHub Actions"], "repoUrl": "https://github.com/amithviswas/linkedin-automation-agent"},
+  {"id": "project-5", "title": "CrimeScope: Urban Safety Analytics", "description": "Crime data analytics and maps to understand urban safety.", "longDescription": "CrimeScope analyzes urban crime data and visualizes safety patterns through a FastAPI backend and a Next.js dashboard.", "imageUrl": "/images/projects/crimescope.jpg", "tags": ["FastAPI", "Next.js", "Data"], "technologies": ["Python", "FastAPI", "Next.js"], "repoUrl": "https://github.com/amithviswas/CrimeScope"},
+  {"id": "project-6", "title": "PDF Helper Telegram Bot", "description": "A Telegram bot that handles everyday PDF tasks right inside chat.", "longDescription": "A Telegram bot for common PDF tasks, written in Python and packaged with Docker for easy deployment.", "imageUrl": "/images/projects/pdf-helper-telegram-bot.jpg", "tags": ["Python", "Telegram", "Docker"], "technologies": ["Python", "python-telegram-bot", "Docker"], "repoUrl": "https://github.com/amithviswas/pdf-helper-telegram-bot"},
+  {"id": "project-7", "title": "Temple Community Website", "description": "Website for Sree Karyasiddhi Hanuman Temple, Radhayapalem, East Godavari.", "longDescription": "A community website for a temple under construction in Radhayapalem, East Godavari: updates, details and ways to support.", "imageUrl": "/images/projects/temple.jpg", "tags": ["HTML", "CSS", "Community"], "technologies": ["HTML", "CSS", "JavaScript", "GitHub Pages"], "repoUrl": "https://github.com/amithviswas/sree-karyasiddhi-hanuman-temple", "projectUrl": "https://amithviswas.github.io/sree-karyasiddhi-hanuman-temple/"},
+  {"id": "project-8", "title": "Experiment: Dark Run Game", "description": "A small scroll-based browser game.", "longDescription": "An early JavaScript experiment: a scroll-based game with obstacles in a dark-themed world.", "imageUrl": "/images/projects/scroll-game.jpg", "tags": ["JavaScript", "Game"], "technologies": ["HTML", "CSS", "JavaScript"], "repoUrl": "https://github.com/amithviswas/Scroll-Game-Dark-Run", "projectUrl": "https://amithviswas.github.io/Scroll-Game-Dark-Run/"},
+  {"id": "project-9", "title": "Experiment: Home Theater Experience", "description": "An interactive home theater setup preview.", "longDescription": "An early front-end experiment simulating choosing and previewing a home theater setup.", "imageUrl": "/images/projects/home-theater.jpg", "tags": ["HTML", "CSS", "JavaScript"], "technologies": ["HTML", "CSS", "JavaScript"], "repoUrl": "https://github.com/amithviswas/Home-Theater-Experience", "projectUrl": "https://amithviswas.github.io/Home-Theater-Experience/"},
+  {"id": "project-10", "title": "Experiment: Twitch.tv UI Clone", "description": "A recreation of the Twitch.tv interface.", "longDescription": "A front-end practice project recreating the Twitch.tv layout with HTML and CSS.", "imageUrl": "/images/projects/twitch.jpg", "tags": ["HTML", "CSS"], "technologies": ["HTML", "CSS"], "repoUrl": "https://github.com/amithviswas/Twitch.tv-UI-Reversed-Engineered-", "projectUrl": "https://amithviswas.github.io/Twitch.tv-UI-Reversed-Engineered-/"},
+  {"id": "project-11", "title": "Experiment: Music Player", "description": "A music player with playback controls and a progress slider.", "longDescription": "A JavaScript practice project: play, pause, skip and a progress slider.", "imageUrl": "/images/projects/music-player.jpg", "tags": ["JavaScript", "UI"], "technologies": ["HTML", "CSS", "JavaScript"], "repoUrl": "https://github.com/amithviswas/Music-Player-with-Slider", "projectUrl": "https://amithviswas.github.io/Music-Player-with-Slider/"},
+  {"id": "project-12", "title": "Experiment: Old Car Game", "description": "A retro-style car game in the browser.", "longDescription": "A JavaScript practice project recreating a simple retro arcade car game.", "imageUrl": "/images/projects/old-car.jpg", "tags": ["JavaScript", "Game"], "technologies": ["HTML", "CSS", "JavaScript"], "repoUrl": "https://github.com/amithviswas/Old-Car-Game", "projectUrl": "https://amithviswas.github.io/Old-Car-Game/"},
 ];

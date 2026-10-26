@@ -82,12 +82,12 @@ export default function IntroAnimation() {
 
     const timers: NodeJS.Timeout[] = [];
     timers.push(setTimeout(() => setStep(1), 100)); // Start glitch text
-    timers.push(setTimeout(() => setStep(2), 2500)); // Resolve name text
-    timers.push(setTimeout(() => setStep(3), 2800)); // Final visual pulse
+    timers.push(setTimeout(() => setStep(2), 1300)); // Resolve name text
+    timers.push(setTimeout(() => setStep(3), 1600)); // Final visual pulse
     timers.push(setTimeout(() => {
       setStep(4); // Mark internal step as completed (though parent AnimatePresence handles removal)
       setIntroCompleted(true); // Signal parent
-    }, 4000)); // Total intro duration 4 seconds
+    }, 2200)); // Total intro duration ~2 seconds
 
     return () => timers.forEach(clearTimeout);
   }, [setIntroCompleted, hasMounted]);
@@ -104,15 +104,17 @@ export default function IntroAnimation() {
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black overflow-hidden"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.4, ease: [0.42, 0, 0.58, 1] } }}
+      onClick={() => setIntroCompleted(true)}
+      title="Click to skip"
     >
       {/* Background Image */}
       <motion.img
         src="https://i.ibb.co/DHPKdq3n/generated-image-1.png"
-        alt="Aggressive BMW M5 backdrop"
-        data-ai-hint="BMW M5 night"
+        alt=""
+        aria-hidden="true"
         className="absolute inset-0 w-full h-full object-cover z-[-2]" // Ensure it's behind text and overlay
         initial={{ scale: 1.05 }}
-        animate={{ scale: 1, transition: { duration: 4.0, ease: "easeInOut" } }}
+        animate={{ scale: 1, transition: { duration: 2.2, ease: "easeInOut" } }}
       />
       {/* Dark Overlay */}
       <div className="absolute inset-0 w-full h-full bg-black opacity-40 z-[-1]"></div>

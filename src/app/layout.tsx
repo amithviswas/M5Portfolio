@@ -35,8 +35,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Amith's M-Powered Portfolio",
-  description: 'Personal portfolio of Amith Viswas Reddy, Data Scientist and AI/ML Enthusiast.',
+  title: "Amith Viswas Reddy – Software Engineer · AI & Automation",
+  description: 'Portfolio of Amith Viswas Reddy, Associate Software Engineer at Accenture building AI apps, agents and automation.',
 };
 
 export default function RootLayout({

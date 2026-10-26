@@ -21,7 +21,7 @@ export default function ResumeSection() {
         viewport={{ once: false }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        Spec <span className="text-primary">Sheet</span>
+        <span className="text-primary">Resume</span>
       </motion.h1>
       <motion.div 
         className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mb-10 md:mb-12 rounded-full"

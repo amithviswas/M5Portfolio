@@ -2,7 +2,7 @@
 "use client";
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge, Activity,
+  Brain, Database, BarChart3, Code2, Bot, Terminal, Server, Zap, Gauge, Activity,
   Languages, Cloud, Webhook
 } from 'lucide-react';
 import Section from '@/components/Section'; 
@@ -11,22 +11,22 @@ import { cn } from '@/lib/utils';
 // import soundService from '@/services/soundService'; // Re-added
 
 const skills = [
-  { name: 'AI Model Training', icon: <Zap size={28} />, modeName: 'Turbo Boost', id: 'skill-ai-training' }, // Icon size adjusted
-  { name: 'Prompt Engineering', icon: <Bot size={28} />, modeName: 'Drive Logic', id: 'skill-prompt-eng' },
-  { name: 'Data Visualization', icon: <Palette size={28} />, modeName: 'Heads-Up Display', id: 'skill-data-viz' },
-  { name: 'Machine Learning', icon: <Brain size={28} />, modeName: 'Intelligent Traction', id: 'skill-ml' },
-  { name: 'Python Programming', icon: <Code2 size={28} />, modeName: 'Core Engine (Python)', id: 'skill-python' },
-  { name: 'Data Analysis', icon: <BarChart3 size={28} />, modeName: 'Performance Analytics', id: 'skill-data-analysis' },
-  { name: 'Web Development', icon: <Activity size={28} />, modeName: 'Chassis & Aero (Web)', id: 'skill-web-dev' },
-  { name: 'SQL & Databases', icon: <Database size={28} />, modeName: 'Fuel System (Data)', id: 'skill-sql' },
-  { name: 'Unix/Linux', icon: <Terminal size={28} />, modeName: 'ECU (Unix/Linux)', id: 'skill-linux' },
-  { name: 'Statistical Modeling', icon: <Gauge size={28} />, modeName: 'Precision Tuning', id: 'skill-stat-model' },
-  { name: 'AI Chatbot Dev', icon: <Bot size={28} />, modeName: 'Co-Pilot AI', id: 'skill-chatbot' },
-  { name: 'Big Data (Hadoop, Spark)', icon: <Server size={28} />, modeName: 'Powertrain (Big Data)', id: 'skill-big-data' },
-  { name: 'R Programming', icon: <Code2 size={28} />, modeName: 'Auxiliary Engine (R)', id: 'skill-r-prog' },
-  { name: 'Natural Language Processing', icon: <Languages size={28} />, modeName: 'Linguistic Dynamics', id: 'skill-nlp' },
-  { name: 'Cloud Platforms', icon: <Cloud size={28} />, modeName: 'SkyNet Computing', id: 'skill-cloud' },
-  { name: 'API Development', icon: <Webhook size={28} />, modeName: 'Interface Protocol', id: 'skill-api-dev' },
+  { name: 'Python', icon: <Code2 size={28} />, modeName: 'Language', id: 'skill-python' },
+  { name: 'TypeScript & JavaScript', icon: <Code2 size={28} />, modeName: 'Language', id: 'skill-ts' },
+  { name: 'Next.js & React', icon: <Activity size={28} />, modeName: 'Frontend', id: 'skill-next' },
+  { name: 'FastAPI & Django', icon: <Server size={28} />, modeName: 'Backend', id: 'skill-backend' },
+  { name: 'AI Agents & LLM APIs', icon: <Brain size={28} />, modeName: 'AI', id: 'skill-agents' },
+  { name: 'Prompt Engineering', icon: <Bot size={28} />, modeName: 'AI', id: 'skill-prompt-eng' },
+  { name: 'UiPath RPA', icon: <Zap size={28} />, modeName: 'Automation (certified)', id: 'skill-rpa' },
+  { name: 'Telegram Bots', icon: <Bot size={28} />, modeName: 'Automation', id: 'skill-bots' },
+  { name: 'SQL & PostgreSQL', icon: <Database size={28} />, modeName: 'Data', id: 'skill-sql' },
+  { name: 'Tableau', icon: <BarChart3 size={28} />, modeName: 'Data visualization', id: 'skill-tableau' },
+  { name: 'Docker & Linux', icon: <Terminal size={28} />, modeName: 'DevOps', id: 'skill-docker' },
+  { name: 'Git & GitHub Actions', icon: <Webhook size={28} />, modeName: 'DevOps', id: 'skill-git' },
+  { name: 'Vercel, Netlify & Render', icon: <Cloud size={28} />, modeName: 'Deployment', id: 'skill-deploy' },
+  { name: 'Salesforce', icon: <Cloud size={28} />, modeName: 'CRM (trained)', id: 'skill-sf' },
+  { name: 'Software Testing', icon: <Gauge size={28} />, modeName: 'NPTEL certified', id: 'skill-testing' },
+  { name: 'English, Hindi, Telugu, Japanese', icon: <Languages size={28} />, modeName: 'Languages', id: 'skill-langs' },
 ];
 
 export default function SkillsSection() {
@@ -85,7 +85,7 @@ export default function SkillsSection() {
           viewport={{ once: false }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          Engine <span className="text-primary">Modes</span>
+          <span className="text-primary">Skills</span>
         </motion.h2>
         <motion.div 
           className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"
@@ -132,10 +132,10 @@ export default function SkillsSection() {
               </motion.div>
               <div className="card-text-skew transition-transform duration-100 ease-m-throttle">
                 <motion.h3 
-                  className="text-sm font-semibold text-muted-foreground"
+                  className="text-sm font-semibold text-primary-foreground/90"
                   variants={textVariants}
                 >
-                  {skill.modeName}
+                  {skill.name}
                 </motion.h3>
                 <motion.p
                   className="text-xs text-muted-foreground/60 mt-0.5"
@@ -144,7 +144,7 @@ export default function SkillsSection() {
                   animate={{ opacity: 1, transition: {delay: index * 0.05 + 0.3} }} 
                   whileHover={{opacity: 1}} 
                 >
-                  ({skill.name})
+                  {skill.modeName}
                 </motion.p>
               </div>
             </motion.div>

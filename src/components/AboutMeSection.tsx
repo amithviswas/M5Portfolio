@@ -33,7 +33,7 @@ export default function AboutMeSection() {
           viewport={{ once: false }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          Performance <span className="text-primary">Specs</span>
+          About <span className="text-primary">Me</span>
         </motion.h2>
         <motion.div 
           className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"
@@ -81,13 +81,13 @@ export default function AboutMeSection() {
         >
           <h3 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-6 font-heading">D. AMITH VISWAS REDDY</h3>
           <p className="text-lg text-foreground/90 leading-relaxed mb-6">
-            A dynamic AI/ML Engineer and Data Scientist, architecting intelligent solutions that drive innovation and real-world impact. My expertise lies in leveraging cutting-edge AI to transform data into actionable insights and build <strong className="text-primary/90">high-octane, high-performance</strong> systems.
+            Associate Software Engineer at <strong className="text-primary/90">Accenture, Hyderabad</strong>. I build AI-powered web apps, agents and automations: from team-memory tools and agent workflows to Telegram bots and RPA with UiPath.
           </p>
           <p className="text-lg text-foreground/90 leading-relaxed mb-8">
-            With a robust foundation in Computer Science from Lovely Professional University, my technical arsenal is built for versatility and power. I specialize in AI model training, sophisticated prompt engineering, and developing <strong className="text-primary/90">precision-engineered, scalable, data-driven applications.</strong> My technical vision is to push the boundaries of AI to create intuitive, efficient, and impactful technologies.
+            B.Tech in Computer Science from Lovely Professional University (2022–2026). I work with <strong className="text-primary/90">Python, Next.js, TypeScript and FastAPI</strong>, and enjoy turning repetitive work into simple, reliable tools.
           </p>
           <p className="text-md text-muted-foreground">
-            Explore my <Link href="/#projects" passHref><span className="text-primary hover:text-accent transition-colors duration-300 underline underline-offset-4 cursor-pointer font-semibold">Track History</span></Link> or download my full <Link href="/#resume" passHref><span className="text-primary hover:text-accent transition-colors duration-300 underline underline-offset-4 cursor-pointer font-semibold">Spec Sheet</span></Link>.
+            Explore my <Link href="/#projects" passHref><span className="text-primary hover:text-accent transition-colors duration-300 underline underline-offset-4 cursor-pointer font-semibold">Projects</span></Link> or download my full <Link href="/#resume" passHref><span className="text-primary hover:text-accent transition-colors duration-300 underline underline-offset-4 cursor-pointer font-semibold">Resume</span></Link>.
           </p>
         </motion.div>
       </div>
@@ -103,8 +103,8 @@ export default function AboutMeSection() {
           visible: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.4 } }
         }}
       >
-        <AnimatedCounter value="3+" label="Years Experience" icon={<Briefcase size={36} className="text-accent group-hover:text-primary transition-colors" />} />
-        <AnimatedCounter value="10+" label="Projects Launched" icon={<TrendingUp size={36} className="text-accent group-hover:text-primary transition-colors"/>} />
+        <AnimatedCounter value="2026" label="Joined Accenture" icon={<Briefcase size={36} className="text-accent group-hover:text-primary transition-colors" />} />
+        <AnimatedCounter value="12" label="Projects Built" icon={<TrendingUp size={36} className="text-accent group-hover:text-primary transition-colors"/>} />
         <AnimatedCounter value="5+" label="Key Certifications" icon={<Award size={36} className="text-accent group-hover:text-primary transition-colors"/>} />
       </motion.div>
     </Section>

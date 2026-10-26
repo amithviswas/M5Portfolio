@@ -265,7 +265,7 @@ export default function HeroSection() {
             isTaglineUnderlineVisible && "underline-visible"
           )}
         >
-          DESIGNED FOR THE FAST LANE.
+          SOFTWARE ENGINEER · AI &amp; AUTOMATION
         </motion.h2>
 
         {/* Paragraph */}
@@ -273,7 +273,7 @@ export default function HeroSection() {
           variants={itemVariants.paragraph}
           className="font-inter mt-6 max-w-[44ch] mx-auto text-base text-foreground/80 sm:text-lg md:mt-8 hero-text-lift"
         >
-          Welcome to my digital command center. I engineer solutions that fuse <strong className="text-primary/90 font-semibold">power</strong> with <strong className="text-primary/90 font-semibold">elegance</strong>, creating impactful, user-centric web experiences. Explore my work and let&apos;s accelerate your vision.
+          Hi, I&apos;m Amith, an Associate Software Engineer at <strong className="text-primary/90 font-semibold">Accenture, Hyderabad</strong>. I build AI-powered apps, agents and automations. Take a look at my projects below.
         </motion.p>
         
         {/* MStartStopButton was here, removed as per user request to leave the space empty */}

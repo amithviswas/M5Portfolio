@@ -44,7 +44,7 @@ export default function AchievementsSection() {
           viewport={{ once: false }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          Lap <span className="text-primary">Records</span>
+          <span className="text-primary">Achievements</span>
         </motion.h1>
         <motion.div 
           className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"

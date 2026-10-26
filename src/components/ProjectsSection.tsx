@@ -14,7 +14,7 @@ import { ProjectModal } from '@/components/portfolio/ProjectModal';
 export default function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [projectsVisible, setProjectsVisible] = useState(false);
+  const [projectsVisible, setProjectsVisible] = useState(true);
 
   const handleViewDetails = (project: Project) => {
     setSelectedProject(project);
@@ -36,7 +36,7 @@ export default function ProjectsSection() {
           viewport={{ once: false }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          Track <span className="text-primary">History</span>
+          <span className="text-primary">Projects</span>
         </motion.h2>
         <motion.div 
           className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"

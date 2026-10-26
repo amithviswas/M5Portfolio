@@ -42,7 +42,7 @@ export default function CertificationsSection() {
           viewport={{ once: false }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          Racing <span className="text-primary">Credentials</span> 
+          <span className="text-primary">Certifications</span> 
         </motion.h1>
         <motion.div 
           className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"

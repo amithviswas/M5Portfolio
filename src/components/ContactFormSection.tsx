@@ -50,19 +50,38 @@ export default function ContactFormSection() {
   const prefersReducedMotion = useReducedMotion();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-    console.log('Form data submitted:', data);
-    toast({
-      title: (
-        <div className="flex items-center">
-          <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-          Message Sent!
-        </div>
-      ),
-      description: "Team M Pit-Wall will respond ASAP.",
-      variant: "default", 
-    });
-    reset();
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/amithviswas0909@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          message: data.message,
+          _subject: `Portfolio message from ${data.name}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      toast({
+        title: (
+          <div className="flex items-center">
+            <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+            Message sent!
+          </div>
+        ),
+        description: "Thanks for reaching out. I'll reply soon.",
+        variant: "default",
+      });
+      reset();
+    } catch {
+      toast({
+        title: "Couldn't send your message",
+        description: "Please email me directly at amithviswas0909@gmail.com.",
+        variant: "destructive",
+      });
+    }
   };
 
   const pageVariants = {
@@ -92,7 +111,7 @@ export default function ContactFormSection() {
             viewport={{ once: false }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            M Pit-Lane <span className="text-primary">Command Center</span>
+            Get in <span className="text-primary">Touch</span>
           </motion.h1>
           <motion.div
             className="w-64 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"
@@ -112,7 +131,7 @@ export default function ContactFormSection() {
             viewport={{ once: false, amount: 0.2 }}
           >
             <div>
-              <h3 className="text-2xl font-heading text-primary-foreground mb-6">Telemetry</h3>
+              <h3 className="text-2xl font-heading text-primary-foreground mb-6">Contact Details</h3>
               <div className="space-y-5">
                 <a href="tel:+919143336888" className={cn("flex items-center group", interactiveElementHoverClass)}>
                   <Phone className="h-7 w-7 mr-4 text-accent group-hover:text-primary transition-colors" />
@@ -125,18 +144,8 @@ export default function ContactFormSection() {
               </div>
             </div>
 
-            <div className="pt-4">
-              <h4 className="text-xs uppercase text-muted-foreground mb-2 tracking-widest">Signal Strength</h4>
-              <div className="space-y-1.5 group">
-                <div className="h-1.5 w-10 bg-m-stripe-light-blue rounded-full transition-all duration-200 group-hover:shadow-[0_0_10px_hsl(var(--m-stripe-light-blue))] group-hover:scale-x-110"></div>
-                <div className="h-1.5 w-10 bg-m-stripe-dark-blue rounded-full transition-all duration-200 group-hover:shadow-[0_0_10px_hsl(var(--m-stripe-dark-blue))] group-hover:scale-x-110 delay-75"></div>
-                <div className="h-1.5 w-10 bg-m-stripe-red rounded-full transition-all duration-200 group-hover:shadow-[0_0_10px_hsl(var(--m-stripe-red))] group-hover:scale-x-110 delay-150"></div>
-                 <div className="h-1.5 w-10 bg-m-stripe-grey rounded-full transition-all duration-200 group-hover:shadow-[0_0_10px_hsl(var(--m-stripe-grey))] group-hover:scale-x-110 delay-200"></div>
-              </div>
-            </div>
-
             <div>
-              <h3 className="text-2xl font-heading text-primary-foreground mt-10 mb-6">Connect Channels</h3>
+              <h3 className="text-2xl font-heading text-primary-foreground mt-10 mb-6">Find Me Online</h3>
               <div className="flex flex-col space-y-4">
                 {socialLinks.map((link) => (
                   <Button
@@ -174,7 +183,7 @@ export default function ContactFormSection() {
             viewport={{ once: false, amount: 0.2 }}
           >
             <div className="h-0.5 w-full bg-gradient-to-r from-bmw-m-blue to-primary mb-6 rounded-full"></div>
-            <h3 className="text-3xl font-heading text-primary-foreground mb-8">Send a Pit-Message</h3>
+            <h3 className="text-3xl font-heading text-primary-foreground mb-8">Send a Message</h3>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
                 <Label htmlFor="name" className="text-muted-foreground font-semibold tracking-wider">Your Name</Label>
@@ -182,7 +191,7 @@ export default function ContactFormSection() {
                   type="text"
                   id="name"
                   className={cn("mt-2 bg-background/70 border-border/50 focus:border-primary focus:ring-primary placeholder:text-muted-foreground/70 transition-m-blip", errors.name && "border-destructive focus:border-destructive ring-destructive")}
-                  placeholder="e.g. Lewis Hamilton"
+                  placeholder="Your name"
                   {...register("name", { required: "Name is required" })}
                 />
                 {errors.name && <p className="mt-1 text-xs text-destructive">{errors.name.message}</p>}
@@ -193,7 +202,7 @@ export default function ContactFormSection() {
                   type="email"
                   id="email"
                   className={cn("mt-2 bg-background/70 border-border/50 focus:border-primary focus:ring-primary placeholder:text-muted-foreground/70 transition-m-blip", errors.email && "border-destructive focus:border-destructive ring-destructive")}
-                  placeholder="lewis@mercedesamgf1.com"
+                  placeholder="you@example.com"
                   {...register("email", { 
                     required: "Email is required",
                     pattern: {
@@ -210,7 +219,7 @@ export default function ContactFormSection() {
                   id="message"
                   rows={5}
                   className={cn("mt-2 bg-background/70 border-border/50 focus:border-primary focus:ring-primary placeholder:text-muted-foreground/70 transition-m-blip", errors.message && "border-destructive focus:border-destructive ring-destructive")}
-                  placeholder="Race strategy, feedback, or just to say hi..."
+                  placeholder="A role, a project idea, or just to say hi..."
                   {...register("message", { required: "Message is required" })}
                   onFocus={() => setIsTextareaFocused(true)}
                   onBlur={() => setIsTextareaFocused(false)}
