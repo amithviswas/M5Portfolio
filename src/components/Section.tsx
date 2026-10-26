@@ -1,38 +1,59 @@
-
-"use client";
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { motion, type AnimationControls, type TargetAndTransition, type VariantLabels } from 'framer-motion';
 
 interface SectionProps {
   id?: string;
   className?: string;
   children: ReactNode;
-  fullHeight?: boolean;
-  noPadding?: boolean;
-  animate?: AnimationControls | TargetAndTransition | VariantLabels;
+  /** Section number in the spec sheet, e.g. "02" */
+  index?: string;
+  title?: string;
+  /** One-line claim set opposite the title */
+  lead?: ReactNode;
+  tone?: 'paper' | 'paper-2' | 'ink';
 }
 
-export default function Section({ id, className, children, fullHeight = false, noPadding = false, animate }: SectionProps) {
+export default function Section({ id, className, children, index, title, lead, tone = 'paper' }: SectionProps) {
   return (
-    <motion.section
+    <section
       id={id}
       className={cn(
-        "w-full relative",
-        !noPadding && "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-28",
-        fullHeight && "min-h-[calc(100vh-5rem)] flex flex-col justify-center",
+        'relative w-full py-20 md:py-28 lg:py-32',
+        tone === 'paper-2' && 'bg-paper-2',
+        tone === 'ink' && 'bg-ink text-paper',
         className
       )}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
-      variants={{ // Basic fade-in variant
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.6, 0.01, 0.0, 0.95] } }
-      }}
-      animate={animate}
     >
-      {children}
-    </motion.section>
+      <div className="wrap">
+        {title && (
+          <header
+            className={cn(
+              'sec-head mb-12 flex flex-wrap items-end justify-between gap-x-12 gap-y-5 md:mb-16',
+              tone === 'ink' && '!border-paper'
+            )}
+          >
+            <h2 className="display flex items-baseline gap-4 text-[2.35rem] [font-variation-settings:'wdth'_108] sm:text-6xl sm:[font-variation-settings:'wdth'_118] lg:text-[5.25rem]">
+              {index && (
+                <span className="mono shrink-0 translate-y-[-0.1em] text-base font-medium tracking-normal md:text-lg" aria-hidden="true">
+                  {index}
+                </span>
+              )}
+              <span>{title}</span>
+            </h2>
+            {lead && (
+              <p
+                className={cn(
+                  'max-w-[40ch] pb-1 text-lg leading-snug md:text-xl',
+                  tone === 'ink' ? 'text-paper/85' : 'text-ink-2'
+                )}
+              >
+                {lead}
+              </p>
+            )}
+          </header>
+        )}
+        {children}
+      </div>
+    </section>
   );
 }

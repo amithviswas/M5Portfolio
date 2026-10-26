@@ -1,60 +1,43 @@
-import type { Metadata } from 'next';
-import { Rajdhani, Playfair_Display, Space_Grotesk, Fraunces, Inter } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import { Archivo, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { IntroProvider } from '@/contexts/IntroContext';
 import { UserInteractionProvider } from '@/contexts/UserInteractionContext';
 import AppClientLayout from '@/components/AppClientLayout';
 
-const rajdhani = Rajdhani({
+const archivo = Archivo({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-rajdhani',
+  axes: ['wdth'],
+  variable: '--font-archivo',
+  display: 'swap',
 });
 
-const playfairDisplay = Playfair_Display({
+const mono = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-playfair-display',
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '700'],
-  variable: '--font-space-grotesk',
-});
-
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  axes: ['opsz', 'SOFT', 'WONK'], // 'wght' removed from here
-  variable: '--font-fraunces',
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
+  weight: ['400', '500'],
+  variable: '--font-mono',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "Amith's M-Powered Portfolio",
-  description: 'Personal portfolio of Amith Viswas Reddy, Data Scientist and AI/ML Enthusiast.',
+  title: 'Amith Viswas Reddy – Software Engineer · AI & Automation',
+  description:
+    'Portfolio of Amith Viswas Reddy, Associate Software Engineer at Accenture building AI apps, agents and automation.',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  themeColor: '#f1f2ee',
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body 
-        className={`${rajdhani.variable} ${playfairDisplay.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${inter.variable} font-sans antialiased bg-background text-foreground`} 
-        suppressHydrationWarning
-      >
-          <UserInteractionProvider>
-            <IntroProvider>
-              <AppClientLayout>{children}</AppClientLayout>
-            </IntroProvider>
-          </UserInteractionProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${archivo.variable} ${mono.variable} font-sans antialiased`} suppressHydrationWarning>
+        <UserInteractionProvider>
+          <IntroProvider>
+            <AppClientLayout>{children}</AppClientLayout>
+          </IntroProvider>
+        </UserInteractionProvider>
       </body>
     </html>
   );

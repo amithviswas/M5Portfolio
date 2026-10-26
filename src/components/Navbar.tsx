@@ -1,261 +1,137 @@
-
 "use client";
 
-import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { useUserInteraction } from '@/contexts/UserInteractionContext'; 
 
-const navLinks = [
-  { name: 'Home', href: '/#home', id: 'home' },
-  { name: 'About', href: '/#about', id: 'about' },
-  { name: 'Skills', href: '/#skills', id: 'skills' },
-  { name: 'Projects', href: '/#projects', id: 'projects' },
-  { name: 'Achievements', href: '/#achievements', id: 'achievements' },
-  { name: 'Certifications', href: '/#certifications', id: 'certifications' },
-  { name: 'Resume', href: '/#resume', id: 'resume' },
-  { name: 'Contact', href: '/#contact', id: 'contact' },
+export const navLinks = [
+  { name: 'About', id: 'about', n: '01' },
+  { name: 'Skills', id: 'skills', n: '02' },
+  { name: 'Projects', id: 'projects', n: '03' },
+  { name: 'Achievements', id: 'achievements', n: '04' },
+  { name: 'Certifications', id: 'certifications', n: '05' },
+  { name: 'Resume', id: 'resume', n: '06' },
+  { name: 'Contact', id: 'contact', n: '07' },
 ];
 
 export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const pathname = usePathname();
-  const [activeLink, setActiveLink] = useState('');
-  const [isMounted, setIsMounted] = useState(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const sectionRefs = useRef<Map<string, HTMLElement | null>>(new Map());
-  const navLinkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-  const { incrementSectionVisit } = useUserInteraction();
-  const [currentSectionIdToTrack, setCurrentSectionIdToTrack] = useState<string | undefined>();
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState<string>('');
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
-    navLinks.forEach(link => {
-      if (link.href.startsWith('/#')) {
-        const element = document.getElementById(link.id);
-        if (element) {
-          sectionRefs.current.set(link.id, element);
-        }
-      }
-    });
+    const onScroll = () => {
+      setScrolled(window.scrollY > 8);
+      const hero = document.getElementById('home');
+      if (hero && window.scrollY < hero.offsetHeight * 0.6) setActive('');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const sections = navLinks
+      .map((l) => document.getElementById(l.id))
+      .filter((el): el is HTMLElement => !!el);
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && window.scrollY > 200) setActive(e.target.id);
+        });
+      },
+      { rootMargin: '-45% 0px -50% 0px', threshold: 0 }
+    );
+    sections.forEach((s) => io.observe(s));
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      io.disconnect();
+    };
   }, []);
 
-  const setActiveLinkAndTrack = useCallback((newHref: string, sectionId?: string) => {
-    setActiveLink(currentActiveLink => {
-      if (currentActiveLink !== newHref) {
-        return newHref;
-      }
-      return currentActiveLink;
-    });
-
-    if (sectionId && pathname === '/' && isMounted) {
-      setCurrentSectionIdToTrack(currentTrackedId => {
-        // Only update if different to trigger the effect for incrementing visit
-        if (currentTrackedId !== sectionId) {
-          return sectionId;
-        }
-        return currentTrackedId;
-      });
-    } else if (pathname !== '/') { // If not on homepage, clear section tracking state
-        setCurrentSectionIdToTrack(undefined);
-    }
-  }, [pathname, isMounted, setActiveLink, setCurrentSectionIdToTrack]);
-
-  // Effect to call incrementSectionVisit when currentSectionIdToTrack changes
   useEffect(() => {
-    if (currentSectionIdToTrack && isMounted && pathname === '/') {
-      incrementSectionVisit(currentSectionIdToTrack);
-    }
-  }, [currentSectionIdToTrack, isMounted, pathname, incrementSectionVisit]);
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
 
-
-  useEffect(() => {
-    if (!isMounted) return;
-
-    const handleScrollOrLoad = () => {
-      if (pathname !== '/') {
-        setActiveLinkAndTrack(pathname); 
-        observerRef.current?.disconnect();
-        return;
-      }
-
-      if (!observerRef.current && sectionRefs.current.size > 0) {
-        observerRef.current = new IntersectionObserver(
-          (entries) => {
-            let bestMatch: IntersectionObserverEntry | null = null;
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                if (!bestMatch || entry.boundingClientRect.top < bestMatch.boundingClientRect.top) {
-                  bestMatch = entry;
-                }
-              }
-            });
-
-            if (window.scrollY < 100) { 
-              setActiveLinkAndTrack('/#home', 'home');
-            } else if (bestMatch) {
-              const activeNav = navLinks.find(link => link.id === bestMatch!.target.id);
-              if (activeNav) {
-                setActiveLinkAndTrack(activeNav.href, activeNav.id);
-              }
-            }
-          },
-          { rootMargin: "-25% 0px -25% 0px", threshold: 0.01 } 
-        );
-        sectionRefs.current.forEach(sectionEl => {
-          if (sectionEl) observerRef.current?.observe(sectionEl);
-        });
-      }
-      
-      const currentHash = window.location.hash;
-      if (currentHash) {
-        const matchedLink = navLinks.find(link => link.href === `/${currentHash}`);
-        if (matchedLink) setActiveLinkAndTrack(matchedLink.href, matchedLink.id);
-      } else if (window.scrollY < 100 && pathname === '/') {
-        setActiveLinkAndTrack('/#home', 'home');
-      }
-    };
-
-    handleScrollOrLoad();
-    window.addEventListener('hashchange', handleScrollOrLoad);
-
-    return () => {
-      observerRef.current?.disconnect();
-      observerRef.current = null;
-      window.removeEventListener('hashchange', handleScrollOrLoad);
-    };
-  }, [isMounted, pathname, setActiveLinkAndTrack]);
-
-
-  const closeMobileMenu = () => setMobileMenuOpen(false);
-
-  const handleNavLinkMouseMove = (event: React.MouseEvent<HTMLAnchorElement>, index: number) => {
-    const linkElement = navLinkRefs.current[index];
-    if (!linkElement) return;
-
-    const rect = linkElement.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const percentage = (x / rect.width) * 100;
-
-    linkElement.style.setProperty('--grille-blue-stop-percentage', `${Math.max(20, Math.min(80, percentage - 5))}%`);
-    linkElement.style.setProperty('--grille-red-start-percentage', `${Math.max(20, Math.min(80, percentage + 5))}%`);
-  };
-
-  const handleNavLinkMouseLeave = (index: number) => {
-    const linkElement = navLinkRefs.current[index];
-    if (!linkElement) return;
-    linkElement.style.setProperty('--grille-blue-stop-percentage', '50%');
-    linkElement.style.setProperty('--grille-red-start-percentage', '50%');
-  };
-  
-  const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, sectionId?: string) => {
-    closeMobileMenu();
-    setActiveLinkAndTrack(href, sectionId); 
-
-    if (href.startsWith('/#') && pathname === '/') {
-      e.preventDefault();
-      const targetId = sectionId || href.substring(2); 
-      if (window.location.hash !== `#${targetId}`) {
-         history.pushState(null, '', `#${targetId}`);
-      }
-      const targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-  };
-  
   return (
-    <nav
-      className="fixed top-0 left-0 right-0 z-50 font-sans bg-background shadow-md"
+    <header
+      className={cn(
+        'sticky top-0 z-50 bg-paper transition-[box-shadow] duration-200',
+        scrolled && 'shadow-[0_1px_0_0_var(--paper-3)]'
+      )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <Link href="/#home" className="flex items-center group" onClick={(e) => handleNavLinkClick(e as any, '/#home', 'home')}>
-             <Image
-              src="https://i.ibb.co/N2v0V2R8/Amith-Viswas-Reddy.png" 
-              alt="Amith Viswas Reddy Logo"
-              width={160} 
-              height={36} 
-              className="object-contain group-hover:opacity-80 transition-opacity duration-300"
-              priority
-            />
-          </Link>
+      <nav className="wrap flex h-[var(--nav-h)] items-center justify-between gap-6" aria-label="Main">
+        <a href="#home" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
+          <Image
+            src="/images/av-logo-ink.png"
+            alt=""
+            width={46}
+            height={36}
+            style={{ width: 46, height: 36 }}
+            className="object-contain"
+            priority
+          />
+          <span className="text-[15px] font-semibold leading-tight tracking-[-0.01em]">
+            Amith Viswas Reddy
+          </span>
+        </a>
 
-          <div className="hidden md:flex space-x-1">
-            {navLinks.map((link, index) => {
-              const isActive = activeLink === link.href || (pathname === '/' && activeLink === '' && link.href === '/#home' && (!window.location.hash || window.location.hash === '#home'));
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  ref={el => navLinkRefs.current[index] = el}
-                  onMouseMove={(e) => handleNavLinkMouseMove(e, index)}
-                  onMouseLeave={() => handleNavLinkMouseLeave(index)}
-                  className={cn(
-                    'px-3 py-2 rounded-sm text-sm font-medium uppercase tracking-wider nav-laser-crest',
-                    isActive ? 'active-link text-primary' : 'text-muted-foreground hover:text-primary-foreground'
-                  )}
-                  onClick={(e) => handleNavLinkClick(e, link.href, link.id)}
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-          </div>
+        <ul className="hidden items-center gap-1 lg:flex">
+          {navLinks.map((l) => (
+            <li key={l.id}>
+              <a
+                href={`#${l.id}`}
+                aria-current={active === l.id ? 'true' : undefined}
+                className={cn(
+                  'flex items-baseline gap-1.5 px-2.5 py-2 text-[15px] font-medium transition-colors duration-150',
+                  active === l.id ? 'bg-mark text-ink' : 'text-ink-2 hover:bg-paper-2 hover:text-ink'
+                )}
+              >
+                <span className="mono text-[11px] text-ink-3" aria-hidden="true">{l.n}</span>
+                {l.name}
+              </a>
+            </li>
+          ))}
+        </ul>
 
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-              className="text-primary-foreground hover:text-primary"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
-          </div>
-        </div>
+        <button
+          type="button"
+          className="flex h-11 items-center gap-2 border-2 border-ink px-3 text-[15px] font-semibold lg:hidden"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span className="relative block h-3 w-4" aria-hidden="true">
+            <span className={cn('absolute left-0 h-[2px] w-4 bg-ink transition-transform duration-200', open ? 'top-[5px] rotate-45' : 'top-0')} />
+            <span className={cn('absolute left-0 h-[2px] w-4 bg-ink transition-transform duration-200', open ? 'top-[5px] -rotate-45' : 'top-[10px]')} />
+          </span>
+          {open ? 'Close' : 'Menu'}
+        </button>
+      </nav>
+
+      <div
+        id="mobile-menu"
+        hidden={!open}
+        className="border-t-4 border-ink bg-paper lg:hidden"
+      >
+        <ul className="wrap py-3">
+          {navLinks.map((l) => (
+            <li key={l.id} className="spec-row">
+              <a
+                href={`#${l.id}`}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  'flex items-baseline gap-4 py-4 text-2xl font-semibold tracking-[-0.02em]',
+                  active === l.id && 'text-ink'
+                )}
+              >
+                <span className="mono w-7 text-sm font-normal text-ink-3" aria-hidden="true">{l.n}</span>
+                <span className={cn(active === l.id && 'bg-mark px-1 -mx-1')}>{l.name}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
-
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden border-t border-border/50 bg-background shadow-md"
-          >
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {navLinks.map((link) => {
-                const isActive = activeLink === link.href || (pathname === '/' && activeLink === '' && link.href === '/#home' && (!window.location.hash || window.location.hash === '#home'));
-                return (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    className={cn(
-                      'block px-3 py-3 rounded-sm text-base font-medium uppercase tracking-wider nav-laser-crest', 
-                      isActive ? 'active-link text-primary' : 'text-muted-foreground hover:text-primary-foreground hover:bg-card/50'
-                    )}
-                    onClick={(e) => handleNavLinkClick(e, link.href, link.id)}
-                    aria-current={isActive ? 'page' : undefined}
-                  >
-                    {link.name}
-                  </Link>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+    </header>
   );
 }
-

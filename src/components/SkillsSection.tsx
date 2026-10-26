@@ -1,156 +1,118 @@
+import Section from '@/components/Section';
 
-"use client";
-import { motion, useReducedMotion } from 'framer-motion';
-import {
-  Brain, Database, BarChart3, Code2, Bot, Palette, Terminal, Server, Zap, Gauge, Activity,
-  Languages, Cloud, Webhook
-} from 'lucide-react';
-import Section from '@/components/Section'; 
-import { cn } from '@/lib/utils';
-// import { useUserInteraction } from '@/contexts/UserInteractionContext'; // Re-added
-// import soundService from '@/services/soundService'; // Re-added
+type Row = { area: string; skill: string; note?: string; cert?: boolean; usedIn?: string };
 
-const skills = [
-  { name: 'AI Model Training', icon: <Zap size={28} />, modeName: 'Turbo Boost', id: 'skill-ai-training' }, // Icon size adjusted
-  { name: 'Prompt Engineering', icon: <Bot size={28} />, modeName: 'Drive Logic', id: 'skill-prompt-eng' },
-  { name: 'Data Visualization', icon: <Palette size={28} />, modeName: 'Heads-Up Display', id: 'skill-data-viz' },
-  { name: 'Machine Learning', icon: <Brain size={28} />, modeName: 'Intelligent Traction', id: 'skill-ml' },
-  { name: 'Python Programming', icon: <Code2 size={28} />, modeName: 'Core Engine (Python)', id: 'skill-python' },
-  { name: 'Data Analysis', icon: <BarChart3 size={28} />, modeName: 'Performance Analytics', id: 'skill-data-analysis' },
-  { name: 'Web Development', icon: <Activity size={28} />, modeName: 'Chassis & Aero (Web)', id: 'skill-web-dev' },
-  { name: 'SQL & Databases', icon: <Database size={28} />, modeName: 'Fuel System (Data)', id: 'skill-sql' },
-  { name: 'Unix/Linux', icon: <Terminal size={28} />, modeName: 'ECU (Unix/Linux)', id: 'skill-linux' },
-  { name: 'Statistical Modeling', icon: <Gauge size={28} />, modeName: 'Precision Tuning', id: 'skill-stat-model' },
-  { name: 'AI Chatbot Dev', icon: <Bot size={28} />, modeName: 'Co-Pilot AI', id: 'skill-chatbot' },
-  { name: 'Big Data (Hadoop, Spark)', icon: <Server size={28} />, modeName: 'Powertrain (Big Data)', id: 'skill-big-data' },
-  { name: 'R Programming', icon: <Code2 size={28} />, modeName: 'Auxiliary Engine (R)', id: 'skill-r-prog' },
-  { name: 'Natural Language Processing', icon: <Languages size={28} />, modeName: 'Linguistic Dynamics', id: 'skill-nlp' },
-  { name: 'Cloud Platforms', icon: <Cloud size={28} />, modeName: 'SkyNet Computing', id: 'skill-cloud' },
-  { name: 'API Development', icon: <Webhook size={28} />, modeName: 'Interface Protocol', id: 'skill-api-dev' },
+const groups: { area: string; rows: Row[] }[] = [
+  {
+    area: 'Languages',
+    rows: [
+      { area: 'Language', skill: 'Python', usedIn: 'LinkedIn Automation Agent, CrimeScope, PDF Helper Bot' },
+      { area: 'Language', skill: 'TypeScript & JavaScript', usedIn: 'ContextMesh, NeuralFlow, CareerCompass' },
+    ],
+  },
+  {
+    area: 'Frontend',
+    rows: [{ area: 'Frontend', skill: 'Next.js & React', usedIn: 'ContextMesh, NeuralFlow, CareerCompass, CrimeScope' }],
+  },
+  {
+    area: 'Backend',
+    rows: [{ area: 'Backend', skill: 'FastAPI & Django', usedIn: 'CrimeScope (FastAPI)' }],
+  },
+  {
+    area: 'AI',
+    rows: [
+      { area: 'AI', skill: 'AI Agents & LLM APIs', usedIn: 'NeuralFlow, LinkedIn Automation Agent, CareerCompass' },
+      { area: 'AI', skill: 'Prompt Engineering', usedIn: 'LinkedIn Automation Agent, CareerCompass' },
+    ],
+  },
+  {
+    area: 'Automation',
+    rows: [
+      { area: 'Automation', skill: 'UiPath RPA', note: 'Certified', cert: true },
+      { area: 'Automation', skill: 'Telegram Bots', usedIn: 'PDF Helper Bot' },
+    ],
+  },
+  {
+    area: 'Data',
+    rows: [
+      { area: 'Data', skill: 'SQL & PostgreSQL', usedIn: 'ContextMesh (Supabase)' },
+      { area: 'Data', skill: 'Tableau', note: 'Data visualization' },
+    ],
+  },
+  {
+    area: 'DevOps',
+    rows: [
+      { area: 'DevOps', skill: 'Docker & Linux', usedIn: 'PDF Helper Bot' },
+      { area: 'DevOps', skill: 'Git & GitHub Actions', usedIn: 'LinkedIn Automation Agent' },
+    ],
+  },
+  {
+    area: 'Deployment',
+    rows: [{ area: 'Deployment', skill: 'Vercel, Netlify & Render', usedIn: 'ContextMesh, NeuralFlow, CareerCompass' }],
+  },
+  {
+    area: 'CRM',
+    rows: [{ area: 'CRM', skill: 'Salesforce', note: 'Trained' }],
+  },
+  {
+    area: 'Testing',
+    rows: [{ area: 'Testing', skill: 'Software Testing', note: 'NPTEL certified', cert: true }],
+  },
+  {
+    area: 'Spoken',
+    rows: [{ area: 'Languages', skill: 'English, Hindi, Telugu, Japanese', note: 'Spoken' }],
+  },
 ];
 
+const total = groups.reduce((n, g) => n + g.rows.length, 0);
+
 export default function SkillsSection() {
-  const prefersReducedMotion = useReducedMotion();
-  // const { interactionData, incrementSkillHover } = useUserInteraction();
-  
-  // const handleSkillHover = (skillName: string) => {
-  //   if (incrementSkillHover) incrementSkillHover(skillName);
-  //   if (interactionData?.isSoundEnabled && soundService) {
-  //     // soundService.playSound('hoverChime'); // Example
-  //   }
-  // };
-  
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.95 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      scale: 1, 
-      transition: {
-        delay: i * 0.05, 
-        duration: prefersReducedMotion ? 0.3 : 0.25, 
-        ease: prefersReducedMotion ? [0.42, 0, 0.58, 1] as any : "circOut" as any, 
-      },
-    }),
-    hover: {
-      scale: 1.07, 
-      y: -5, 
-      transition: { type: 'spring', stiffness: 280, damping: 12, duration: 0.1 }
-    }
-  };
-
-  const textVariants = {
-    hover: {
-      skewX: "1deg",
-      color: "hsl(var(--primary-foreground))",
-      transition: { duration: 0.1 }
-    }
-  };
-
-  const iconVariants = {
-    hover: {
-      scale: 1.1,
-      color: "hsl(var(--primary))", 
-      transition: { duration: 0.1 }
-    }
-  };
-  
   return (
-    <Section id="skills" className="bg-card/20">
-      <div className="text-center mb-12 md:mb-16">
-        <motion.h2 
-          className="text-4xl md:text-5xl font-heading text-primary-foreground"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
-          Engine <span className="text-primary">Modes</span>
-        </motion.h2>
-        <motion.div 
-          className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6">
-        {skills.map((skill, index) => {
-          // const hoverCount = interactionData?.skillHoverCounts?.[skill.name]?.count || 0;
-          // const isSkillOverclocked = hoverCount >= 3; // Example logic
-          const isSkillOverclocked = false; // Placeholder
-          
-          return (
-            <motion.div
-              key={skill.id}
-              className={cn(
-                "skill-card-trail-container carbon-texture-panel card-m-glow", 
-                "p-4 text-center cursor-default", 
-                "transition-m-throttle", 
-                isSkillOverclocked && "skill-overclocked animate-skill-jitter", 
-                "hover:animate-skill-jitter" 
-              )}
-              custom={index}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              whileHover="hover"
-              // onHoverStart={() => handleSkillHover(skill.name)}
-              viewport={{ once: false, amount: 0.1 }}
-            >
-              <div className={cn(
-                "skill-card-trail",
-                isSkillOverclocked && "electric-trail" 
-              )}/>
-              <motion.div 
-                className="mb-3 text-primary-foreground/80 inline-block"
-                variants={iconVariants}
-              >
-                {skill.icon}
-              </motion.div>
-              <div className="card-text-skew transition-transform duration-100 ease-m-throttle">
-                <motion.h3 
-                  className="text-sm font-semibold text-muted-foreground"
-                  variants={textVariants}
+    <Section
+      id="skills"
+      index="02"
+      title="Skills"
+      lead={`${total} working skills across ${groups.length} areas, each tied to the project it was used in or the course that certified it.`}
+    >
+      <table className="w-full border-collapse text-left max-md:block">
+        <caption className="sr-only">Skills by area, with notes and the projects they were used in</caption>
+        <thead className="max-md:hidden">
+          <tr className="text-[15px] text-ink-3">
+            <th scope="col" className="w-[16%] pb-3 font-normal">Area</th>
+            <th scope="col" className="w-[30%] pb-3 font-normal">Skill</th>
+            <th scope="col" className="w-[16%] pb-3 font-normal">Note</th>
+            <th scope="col" className="pb-3 font-normal">Applied in</th>
+          </tr>
+        </thead>
+        {groups.map((g) => (
+          <tbody key={g.area} className="spec-row group max-md:block max-md:py-4">
+            {g.rows.map((r, i) => (
+              <tr key={r.skill} className="transition-colors duration-150 hover:bg-paper-2 max-md:grid max-md:grid-cols-[6.5rem_1fr] max-md:gap-x-3 max-md:py-1.5 max-md:hover:bg-transparent">
+                <th
+                  scope="row"
+                  className={`align-top text-[15px] font-normal text-ink-3 md:py-3.5 ${i > 0 ? 'max-md:invisible md:text-transparent' : ''}`}
                 >
-                  {skill.modeName}
-                </motion.h3>
-                <motion.p
-                  className="text-xs text-muted-foreground/60 mt-0.5"
-                  variants={{ hover: { opacity: 1} }} 
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 1, transition: {delay: index * 0.05 + 0.3} }} 
-                  whileHover={{opacity: 1}} 
-                >
-                  ({skill.name})
-                </motion.p>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
+                  {g.area === 'Spoken' ? 'Languages' : g.area}
+                </th>
+                <td className="align-top text-[1.2rem] font-semibold leading-snug tracking-[-0.01em] md:py-3 md:text-[1.35rem]">
+                  {r.skill}
+                </td>
+                <td className="align-top text-[15px] max-md:col-start-2 max-md:empty:hidden md:py-3.5">
+                  {r.note &&
+                    (r.cert ? (
+                      <span className="bg-mark px-1.5 py-0.5 font-medium text-ink">{r.note}</span>
+                    ) : (
+                      <span className="text-ink-2">{r.note}</span>
+                    ))}
+                </td>
+                <td className="mono align-top text-[13px] leading-relaxed text-ink-2 max-md:col-start-2 max-md:empty:hidden md:py-4">
+                  {r.usedIn}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        ))}
+      </table>
     </Section>
   );
 }

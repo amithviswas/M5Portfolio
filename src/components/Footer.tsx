@@ -1,26 +1,23 @@
-
-"use client";
-import React from 'react';
-import { cn } from '@/lib/utils';
-
 export default function Footer() {
   return (
-    <footer
-      className={cn(
-        "w-full py-10 md:py-16 text-center relative overflow-hidden bg-background border-t border-border/30"
-      )}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <p className="text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} Amith Viswas Reddy. All rights reserved.
-        </p>
-        <p className="text-xs text-muted-foreground/70 mt-2">
-          Inspired by BMW M Performance. Designed with passion.
-        </p>
-        <div className="mt-4 flex justify-center space-x-2">
-          <div className="w-8 h-1 bg-primary rounded-full"></div>
-          <div className="w-8 h-1 bg-bmw-m-blue rounded-full"></div>
-          <div className="w-8 h-1 bg-primary-foreground rounded-full"></div>
+    <footer className="bg-paper pb-8 pt-16 md:pt-24">
+      <div className="wrap">
+        <svg viewBox="0 0 1000 90" className="block w-full select-none" aria-hidden="true" focusable="false">
+          <text
+            x="0"
+            y="70"
+            textLength="1000"
+            lengthAdjust="spacingAndGlyphs"
+            fill="currentColor"
+            className="display"
+            style={{ fontSize: 87, fontVariationSettings: "'wdth' 112" }}
+          >
+            Amith Viswas Reddy
+          </text>
+        </svg>
+        <div className="mt-8 flex flex-col gap-3 border-t-4 border-ink pt-5 text-[15px] text-ink-2 sm:flex-row sm:items-center sm:justify-between">
+          <p>&copy; {new Date().getFullYear()} Amith Viswas Reddy. Designed and built by Amith Viswas Reddy.</p>
+          <a href="#home" className="link font-semibold text-ink">Back to top</a>
         </div>
       </div>
     </footer>

@@ -1,72 +1,56 @@
-
-"use client";
-import * as React from 'react'; 
 import Image from 'next/image';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
 import Section from '@/components/Section';
-import { Power } from 'lucide-react';
-import { MStartStopButton } from '@/components/MStartStopButton';
+import { RESUME_URL } from '@/components/HeroSection';
 
-const resumeImageUrl = "https://i.ibb.co/kg7LrMfW/SPECmain-page-0001.jpg";
-const resumeDownloadUrl = "https://drive.google.com/file/d/1KGfnTG-dXnwmolefmNbpA7a5DrxeI0Le/view?usp=drive_link";
+const contents = ['Internships', 'Projects', 'Certificates', 'Technical skills', 'Education'];
 
 export default function ResumeSection() {
   return (
-    <Section id="resume" className="min-h-screen flex flex-col items-center justify-center text-center">
-      <motion.h1 
-        className="text-4xl md:text-5xl font-heading text-primary-foreground mb-6 md:mb-8"
-        initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-      >
-        Spec <span className="text-primary">Sheet</span>
-      </motion.h1>
-      <motion.div 
-        className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mb-10 md:mb-12 rounded-full"
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: false }}
-        transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-      />
-
-      <motion.div 
-        className="w-full max-w-3xl mb-10 md:mb-12 rounded-lg overflow-hidden shadow-2xl border-2 border-primary/50 hover:border-primary transition-all duration-300 bg-card"
-        initial={{ opacity: 0, scale: 0.9 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: false }}
-        transition={{ duration: 0.7, delay: 0.3, type: "spring", stiffness: 100 }}
-      >
-        <Image
-          src={resumeImageUrl}
-          alt="Amith Viswas Reddy Resume Preview"
-          width={1200}
-          height={1697} 
-          style={{ objectFit: "contain", layout:"responsive" }}
-          className="bg-card"
-          data-ai-hint="resume document"
-          priority
-        />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-      >
-        <MStartStopButton asChild>
-          <Link href={resumeDownloadUrl} target="_blank" rel="noopener noreferrer">
-            <Power size={32} className="mb-1 text-primary group-hover:text-blood-red transition-colors" />
-            <span className="block">Download</span>
-            <span className="block">PDF</span>
-          </Link>
-        </MStartStopButton>
-      </motion.div>
-      <p className="mt-8 text-sm text-muted-foreground">
-        Download the full specification sheet (resume).
-      </p>
+    <Section id="resume" index="06" title="Resume" tone="paper-2" lead="Everything on this page, in a file you can forward.">
+      <div className="grid items-start gap-10 md:grid-cols-12 md:gap-8">
+        <div className="md:col-span-5 lg:col-span-4">
+          <p className="max-w-[34ch] text-[1.25rem] leading-snug tracking-[-0.01em]">
+            Prefer a file? Download my resume as a PDF.
+          </p>
+          <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="btn btn-mark mt-7">
+            Download resume (PDF)
+          </a>
+          <dl className="mt-12 text-[15px]">
+            <div className="spec-row grid grid-cols-[6rem_1fr] gap-4 py-2.5">
+              <dt className="text-ink-3">Format</dt>
+              <dd className="font-medium">PDF</dd>
+            </div>
+            <div className="spec-row grid grid-cols-[6rem_1fr] gap-4 py-2.5">
+              <dt className="text-ink-3">Covers</dt>
+              <dd className="font-medium">{contents.join(', ')}</dd>
+            </div>
+            <div className="spec-row grid grid-cols-[6rem_1fr] gap-4 py-2.5">
+              <dt className="text-ink-3">Hosted on</dt>
+              <dd className="font-medium">Google Drive</dd>
+            </div>
+          </dl>
+        </div>
+        <a
+          href={RESUME_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative block md:col-span-7 lg:col-span-7 lg:col-start-6"
+          aria-label="Open the resume PDF"
+        >
+          <div className="relative aspect-[1200/1000] w-full overflow-hidden bg-white">
+            <Image
+              src="/images/resume/resume-preview.jpg"
+              alt="Preview of Amith Viswas Reddy's resume"
+              fill
+              sizes="(max-width: 768px) 100vw, 55vw"
+              className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.015]"
+            />
+          </div>
+          <p className="mt-3 text-[15px] text-ink-3">
+            <span className="mono">Fig. R</span> First page, cropped. Opens the full PDF.
+          </p>
+        </a>
+      </div>
     </Section>
   );
 }
