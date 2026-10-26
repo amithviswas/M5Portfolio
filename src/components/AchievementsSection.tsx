@@ -35,7 +35,7 @@ const achievements = [
 export default function AchievementsSection() {
 
   return (
-    <Section id="achievements" className="min-h-screen">
+    <Section id="achievements">
       <div className="text-center mb-12 md:mb-16">
         <motion.h1 
           className="text-4xl md:text-5xl font-heading text-primary-foreground" 
@@ -55,24 +55,20 @@ export default function AchievementsSection() {
         />
       </div>
 
-      <div className="relative pl-6 md:pl-0 before:absolute before:top-0 before:left-6 md:before:left-1/2 before:w-0.5 before:h-full before:bg-border/40 before:-translate-x-1/2">
+      <div className="grid gap-8 md:grid-cols-2 md:gap-10 items-stretch">
         {achievements.map((achievement, index) => (
           <motion.div
             key={achievement.id}
-            className="mb-10 md:mb-12 flex md:[&:nth-child(odd)]:flex-row-reverse group" 
+            className="flex group" 
             initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }} 
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: false, amount: 0.2 }} 
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            <div className="hidden md:flex w-1/2"></div> 
-            <div className="relative md:w-1/2">
-              <div className="absolute -left-[29.5px] md:left-auto md:-right-[6.5px] md:group-odd:-left-[6.5px] top-0 w-3.5 h-3.5 rounded-full bg-primary border-2 border-background shadow-md"> 
-                <div className="absolute inset-0.5 bg-primary/40 rounded-full animate-pulse"></div> 
-              </div>
+            <div className="relative w-full flex">
                <Card className={cn(
                 "carbon-texture-panel card-m-glow card-with-glowing-seal", 
-                "overflow-hidden group flex flex-col w-full transition-m-throttle" 
+                "overflow-hidden group flex flex-col w-full h-full transition-m-throttle" 
               )}> 
                 <div className="relative w-full aspect-video overflow-hidden"> 
                   <Image

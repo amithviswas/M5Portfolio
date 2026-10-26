@@ -275,6 +275,33 @@ export default function HeroSection() {
         >
           Hi, I&apos;m Amith, an Associate Software Engineer at <strong className="text-primary/90 font-semibold">Accenture, Hyderabad</strong>. I build AI-powered apps, agents and automations. Take a look at my projects below.
         </motion.p>
+
+        {/* Calls to action */}
+        <motion.div
+          variants={itemVariants.paragraph}
+          className="mt-8 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
+        >
+          <a
+            href="#projects"
+            className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-7 text-base font-semibold text-primary-foreground transition-transform duration-150 hover:bg-primary/90 active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary w-full sm:w-auto"
+          >
+            View Projects
+          </a>
+          <a
+            href="https://drive.google.com/file/d/1KGfnTG-dXnwmolefmNbpA7a5DrxeI0Le/view?usp=drive_link"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-12 items-center justify-center rounded-md border border-foreground/30 px-7 text-base font-semibold text-foreground transition-colors duration-150 hover:border-foreground hover:bg-foreground/5 active:scale-[0.97] w-full sm:w-auto"
+          >
+            Download Resume
+          </a>
+          <a
+            href="#contact"
+            className="inline-flex h-12 items-center justify-center rounded-md px-5 text-base font-semibold text-foreground/90 underline-offset-4 transition-colors duration-150 hover:text-primary hover:underline w-full sm:w-auto"
+          >
+            Contact Me
+          </a>
+        </motion.div>
         
         {/* MStartStopButton was here, removed as per user request to leave the space empty */}
 

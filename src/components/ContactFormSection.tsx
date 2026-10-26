@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Github, Linkedin, Instagram, Mail, Phone, CheckCircle, Send } from 'lucide-react';
+import { Github, Linkedin, FileText, Mail, Phone, CheckCircle, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -34,10 +34,10 @@ const socialLinks = [
     ariaLabel: "Amith Viswas Reddy's LinkedIn Profile",
   },
   {
-    name: 'Instagram',
-    icon: <Instagram size={28} className="group-hover:text-primary transition-colors duration-200"/>,
-    href: 'https://instagram.com/amithviswas_reddy',
-    ariaLabel: "Amith Viswas Reddy's Instagram Profile",
+    name: 'Resume',
+    icon: <FileText size={28} className="group-hover:text-primary transition-colors duration-200"/>,
+    href: 'https://drive.google.com/file/d/1KGfnTG-dXnwmolefmNbpA7a5DrxeI0Le/view?usp=drive_link',
+    ariaLabel: "Download Amith Viswas Reddy's resume",
   },
 ];
 
@@ -96,7 +96,7 @@ export default function ContactFormSection() {
   };
 
   return (
-    <Section id="contact" className="min-h-screen !py-12 md:!py-16">
+    <Section id="contact">
       <motion.div 
         variants={pageVariants}
         initial="initial"

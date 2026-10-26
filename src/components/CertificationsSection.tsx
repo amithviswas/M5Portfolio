@@ -33,7 +33,7 @@ const certifications = [
 
 export default function CertificationsSection() {
   return (
-    <Section id="certifications" className="min-h-screen">
+    <Section id="certifications">
       <div className="text-center mb-12 md:mb-16">
         <motion.h1 
           className="text-4xl md:text-5xl font-heading text-primary-foreground" 

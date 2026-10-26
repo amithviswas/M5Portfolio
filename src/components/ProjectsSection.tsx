@@ -15,6 +15,10 @@ export default function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectsVisible, setProjectsVisible] = useState(true);
+  const [showAll, setShowAll] = useState(false);
+  const INITIAL_COUNT = 6;
+  const visibleProjects = showAll ? projectsData : projectsData.slice(0, INITIAL_COUNT);
+  const hiddenCount = projectsData.length - INITIAL_COUNT;
 
   const handleViewDetails = (project: Project) => {
     setSelectedProject(project);
@@ -69,7 +73,7 @@ export default function ProjectsSection() {
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mt-12 perspective" 
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.1 }}
+          viewport={{ once: true, amount: 0.05 }}
           variants={{
             hidden: { opacity: 0, y: 30 },
             visible: { 
@@ -79,7 +83,7 @@ export default function ProjectsSection() {
             }
           }}
         >
-          {projectsData.map((project, index) => (
+          {visibleProjects.map((project, index) => (
             <motion.div
               key={project.id}
               variants={{
@@ -95,6 +99,25 @@ export default function ProjectsSection() {
             </motion.div>
           ))}
         </motion.div>
+      )}
+
+      {projectsVisible && hiddenCount > 0 && (
+        <div className="mt-12 flex justify-center">
+          <Button
+            onClick={() => {
+              if (showAll) {
+                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+              setShowAll(!showAll);
+            }}
+            size="lg"
+            variant="outline"
+            aria-expanded={showAll}
+            className="h-12 px-8 text-base font-semibold border-foreground/30 hover:border-foreground hover:bg-foreground/5 active:scale-[0.97] transition-transform"
+          >
+            {showAll ? 'Show fewer projects' : `Show ${hiddenCount} more projects`}
+          </Button>
+        </div>
       )}
 
       <ProjectModal 

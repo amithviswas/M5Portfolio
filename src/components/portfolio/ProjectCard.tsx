@@ -94,18 +94,18 @@ export function ProjectCard({ project, onViewDetails }: ProjectCardProps) {
             />
           </div>
         </CardHeader>
-        <CardContent className="p-4 md:p-5 flex-grow card-text-skew transition-transform duration-100 ease-m-throttle"> {/* card-text-skew for hover */}
+        <CardContent className="p-5 md:p-6 pb-4 md:pb-5 flex-grow card-text-skew transition-transform duration-100 ease-m-throttle"> {/* card-text-skew for hover */}
           <CardTitle className="text-lg md:text-xl font-bold mb-1.5 text-primary-foreground group-hover:text-primary transition-colors font-heading uppercase tracking-wider">{project.title}</CardTitle> {/* Adjusted size */}
           <CardDescription className="text-muted-foreground mb-3 line-clamp-3 text-xs md:text-sm">{project.description}</CardDescription> {/* Adjusted size */}
-          <div className="flex flex-wrap gap-1.5 mb-3"> {/* Smaller gaps for badges */}
+          <div className="flex flex-wrap gap-1.5"> {/* Smaller gaps for badges */}
             {project.tags.slice(0, 3).map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-[10px] md:text-xs px-1.5 py-0.5 font-normal bg-accent/15 text-accent group-hover:bg-accent/25 transition-colors"> {/* Smaller badges */}
+              <Badge key={tag} variant="secondary" className="text-[11px] md:text-xs px-2 py-0.5 font-medium bg-foreground/10 text-foreground/85 border-0 transition-colors"> {/* Smaller badges */}
                 {tag}
               </Badge>
             ))}
           </div>
         </CardContent>
-        <CardFooter className="p-4 md:p-5 pt-0 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-2"> {/* Adjusted padding/spacing */}
+        <CardFooter className="p-5 md:p-6 pt-0 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-2"> {/* Adjusted padding/spacing */}
           <Button 
             onClick={(e) => { onViewDetails(project); handleClickEffect(e); }} 
             variant="outline"

@@ -13,7 +13,7 @@ const resumeDownloadUrl = "https://drive.google.com/file/d/1KGfnTG-dXnwmolefmNbp
 
 export default function ResumeSection() {
   return (
-    <Section id="resume" className="min-h-screen flex flex-col items-center justify-center text-center">
+    <Section id="resume" className="flex flex-col items-center justify-center text-center">
       <motion.h1 
         className="text-4xl md:text-5xl font-heading text-primary-foreground mb-6 md:mb-8"
         initial={{ opacity: 0, y: -20 }}
@@ -32,7 +32,7 @@ export default function ResumeSection() {
       />
 
       <motion.div 
-        className="w-full max-w-3xl mb-10 md:mb-12 rounded-lg overflow-hidden shadow-2xl border-2 border-primary/50 hover:border-primary transition-all duration-300 bg-card"
+        className="w-full max-w-sm md:max-w-md mb-10 md:mb-12 rounded-lg overflow-hidden shadow-2xl border-2 border-primary/50 hover:border-primary transition-all duration-300 bg-card"
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: false }}
@@ -65,7 +65,7 @@ export default function ResumeSection() {
         </MStartStopButton>
       </motion.div>
       <p className="mt-8 text-sm text-muted-foreground">
-        Download the full specification sheet (resume).
+        Prefer a file? Download my resume as a PDF.
       </p>
     </Section>
   );

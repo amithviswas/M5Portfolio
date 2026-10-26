@@ -23,7 +23,7 @@
     --secondary-foreground: 0 0% 70%;
 
     --muted: 220 8% 15%;
-    --muted-foreground: 0 0% 50%;
+    --muted-foreground: 0 0% 72%;
 
     --accent: 210 100% 50%; /* Saturated M Blue */
     --accent-foreground: 0 0% 98%;
@@ -532,7 +532,7 @@
     box-shadow: 0 0 6px hsl(var(--bmw-m-blue)/0.5), 0 0 6px hsl(var(--primary)/0.5);
   }
   .hero-tagline-empire.underline-visible::after {
-    width: 105%;
+    width: 100%;
   }
   .hero-empire-bg { 
     @apply relative overflow-hidden; 
@@ -1031,5 +1031,5 @@
   
 }
 
-
-    
+/* Keep section headings clear of the fixed navbar when jumping via links */
+section[id] { scroll-margin-top: 5.5rem; }

@@ -178,12 +178,12 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link href="/#home" className="flex items-center group" onClick={(e) => handleNavLinkClick(e as any, '/#home', 'home')}>
              <Image
-              src="https://i.ibb.co/N2v0V2R8/Amith-Viswas-Reddy.png" 
-              alt="Amith Viswas Reddy Logo"
-              width={48} 
+              src="/images/av-logo.png" 
+              alt="Amith Viswas Reddy"
+              width={61} 
               height={48} 
-              style={{ width: 48, height: 48 }}
-              className="object-contain rounded-md group-hover:opacity-80 transition-opacity duration-300"
+              style={{ width: 61, height: 48 }}
+              className="object-contain group-hover:opacity-80 transition-opacity duration-300"
               priority
             />
           </Link>
