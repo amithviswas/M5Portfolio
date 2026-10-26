@@ -1,0 +1,1229 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Amith M5 Portfolio · Amith Viswas Reddy, Software Engineer</title>
+    <meta name="description" content="Amith Viswas Reddy — Salesforce engineer at Accenture who builds web apps, AI tools and bots. Projects, patent, skills and résumé." />
+    <meta name="theme-color" content="#0d0e10" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="hark.css" />
+    <link rel="stylesheet" href="hark-hero.css" />
+    <style>
+      :root {
+        --x-ground: #0d0e10;
+        --x-s1: #16181b;
+        --x-s2: #1f2226;
+        --x-s3: #2b2f34;
+        --x-ink: #eceef1;
+        --x-ink2: #b4bac2;
+        --x-red: #d0211a;
+        --x-red-hi: #e1251b;
+        --x-red-press: #b01b15;
+        --x-m1: #4fa3d9;
+        --x-m2: #1c3f94;
+        --x-m3: #e1251b;
+        --x-steel: #d6d9dd;
+        --x-steel-2: #c4c8ce;
+        --x-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+        --x-body: "Barlow", system-ui, sans-serif;
+        --x-pad: clamp(16px, 3vw, 32px);
+        --x-max: 1376px;
+        --x-gap: clamp(56px, 7vw, 100px);
+        --x-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+        --x-ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+        color-scheme: dark;
+      }
+      html { background: var(--x-ground); scroll-padding-top: 72px; }
+      @media (pointer: fine) { html { overscroll-behavior: none; } }
+      body {
+        background: var(--x-ground);
+        color: var(--x-ink);
+        font: 400 18px/1.55 var(--x-body);
+        font-variant-numeric: tabular-nums;
+        caret-color: var(--x-red-hi);
+        scrollbar-color: var(--x-s3) var(--x-ground);
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+      ::selection { background: var(--x-red); color: #fff; }
+      ::-webkit-scrollbar { width: 12px; }
+      ::-webkit-scrollbar-track { background: var(--x-ground); }
+      ::-webkit-scrollbar-thumb { background: var(--x-s3); }
+      :focus-visible { outline: 2px solid var(--x-red-hi); outline-offset: 3px; border-radius: 0; }
+      a { text-underline-offset: 0.22em; text-decoration-thickness: 2px; }
+
+      .x-skip { position: fixed; left: 16px; top: -80px; z-index: 60; background: var(--x-red); color: #fff; padding: 12px 16px; font-weight: 600; text-decoration: none; }
+      .x-skip:focus { top: 12px; }
+
+      .x-full { width: 100vw; margin-inline: calc(50% - 50vw); }
+      .x-wrap { max-width: var(--x-max); margin-inline: auto; padding-inline: var(--x-pad); }
+      .x-sec { padding-block: var(--x-gap); scroll-margin-top: 64px; }
+
+      /* type: display, h3, body, small */
+      .x-d { font-family: var(--x-display); font-weight: 800; text-transform: uppercase; line-height: 0.9; letter-spacing: -0.02em; margin: 0; }
+      .x-h2 { font-size: clamp(3rem, 6.4vw, 6rem); }
+      .x-h3 { font-family: var(--x-display); font-weight: 700; font-size: clamp(1.5rem, 2vw, 1.875rem); line-height: 1; letter-spacing: -0.01em; text-transform: uppercase; margin: 0; }
+      .x-lead { font-size: clamp(1.125rem, 1.4vw, 1.25rem); max-width: 60ch; margin-top: 24px; }
+      .x-small { font-size: 15px; line-height: 1.45; }
+      .x-muted { color: var(--x-ink2); }
+      /* the car word: a small secondary tag under the human heading */
+      .x-tag { display: flex; align-items: center; gap: 10px; margin: 16px 0 0; font: 700 1rem/1 var(--x-display); letter-spacing: 0.14em; text-transform: uppercase; color: var(--x-steel-2); }
+      .x-tag .x-m { gap: 2px; }
+      .x-tag .x-m i { width: 4px; height: 13px; }
+
+      /* flat M tricolour mark */
+      .x-m { display: inline-flex; gap: 3px; transform: skewX(-20deg); }
+      .x-m i { display: block; width: 6px; height: 18px; }
+      .x-m i:nth-child(1) { background: var(--x-m1); }
+      .x-m i:nth-child(2) { background: var(--x-m2); }
+      .x-m i:nth-child(3) { background: var(--x-m3); }
+      .x-stripe { display: grid; grid-template-rows: repeat(3, 4px); }
+      .x-stripe i:nth-child(1) { background: var(--x-m1); }
+      .x-stripe i:nth-child(2) { background: var(--x-m2); }
+      .x-stripe i:nth-child(3) { background: var(--x-m3); }
+
+      /* buttons */
+      .x-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+        min-height: 48px; padding: 0 22px; border: 0; border-radius: 0;
+        font: 700 1.125rem/1 var(--x-display); letter-spacing: 0.01em; text-transform: uppercase;
+        text-decoration: none; cursor: pointer;
+        background: var(--x-red); color: #fff;
+        transition: background-color 160ms ease, color 160ms ease, transform 120ms var(--x-ease-out);
+      }
+      .x-btn:hover { background: var(--x-red-press); }
+      .x-btn:active { transform: scale(0.97); }
+      .x-btn--steel { background: var(--x-ink); color: var(--x-ground); }
+      .x-btn--steel:hover { background: #fff; }
+      .x-btn--dark { background: var(--x-ground); color: var(--x-ink); }
+      .x-btn--dark:hover { background: var(--x-s2); }
+      .x-btn--ghost { background: var(--x-s2); color: var(--x-ink); }
+      .x-btn--ghost:hover { background: var(--x-s3); }
+      .x-btn svg { width: 18px; height: 18px; flex: none; }
+
+      /* nav */
+      .x-nav { position: fixed; inset: 0 0 auto 0; z-index: 40; background: var(--x-ground); padding-top: env(safe-area-inset-top, 0px); }
+      .x-nav__in { display: flex; align-items: center; gap: 32px; height: 64px; }
+      .x-word { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font: 800 1.75rem/1 var(--x-display); letter-spacing: 0.02em; min-height: 44px; }
+      .x-nav__links { display: flex; gap: 4px; margin: 0 0 0 auto; padding: 0; list-style: none; }
+      .x-nav__links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; text-decoration: none; font-weight: 500; color: var(--x-ink); transition: color 160ms ease, background-color 160ms ease; }
+      .x-nav__links a:hover { background: var(--x-s2); }
+      .x-nav .x-btn { min-height: 44px; font-size: 1rem; padding: 0 16px; }
+      @media (max-width: 760px) {
+        .x-nav__links { display: none; }
+        .x-nav .x-btn { margin-left: auto; }
+      }
+
+      /* hero */
+      .x-hero { position: relative; z-index: 1; margin-top: -12px; min-height: max(640px, 100svh); display: grid; align-items: end; background: var(--x-ground); }
+      .x-hero__bg { position: absolute; inset: 0; overflow: hidden; }
+      .x-hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 76% 50%; }
+      .x-hero__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(13, 14, 16, 0.86) 0%, rgba(13, 14, 16, 0.6) 42%, rgba(13, 14, 16, 0.2) 78%), linear-gradient(0deg, rgba(13, 14, 16, 0.7) 0%, rgba(13, 14, 16, 0) 40%); }
+      .x-hero__copy { position: relative; width: 100%; padding-top: 140px; padding-bottom: clamp(48px, 7vw, 96px); }
+      .x-hero__text { max-width: min(66%, 900px); }
+      .x-hero h1 { font-size: clamp(3rem, 7.6vw, 7.5rem); }
+      .x-hero__sub { font: 500 clamp(1.25rem, 1.8vw, 1.625rem)/1.3 var(--x-body); max-width: 36ch; margin-top: 20px; }
+      .x-hero__acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      .x-spec { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin: clamp(32px, 5vw, 56px) 0 0; padding: 0; list-style: none; }
+      .x-spec li { background: rgba(22, 24, 27, 0.92); padding: 16px 20px; }
+      .x-spec b { display: block; font: 700 1.25rem/1.1 var(--x-display); text-transform: uppercase; }
+      .x-spec span { display: block; color: var(--x-ink2); font-size: 15px; margin-top: 4px; }
+      @media (max-width: 1000px) {
+        .x-hero__img { object-position: 60% 50%; }
+        .x-hero__text { max-width: min(80%, 620px); }
+        .x-hero h1 { font-size: clamp(3rem, 7.4vw, 4.5rem); }
+        .x-spec { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 760px) {
+        .x-hero__img { object-position: 70% 50%; }
+        .x-hero__shade { background: linear-gradient(0deg, rgba(13, 14, 16, 0.9) 0%, rgba(13, 14, 16, 0.62) 55%, rgba(13, 14, 16, 0.35) 100%); }
+        .x-hero__copy { padding-top: 88px; padding-bottom: 40px; }
+        .x-hero__text { max-width: none; }
+        .x-hero h1 { font-size: clamp(2.5rem, 12vw, 3.25rem); }
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .x-hero__img { animation: x-settle 1800ms var(--x-ease-out) both; }
+        @keyframes x-settle { from { transform: scale(1.06); } to { transform: none; } }
+      }
+      .x-btn.is-firing { background: var(--x-red-hi); color: #fff; }
+
+      /* about */
+      .x-about { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(24px, 3vw, 40px); }
+      .x-about__text { grid-column: 1 / span 7; align-self: center; }
+      .x-about__text p { max-width: 62ch; margin-top: 20px; }
+      .x-about__text .x-lead { margin-top: 32px; }
+      .x-about__portrait { grid-column: 8 / span 5; margin: 0; background: var(--x-s1); }
+      .x-about__portrait img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 20%; }
+      .x-plate { background: var(--x-steel); color: var(--x-ground); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding: 4px; margin: 40px 0 0; }
+      .x-plate div { background: var(--x-steel-2); padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; min-height: 128px; }
+      .x-plate dd { margin: 0; font: 800 clamp(3rem, 5vw, 4.5rem)/0.9 var(--x-display); letter-spacing: -0.02em; order: -1; }
+      .x-plate dt { font-weight: 600; font-size: 15px; line-height: 1.3; margin-top: 12px; }
+      /* build history: a horizontal production line */
+      .x-build { grid-column: 1 / -1; margin-top: clamp(40px, 5vw, 72px); }
+      .x-hist { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin: 24px 0 0; padding: 0; list-style: none; }
+      .x-hist li { background: var(--x-s1); border-top: 4px solid var(--x-s3); padding: 18px 20px 22px; }
+      .x-hist li:last-child { border-top-color: var(--x-red-hi); background: var(--x-s2); }
+      .x-hist__no { font: 700 15px/1 var(--x-display); letter-spacing: 0.1em; color: var(--x-ink2); }
+      .x-hist__where { font: 700 1.375rem/1 var(--x-display); text-transform: uppercase; margin-top: 14px; }
+      .x-hist li p:last-child { font-size: 15px; line-height: 1.45; color: var(--x-ink2); margin-top: 8px; }
+      @media (max-width: 1100px) { .x-hist { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 900px) {
+        .x-about__text, .x-about__portrait { grid-column: 1 / -1; }
+        .x-about__portrait { max-width: 520px; }
+      }
+      @media (max-width: 560px) {
+        .x-hist { grid-template-columns: 1fr; }
+        .x-hist li { border-top: 0; border-left: 4px solid var(--x-s3); }
+        .x-hist li:last-child { border-left-color: var(--x-red-hi); }
+        .x-plate { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .x-plate div { padding: 14px; min-height: 110px; }
+        .x-plate dd { font-size: 2.75rem; }
+      }
+
+      /* skills */
+      .x-skills { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 64px); align-items: start; }
+      .x-skills__side { position: sticky; top: 96px; }
+      .x-skills__side img { width: 100%; max-width: 360px; aspect-ratio: 4 / 3; object-fit: cover; margin-top: 32px; }
+      .x-tiers { display: grid; gap: 32px; }
+      .x-tier__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 24px; padding-bottom: 12px; }
+      .x-tier__head p { margin-top: 6px; }
+      .x-band8 { display: inline-flex; align-items: center; gap: 10px; font: 700 15px/1 var(--x-display); letter-spacing: 0.1em; text-transform: uppercase; color: var(--x-ink2); }
+      .x-band8 span { display: inline-grid; grid-template-columns: repeat(8, 8px); gap: 2px; }
+      .x-band8 i { height: 12px; background: var(--x-s3); }
+      .x-band8--low i:nth-child(-n + 3), .x-band8--mid i:nth-child(-n + 5), .x-band8--red i:nth-child(-n + 7) { background: var(--x-ink); }
+      .x-band8--red i:nth-child(8) { background: var(--x-red-hi); }
+      .x-tier__list { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+      .x-tier__list li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 24px; align-items: baseline; background: var(--x-s1); padding: 16px 20px; transition: background-color 160ms ease; }
+      .x-tier__list li:nth-child(even) { background: var(--x-s2); }
+      .x-tier__list li:hover { background: var(--x-s3); }
+      .x-tier__list b { font-weight: 600; }
+      .x-tier__list span { color: var(--x-ink2); font-size: 15px; }
+      @media (max-width: 900px) {
+        .x-skills { grid-template-columns: 1fr; }
+        .x-skills__side { position: static; }
+      }
+      @media (max-width: 560px) {
+        .x-tier__list li { grid-template-columns: 1fr; padding: 14px 16px; }
+      }
+
+      /* projects */
+      .x-band { position: relative; margin: 0; }
+      .x-band img { width: 100%; height: clamp(240px, 42vw, 520px); object-fit: cover; }
+      .x-band figcaption { position: absolute; right: var(--x-pad); bottom: 16px; background: var(--x-ground); padding: 8px 14px; font-size: 15px; }
+      .x-work__head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; align-items: end; margin-top: var(--x-gap); }
+      .x-work__head p { max-width: 46ch; }
+      .x-line { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
+      .x-part { background: var(--x-s1); display: flex; flex-direction: column; min-width: 0; }
+      .x-part__no { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--x-s2); padding: 10px 16px; font: 700 1.25rem/1 var(--x-display); letter-spacing: 0.04em; }
+      .x-part__media { position: relative; overflow: hidden; background: var(--x-ground); }
+      .x-part__media img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; object-position: 50% 0; }
+      .x-part__body { padding: 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+      .x-part__tech { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; list-style: none; }
+      .x-part__tech li { background: var(--x-s2); padding: 4px 10px; font-size: 14px; font-weight: 500; }
+      .x-part__links { display: flex; gap: 8px; margin-top: auto; padding-top: 8px; }
+      .x-part__links .x-btn { min-height: 44px; font-size: 1rem; padding: 0 18px; }
+      .x-part__no span { font: 700 15px/1 var(--x-display); letter-spacing: 0.1em; text-transform: uppercase; color: var(--x-ink2); }
+      /* CareerCompass: the case study plate */
+      .x-part--a { grid-column: 1 / -1; }
+      .x-part--a .x-part__media img { max-height: 620px; }
+      .x-part--a .x-h3 { font-size: clamp(1.75rem, 3vw, 2.75rem); }
+      .x-case { padding: clamp(20px, 3vw, 40px); display: flex; flex-direction: column; gap: 24px; }
+      .x-case__top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 32px; }
+      .x-case__top .x-part__links { margin: 0; padding: 0; }
+      .x-case__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 0; }
+      .x-case__grid div { background: var(--x-s2); padding: 20px; }
+      .x-case__grid dt { font: 700 1.25rem/1 var(--x-display); text-transform: uppercase; }
+      .x-case__grid dd { margin: 10px 0 0; font-size: 17px; line-height: 1.5; }
+      /* main plates: image plates wide, typographic plates narrow, compact plates paired */
+      .x-part--b, .x-part--g { grid-column: span 7; }
+      .x-part--c, .x-part--f { grid-column: span 5; }
+      .x-part--d { grid-column: span 8; }
+      .x-part--e { grid-column: span 4; }
+      .x-part--h, .x-part--i { grid-column: span 6; }
+      .x-part--wide .x-part__media img { aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 50%; }
+      .x-part--wide .x-part__media img.x-contain { object-fit: contain; }
+      .x-part__line { max-width: 60ch; }
+      /* typographic plate: a part number and a flat drawing in place of a photo */
+      .x-type__face { flex: 1; min-height: 200px; background: var(--x-ground); display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding: 20px; }
+      .x-type .x-part__body { flex: none; }
+      .x-type__big { font: 800 clamp(4.5rem, 8vw, 7.5rem)/0.8 var(--x-display); letter-spacing: -0.03em; color: var(--x-ink); }
+      .x-type__art { width: min(52%, 220px); height: auto; flex: none; color: var(--x-ink2); }
+      .x-type__art .x-hot { fill: var(--x-red-hi); }
+      .x-type__art .x-hot-s { stroke: var(--x-red-hi); }
+      .x-type__art .x-dim { fill: var(--x-s3); }
+      .x-type__art text { font: 700 13px var(--x-display); fill: var(--x-ink2); text-anchor: middle; }
+      .x-live { display: inline-flex; align-items: center; gap: 8px; }
+      .x-live::before { content: ""; width: 8px; height: 8px; background: var(--x-red-hi); }
+      .x-bots { display: grid; gap: 4px; }
+      .x-bot { background: var(--x-s2); padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+      .x-bot h4 { margin: 0; font: 700 1.25rem/1 var(--x-display); text-transform: uppercase; }
+      .x-bot p { font-size: 16px; line-height: 1.5; }
+      .x-bot .x-part__links { margin-top: 4px; padding-top: 0; }
+      /* compact plates: screenshot beside the text */
+      .x-part--sm { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); grid-template-rows: auto 1fr; }
+      .x-part--sm .x-part__no { grid-column: 1 / -1; }
+      .x-part--sm .x-part__media img { height: 100%; aspect-ratio: auto; min-height: 180px; }
+      /* patent: a stamped certificate of invention */
+      .x-patent { margin-top: 48px; background: var(--x-steel); color: var(--x-ground); padding: 4px; display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 4px; }
+      .x-patent > * { background: var(--x-steel-2); padding: clamp(20px, 3vw, 36px); margin: 0; }
+      .x-patent__kind { display: flex; align-items: center; gap: 12px; font: 700 15px/1 var(--x-display); letter-spacing: 0.14em; text-transform: uppercase; color: #3c4148; }
+      .x-patent__kind .x-m i { width: 4px; height: 13px; }
+      .x-patent__title { font-size: clamp(2rem, 4vw, 3.5rem); line-height: 0.92; margin-top: 20px; max-width: 18ch; }
+      .x-patent__main p:last-child { font-size: 17px; max-width: 52ch; margin-top: 16px; }
+      .x-patent__data { display: flex; flex-direction: column; gap: 20px; }
+      .x-patent__data dt { font: 700 15px/1 var(--x-display); letter-spacing: 0.12em; text-transform: uppercase; color: #3c4148; }
+      .x-patent__data dd { margin: 8px 0 0; font-weight: 600; font-size: 17px; line-height: 1.4; }
+      .x-stamp { display: inline-block; border: 3px solid var(--x-red-press); outline: 1px solid var(--x-red-press); outline-offset: 3px; color: var(--x-red-press); padding: 8px 14px; font: 800 1.5rem/1 var(--x-display); letter-spacing: 0.06em; text-transform: uppercase; margin: 4px; }
+      @media (max-width: 1000px) {
+        .x-case__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .x-part--b, .x-part--d, .x-part--g { grid-column: 1 / -1; }
+        .x-type { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: auto 1fr; }
+        .x-type .x-part__no { grid-column: 1 / -1; }
+        .x-type .x-part__body { flex: 1; }
+        .x-type__face { flex-direction: column; align-items: flex-start; justify-content: space-between; }
+        .x-type__art { width: min(100%, 220px); }
+        .x-part--h, .x-part--i { display: flex; }
+        .x-part--sm .x-part__media img { height: auto; aspect-ratio: 2 / 1; min-height: 0; }
+        .x-patent { grid-template-columns: 1fr; }
+        .x-work__head { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 640px) {
+        .x-case__grid { grid-template-columns: 1fr; }
+        .x-type { display: flex; }
+        .x-type__face { flex-direction: row; align-items: flex-end; min-height: 160px; }
+        .x-type__art { width: min(50%, 180px); }
+        .x-part--h, .x-part--i { grid-column: 1 / -1; }
+      }
+      .x-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+      /* credentials: the field flips to steel */
+      .x-cred { background: var(--x-steel); color: var(--x-ground); }
+      .x-cred .x-muted, .x-cred .x-tag { color: #3c4148; }
+      .x-sheet .x-tag { color: #fff; }
+      .x-cred__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 64px); }
+      .x-cred__img { margin: 0; }
+      .x-cred__img img { width: 100%; height: 100%; min-height: 420px; object-fit: cover; }
+      .x-docs { display: grid; gap: 4px; margin: 40px 0 0; padding: 0; list-style: none; }
+      .x-doc { background: var(--x-steel-2); padding: 24px; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 16px 24px; align-items: start; }
+      .x-doc__by { font: 800 1.5rem/1 var(--x-display); text-transform: uppercase; }
+      .x-doc__txt p { font-size: 17px; }
+      .x-doc__txt p + p { margin-top: 6px; }
+      .x-doc__when { font-weight: 600; color: #2a2e33; }
+      .x-doc__by span { display: block; font: 500 15px/1.3 var(--x-body); text-transform: none; margin-top: 6px; color: #3c4148; }
+      @media (max-width: 900px) { .x-cred__grid { grid-template-columns: 1fr; } .x-cred__img img { min-height: 0; aspect-ratio: 3 / 2; } }
+      @media (max-width: 560px) { .x-doc { grid-template-columns: 1fr; } }
+      .x-certview-btn { display: inline; margin: 0 0 0 6px; padding: 0; border: 0; background: none; font: inherit; font-weight: 600; color: #2a2e33; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; white-space: nowrap; }
+      .x-certview-btn:hover { color: var(--x-ground); }
+      .x-certview-btn { display: inline-flex; align-items: center; min-height: 44px; margin-block: -9px; vertical-align: middle; }
+      .x-certview-thumb { display: block; width: 120px; max-width: 45%; margin: 12px 0 0; padding: 0; border: 1px solid rgba(42, 46, 51, 0.35); background: none; cursor: zoom-in; line-height: 0; }
+      .x-certview-thumb img { display: block; width: 100%; height: auto; }
+      .x-certview-thumb:hover { border-color: #2a2e33; }
+      @media (max-width: 560px) { .x-certview-thumb { width: 110px; max-width: 100%; } }
+      .x-certview { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.86); padding: 16px; }
+      .x-certview.is-open { display: flex; }
+      .x-certview-fig { margin: 0; display: none; }
+      .x-certview-fig.is-on { display: block; }
+      .x-certview-fig img { display: block; max-width: 92vw; max-height: 88vh; width: auto; height: auto; object-fit: contain; }
+      .x-certview-close { position: fixed; top: 16px; right: 16px; min-height: 44px; padding: 0 16px; border: 0; background: var(--x-ink); color: var(--x-ground); font: 700 1rem/1 var(--x-display); letter-spacing: 0.01em; text-transform: uppercase; cursor: pointer; }
+      .x-certview-close:hover { background: #fff; }
+
+      /* records: timing board */
+      .x-board { margin: 48px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+      .x-lap { background: var(--x-s1); display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) minmax(0, 4fr); gap: 24px 40px; padding: clamp(24px, 3vw, 40px); align-items: start; }
+      .x-lap:nth-child(even) { background: var(--x-s2); }
+      .x-lap__org { font: 800 clamp(2rem, 3.4vw, 3rem)/0.95 var(--x-display); text-transform: uppercase; }
+      .x-lap__fig { font: 800 clamp(3.5rem, 6vw, 5.5rem)/0.85 var(--x-display); letter-spacing: -0.02em; text-align: right; }
+      .x-lap__fig small { display: block; font: 500 15px/1.3 var(--x-body); letter-spacing: 0; color: var(--x-ink2); margin-top: 10px; }
+      .x-lap__fig--word { font-size: clamp(2rem, 3.2vw, 2.75rem); line-height: 0.95; text-transform: uppercase; }
+      .x-lap p + p { margin-top: 10px; }
+      @media (max-width: 900px) { .x-lap { grid-template-columns: 1fr; } .x-lap__fig { text-align: left; } }
+
+      /* spec sheet: the field flips to red */
+      .x-sheet { background: var(--x-red); color: #fff; }
+      .x-sheet__in { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; align-items: end; }
+      .x-sheet p { font-size: clamp(1.125rem, 1.5vw, 1.375rem); max-width: 34ch; }
+      .x-sheet .x-btn { margin-top: 28px; }
+      .x-sheet :focus-visible { outline-color: #fff; }
+      @media (max-width: 900px) { .x-sheet__in { grid-template-columns: 1fr; } }
+
+      /* contact */
+      .x-tunnel img { width: 100%; height: clamp(260px, 44vw, 560px); object-fit: cover; }
+      .x-contact__text { font-size: clamp(1.125rem, 1.4vw, 1.25rem); max-width: 52ch; margin-top: 24px; }
+      .x-contact__acts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px; margin-top: 32px; }
+      .x-mail { display: inline-block; min-height: 48px; padding-block: 8px; font: 800 clamp(1.5rem, 4vw, 3.5rem)/1 var(--x-display); letter-spacing: -0.01em; color: var(--x-ink); text-decoration: underline; text-decoration-color: var(--x-red-hi); text-decoration-thickness: 0.08em; text-underline-offset: 0.12em; overflow-wrap: anywhere; transition: color 160ms ease; }
+      .x-mail:hover { color: #fff; text-decoration-color: #fff; }
+      .x-reach { margin-top: 40px; }
+      .x-reach__list { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; list-style: none; }
+      .x-reach__list a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; background: var(--x-s1); text-decoration: none; font-weight: 500; transition: background-color 160ms ease; }
+      .x-reach__list a:hover { background: var(--x-s3); }
+
+      /* footer: the name returns full width */
+      .x-foot { padding: var(--x-gap) 0 48px; }
+      .x-foot__name { display: block; width: 100%; height: auto; margin-top: 24px; }
+      .x-foot__name text { font-family: var(--x-display); font-weight: 800; fill: var(--x-ink); }
+      .x-foot__meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 24px; font-size: 15px; color: var(--x-ink2); }
+
+      /* tachometer: scroll progress and gear selector */
+      .x-tach { position: fixed; right: 16px; bottom: 16px; z-index: 45; width: 156px; background: var(--x-s1); padding: 8px 8px 6px; }
+      .x-tach svg { display: block; width: 100%; height: auto; }
+      .x-tach line { stroke: var(--x-ink); }
+      .x-tach .x-tick--red { stroke: var(--x-red-hi); }
+      .x-tach text { font: 700 17px var(--x-display); fill: var(--x-ink); text-anchor: middle; }
+      .x-tach .x-redline { fill: none; stroke: var(--x-red-hi); stroke-width: 6; }
+      .x-tach .x-gauge-unit { font: 500 10px var(--x-body); fill: var(--x-ink2); }
+      .x-tach .x-gear-read { font-size: 30px; }
+      .x-needle { transform-box: view-box; transform-origin: 100px 100px; transform: rotate(-120deg); transition: transform 140ms var(--x-ease-out); }
+      .x-needle line { stroke: var(--x-red-hi); stroke-width: 3; stroke-linecap: square; }
+      .x-hub { fill: var(--x-ink); }
+      .x-tach.is-sweep .x-needle { transition: transform 460ms var(--x-ease-io); }
+      .x-tach.is-red .x-gear-read { fill: var(--x-red-hi); }
+      .x-tach__name { margin: 2px 0 0; text-align: center; font: 700 15px/1.2 var(--x-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--x-ink); }
+      .x-gears { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; margin-top: 4px; }
+      .x-gears a { display: grid; place-items: center; height: 26px; font: 700 15px/1 var(--x-display); text-decoration: none; color: var(--x-ink); background: var(--x-s2); transition: background-color 160ms ease, color 160ms ease; }
+      .x-gears a:hover { background: var(--x-s3); }
+      .x-gears a[aria-current="true"] { background: var(--x-red); color: #fff; }
+      .x-rev { display: none; }
+      @media (max-width: 760px) {
+        body { padding-bottom: calc(54px + env(safe-area-inset-bottom, 0px)); }
+        .x-tach { left: 0; right: 0; bottom: 0; width: auto; padding: 0 0 env(safe-area-inset-bottom, 0px); }
+        .x-tach svg, .x-tach__name { display: none; }
+        .x-rev { display: block; position: relative; height: 6px; background: var(--x-s3); }
+        .x-rev__fill { position: absolute; inset: 0; background: var(--x-ink); transform-origin: 0 50%; transform: scaleX(0); }
+        .x-rev__red { position: absolute; top: 0; bottom: 0; right: 0; width: 12.5%; background: var(--x-red-hi); opacity: 0.55; }
+        .x-gears { margin: 0; gap: 0; }
+        .x-gears a { height: 48px; font-size: 18px; background: var(--x-s1); }
+      }
+      @media (prefers-reduced-motion: reduce) { .x-needle, .x-tach.is-sweep .x-needle { transition: none; } }
+
+      /* entrances: heading, text, picture */
+      @media (prefers-reduced-motion: no-preference) {
+        .js .x-rv { opacity: 0; transform: translateY(24px); transition: opacity 600ms var(--x-ease-out), transform 700ms var(--x-ease-out); transition-delay: calc(var(--i, 0) * 75ms); }
+        .js .x-rv.is-in { opacity: 1; transform: none; }
+      }
+
+      /* boot: BMW angel-eyes headlight intro (scoped, removed after it ends) */
+      html.x-boot-on { overflow: hidden; }
+      html.x-boot-on .x-hero__img { animation-play-state: paused; }
+      .x-boot {
+        position: fixed; inset: 0; z-index: 2147483000; overflow: hidden;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(14px, 3vh, 28px);
+        padding: 24px var(--x-pad, 16px) 80px;
+        background: #050607;
+        color: #eaf4ff; font-family: var(--x-display, "Barlow Condensed", sans-serif);
+        user-select: none; -webkit-user-select: none; touch-action: none; cursor: default;
+        animation: x-boot-failsafe 1ms linear 5s forwards;
+      }
+      @keyframes x-boot-failsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+
+      .x-boot-car { width: min(92vw, 860px, calc((100vh - 230px) * 2.6)); min-width: 280px; flex: none; }
+      .x-boot-car svg { display: block; width: 100%; height: auto; overflow: visible; }
+      .x-boot-line { fill: none; stroke: #2a3038; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+      .x-boot-body { opacity: 0.75; animation: x-boot-fade 500ms ease-out both; }
+      .x-boot-lit .x-boot-line { stroke: #9fb6cc; }
+      .x-boot-lit { opacity: 0; animation: x-boot-lit 700ms ease-out 900ms both; }
+      .x-boot-ring { fill: none; stroke: #eaf4ff; stroke-width: 4.5; }
+      .x-boot-core { fill: url(#x-boot-core); }
+      .x-boot-eye { opacity: 0; animation: x-boot-flick 900ms linear 500ms both; }
+      .x-boot-eye--r { animation-delay: 580ms; }
+      .x-boot-bloom { opacity: 0; animation: x-boot-lit 900ms ease-out 900ms both; }
+      .x-boot-flare { opacity: 0; animation: x-boot-flare 700ms ease-out 2600ms both; }
+      @keyframes x-boot-fade { from { opacity: 0; } }
+      @keyframes x-boot-lit { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes x-boot-flick {
+        0% { opacity: 0; } 5% { opacity: 0.9; } 10% { opacity: 0.05; } 19% { opacity: 0.75; }
+        24% { opacity: 0.08; } 34% { opacity: 1; } 100% { opacity: 1; }
+      }
+      @keyframes x-boot-flare { 0% { opacity: 0; } 35% { opacity: 1; } 100% { opacity: 0.85; } }
+
+      .x-boot-text { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; max-width: 100%; }
+      .x-boot-name {
+        margin: 0; white-space: nowrap; color: #eaf4ff;
+        font: 800 clamp(26px, 4.6vw, 60px)/1 var(--x-display, sans-serif); text-transform: uppercase;
+        letter-spacing: 0.14em; text-indent: 0.14em;
+        animation: x-boot-name 1100ms var(--x-ease-out, ease-out) 1400ms both;
+      }
+      @keyframes x-boot-name {
+        from { opacity: 0; letter-spacing: 0.42em; text-indent: 0.42em; filter: blur(12px); }
+        to { opacity: 1; letter-spacing: 0.14em; text-indent: 0.14em; filter: blur(0); }
+      }
+      .x-boot-m { display: flex; width: min(420px, 70vw); height: 3px; transform-origin: 50% 50%; animation: x-boot-draw 700ms var(--x-ease-io, ease-in-out) 1750ms both; }
+      .x-boot-m i { flex: 1; }
+      .x-boot-m i:nth-child(1) { background: var(--x-m1, #4fa3d9); }
+      .x-boot-m i:nth-child(2) { background: var(--x-m2, #1c3f94); }
+      .x-boot-m i:nth-child(3) { background: var(--x-m3, #e1251b); }
+      @keyframes x-boot-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+      .x-boot-cap { margin: 0; font: 600 clamp(13px, 1.3vw, 16px)/1.2 var(--x-display, sans-serif); letter-spacing: 0.24em; text-indent: 0.24em; text-transform: uppercase; color: #9aa6b3; animation: x-boot-fade 500ms ease-out 2150ms both; }
+
+      .x-boot-wash { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: radial-gradient(ellipse at 50% 40%, #f4f9ff 0%, #cfe3ff 40%, rgba(150, 190, 240, 0.6) 100%); animation: x-boot-lit 450ms ease-in 2800ms both; }
+
+      .x-boot-skip {
+        position: absolute; right: max(16px, var(--x-pad, 16px)); bottom: 24px;
+        min-height: 44px; min-width: 64px; padding: 0 16px;
+        background: transparent; color: var(--x-ink2, #b4bac2); border: 1px solid var(--x-s3, #2b2f34); border-radius: 0;
+        font: 700 14px/1 var(--x-display, sans-serif); letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer;
+        transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease;
+      }
+      .x-boot-skip:hover { color: var(--x-ink, #eceef1); border-color: var(--x-red-hi, #e1251b); background: var(--x-s2, #1f2226); }
+
+      .x-boot.is-leave { opacity: 0; transition: opacity 500ms ease-out; }
+      .x-boot.is-quick { opacity: 0; transition: opacity 260ms ease; }
+      .x-boot.is-static .x-boot-body, .x-boot.is-static .x-boot-lit, .x-boot.is-static .x-boot-eye, .x-boot.is-static .x-boot-bloom,
+      .x-boot.is-static .x-boot-name, .x-boot.is-static .x-boot-m, .x-boot.is-static .x-boot-cap { animation: none; opacity: 1; filter: none; transform: none; }
+      .x-boot.is-static .x-boot-flare, .x-boot.is-static .x-boot-wash { animation: none; opacity: 0; }
+      @media (prefers-reduced-motion: reduce) {
+        .x-boot-body, .x-boot-lit, .x-boot-eye, .x-boot-bloom, .x-boot-name, .x-boot-m, .x-boot-cap { animation: none; opacity: 1; filter: none; transform: none; }
+        .x-boot-flare, .x-boot-wash { animation: none; opacity: 0; }
+        .x-boot.is-leave { transition: opacity 300ms ease; }
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      (function () {
+        var r = document.documentElement;
+        r.classList.add("x-boot-on");
+        setTimeout(function () { r.classList.remove("x-boot-on"); var b = document.getElementById("x-boot"); if (b && b.parentNode) b.parentNode.removeChild(b); }, 5000);
+      })();
+    </script>
+    <div class="x-boot" id="x-boot" role="status" aria-label="Loading Amith Viswas Reddy's portfolio">
+      <div class="x-boot-car" aria-hidden="true">
+        <svg viewBox="0 0 1000 350" focusable="false">
+          <defs>
+            <filter id="x-boot-glow" x="-60%" y="-80%" width="220%" height="260%" color-interpolation-filters="sRGB">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="14" result="o" />
+              <feFlood flood-color="#8fc3ff" flood-opacity="0.9" />
+              <feComposite in2="o" operator="in" result="halo" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="i" />
+              <feMerge><feMergeNode in="halo" /><feMergeNode in="i" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <radialGradient id="x-boot-core"><stop offset="0" stop-color="#eaf4ff" stop-opacity="0.16" /><stop offset="1" stop-color="#eaf4ff" stop-opacity="0" /></radialGradient>
+            <radialGradient id="x-boot-bloomg"><stop offset="0" stop-color="#cfe3ff" stop-opacity="0.32" /><stop offset="0.55" stop-color="#8fb8e8" stop-opacity="0.1" /><stop offset="1" stop-color="#8fb8e8" stop-opacity="0" /></radialGradient>
+            <radialGradient id="x-boot-flareg"><stop offset="0" stop-color="#ffffff" stop-opacity="0.95" /><stop offset="0.35" stop-color="#eaf4ff" stop-opacity="0.45" /><stop offset="1" stop-color="#9cc8ff" stop-opacity="0" /></radialGradient>
+          </defs>
+          <g class="x-boot-bloom">
+            <ellipse cx="500" cy="334" rx="480" ry="40" fill="url(#x-boot-bloomg)" />
+            <ellipse cx="205" cy="328" rx="210" ry="28" fill="url(#x-boot-bloomg)" />
+            <ellipse cx="795" cy="328" rx="210" ry="28" fill="url(#x-boot-bloomg)" />
+          </g>
+          <g class="x-boot-body">
+            <path class="x-boot-line" d="M30 160 C110 100 300 74 500 70 C700 74 890 100 970 160" />
+            <path class="x-boot-line" d="M330 112 C400 100 450 96 500 96 C550 96 600 100 670 112" opacity="0.6" />
+            <path class="x-boot-line" d="M30 160 C22 200 22 250 32 286 Q40 312 80 316 L920 316 Q960 312 968 286 C978 250 978 200 970 160" />
+            <path class="x-boot-line" d="M90 150 L300 130 Q320 129 316 148 L298 204 Q293 216 278 217 L122 216 Q92 215 90 188 Z" />
+            <path class="x-boot-line" d="M910 150 L700 130 Q680 129 684 148 L702 204 Q707 216 722 217 L878 216 Q908 215 910 188 Z" />
+            <path class="x-boot-line" d="M494 124 L494 226 Q494 238 482 237 L438 233 Q422 231 420 214 L416 142 Q415 125 432 124 Z" />
+            <path class="x-boot-line" d="M506 124 L506 226 Q506 238 518 237 L562 233 Q578 231 580 214 L584 142 Q585 125 568 124 Z" />
+            <path class="x-boot-line" d="M440 128 V232 M458 127 V234 M476 126 V236 M524 126 V236 M542 127 V234 M560 128 V232" opacity="0.5" />
+            <path class="x-boot-line" d="M350 262 L650 262 Q664 262 660 276 L652 296 L348 296 L340 276 Q336 262 350 262 Z" />
+            <path class="x-boot-line" d="M70 250 L230 262 L210 298 L86 294 Q66 292 66 272 Z" />
+            <path class="x-boot-line" d="M930 250 L770 262 L790 298 L914 294 Q934 292 934 272 Z" />
+          </g>
+          <g class="x-boot-lit" stroke-opacity="0.4">
+            <path class="x-boot-line" d="M90 150 L300 130 Q320 129 316 148 L298 204 Q293 216 278 217 L122 216 Q92 215 90 188 Z" />
+            <path class="x-boot-line" d="M910 150 L700 130 Q680 129 684 148 L702 204 Q707 216 722 217 L878 216 Q908 215 910 188 Z" />
+            <path class="x-boot-line" d="M494 124 L494 226 Q494 238 482 237 L438 233 Q422 231 420 214 L416 142 Q415 125 432 124 Z" />
+            <path class="x-boot-line" d="M506 124 L506 226 Q506 238 518 237 L562 233 Q578 231 580 214 L584 142 Q585 125 568 124 Z" />
+            <path class="x-boot-line" d="M350 262 L650 262 Q664 262 660 276 L652 296 L348 296 L340 276 Q336 262 350 262 Z" stroke-opacity="0.25" />
+          </g>
+          <g class="x-boot-eye x-boot-eye--l" filter="url(#x-boot-glow)">
+            <circle class="x-boot-core" cx="160" cy="172" r="30" /><circle class="x-boot-core" cx="240" cy="172" r="30" />
+            <circle class="x-boot-ring" cx="160" cy="172" r="30" /><circle class="x-boot-ring" cx="240" cy="172" r="30" />
+          </g>
+          <g class="x-boot-eye x-boot-eye--r" filter="url(#x-boot-glow)">
+            <circle class="x-boot-core" cx="760" cy="172" r="30" /><circle class="x-boot-core" cx="840" cy="172" r="30" />
+            <circle class="x-boot-ring" cx="760" cy="172" r="30" /><circle class="x-boot-ring" cx="840" cy="172" r="30" />
+          </g>
+          <g class="x-boot-flare">
+            <ellipse cx="200" cy="172" rx="230" ry="110" fill="url(#x-boot-flareg)" opacity="0.5" />
+            <ellipse cx="800" cy="172" rx="230" ry="110" fill="url(#x-boot-flareg)" opacity="0.5" />
+            <circle cx="160" cy="172" r="56" fill="url(#x-boot-flareg)" /><circle cx="240" cy="172" r="56" fill="url(#x-boot-flareg)" />
+            <circle cx="760" cy="172" r="56" fill="url(#x-boot-flareg)" /><circle cx="840" cy="172" r="56" fill="url(#x-boot-flareg)" />
+            <ellipse cx="500" cy="334" rx="500" ry="44" fill="url(#x-boot-bloomg)" />
+          </g>
+        </svg>
+      </div>
+      <div class="x-boot-text">
+        <p class="x-boot-name">Amith Viswas Reddy</p>
+        <div class="x-boot-m" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p class="x-boot-cap">Salesforce engineer · Builder</p>
+      </div>
+      <div class="x-boot-wash" aria-hidden="true"></div>
+      <button class="x-boot-skip" id="x-boot-skip" type="button">Skip</button>
+    </div>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var boot = document.getElementById("x-boot");
+        if (!boot) { root.classList.remove("x-boot-on"); return; }
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var state = "run", timers = [];
+
+        function finish() {
+          if (state === "gone") return;
+          state = "gone";
+          timers.forEach(clearTimeout);
+          document.removeEventListener("keydown", onAny, true);
+          document.removeEventListener("pointerdown", onAny, true);
+          document.removeEventListener("click", onAny, true);
+          if (boot.parentNode) boot.parentNode.removeChild(boot);
+          root.classList.remove("x-boot-on");
+        }
+        function leave(quick) {
+          if (state !== "run") return;
+          state = "leave";
+          boot.classList.add(quick ? "is-quick" : "is-leave");
+          timers.push(setTimeout(finish, quick ? 280 : (reduce ? 320 : 520)));
+        }
+        function onAny(e) {
+          if (state === "gone") return;
+          if (e.type === "click" && boot.contains(e.target)) { e.preventDefault(); e.stopPropagation(); }
+          leave(true);
+        }
+        document.addEventListener("keydown", onAny, true);
+        document.addEventListener("pointerdown", onAny, true);
+        document.addEventListener("click", onAny, true);
+
+        if (reduce) {
+          boot.classList.add("is-static");
+          timers.push(setTimeout(function () { leave(false); }, 600));
+        } else {
+          timers.push(setTimeout(function () { leave(false); }, 3000));
+        }
+      })();
+    </script>
+    <a class="x-skip" href="#main">Skip to content</a>
+    <div class="page" id="top">
+      <header class="x-nav">
+        <div class="x-wrap x-nav__in">
+          <a class="x-word" href="#top" aria-label="AVR, back to top"><span class="x-m" aria-hidden="true"><i></i><i></i><i></i></span>AVR</a>
+          <ul class="x-nav__links">
+            <li><a href="#work">Work</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <a class="x-btn" href="https://drive.google.com/file/d/1KGfnTG-dXnwmolefmNbpA7a5DrxeI0Le/view?usp=drive_link" target="_blank" rel="noopener">Résumé (PDF)</a>
+        </div>
+      </header>
+
+      <main class="main" id="main">
+        <section class="x-hero x-full" id="hero" aria-labelledby="hero-title">
+          <div class="x-hero__bg">
+            <img class="x-hero__img" src="m5_hero.jpg" alt="A dark grey M5-style sedan parked in an empty concrete hangar" width="1584" height="672" fetchpriority="high" />
+            <div class="x-hero__shade" aria-hidden="true"></div>
+          </div>
+          <div class="x-wrap x-hero__copy">
+            <div class="x-hero__text">
+            <h1 class="x-d" id="hero-title">Amith Viswas Reddy</h1>
+            <p class="x-hero__sub">Salesforce engineer at Accenture. On the side, I build web apps and AI tools — engineered like an M car: power, with precision.</p>
+            <div class="x-hero__acts">
+              <a class="x-btn" href="#work">See my work</a>
+              <a class="x-btn x-btn--steel" href="#about" id="x-start">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 6v6" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
+                Start Engine
+              </a>
+            </div>
+            <ul class="x-spec">
+              <li><b>Associate Software Engineer — Salesforce</b><span>Accenture, Hyderabad</span></li>
+              <li><b>B.Tech CSE</b><span>Lovely Professional University, 2026</span></li>
+              <li><b>Based in Hyderabad</b><span>India</span></li>
+            </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="x-sec x-full" id="about" data-gear="1" aria-labelledby="about-title">
+          <div class="x-wrap x-about">
+            <div class="x-about__text">
+              <h2 class="x-d x-h2 x-rv" id="about-title" tabindex="-1">Hi, I’m Amith.</h2>
+              <p class="x-tag x-rv" style="--i: 1"><span class="x-m" aria-hidden="true"><i></i><i></i><i></i></span>Driver profile</p>
+              <p class="x-lead x-rv" style="--i: 1">I grew up in Rajahmundry, Andhra Pradesh, and studied Computer Science at Lovely Professional University in Punjab. That’s where I found the thing I enjoy most: taking an idea and turning it into something people can actually click, use and play with — an AI career coach, a rebuilt Twitch interface, a couple of browser games.</p>
+              <p class="x-rv" style="--i: 2">I work on Salesforce as an Associate Software Engineer at Accenture in Hyderabad. Before onboarding on 24 July 2026, I went through three months of Salesforce (SFDC) training and cleared all the required exams. Outside work I keep building: web apps, AI-powered tools and anything with a good interface.</p>
+              <p class="x-rv" style="--i: 2">I like clean, fast, precise things — which is why this site borrows from the BMW M5. I speak English, Hindi, Telugu and Japanese.</p>
+              <dl class="x-plate x-rv" style="--i: 3" aria-label="At a glance">
+                <div><dt>Projects built</dt><dd>9</dd></div>
+                <div><dt>Patent pending</dt><dd>1</dd></div>
+                <div><dt>Certifications</dt><dd>4</dd></div>
+                <div><dt>Languages</dt><dd>4</dd></div>
+              </dl>
+            </div>
+            <figure class="x-about__portrait x-rv" style="--i: 2">
+              <img src="portrait_standing.jpg" alt="Amith Viswas Reddy standing in a navy blazer" width="1356" height="1600" loading="lazy" />
+            </figure>
+            <div class="x-build">
+              <h3 class="x-h3 x-rv">Build history</h3>
+              <ol class="x-hist">
+                <li class="x-rv"><p class="x-hist__no">ST-01</p><p class="x-hist__where">Rajahmundry</p><p>Where it started.</p></li>
+                <li class="x-rv" style="--i: 1"><p class="x-hist__no">ST-02</p><p class="x-hist__where">LPU</p><p>B.Tech Computer Science, 2026.</p></li>
+                <li class="x-rv" style="--i: 2"><p class="x-hist__no">ST-03</p><p class="x-hist__where">Academor</p><p>Internship on data and web projects.</p></li>
+                <li class="x-rv" style="--i: 3"><p class="x-hist__no">ST-04</p><p class="x-hist__where">UNYC Events</p><p>Event Manager, four events.</p></li>
+                <li class="x-rv" style="--i: 4"><p class="x-hist__no">ST-05</p><p class="x-hist__where">Accenture</p><p>Placed as ASE; 3 months of SFDC training, exams cleared.</p></li>
+                <li class="x-rv" style="--i: 5"><p class="x-hist__no">ST-06</p><p class="x-hist__where">Now</p><p>Salesforce engineer at Accenture Hyderabad; building AI tools and bots on the side.</p></li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="x-sec x-full" id="skills" data-gear="2" aria-labelledby="skills-title">
+          <div class="x-wrap x-skills">
+            <div class="x-skills__side">
+              <h2 class="x-d x-h2 x-rv" id="skills-title">What I work with</h2>
+              <p class="x-tag x-rv" style="--i: 1"><span class="x-m" aria-hidden="true"><i></i><i></i><i></i></span>Engine modes</p>
+              <p class="x-lead x-rv" style="--i: 1">Three tiers, from what I use every day to what I’m still learning. Each skill names the project or certificate that proves it.</p>
+              <img class="x-rv" style="--i: 2" src="m5_tach.jpg" alt="A tachometer needle at the redline" width="1264" height="848" loading="lazy" />
+            </div>
+            <div class="x-tiers">
+              <section class="x-tier x-rv" style="--i: 1" aria-labelledby="tier-1">
+                <div class="x-tier__head">
+                  <div><h3 class="x-h3" id="tier-1">Daily driver</h3><p class="x-small x-muted">What I use most</p></div>
+                  <p class="x-band8 x-band8--red"><span aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>Redline</p>
+                </div>
+                <ul class="x-tier__list">
+                  <li><b>Salesforce (SFDC)</b><span>3-month Accenture training, required exams cleared</span></li>
+                  <li><b>HTML &amp; CSS</b><span>Twitch UI rebuild, Home Theater</span></li>
+                  <li><b>JavaScript</b><span>Home Theater, Temple site</span></li>
+                  <li><b>React &amp; Next.js with TypeScript</b><span>CareerCompass</span></li>
+                  <li><b>Tailwind CSS &amp; ShadCN UI</b><span>CareerCompass</span></li>
+                </ul>
+              </section>
+              <section class="x-tier x-rv" style="--i: 2" aria-labelledby="tier-2">
+                <div class="x-tier__head">
+                  <div><h3 class="x-h3" id="tier-2">Track-ready</h3><p class="x-small x-muted">Built real things with</p></div>
+                  <p class="x-band8 x-band8--mid"><span aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>Mid range</p>
+                </div>
+                <ul class="x-tier__list">
+                  <li><b>AI integration &amp; prompt engineering</b><span>Genkit, Google AI · CareerCompass, ContextMesh, NeuralFlow</span></li>
+                  <li><b>Python automation &amp; GitHub Actions</b><span>LinkedIn Automation Agent</span></li>
+                  <li><b>Bots &amp; backends (Telegram Bot API, FastAPI, PostgreSQL)</b><span>Telegram bots, CrimeScope</span></li>
+                  <li><b>Firebase</b><span>CareerCompass</span></li>
+                  <li><b>Python &amp; Django</b><span>CipherSchools full-stack certification</span></li>
+                  <li><b>Software testing</b><span>NPTEL (IIIT Bangalore) certification</span></li>
+                </ul>
+              </section>
+              <section class="x-tier x-rv" style="--i: 3" aria-labelledby="tier-3">
+                <div class="x-tier__head">
+                  <div><h3 class="x-h3" id="tier-3">In the garage</h3><p class="x-small x-muted">Learning and certified</p></div>
+                  <p class="x-band8 x-band8--low"><span aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>Low revs</p>
+                </div>
+                <ul class="x-tier__list">
+                  <li><b>Data analysis &amp; visualisation</b><span>Python, SQL, Tableau · Academor internship</span></li>
+                  <li><b>RPA with UiPath</b><span>UiPath certification</span></li>
+                  <li><b>Machine learning</b><span>Currently learning</span></li>
+                </ul>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="x-sec x-full" id="work" data-gear="3" aria-labelledby="work-title" style="padding-top: 0">
+          <figure class="x-band">
+            <img src="m5_factory.jpg" alt="Robotic arms welding car bodies on an assembly line" width="1376" height="768" loading="lazy" />
+            <figcaption>The assembly line</figcaption>
+          </figure>
+          <div class="x-wrap">
+            <div class="x-work__head">
+              <div>
+                <h2 class="x-d x-h2 x-rv" id="work-title">Things I’ve built</h2>
+                <p class="x-tag x-rv" style="--i: 1"><span class="x-m" aria-hidden="true"><i></i><i></i><i></i></span>Track history</p>
+              </div>
+              <p class="x-rv x-muted" style="--i: 1">Nine builds, from a patent-pending idea to bots people use every day. CareerCompass first, in depth.</p>
+            </div>
+            <section class="x-patent x-rv" aria-labelledby="pat-title">
+              <div class="x-patent__main">
+                <p class="x-patent__kind"><span class="x-m" aria-hidden="true"><i></i><i></i><i></i></span>Certificate of invention</p>
+                <h3 class="x-d x-patent__title" id="pat-title">Social Media Sentiment Extraction and Analysis System</h3>
+                <p>A system for extracting and analysing sentiment from social media content.</p>
+              </div>
+              <dl class="x-patent__data">
+                <div><dt>Status</dt><dd><span class="x-stamp">Patent pending</span></dd></div>
+                <div><dt>Filed by</dt><dd>Dwarampudi Amith Viswas Reddy<br />Mohammed Sardar Saajit</dd></div>
+              </dl>
+            </section>
+            <div class="x-line">
+              <article class="x-part x-part--a x-rv" aria-labelledby="p1">
+                <p class="x-part__no">M5-AVR-001 <span>Case study</span></p>
+                <div class="x-part__media">
+                  <img src="proj_careercompass.jpg" alt="CareerCompass app screen" width="1600" height="774" loading="lazy" />
+                </div>
+                <div class="x-case">
+                  <div class="x-case__top">
+                    <h3 class="x-h3" id="p1">CareerCompass: AI-Powered Career Mentor</h3>
+                    <div class="x-part__links">
+                      <a class="x-btn" href="https://carrercompassavr.netlify.app/" target="_blank" rel="noopener" aria-label="CareerCompass live site">Live</a>
+                      <a class="x-btn x-btn--ghost" href="https://github.com/amithviswas/career-compass" target="_blank" rel="noopener" aria-label="CareerCompass source code">Code</a>
+                    </div>
+                  </div>
+                  <dl class="x-case__grid">
+                    <div><dt>The problem</dt><dd>Job hunting means rewriting your résumé, guessing what ATS filters want and practising interviews alone.</dd></div>
+                    <div><dt>What I built</dt><dd>An AI career mentor that analyses a résumé, builds an ATS-friendly version, writes cover letters and runs mock interviews with real-time feedback.</dd></div>
+                    <div><dt>How</dt><dd>Next.js and TypeScript on the front, Genkit with Google AI models for the intelligence, Firebase behind it, ShadCN UI and Tailwind for the interface.</dd></div>
+                    <div><dt>What I learned</dt><dd>How to design around AI output — prompts, loading states and making feedback feel useful instead of generic.</dd></div>
+                  </dl>
+                  <ul class="x-part__tech" aria-label="Built with"><li>Next.js</li><li>React</li><li>TypeScript</li><li>Genkit (Google AI)</li><li>ShadCN UI</li><li>Tailwind CSS</li><li>Firebase</li></ul>
+                </div>
+              </article>
+
+              <article class="x-part x-part--b x-part--wide x-rv" aria-labelledby="p2">
+                <p class="x-part__no">M5-AVR-002 <span>AI tool</span></p>
+                <div class="x-part__media">
+                  <img class="x-contain" src="proj_contextmesh.jpg" alt="ContextMesh: shared memory for AI-powered teams" width="1024" height="1024" loading="lazy" />
+                </div>
+                <div class="x-part__body">
+                  <h3 class="x-h3" id="p2">ContextMesh</h3>
+                  <p class="x-part__line">The shared memory layer for engineering teams: store decisions, architecture notes, blockers and meeting context, then ask questions about it in plain language with AI.</p>
+                  <ul class="x-part__tech" aria-label="Built with"><li>Next.js</li><li>Supabase (PostgreSQL)</li><li>AI</li></ul>
+                  <div class="x-part__links">
+                    <a class="x-btn" href="https://contextmesh-murex.vercel.app/" target="_blank" rel="noopener" aria-label="ContextMesh live site">Live</a>
+                    <a class="x-btn x-btn--ghost" href="https://github.com/amithviswas/contextmesh" target="_blank" rel="noopener" aria-label="ContextMesh source code">Code</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="x-part x-part--c x-type x-rv" style="--i: 1" aria-labelledby="p3">
+                <p class="x-part__no">M5-AVR-003 <span>Automation</span></p>
+                <div class="x-type__face">
+                  <p class="x-type__big" aria-hidden="true">003</p>
+                  <svg class="x-type__art" viewBox="0 0 220 132" role="img" aria-label="Posting schedule: two posts a day Monday to Friday, three on Saturday and Sunday">
+                    <circle cx="34" cy="34" r="28" fill="none" stroke="currentColor" stroke-width="4" />
+                    <path d="M34 16v18l12 8" fill="none" class="x-hot-s" stroke-width="4" stroke-linecap="square" />
+                    <g fill="currentColor">
+                      <rect x="80" y="70" width="16" height="16" /><rect x="80" y="92" width="16" height="16" />
+                      <rect x="100" y="70" width="16" height="16" /><rect x="100" y="92" width="16" height="16" />
+                      <rect x="120" y="70" width="16" height="16" /><rect x="120" y="92" width="16" height="16" />
+                      <rect x="140" y="70" width="16" height="16" /><rect x="140" y="92" width="16" height="16" />
+                      <rect x="160" y="70" width="16" height="16" /><rect x="160" y="92" width="16" height="16" />
+                    </g>
+                    <g class="x-hot">
+                      <rect x="184" y="48" width="16" height="16" /><rect x="184" y="70" width="16" height="16" /><rect x="184" y="92" width="16" height="16" />
+                      <rect x="204" y="48" width="16" height="16" /><rect x="204" y="70" width="16" height="16" /><rect x="204" y="92" width="16" height="16" />
+                    </g>
+                    <g class="x-dim"><rect x="80" y="48" width="96" height="16" /></g>
+                    <text x="88" y="128">M</text><text x="108" y="128">T</text><text x="128" y="128">W</text><text x="148" y="128">T</text><text x="168" y="128">F</text><text x="192" y="128">S</text><text x="212" y="128">S</text>
+                  </svg>
+                </div>
+                <div class="x-part__body">
+                  <h3 class="x-h3" id="p3">LinkedIn Automation Agent</h3>
+                  <p class="x-part__line">An autonomous content engine: it reads 150+ tech and AI stories from 65+ sources, picks the best, writes LinkedIn posts with Gemini 2.5 Flash and publishes them on a schedule — twice a day on weekdays, three times on weekends — for ₹0 a month.</p>
+                  <ul class="x-part__tech" aria-label="Built with"><li>Python</li><li>Gemini 2.5 Flash</li><li>GitHub Actions</li></ul>
+                  <div class="x-part__links">
+                    <a class="x-btn x-btn--ghost" href="https://github.com/amithviswas/linkedin-automation-agent" target="_blank" rel="noopener" aria-label="LinkedIn Automation Agent source code">Code</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="x-part x-part--d x-part--wide x-rv" aria-labelledby="p4">
+                <p class="x-part__no">M5-AVR-004 <span>Open source</span></p>
+                <div class="x-part__media">
+                  <img src="proj_neuralflow.jpg" alt="NeuralFlow: lines of a neural network on a dark ground" width="1280" height="543" loading="lazy" />
+                </div>
+                <div class="x-part__body">
+                  <h3 class="x-h3" id="p4">NeuralFlow</h3>
+                  <p class="x-part__line">An open-source framework for building, chaining and running autonomous AI agent workflows and LLM pipelines.</p>
+                  <ul class="x-part__tech" aria-label="Built with"><li>AI agents</li><li>LLM pipelines</li></ul>
+                  <div class="x-part__links">
+                    <a class="x-btn" href="https://neuralflow-six-gamma.vercel.app/" target="_blank" rel="noopener" aria-label="NeuralFlow live site">Live</a>
+                    <a class="x-btn x-btn--ghost" href="https://github.com/amithviswas/neuralflow" target="_blank" rel="noopener" aria-label="NeuralFlow source code">Code</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="x-part x-part--e x-type x-rv" style="--i: 1" aria-labelledby="p5">
+                <p class="x-part__no">M5-AVR-005 <span>Analytics</span></p>
+                <div class="x-type__face">
+                  <p class="x-type__big" aria-hidden="true">005</p>
+                  <svg class="x-type__art" viewBox="0 0 160 132" aria-hidden="true">
+                    <g fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M0 22h160M0 66h160M0 110h160M26 0v132M80 0v132M134 0v132" />
+                    </g>
+                    <g class="x-dim">
+                      <rect x="32" y="28" width="42" height="32" /><rect x="86" y="72" width="42" height="32" /><rect x="140" y="28" width="20" height="32" /><rect x="0" y="72" width="20" height="32" /><rect x="32" y="116" width="42" height="16" />
+                    </g>
+                    <path class="x-hot" d="M107 14a17 17 0 0 1 17 17c0 13-17 31-17 31s-17-18-17-31a17 17 0 0 1 17-17z" />
+                    <circle cx="107" cy="31" r="6" fill="var(--x-ground)" />
+                  </svg>
+                </div>
+                <div class="x-part__body">
+                  <h3 class="x-h3" id="p5">CrimeScope</h3>
+                  <p class="x-part__line">Urban safety intelligence platform: crime analytics, facial recognition and public-safety insights for city planners, researchers and journalists.</p>
+                  <ul class="x-part__tech" aria-label="Built with"><li>Python</li><li>FastAPI</li><li>Next.js</li><li>PostgreSQL</li></ul>
+                  <div class="x-part__links">
+                    <a class="x-btn x-btn--ghost" href="https://github.com/amithviswas/CrimeScope" target="_blank" rel="noopener" aria-label="CrimeScope source code">Code</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="x-part x-part--f x-type x-rv" aria-labelledby="p6">
+                <p class="x-part__no">M5-AVR-006 <span class="x-live">Live 24/7</span></p>
+                <div class="x-type__face">
+                  <p class="x-type__big" aria-hidden="true">006</p>
+                  <svg class="x-type__art" viewBox="0 0 160 132" aria-hidden="true">
+                    <path d="M0 8h104v52H28L12 74V60H0z" fill="currentColor" />
+                    <path class="x-hot" d="M44 72h116v52h-12v14l-16-14H44z" />
+                    <g fill="var(--x-ground)"><rect x="14" y="24" width="60" height="6" /><rect x="14" y="38" width="40" height="6" /></g>
+                    <g fill="#fff"><rect x="62" y="90" width="76" height="6" /><rect x="62" y="104" width="50" height="6" /></g>
+                  </svg>
+                </div>
+                <div class="x-part__body">
+                  <h3 class="x-h3" id="p6">Telegram bots</h3>
+                  <p class="x-part__line x-muted">Two live bots that people use every day.</p>
+                  <div class="x-bots">
+                    <div class="x-bot">
+                      <h4>PDF Maker</h4>
+                      <p>Turns photos into PDFs, merges and shrinks PDFs, and resizes photos and signatures to 20/50/100 KB for exam and job forms.</p>
+                      <div class="x-part__links">
+                        <a class="x-btn" href="https://t.me/PDFHelperIndiaBot" target="_blank" rel="noopener" aria-label="Open PDF Maker bot on Telegram">Open</a>
+                        <a class="x-btn x-btn--ghost" href="https://github.com/amithviswas/pdf-helper-telegram-bot" target="_blank" rel="noopener" aria-label="PDF Maker bot source code">Code</a>
+                      </div>
+                    </div>
+                    <div class="x-bot">
+                      <h4>Ask Me Anonymously</h4>
+                      <p>Anonymous messages through a personal share link.</p>
+                      <div class="x-part__links">
+                        <a class="x-btn" href="https://t.me/AskMeAnonymousIndiaBot" target="_blank" rel="noopener" aria-label="Open Ask Me Anonymously bot on Telegram">Open</a>
+                      </div>
+                    </div>
+                  </div>
+                  <ul class="x-part__tech" aria-label="Built with"><li>Python</li><li>Telegram Bot API</li><li>Render</li><li>Neon PostgreSQL</li></ul>
+                </div>
+              </article>
+
+              <article class="x-part x-part--g x-part--wide x-rv" style="--i: 1" aria-labelledby="p7">
+                <p class="x-part__no">M5-AVR-007 <span>Real client</span></p>
+                <div class="x-part__media">
+                  <img src="proj_temple.jpg" alt="The Hanuman statue under construction, wrapped in bamboo scaffolding" width="1200" height="630" loading="lazy" />
+                </div>
+                <div class="x-part__body">
+                  <h3 class="x-h3" id="p7">Sree Karyasiddhi Hanuman Temple</h3>
+                  <p class="x-part__line">A bilingual English/Telugu donation website for a temple under construction in Radhayapalem, East Godavari — built for a real trust, mobile-first.</p>
+                  <ul class="x-part__tech" aria-label="Built with"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>GitHub Pages</li></ul>
+                  <div class="x-part__links">
+                    <a class="x-btn" href="https://amithviswas.github.io/sree-karyasiddhi-hanuman-temple/" target="_blank" rel="noopener" aria-label="Hanuman Temple live site">Live</a>
+                    <a class="x-btn x-btn--ghost" href="https://github.com/amithviswas/sree-karyasiddhi-hanuman-temple" target="_blank" rel="noopener" aria-label="Hanuman Temple source code">Code</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="x-part x-part--h x-part--sm x-rv" aria-labelledby="p8">
+                <p class="x-part__no">M5-AVR-008</p>
+                <div class="x-part__media">
+                  <img src="proj_hometheater.jpg" alt="Home Theater Experience screen" width="1600" height="773" loading="lazy" />
+                </div>
+                <div class="x-part__body">
+                  <h3 class="x-h3" id="p8">Home Theater Experience</h3>
+                  <p class="x-part__line">Pick and preview a home theater setup.</p>
+                  <ul class="x-part__tech" aria-label="Built with"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+                  <div class="x-part__links">
+                    <a class="x-btn" href="https://amithviswas.github.io/Home-Theater-Experience/" target="_blank" rel="noopener" aria-label="Home Theater Experience live site">Live</a>
+                    <a class="x-btn x-btn--ghost" href="https://github.com/amithviswas/Home-Theater-Experience" target="_blank" rel="noopener" aria-label="Home Theater Experience source code">Code</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="x-part x-part--i x-part--sm x-rv" style="--i: 1" aria-labelledby="p9">
+                <p class="x-part__no">M5-AVR-009</p>
+                <div class="x-part__media">
+                  <img src="proj_twitch.jpg" alt="Twitch.tv interface recreation" width="1600" height="780" loading="lazy" />
+                </div>
+                <div class="x-part__body">
+                  <h3 class="x-h3" id="p9">Reverse-engineered Twitch.tv UI</h3>
+                  <p class="x-part__line">The Twitch.tv interface, rebuilt by hand in pure HTML and CSS.</p>
+                  <ul class="x-part__tech" aria-label="Built with"><li>HTML</li><li>CSS</li></ul>
+                  <div class="x-part__links">
+                    <a class="x-btn" href="https://amithviswas.github.io/Twitch.tv-UI-Reversed-Engineered-/" target="_blank" rel="noopener" aria-label="Twitch.tv UI live site">Live</a>
+                    <a class="x-btn x-btn--ghost" href="https://github.com/amithviswas/Twitch.tv-UI-Reversed-Engineered-" target="_blank" rel="noopener" aria-label="Twitch.tv UI source code">Code</a>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </div>
+        </section>
+
+        <section class="x-sec x-full x-cred" id="credentials" data-gear="4" aria-labelledby="cred-title">
+          <div class="x-wrap x-cred__grid">
+            <figure class="x-cred__img x-rv" style="--i: 2">
+              <img src="m5_brake.jpg" alt="A blue brake caliper behind a black wheel" width="1264" height="848" loading="lazy" />
+            </figure>
+            <div>
+              <h2 class="x-d x-h2 x-rv" id="cred-title">Certifications</h2>
+              <p class="x-tag x-rv" style="--i: 1"><span class="x-m" aria-hidden="true"><i></i><i></i><i></i></span>Racing licence</p>
+              <p class="x-lead x-rv" style="--i: 1">Courses and programmes I’ve completed.</p>
+              <ul class="x-docs">
+                <li class="x-doc x-rv" style="--i: 2">
+                  <p class="x-doc__by">NPTEL <span>IIIT Bangalore</span><button type="button" class="x-certview-thumb" data-certview="nptel" aria-label="View NPTEL Software Testing certificate"><img src="cert_nptel.jpg" alt="NPTEL Software Testing certificate" loading="lazy" /></button></p>
+                  <div class="x-doc__txt">
+                    <h3 class="x-h3">Software Testing</h3>
+                    <p class="x-doc__when">Jul–Oct 2024 · 12-week course</p>
+                    <p>NPTEL Certification. Testing levels, black-box and white-box techniques, test case design and automated test tools.<button type="button" class="x-certview-btn" data-certview="nptel">View certificate →</button></p>
+                  </div>
+                </li>
+                <li class="x-doc x-rv" style="--i: 3">
+                  <p class="x-doc__by">CipherSchools<button type="button" class="x-certview-thumb" data-certview="cipherschools" aria-label="View CipherSchools Full Stack Development certificate"><img src="cert_cipherschools.jpg" alt="CipherSchools Full Stack Development certificate" loading="lazy" /></button></p>
+                  <div class="x-doc__txt">
+                    <h3 class="x-h3">Full Stack Development using Python and Django</h3>
+                    <p class="x-doc__when">July 2024</p>
+                    <p>Front-end and back-end development with Django and database integration.<button type="button" class="x-certview-btn" data-certview="cipherschools">View certificate →</button></p>
+                  </div>
+                </li>
+                <li class="x-doc x-rv" style="--i: 4">
+                  <p class="x-doc__by">Academor <span>Internship</span><button type="button" class="x-certview-thumb" data-certview="academor" aria-label="View Academor Web Development certificate"><img src="cert_academor.jpg" alt="Academor Web Development certificate" loading="lazy" /></button></p>
+                  <div class="x-doc__txt">
+                    <h3 class="x-h3">Internship at Academor</h3>
+                    <p>Data-driven projects and real-world web development: data analysis, front-end work and teamwork in an agile setup.<button type="button" class="x-certview-btn" data-certview="academor">View certificate →</button></p>
+                  </div>
+                </li>
+                <li class="x-doc x-rv" style="--i: 5">
+                  <p class="x-doc__by">UiPath</p>
+                  <div class="x-doc__txt">
+                    <h3 class="x-h3">UiPath RPA certification</h3>
+                    <p>Building software robots that automate repetitive, rule-based tasks.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="x-sec x-full" id="records" data-gear="5" aria-labelledby="rec-title">
+          <div class="x-wrap">
+            <h2 class="x-d x-h2 x-rv" id="rec-title">Leadership &amp; recognition</h2>
+            <p class="x-tag x-rv" style="--i: 1"><span class="x-m" aria-hidden="true"><i></i><i></i><i></i></span>Lap records</p>
+            <ol class="x-board">
+              <li class="x-lap x-rv" style="--i: 1">
+                <p class="x-lap__org">UNYC Events</p>
+                <div>
+                  <h3 class="x-h3">Event Manager</h3>
+                  <p style="margin-top: 10px">At UNYC Events I managed four events — Vitharkh, Samvaad, Vachan and Clash of Words — each with 150–200 participants. I handled planning, coordination on the day and the review afterwards.</p>
+                </div>
+                <p class="x-lap__fig">150–200<small>participants per event</small></p>
+              </li>
+              <li class="x-lap x-rv" style="--i: 2">
+                <p class="x-lap__org">Academor</p>
+                <div>
+                  <h3 class="x-h3">Outstanding Performance Award</h3>
+                  <p style="margin-top: 10px">Recognised for performance and leadership on data-driven projects that lifted client satisfaction.</p>
+                </div>
+                <p class="x-lap__fig x-lap__fig--word">Award<small>Performance and leadership</small></p>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="x-sec x-full x-sheet" id="specsheet" data-gear="6" aria-labelledby="sheet-title">
+          <div class="x-wrap x-sheet__in">
+            <div>
+              <h2 class="x-d x-h2 x-rv" id="sheet-title">My résumé</h2>
+              <p class="x-tag x-rv" style="--i: 1"><span class="x-m" aria-hidden="true"><i></i><i></i><i></i></span>Spec sheet</p>
+            </div>
+            <div class="x-rv" style="--i: 1">
+              <p>Everything on one page — education, skills, projects and certifications.</p>
+              <a class="x-btn x-btn--dark" href="https://drive.google.com/file/d/1KGfnTG-dXnwmolefmNbpA7a5DrxeI0Le/view?usp=drive_link" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-5-5m5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg>
+                Download Résumé (PDF)
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="x-full" id="contact" data-gear="7" aria-labelledby="contact-title" style="scroll-margin-top: 64px">
+          <figure class="x-tunnel" style="margin: 0">
+            <img src="m5_tunnel.jpg" alt="A sedan leaving a tunnel at night" width="1376" height="768" loading="lazy" />
+          </figure>
+          <div class="x-wrap" style="padding-top: var(--x-gap)">
+            <h2 class="x-d x-h2 x-rv" id="contact-title">Let’s build something.</h2>
+            <p class="x-tag x-rv" style="--i: 1"><span class="x-m" aria-hidden="true"><i></i><i></i><i></i></span>Pit lane</p>
+            <p class="x-contact__text x-rv" style="--i: 1">Want to talk Salesforce, web development or a side project? Email is the fastest way to reach me.</p>
+            <div class="x-contact__acts x-rv" style="--i: 2">
+              <a class="x-btn" href="mailto:amithviswas0909@gmail.com">Email me</a>
+              <a class="x-mail" href="mailto:amithviswas0909@gmail.com">amithviswas0909@gmail.com</a>
+            </div>
+            <div class="x-reach x-rv" style="--i: 3">
+              <ul class="x-reach__list">
+                <li><a href="tel:+919143336888">+91 91433 36888</a></li>
+                <li><a href="https://github.com/amithviswas" target="_blank" rel="noopener">GitHub</a></li>
+                <li><a href="https://www.linkedin.com/in/amith-viswas-reddy/" target="_blank" rel="noopener">LinkedIn</a></li>
+                <li><a href="https://instagram.com/amithviswas_reddy" target="_blank" rel="noopener">Instagram</a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="x-foot x-full">
+        <div class="x-wrap">
+          <div class="x-stripe" aria-hidden="true"><i></i><i></i><i></i></div>
+          <svg class="x-foot__name" viewBox="0 0 1000 118" role="img" aria-label="Amith Viswas Reddy">
+            <text x="0" y="112" font-size="150" textLength="1000" lengthAdjust="spacingAndGlyphs">AMITH VISWAS REDDY</text>
+          </svg>
+          <div class="x-foot__meta">
+            <p>© 2026 · Coded precision.</p>
+            <p>Inspired by the BMW M5. Not affiliated with BMW. Car imagery is AI-generated.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <aside class="x-tach" aria-label="Tachometer: scroll progress and section gears">
+      <svg viewBox="0 0 200 156" aria-hidden="true">
+        <path class="x-redline" d="M186.0 100.0 A86 86 0 0 1 174.5 143.0" />
+        <line x1="30.7" y1="140.0" x2="41.1" y2="134.0" stroke-width="3" />
+        <line x1="22.7" y1="120.7" x2="29.5" y2="118.9" stroke-width="1.5" />
+        <line x1="20.0" y1="100.0" x2="32.0" y2="100.0" stroke-width="3" />
+        <line x1="22.7" y1="79.3" x2="29.5" y2="81.1" stroke-width="1.5" />
+        <line x1="30.7" y1="60.0" x2="41.1" y2="66.0" stroke-width="3" />
+        <line x1="43.4" y1="43.4" x2="48.4" y2="48.4" stroke-width="1.5" />
+        <line x1="60.0" y1="30.7" x2="66.0" y2="41.1" stroke-width="3" />
+        <line x1="79.3" y1="22.7" x2="81.1" y2="29.5" stroke-width="1.5" />
+        <line x1="100.0" y1="20.0" x2="100.0" y2="32.0" stroke-width="3" />
+        <line x1="120.7" y1="22.7" x2="118.9" y2="29.5" stroke-width="1.5" />
+        <line x1="140.0" y1="30.7" x2="134.0" y2="41.1" stroke-width="3" />
+        <line x1="156.6" y1="43.4" x2="151.6" y2="48.4" stroke-width="1.5" />
+        <line x1="169.3" y1="60.0" x2="158.9" y2="66.0" stroke-width="3" />
+        <line x1="177.3" y1="79.3" x2="170.5" y2="81.1" stroke-width="1.5" />
+        <line x1="180.0" y1="100.0" x2="168.0" y2="100.0" stroke-width="3" class="x-tick--red" />
+        <line x1="177.3" y1="120.7" x2="170.5" y2="118.9" stroke-width="1.5" class="x-tick--red" />
+        <line x1="169.3" y1="140.0" x2="158.9" y2="134.0" stroke-width="3" class="x-tick--red" />
+        <text x="52.4" y="132.5">0</text><text x="45.0" y="105.0">1</text><text x="52.4" y="77.5">2</text>
+        <text x="72.5" y="57.4">3</text><text x="100.0" y="50.0">4</text><text x="127.5" y="57.4">5</text>
+        <text x="147.6" y="77.5">6</text><text x="155.0" y="105.0">7</text><text x="147.6" y="132.5">8</text>
+        <text class="x-gauge-unit" x="100" y="72">×1000 rpm</text>
+        <g class="x-needle" id="x-needle"><line x1="100" y1="112" x2="100" y2="30" /></g>
+        <circle class="x-hub" cx="100" cy="100" r="6" />
+        <text class="x-gear-read" id="x-gear" x="100" y="146">N</text>
+      </svg>
+      <div class="x-rev" aria-hidden="true"><span class="x-rev__red"></span><span class="x-rev__fill" id="x-revfill"></span></div>
+      <p class="x-tach__name" id="x-tachname" aria-hidden="true">Top</p>
+      <nav class="x-gears" aria-label="Sections">
+        <a href="#top" aria-label="N: Top" title="Top" aria-current="true">N</a>
+        <a href="#about" aria-label="1: About" title="About">1</a>
+        <a href="#skills" aria-label="2: Skills" title="Skills">2</a>
+        <a href="#work" aria-label="3: Work" title="Work">3</a>
+        <a href="#credentials" aria-label="4: Certifications" title="Certifications">4</a>
+        <a href="#records" aria-label="5: Leadership" title="Leadership">5</a>
+        <a href="#specsheet" aria-label="6: Résumé" title="Résumé">6</a>
+        <a href="#contact" aria-label="7: Contact" title="Contact">7</a>
+      </nav>
+    </aside>
+
+    <div class="x-certview" id="x-certview" role="dialog" aria-modal="true" aria-label="Certificate">
+      <button type="button" class="x-certview-close" id="x-certview-close">Close</button>
+      <figure class="x-certview-fig" data-cert="nptel"><img src="cert_nptel.jpg" alt="NPTEL Software Testing certificate, IIIT Bangalore" loading="lazy" /></figure>
+      <figure class="x-certview-fig" data-cert="cipherschools"><img src="cert_cipherschools.jpg" alt="CipherSchools Full Stack Development using Python and Django certificate" loading="lazy" /></figure>
+      <figure class="x-certview-fig" data-cert="academor"><img src="cert_academor.jpg" alt="Academor Web Development certificate" loading="lazy" /></figure>
+    </div>
+
+    <script src="hark.js"></script>
+    <script>
+      (function () {
+        var box = document.getElementById("x-certview");
+        var close = document.getElementById("x-certview-close");
+        var figs = [].slice.call(box.querySelectorAll(".x-certview-fig"));
+        var opener = null;
+        function hide() {
+          if (!box.classList.contains("is-open")) return;
+          box.classList.remove("is-open");
+          document.removeEventListener("keydown", onKey);
+          if (opener) opener.focus();
+        }
+        function onKey(e) {
+          if (e.key === "Escape") hide();
+          else if (e.key === "Tab") { e.preventDefault(); close.focus(); }
+        }
+        [].slice.call(document.querySelectorAll(".x-certview-btn, .x-certview-thumb")).forEach(function (b) {
+          b.addEventListener("click", function () {
+            opener = b;
+            figs.forEach(function (f) { f.classList.toggle("is-on", f.getAttribute("data-cert") === b.getAttribute("data-certview")); });
+            box.classList.add("is-open");
+            document.addEventListener("keydown", onKey);
+            close.focus();
+          });
+        });
+        close.addEventListener("click", hide);
+        box.addEventListener("click", function (e) { if (e.target === box || e.target.classList.contains("x-certview-fig")) hide(); });
+      })();
+    </script>
+    <script>
+      (function () {
+        var doc = document.documentElement;
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+        var ids = ["top", "about", "skills", "work", "credentials", "records", "specsheet", "contact"];
+        var secs = ids.map(function (id) { return id === "top" ? null : document.getElementById(id); });
+        var tach = document.querySelector(".x-tach");
+        var needle = document.getElementById("x-needle");
+        var fill = document.getElementById("x-revfill");
+        var read = document.getElementById("x-gear");
+        var gears = [].slice.call(document.querySelectorAll(".x-gears a"));
+        var labels = ["N", "1", "2", "3", "4", "5", "6", "7"];
+        var names = ["Top", "About", "Skills", "Work", "Certifications", "Leadership", "Résumé", "Contact"];
+        var nameEl = document.getElementById("x-tachname");
+        var hold = null, ticking = false, gear = -1;
+
+        function setRpm(v) {
+          needle.style.transform = "rotate(" + (-120 + v * 30) + "deg)";
+          fill.style.transform = "scaleX(" + v / 8 + ")";
+          tach.classList.toggle("is-red", v >= 7);
+        }
+        function progress() {
+          var max = doc.scrollHeight - window.innerHeight;
+          return max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+        }
+        function update() {
+          ticking = false;
+          var p = progress();
+          if (hold === null) setRpm(p * 8);
+          var line = window.innerHeight * 0.45, g = 0;
+          secs.forEach(function (s, i) { if (s && s.getBoundingClientRect().top <= line) g = i; });
+          if (p > 0.995) g = 7;
+          if (g !== gear) {
+            gear = g;
+            read.textContent = labels[g];
+            nameEl.textContent = names[g];
+            gears.forEach(function (a, i) { if (i === g) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current"); });
+          }
+        }
+        function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+        update();
+
+        /* Start Engine: a flat red sweep to the redline, then into About */
+        var start = document.getElementById("x-start");
+        var about = document.getElementById("about");
+        var heading = document.getElementById("about-title");
+        start.addEventListener("click", function (e) {
+          e.preventDefault();
+          function go() {
+            about.scrollIntoView({ behavior: reduce.matches ? "auto" : "smooth" });
+            heading.focus({ preventScroll: true });
+            if (history.replaceState) history.replaceState(null, "", "#about");
+          }
+          if (reduce.matches) { go(); return; }
+          start.classList.add("is-firing");
+          tach.classList.add("is-sweep");
+          hold = 8; setRpm(8);
+          setTimeout(function () {
+            hold = null; go();
+            setTimeout(function () { tach.classList.remove("is-sweep"); start.classList.remove("is-firing"); update(); }, 700);
+          }, 560);
+        });
+
+        /* staggered entrances: heading, text, picture */
+        var blocks = [].slice.call(document.querySelectorAll(".x-rv"));
+        if (!reduce.matches && "IntersectionObserver" in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); } });
+          }, { rootMargin: "0px 0px -12% 0px" });
+          blocks.forEach(function (b) { io.observe(b); });
+        } else {
+          blocks.forEach(function (b) { b.classList.add("is-in"); });
+        }
+      })();
+    </script>
+  </body>
+</html>
