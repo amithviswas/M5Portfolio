@@ -153,7 +153,7 @@ export default function IntroAnimation() {
             animate={{ opacity: 1, transition: { delay: 0.2 } }}
           >
             <GlitchText text="AMITH VISWAS REDDY" resolved={nameResolved} className="text-4xl md:text-5xl lg:text-6xl block" />
-            <GlitchText text="AI/MACHINE LEARNING ENGINEER" resolved={nameResolved} className="text-xl md:text-2xl lg:text-3xl text-primary mt-2 block" />
+            <GlitchText text="SOFTWARE ENGINEER · AI & AUTOMATION" resolved={nameResolved} className="text-xl md:text-2xl lg:text-3xl text-primary mt-2 block" />
           </motion.div>
 
           {/* Screen flash / pulse - Render only on client after mount */}
