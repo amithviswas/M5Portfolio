@@ -1,130 +1,141 @@
-
 "use client";
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 import Section from '@/components/Section';
-import { Button } from '@/components/ui/button';
-import { Zap } from 'lucide-react'; 
+import { projectsData } from '@/lib/data';
+import type { Project } from '@/lib/types';
 
-import { projectsData } from '@/lib/data'; 
-import type { Project } from '@/lib/types'; 
-import { ProjectCard } from '@/components/portfolio/ProjectCard'; 
-import { ProjectModal } from '@/components/portfolio/ProjectModal'; 
+const INITIAL_COUNT = 6;
 
-export default function ProjectsSection() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [projectsVisible, setProjectsVisible] = useState(true);
-  const [showAll, setShowAll] = useState(false);
-  const INITIAL_COUNT = 6;
-  const visibleProjects = showAll ? projectsData : projectsData.slice(0, INITIAL_COUNT);
-  const hiddenCount = projectsData.length - INITIAL_COUNT;
-
-  const handleViewDetails = (project: Project) => {
-    setSelectedProject(project);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setTimeout(() => setSelectedProject(null), 300); 
-  };
-
+function Links({ project }: { project: Project }) {
   return (
-    <Section id="projects" className="bg-background/70 backdrop-blur-md"> 
-      <div className="text-center mb-12 md:mb-16">
-        <motion.h2 
-          className="text-4xl md:text-5xl font-heading text-primary-foreground"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
-          <span className="text-primary">Projects</span>
-        </motion.h2>
-        <motion.div 
-          className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+    <div className="flex flex-wrap gap-x-5 gap-y-2 text-[15px] font-semibold">
+      {project.projectUrl && (
+        <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="link">
+          Live site<span aria-hidden="true"> ↗</span>
+        </a>
+      )}
+      {project.repoUrl && (
+        <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="link">
+          Source code<span aria-hidden="true"> ↗</span>
+        </a>
+      )}
+    </div>
+  );
+}
+
+function FeaturedRow({ project, n }: { project: Project; n: number }) {
+  return (
+    <article className="spec-row grid gap-6 py-8 md:grid-cols-12 md:gap-8 md:py-10">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink md:col-span-5">
+        <Image
+          src={project.imageUrl}
+          alt={`${project.title}: ${project.description}`}
+          fill
+          sizes="(max-width: 768px) 100vw, 42vw"
+          className="object-cover"
         />
       </div>
+      <div className="flex flex-col md:col-span-7 lg:pl-4">
+        <p className="mono text-[13px] text-ink-3">P/{String(n).padStart(2, '0')}</p>
+        <h3 className="mt-2 text-[1.6rem] font-bold leading-[1.1] tracking-[-0.025em] [font-variation-settings:'wdth'_110] md:text-[2.1rem]">
+          {project.title}
+        </h3>
+        <p className="mt-3 max-w-[60ch] text-[1.0625rem] leading-[1.6]">{project.longDescription}</p>
+        <dl className="mt-5 grid grid-cols-[4.5rem_1fr] gap-x-4 gap-y-1 text-[15px]">
+          <dt className="text-ink-3">Stack</dt>
+          <dd className="mono text-[13.5px] leading-relaxed text-ink-2">{project.technologies.join(' / ')}</dd>
+        </dl>
+        <div className="mt-6">
+          <Links project={project} />
+        </div>
+      </div>
+    </article>
+  );
+}
 
-      {!projectsVisible && (
-        <motion.div 
-          className="text-center mt-10 mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <Button 
-            onClick={() => setProjectsVisible(true)} 
-            size="lg" 
-            className="group bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 hover:from-gray-600 hover:via-gray-700 hover:to-gray-800 text-primary-foreground rounded-lg shadow-lg hover:shadow-[0_0_20px_hsl(var(--accent)/0.5)] transition-all duration-300 transform hover:scale-105 px-8 py-4 border-2 border-gray-600 hover:border-accent"
-          >
-            VIEW TRACK HISTORY <Zap className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:text-yellow-400 group-hover:animate-pulse" />
-          </Button>
-        </motion.div>
+function ExperimentCard({ project }: { project: Project }) {
+  return (
+    <article className="flex flex-col bg-paper">
+      <div className="relative aspect-[2/1] w-full overflow-hidden bg-ink">
+        <Image
+          src={project.imageUrl}
+          alt={`${project.title}: ${project.description}`}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className="object-cover"
+        />
+      </div>
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="text-[1.2rem] font-semibold leading-snug tracking-[-0.015em]">
+          {project.title.replace(/^Experiment:\s*/, '')}
+        </h3>
+        <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{project.longDescription}</p>
+        <p className="mono mt-3 text-[13px] text-ink-2">{project.technologies.join(' / ')}</p>
+        <div className="mt-auto pt-4">
+          <Links project={project} />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export default function ProjectsSection() {
+  const [showAll, setShowAll] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const featured = projectsData.slice(0, INITIAL_COUNT);
+  const rest = projectsData.slice(INITIAL_COUNT);
+  const hiddenCount = rest.length;
+
+  return (
+    <Section
+      id="projects"
+      index="03"
+      title="Projects"
+      lead={`${featured.length} AI and automation builds, plus ${hiddenCount} early front-end experiments.`}
+    >
+      <div>
+        {featured.map((p, i) => (
+          <FeaturedRow key={p.id} project={p} n={i + 1} />
+        ))}
+      </div>
+
+      {showAll && hiddenCount > 0 && (
+        <div id="more-projects" className="mt-6 bg-paper-2 p-px">
+          <h3 className="px-5 pb-4 pt-6 text-[1.35rem] font-semibold tracking-[-0.015em]">Early experiments</h3>
+          <div className="grid gap-px md:grid-cols-2 lg:grid-cols-3">
+            {rest.map((p) => (
+              <ExperimentCard key={p.id} project={p} />
+            ))}
+          </div>
+        </div>
       )}
 
-      {projectsVisible && (
-        <motion.div 
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mt-12 perspective" 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.05 }}
-          variants={{
-            hidden: { opacity: 0, y: 30 },
-            visible: { 
-              opacity: 1, 
-              y: 0, 
-              transition: { duration: 0.6, delay: 0.1, staggerChildren: 0.1, ease: "easeOut" }
-            }
-          }}
-        >
-          {visibleProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              variants={{
-                hidden: { opacity: 0, y: 50, rotateY: -30, rotateX: 10 },
-                visible: { opacity: 1, y: 0, rotateY: 0, rotateX: 0, transition: { duration: 0.5, ease: "easeOut" }}
-              }}
-              className="transform-style-3d"
-            >
-              <ProjectCard 
-                project={project} 
-                onViewDetails={handleViewDetails} 
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-      )}
-
-      {projectsVisible && hiddenCount > 0 && (
-        <div className="mt-12 flex justify-center">
-          <Button
+      {hiddenCount > 0 && (
+        <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <button
+            ref={toggleRef}
+            type="button"
+            className="btn btn-ink"
+            aria-expanded={showAll}
+            aria-controls="more-projects"
             onClick={() => {
               if (showAll) {
                 document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }
               setShowAll(!showAll);
             }}
-            size="lg"
-            variant="outline"
-            aria-expanded={showAll}
-            className="h-12 px-8 text-base font-semibold border-foreground/30 hover:border-foreground hover:bg-foreground/5 active:scale-[0.97] transition-transform"
           >
             {showAll ? 'Show fewer projects' : `Show ${hiddenCount} more projects`}
-          </Button>
+          </button>
+          {!showAll && (
+            <p className="text-[15px] text-ink-2">
+              Games, a music player and UI recreations, built while learning front-end.
+            </p>
+          )}
         </div>
       )}
-
-      <ProjectModal 
-        project={selectedProject} 
-        isOpen={isModalOpen} 
-        onClose={handleCloseModal} 
-      />
     </Section>
   );
 }

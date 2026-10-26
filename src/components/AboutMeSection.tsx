@@ -1,112 +1,70 @@
-
-"use client";
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import Section from '@/components/Section';
-import Link from 'next/link';
-import { TrendingUp, Briefcase, Award } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { projectsData } from '@/lib/data';
 
-// Helper for animated counters (simplified)
-const AnimatedCounter = ({ value, label, icon }: { value: string | number, label: string, icon: React.ReactNode }) => {
-  return (
-    <motion.div 
-      className="flex flex-col items-center p-4 bg-card/70 rounded-lg border border-border/40 backdrop-blur-sm shadow-md card-m-glow"
-      whileHover={{ y: -5 }}
-      transition={{ type: "spring", stiffness: 300 }}
-    >
-      <div className="text-accent mb-2">{icon}</div>
-      <div className="text-3xl font-bold text-primary">{value}</div>
-      <div className="text-sm text-muted-foreground uppercase tracking-wider font-monospace-subheader">{label}</div>
-    </motion.div>
-  );
-};
+const record = [
+  { k: 'Joined Accenture', v: '2026' },
+  { k: 'Projects built', v: String(projectsData.length) },
+  { k: 'Key certifications', v: '5+' },
+];
 
 export default function AboutMeSection() {
   return (
-    <Section id="about" className="bg-background/80 backdrop-blur-md">
-      <div className="text-center mb-12 md:mb-16">
-        <motion.h2 
-          className="text-4xl md:text-5xl font-heading text-primary-foreground"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
-          About <span className="text-primary">Me</span>
-        </motion.h2>
-        <motion.div 
-          className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-        />
-      </div>
-
-      <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
-        {/* Column 1: Profile Image */}
-        <motion.div 
-          className="md:col-span-5 flex justify-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-        >
-          <div className={cn(
-            "relative group hero-medallion-empire w-64 h-64 md:w-72 md:h-72",
-            "p-1" 
-          )}>
-            <div className="spec-highlight-arc" /> 
+    <Section
+      id="about"
+      index="01"
+      title="About"
+      tone="paper-2"
+      lead="D. Amith Viswas Reddy: engineer at Accenture who turns repetitive work into reliable tools."
+    >
+      <div className="grid gap-10 md:grid-cols-12 md:gap-8">
+        <figure className="md:col-span-5 lg:col-span-4">
+          <div className="relative aspect-[4/5] w-full overflow-hidden bg-paper-3">
             <Image
-              src="https://i.ibb.co/PGgTrngH/d2d27295-61a5-43fa-bd33-5f44c25e813a.png"
-              alt="Amith Viswas Reddy"
+              src="/images/profile/portrait.jpg"
+              alt="Portrait of Amith Viswas Reddy"
               fill
-              style={{ objectFit: "cover" }}
-              className="rounded-full object-cover transition-transform duration-500 group-hover:scale-105"
-              data-ai-hint="professional portrait"
-              priority 
-              sizes="(max-width: 768px) 16rem, 18rem"
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover object-[50%_20%]"
             />
           </div>
-        </motion.div>
-        
-        {/* Column 2: Bio */}
-        <motion.div 
-          className="md:col-span-7 p-6 md:p-8 bg-card/80 backdrop-blur-sm border border-border/50 rounded-lg shadow-xl carbon-texture-panel card-m-glow"
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-        >
-          <h3 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-6 font-heading">D. AMITH VISWAS REDDY</h3>
-          <p className="text-lg text-foreground/90 leading-relaxed mb-6">
-            Associate Software Engineer at <strong className="text-primary/90">Accenture, Hyderabad</strong>. I build AI-powered web apps, agents and automations: from team-memory tools and agent workflows to Telegram bots and RPA with UiPath.
-          </p>
-          <p className="text-lg text-foreground/90 leading-relaxed mb-8">
-            B.Tech in Computer Science from Lovely Professional University (2022–2026). I work with <strong className="text-primary/90">Python, Next.js, TypeScript and FastAPI</strong>, and enjoy turning repetitive work into simple, reliable tools.
-          </p>
-          <p className="text-md text-muted-foreground">
-            Explore my <Link href="/#projects" passHref><span className="text-primary hover:text-accent transition-colors duration-300 underline underline-offset-4 cursor-pointer font-semibold">Projects</span></Link> or download my full <Link href="/#resume" passHref><span className="text-primary hover:text-accent transition-colors duration-300 underline underline-offset-4 cursor-pointer font-semibold">Resume</span></Link>.
-          </p>
-        </motion.div>
-      </div>
+          <figcaption className="mt-3 text-[15px] text-ink-3">
+            <span className="mono">Fig. A</span> Amith, Hyderabad
+          </figcaption>
+        </figure>
 
-      {/* "Digital Gauge" counters */}
-      <motion.div 
-        className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 mt-16 md:mt-20"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.2 }}
-        variants={{
-          hidden: { opacity: 0 },
-          visible: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.4 } }
-        }}
-      >
-        <AnimatedCounter value="2026" label="Joined Accenture" icon={<Briefcase size={36} className="text-accent group-hover:text-primary transition-colors" />} />
-        <AnimatedCounter value="12" label="Projects Built" icon={<TrendingUp size={36} className="text-accent group-hover:text-primary transition-colors"/>} />
-        <AnimatedCounter value="5+" label="Key Certifications" icon={<Award size={36} className="text-accent group-hover:text-primary transition-colors"/>} />
-      </motion.div>
+        <div className="flex flex-col md:col-span-7 lg:col-span-7 lg:col-start-6">
+          <h3 className="text-[1.65rem] font-semibold leading-tight tracking-[-0.02em] md:text-[2rem]">
+            D. Amith Viswas Reddy
+          </h3>
+          <div className="mt-6 max-w-[62ch] space-y-5 text-[1.125rem] leading-[1.6]">
+            <p>
+              Associate Software Engineer at <strong className="font-semibold">Accenture, Hyderabad</strong>. I build
+              AI-powered web apps, agents and automations: from team-memory tools and agent workflows to Telegram bots
+              and RPA with UiPath.
+            </p>
+            <p>
+              B.Tech in Computer Science from Lovely Professional University (2022–2026). I work with{' '}
+              <strong className="font-semibold">Python, Next.js, TypeScript and FastAPI</strong>, and enjoy turning
+              repetitive work into simple, reliable tools.
+            </p>
+            <p className="text-ink-2">
+              Explore my{' '}
+              <a href="#projects" className="link font-semibold text-ink">projects</a> or download my full{' '}
+              <a href="#resume" className="link font-semibold text-ink">resume</a>.
+            </p>
+          </div>
+
+          <dl className="mt-12 grid grid-cols-3 gap-px bg-paper-3 md:mt-auto">
+            {record.map((r) => (
+              <div key={r.k} className="flex flex-col-reverse justify-end bg-paper-2 pr-3 pt-4 first:pl-0 [&:not(:first-child)]:pl-4">
+                <dt className="mt-2 text-[15px] leading-snug text-ink-2">{r.k}</dt>
+                <dd className="display tnum text-[2.25rem] md:text-[2.5rem] lg:text-[3.25rem]">{r.v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
     </Section>
   );
 }

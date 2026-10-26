@@ -1,108 +1,54 @@
-
-"use client";
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import Section from '@/components/Section';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Trophy, Users, Zap, BarChart, Award } from 'lucide-react'; 
-import { cn } from '@/lib/utils';
 
 const achievements = [
   {
+    id: 'achieve-unyc',
     title: 'Event Manager at UNYC Events',
     organization: 'Vitharkh, Samvaad, Vachan, Clash of Words',
-    icon: <Users size={32} className="text-primary" />,
-    description: "Successfully managed and coordinated multiple large-scale events (Vitharkh, Samvaad, Vachan, Clash of Words), each with 150-200 participants. Responsibilities included planning, execution, and post-event analysis, ensuring smooth operations and high attendee satisfaction.",
-    impactLabel: "Participants per Event Series",
-    impactValue: "150-200+",
-    impactIcon: <Users size={20} className="text-accent" />,
-    imageUrl: 'https://i.ibb.co/s9K5d6j7/875a3943-9026-4af9-ab9d-514f7c2ed301.png',
-    id: 'achieve-unyc', 
+    description:
+      'Successfully managed and coordinated multiple large-scale events (Vitharkh, Samvaad, Vachan, Clash of Words), each with 150-200 participants. Responsibilities included planning, execution, and post-event analysis, ensuring smooth operations and high attendee satisfaction.',
+    impactLabel: 'Participants per event series',
+    impactValue: '150–200+',
+    imageUrl: '/images/achievements/unyc.jpg',
+    alt: 'Amith with the UNYC events team',
   },
   {
+    id: 'achieve-academor',
     title: 'Outstanding Performance Award',
     organization: 'Academor',
-    icon: <Zap size={32} className="text-primary" />,
-    description: "Recognized for exceptional performance and leadership in data-driven projects. Spearheaded initiatives that directly contributed to a significant boost in client satisfaction metrics through innovative data analysis and solution implementation using ML.",
-    impactLabel: "Client Satisfaction Boost",
-    impactValue: "40%",
-    impactIcon: <BarChart size={20} className="text-accent" />,
-    imageUrl: 'https://i.ibb.co/btytXQf/Screenshot-2025-04-22-102101.png',
-    id: 'achieve-academor', 
+    description:
+      'Recognized for exceptional performance and leadership in data-driven projects. Spearheaded initiatives that directly contributed to a significant boost in client satisfaction metrics through innovative data analysis and solution implementation using ML.',
+    impactLabel: 'Client satisfaction boost',
+    impactValue: '40%',
+    imageUrl: '/images/achievements/academor.jpg',
+    alt: 'Academor Certificate of Outstanding Performance awarded to D Amith Viswas Reddy',
   },
 ];
 
 export default function AchievementsSection() {
-
   return (
-    <Section id="achievements">
-      <div className="text-center mb-12 md:mb-16">
-        <motion.h1 
-          className="text-4xl md:text-5xl font-heading text-primary-foreground" 
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
-          <span className="text-primary">Achievements</span>
-        </motion.h1>
-        <motion.div 
-          className="w-48 h-1 bg-gradient-to-r from-bmw-m-blue via-primary-foreground to-primary mx-auto mt-4 rounded-full"
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-        />
-      </div>
-
-      <div className="grid gap-8 md:grid-cols-2 md:gap-10 items-stretch">
-        {achievements.map((achievement, index) => (
-          <motion.div
-            key={achievement.id}
-            className="flex group" 
-            initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }} 
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.2 }} 
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
-            <div className="relative w-full flex">
-               <Card className={cn(
-                "carbon-texture-panel card-m-glow card-with-glowing-seal", 
-                "overflow-hidden group flex flex-col w-full h-full transition-m-throttle" 
-              )}> 
-                <div className="relative w-full aspect-video overflow-hidden"> 
-                  <Image
-                    src={achievement.imageUrl}
-                    alt={achievement.title}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    className="transition-transform duration-500 ease-in-out group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" 
-                  />
-                </div>
-                <CardHeader className="flex flex-row items-start gap-3 p-4 md:p-5"> 
-                  <div className="p-2.5 bg-primary/15 rounded-sm shadow-inner"> 
-                    {achievement.icon}
-                  </div>
-                  <div className="card-text-skew transition-transform duration-100 ease-m-throttle"> 
-                    <CardTitle className="text-lg md:text-xl text-primary-foreground group-hover:text-primary transition-colors font-heading">{achievement.title}</CardTitle> 
-                    <CardDescription className="text-accent font-semibold mt-0.5 uppercase tracking-wider text-[11px] md:text-xs">{achievement.organization}</CardDescription> 
-                  </div>
-                </CardHeader>
-                <CardContent className="p-4 md:p-5 pt-0 flex-grow flex flex-col card-text-skew transition-transform duration-100 ease-m-throttle"> 
-                  <p className="text-muted-foreground leading-relaxed mb-3 text-xs md:text-sm flex-grow">{achievement.description}</p> 
-                  <div className="mt-auto border-t border-border/30 pt-2.5 bg-card/40 p-2.5 rounded-sm shadow-sm"> 
-                    <h4 className="font-semibold text-primary-foreground/80 mb-0.5 text-[11px] uppercase tracking-wider">{achievement.impactLabel}:</h4> 
-                    <div className="flex items-center">
-                      {achievement.impactIcon}
-                      <p className="text-primary text-lg font-bold ml-1.5">{achievement.impactValue}</p> 
-                    </div>
-                  </div>
-                  <Award className="mt-3 h-5 w-5 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:rotate-[15deg] group-hover:scale-125 ml-auto self-end" /> 
-                </CardContent>
-              </Card>
+    <Section
+      id="achievements"
+      index="04"
+      title="Achievements"
+      tone="paper-2"
+      lead="Leading people at scale, and results a client could measure."
+    >
+      <div className="grid gap-14 md:grid-cols-2 md:gap-8 lg:gap-12">
+        {achievements.map((a) => (
+          <article key={a.id} className="flex flex-col">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-paper-3">
+              <Image src={a.imageUrl} alt={a.alt} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
             </div>
-          </motion.div>
+            <div className="mt-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-1 border-b-4 border-ink pb-4">
+              <p className="display tnum whitespace-nowrap text-[2.6rem] sm:text-[3.25rem] md:text-[2.75rem] lg:text-[3.25rem] xl:text-[4rem]">{a.impactValue}</p>
+              <p className="max-w-[16ch] pb-1 text-right text-[15px] leading-snug text-ink-2">{a.impactLabel}</p>
+            </div>
+            <h3 className="mt-5 text-[1.5rem] font-semibold leading-tight tracking-[-0.02em]">{a.title}</h3>
+            <p className="mt-1 text-[15px] font-medium text-ink-2">{a.organization}</p>
+            <p className="mt-4 max-w-[60ch] leading-[1.6]">{a.description}</p>
+          </article>
         ))}
       </div>
     </Section>

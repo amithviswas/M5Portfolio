@@ -1,333 +1,199 @@
-
 "use client";
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { motion, useAnimation, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { PlayCircle } from 'lucide-react';
-import Section from '@/components/Section'; // Ensure Section is imported correctly
-import { MStartStopButton } from '@/components/MStartStopButton';
-import { useIntroContext } from '@/contexts/IntroContext';
+
 import Image from 'next/image';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { projectsData } from '@/lib/data';
 import { cn } from '@/lib/utils';
 
-const easeMThrottle = [0.36,1.08,0.33,1] as any; // Custom "throttle blip"
+export const RESUME_URL =
+  'https://drive.google.com/file/d/1KGfnTG-dXnwmolefmNbpA7a5DrxeI0Le/view?usp=drive_link';
 
-// Variants for Framer Motion
-const heroTextAnimation = (delay = 0, duration = 0.7, yOffset = 20) => ({
-  initial: { opacity: 0, y: yOffset, filter: 'blur(4px)' },
-  animate: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration, ease: easeMThrottle, delay },
-  },
-});
+const FEATURED = projectsData.slice(0, 6);
+const PLATE_MS = 5200;
 
-export default function HeroSection() {
-  const { introCompleted, setIntroCompleted } = useIntroContext();
-  const prefersReducedMotion = useReducedMotion();
-  const heroControls = useAnimation();
-  
-  const [isScrolledPastHeroThreshold, setIsScrolledPastHeroThreshold] = useState(false);
-  const [isHeadlineHovered, setIsHeadlineHovered] = useState(false);
-  const [isTaglineUnderlineVisible, setIsTaglineUnderlineVisible] = useState(false);
-  const [headlineBeamFrozen, setHeadlineBeamFrozen] = useState(false);
+const spec = [
+  { k: 'Role', v: 'Associate Software Engineer, Accenture' },
+  { k: 'Based in', v: 'Hyderabad, India' },
+  { k: 'Education', v: 'B.Tech CSE, LPU, 2022–2026' },
+  { k: 'Works in', v: 'Python · Next.js · TypeScript · FastAPI' },
+];
 
-  const headlineRef = useRef<HTMLHeadingElement>(null);
-  const { scrollY } = useScroll();
-
-  const [parallaxStreaks, setParallaxStreaks] = useState({ streak1X: 0, streak2X: 0 });
-  const [scrollPercentForTachometer, setScrollPercentForTachometer] = useState(0);
-  const heroSectionRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: heroSectionRef,
-    offset: ["start start", "end start"]
-  });
-
-  const parallaxX1 = useTransform(scrollYProgress, [0, 1], ["-10%", "20%"]);
-  const parallaxX2 = useTransform(scrollYProgress, [0, 1], ["10%", "-20%"]);
-
+function FigurePlate() {
+  const [idx, setIdx] = useState(0);
+  const [prev, setPrev] = useState<number | null>(null);
+  const [paused, setPaused] = useState(false);
+  const [hovering, setHovering] = useState(false);
+  const [reduced, setReduced] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (introCompleted) {
-      const timer = setTimeout(() => setIsTaglineUnderlineVisible(true), 800); 
-      return () => clearTimeout(timer);
-    }
-  }, [introCompleted]);
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const apply = () => setReduced(mq.matches);
+    apply();
+    mq.addEventListener('change', apply);
+    return () => mq.removeEventListener('change', apply);
+  }, []);
 
-  useEffect(() => {
-    const heroElement = heroSectionRef.current;
-    if (!heroElement || !introCompleted) return;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const viewportHeight = window.innerHeight;
-      const heroSectionHeight = heroElement.offsetHeight || viewportHeight;
-      const heroTopOffset = heroElement.offsetTop;
-      
-      const scrollThresholdForDim = viewportHeight * 0.15; 
-      const newIsScrolledPast = currentScrollY > scrollThresholdForDim;
-      
-      if (newIsScrolledPast !== isScrolledPastHeroThreshold) {
-        setIsScrolledPastHeroThreshold(newIsScrolledPast);
-        setHeadlineBeamFrozen(newIsScrolledPast);
-      }
-
-      let scrollPercent = 0;
-      if (currentScrollY >= heroTopOffset && currentScrollY <= heroTopOffset + heroSectionHeight - viewportHeight) {
-        scrollPercent = Math.min(100, ((currentScrollY - heroTopOffset) / (heroSectionHeight - viewportHeight)) * 100);
-      } else if (currentScrollY > heroTopOffset + heroSectionHeight - viewportHeight) {
-        scrollPercent = 100;
-      } else if (currentScrollY < heroTopOffset) {
-        scrollPercent = 0;
-      }
-      setScrollPercentForTachometer(scrollPercent);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [introCompleted, isScrolledPastHeroThreshold]);
-
-
-  const containerVariants = {
-    initial: { opacity: 0 },
-    animate: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: introCompleted ? 0.2 : 0.2 }
+  const go = useCallback(
+    (next: number) => {
+      setIdx((cur) => {
+        if (cur === next) return cur;
+        setPrev(cur);
+        return next;
+      });
     },
-  };
+    []
+  );
 
-  const itemVariants = {
-    medallion: heroTextAnimation(0.2, 0.7, 20),
-    headline: heroTextAnimation(0.4, 0.7, 20),
-    tagline: heroTextAnimation(0.55, 0.7, 20),
-    paragraph: heroTextAnimation(0.8, 0.6, 10),
-    // button variant was here, removed as button is removed
-  };
-  
-  const getTachometerBarGradient = () => {
-    const iBlue = `hsl(var(--bmw-m-blue))`;
-    const hyperViolet = `hsl(var(--m-violet-hsl))`;
-    const voltageGold = `hsl(var(--primary))`;
+  const stopped = paused || hovering || reduced;
 
-    if (scrollPercentForTachometer <= 33) return `linear-gradient(to right, ${iBlue} 0%, ${hyperViolet} 100%)`;
-    if (scrollPercentForTachometer <= 66) return `linear-gradient(to right, ${iBlue} 0%, ${hyperViolet} 50%, ${voltageGold} 100%)`;
-    return `linear-gradient(to right, ${hyperViolet} 0%, ${voltageGold} 100%)`;
-  };
+  useEffect(() => {
+    if (stopped) return;
+    timer.current = setTimeout(() => go((idx + 1) % FEATURED.length), PLATE_MS);
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
+  }, [idx, stopped, go]);
 
-
-  const handleStartDriveClick = useCallback(() => {
-    setIntroCompleted(true);
-    requestAnimationFrame(() => {
-      const aboutSection = document.getElementById('about');
-      if (aboutSection) {
-        aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  }, [setIntroCompleted]);
-
+  const p = FEATURED[idx];
+  const href = p.projectUrl ?? p.repoUrl;
 
   return (
-    <Section
-      ref={heroSectionRef}
-      id="home"
-      className={cn(
-        "hero-empire-bg min-h-screen !py-0 overflow-hidden flex flex-col items-center justify-center",
-        isScrolledPastHeroThreshold && "hero-backdrop-dimmed"
-      )}
-      fullHeight
-      noPadding
+    <figure
+      className={cn('flex flex-col', stopped && 'plate-paused')}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+      onFocusCapture={() => setHovering(true)}
+      onBlurCapture={() => setHovering(false)}
+      aria-roledescription="carousel"
+      aria-label="Selected projects"
     >
-      {/* Background Effects (Static and Parallax) */}
-      <div className="hero-headlight-sweep-bg" /> 
-
-      {!prefersReducedMotion && (
-        <>
-          <motion.div
-            className="absolute -top-1/4 -left-1/4 w-[150vw] h-[150vh] opacity-[0.03] bg-gradient-radial from-bmw-m-blue/30 via-transparent to-transparent blur-3xl transform rotate-[20deg] pointer-events-none -z-10"
-            style={{ x: parallaxX1, willChange: 'transform' }}
-          />
-          <motion.div
-            className="absolute -bottom-1/4 -right-1/4 w-[150vw] h-[150vh] opacity-[0.02] bg-gradient-radial from-primary/20 via-transparent to-transparent blur-3xl transform rotate-[-25deg] pointer-events-none -z-10"
-            style={{ x: parallaxX2, willChange: 'transform' }}
-          />
-           {/* Nano Particle Shimmer & Lens Flares */}
-            <div className="nano-particle-shimmer" aria-hidden="true">
-              {Array.from({ length: 15 }).map((_, i) => (
-                <motion.div
-                  key={`nano-${i}`}
-                  className="nano-particle"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    width: `${Math.random() * 2 + 1}px`,
-                    height: `${Math.random() * 2 + 1}px`,
-                    animationDelay: `${Math.random() * 8}s`,
-                    // @ts-ignore
-                    '--drift-x': `${(Math.random() - 0.5) * 100}px`,
-                    '--drift-y': `${(Math.random() - 0.5) * 100}px`,
-                  }}
-                />
-              ))}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink">
+        {FEATURED.map((proj, i) => {
+          const isCur = i === idx;
+          const isPrev = i === prev;
+          return (
+            <div
+              key={isCur ? `cur-${idx}` : proj.id}
+              className={cn(
+                'absolute inset-0',
+                isCur ? 'plate-current z-20' : isPrev ? 'z-10' : 'z-0 opacity-0'
+              )}
+              aria-hidden={!isCur}
+            >
+              <Image
+                src={proj.imageUrl}
+                alt={isCur ? `${proj.title}: ${proj.description}` : ''}
+                fill
+                priority={i === 0}
+                sizes="(max-width: 1024px) 100vw, 58vw"
+                className="object-cover"
+              />
             </div>
-            <div className="vertical-lens-flare" style={{ left: '10%', animationDelay: '0s' }} />
-            <div className="vertical-lens-flare" style={{ left: '85%', animationDelay: '5s' }} />
-        </>
-      )}
-      
-      {/* Halo Glows & Bloom Effects */}
-      {!prefersReducedMotion && (
-        <>
-          <div className="halo-glow" style={{ width: '400px', height: '400px', top: '10%', left: '20%', background: 'radial-gradient(circle, hsla(var(--bmw-m-blue),0.06) 0%, transparent 70%)', animationDelay: '0s' }} />
-          <div className="halo-glow" style={{ width: '500px', height: '500px', top: '50%', left: '60%', background: 'radial-gradient(circle, hsla(var(--primary),0.04) 0%, transparent 70%)', animationDelay: '3s' }} />
-          <div className="hero-bloom-extra" />
-        </>
-      )}
+          );
+        })}
+      </div>
 
+      <div className="relative h-[3px] w-full bg-paper-3" aria-hidden="true">
+        <div key={`bar-${idx}`} className="plate-progress absolute inset-0 bg-ink" style={{ ['--plate-ms' as string]: `${PLATE_MS}ms` }} />
+      </div>
 
-      {/* Gantry Lights */}
-      {!prefersReducedMotion && introCompleted && (
-        <>
-           <motion.div
-            className="hero-gantry-light top-0"
-            initial={{ scaleX:0, opacity:0}}
-            animate={{ scaleX:1, opacity:1, transition: {duration: 0.5, delay:0.1, ease: "easeOut"}} }
-            exit={{scaleX:0, opacity:0}}
-          />
-          <motion.div
-            className="hero-gantry-light bottom-0"
-            initial={{ scaleX:0, opacity:0}}
-            animate={{ scaleX:1, opacity:1, transition: {duration: 0.5, delay:0.3, ease: "easeOut"}} }
-            exit={{scaleX:0, opacity:0}}
-          />
-        </>
-      )}
-
-      {/* Main Content Container */}
-      <motion.div
-        variants={containerVariants}
-        initial="initial" 
-        animate={introCompleted ? "animate" : "initial"}
-        className="relative z-10 flex flex-col items-center justify-center text-center h-full px-4 py-16 md:py-20 lg:py-24"
-      >
-        {/* Profile Medallion */}
-        <motion.div
-          variants={itemVariants.medallion}
-          className={cn(
-            "mb-6 group hero-medallion-empire", 
-            isHeadlineHovered && !prefersReducedMotion && "animate-cameraShutterFlash" 
-          )}
-          onMouseEnter={() => setIsHeadlineHovered(true)}
-          onMouseLeave={() => setIsHeadlineHovered(false)}
-        >
-          <div className="hero-medallion-nightfall-inner"> 
-            <div className="spec-highlight-arc" /> 
-            <Image
-              src="https://i.ibb.co/cKgh0560/1701fc1e-7948-4d92-b440-ffb24258652b.png" 
-              alt="Amith Viswas Reddy"
-              width={128} 
-              height={128}
-              className="rounded-full object-cover"
-              priority
-              data-ai-hint="profile photo"
-            />
-          </div>
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1
-          ref={headlineRef}
-          variants={itemVariants.headline}
-          className={cn(
-            "relative hero-headline-empire text-5xl sm:text-6xl md:text-7xl text-primary-foreground font-fraunces",
-            headlineBeamFrozen && !prefersReducedMotion && "beam-frozen", 
-            isHeadlineHovered && !prefersReducedMotion && "animate-cameraShutterFlash"
-          )}
-          
-          onMouseEnter={() => setIsHeadlineHovered(true)}
-          onMouseLeave={() => setIsHeadlineHovered(false)}
-        >
-          Coded Precision.
-          {/* Dynamic Headline Beam */}
-          {!prefersReducedMotion && (
-             <span className={cn("hero-headline-beam", headlineBeamFrozen && "beam-frozen")} />
-          )}
-        </motion.h1>
-
-        {/* Tagline */}
-        <motion.h2
-          variants={itemVariants.tagline}
-          className={cn(
-            "hero-tagline-empire mt-2 md:mt-3 text-xl font-semibold uppercase tracking-wider text-transparent md:text-2xl md:tracking-widest font-inter", 
-            isTaglineUnderlineVisible && "underline-visible"
-          )}
-        >
-          SOFTWARE ENGINEER · AI &amp; AUTOMATION
-        </motion.h2>
-
-        {/* Paragraph */}
-        <motion.p
-          variants={itemVariants.paragraph}
-          className="font-inter mt-6 max-w-[44ch] mx-auto text-base text-foreground/80 sm:text-lg md:mt-8 hero-text-lift"
-        >
-          Hi, I&apos;m Amith, an Associate Software Engineer at <strong className="text-primary/90 font-semibold">Accenture, Hyderabad</strong>. I build AI-powered apps, agents and automations. Take a look at my projects below.
-        </motion.p>
-
-        {/* Calls to action */}
-        <motion.div
-          variants={itemVariants.paragraph}
-          className="mt-8 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
-        >
-          <a
-            href="#projects"
-            className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-7 text-base font-semibold text-primary-foreground transition-transform duration-150 hover:bg-primary/90 active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary w-full sm:w-auto"
+      <figcaption className="mt-4 grid grid-cols-[1fr_auto] items-start gap-x-6 gap-y-3">
+        <div className="min-w-0" aria-live={stopped ? 'polite' : 'off'}>
+          <p className="text-[15px] text-ink-3">
+            <span className="mono text-[13.5px]">Fig. {String(idx + 1).padStart(2, '0')}</span> of {FEATURED.length}, selected work
+          </p>
+          <p className="mt-1 text-lg font-semibold leading-snug tracking-[-0.01em]">
+            {href ? (
+              <a href={href} target="_blank" rel="noopener noreferrer" className="link">
+                {p.title}
+              </a>
+            ) : (
+              p.title
+            )}
+          </p>
+          <p className="mono mt-1 text-[13px] text-ink-2">{p.technologies.join(' / ')}</p>
+        </div>
+        <div className="flex items-center gap-1">
+          {FEATURED.map((proj, i) => (
+            <button
+              key={proj.id}
+              type="button"
+              onClick={() => go(i)}
+              aria-label={`Show ${proj.title}`}
+              aria-current={i === idx ? 'true' : undefined}
+              className={cn(
+                'mono hidden h-9 w-9 items-center justify-center text-[13px] transition-colors duration-150 sm:flex',
+                i === idx ? 'bg-ink text-paper' : 'text-ink-2 hover:bg-paper-2'
+              )}
+            >
+              {String(i + 1).padStart(2, '0')}
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => go((idx + 1) % FEATURED.length)}
+            className="flex h-9 items-center px-3 text-[14px] font-semibold hover:bg-paper-2 sm:hidden"
+            aria-label="Next project"
           >
-            View Projects
-          </a>
-          <a
-            href="https://drive.google.com/file/d/1KGfnTG-dXnwmolefmNbpA7a5DrxeI0Le/view?usp=drive_link"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-12 items-center justify-center rounded-md border border-foreground/30 px-7 text-base font-semibold text-foreground transition-colors duration-150 hover:border-foreground hover:bg-foreground/5 active:scale-[0.97] w-full sm:w-auto"
+            Next
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaused((v) => !v)}
+            className="ml-1 flex h-9 items-center border-2 border-ink px-3 text-[14px] font-semibold transition-colors duration-150 hover:bg-ink hover:text-paper"
+            aria-pressed={paused}
           >
-            Download Resume
-          </a>
-          <a
-            href="#contact"
-            className="inline-flex h-12 items-center justify-center rounded-md px-5 text-base font-semibold text-foreground/90 underline-offset-4 transition-colors duration-150 hover:text-primary hover:underline w-full sm:w-auto"
-          >
-            Contact Me
-          </a>
-        </motion.div>
-        
-        {/* MStartStopButton was here, removed as per user request to leave the space empty */}
-
-      </motion.div>
-
-      {/* Tachometer Indicator (conditionally rendered) */}
-      {!prefersReducedMotion && introCompleted && (
-        <motion.div
-          className="hero-empire-tachometer"
-          initial={{opacity:0, y:20}}
-          animate={{opacity:1, y:0, transition: {delay: 0.5, duration:0.5}}}
-        >
-          <motion.div
-              className="hero-empire-tachometer-bar"
-              style={{
-                width: `${scrollPercentForTachometer}%`,
-                backgroundImage: getTachometerBarGradient()
-              }}
-          />
-          <motion.div
-            className="hero-empire-tachometer-trail"
-            style={{ width: `${scrollPercentForTachometer}%`, opacity: scrollPercentForTachometer > 5 ? 0.5 : 0 }}
-          />
-        </motion.div>
-      )}
-    </Section>
+            {paused || reduced ? 'Play' : 'Pause'}
+          </button>
+        </div>
+      </figcaption>
+    </figure>
   );
 }
 
+export default function HeroSection() {
+  return (
+    <section id="home" className="relative pb-20 pt-10 md:pb-28 md:pt-14 lg:pb-32">
+      <div className="wrap">
+        <h1 className="display text-[clamp(2.75rem,11vw,6.5rem)] [font-variation-settings:'wdth'_100] sm:[font-variation-settings:'wdth'_118]">
+          Amith Viswas Reddy
+        </h1>
+
+        <div className="mt-10 grid gap-12 md:mt-12 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-0">
+          <div className="lg:col-span-5 lg:row-start-1">
+            <p className="max-w-[30ch] text-[1.45rem] font-medium leading-[1.3] tracking-[-0.015em] md:text-[1.7rem]">
+              I build AI-powered apps, agents and automations, and turn repetitive work into simple, reliable tools.
+            </p>
+            <p className="mt-5 max-w-[46ch] text-ink-2">
+              Hi, I&apos;m Amith, an Associate Software Engineer at Accenture, Hyderabad. Take a look at my projects below.
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a href="#projects" className="btn btn-mark">View projects</a>
+              <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="btn btn-line">
+                Download resume
+              </a>
+              <a href="#contact" className="inline-flex min-h-[52px] items-center px-2 font-semibold underline decoration-1 underline-offset-[0.25em] transition-colors duration-150 hover:bg-mark">
+                Contact me
+              </a>
+            </div>
+          </div>
+
+          <div className="lg:col-span-7 lg:col-start-6 lg:row-span-2 lg:row-start-1">
+            <FigurePlate />
+          </div>
+
+          <dl className="text-[15px] lg:col-span-5 lg:row-start-2 lg:self-end">
+            {spec.map((row) => (
+              <div key={row.k} className="spec-row grid grid-cols-[7.5rem_1fr] gap-4 py-2.5">
+                <dt className="text-ink-3">{row.k}</dt>
+                <dd className="font-medium">{row.v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
+  );
+}
